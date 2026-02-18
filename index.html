@@ -1399,7 +1399,6 @@ document.getElementById('searchInput').addEventListener('input', () => {
     noResults.style.display = hasResults ? 'none' : 'block';
 });
 
-// ─── PWA Install Gate ─────────────────────────────────────────────────────────
 (function () {
   const isStandalone =
     window.matchMedia('(display-mode: standalone)').matches ||
@@ -1410,8 +1409,6 @@ document.getElementById('searchInput').addEventListener('input', () => {
   const iosSteps = document.getElementById('ios-steps');
   const installNote = document.getElementById('install-note');
 
-  // ── CRITICAL: Hide the entire app content immediately ──
-  // This runs before anything renders
   const appContainer = document.querySelector('.container');
   const appFooter = document.querySelector('footer');
   const payModal = document.getElementById('payModal');
@@ -1428,18 +1425,34 @@ document.getElementById('searchInput').addEventListener('input', () => {
     document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
   }
 
-  function showApp() {
+  function showOpenButton() {
+    // Replace everything inside the card with an "Open App" button
+    const card = document.querySelector('.install-card');
+    if (!card) return;
+    card.innerHTML = `
+      <div class="install-logo">🎉</div>
+      <div class="install-title">Installation Complete!</div>
+      <div class="install-subtitle">
+        ଆପ୍ ସଫଳଭାବରେ ଇନ୍‌ସ୍ଟଲ୍ ହୋଇଛି ।<br>
+        <small>Your app has been installed successfully.</small>
+      </div>
+      <button class="install-btn" onclick="window.location.href=window.location.href">
+        🚀 Open App — ଆପ୍ ଖୋଲନ୍ତୁ
+      </button>
+      <div class="install-note">
+        ଉପର ବଟନ୍ ଦବାଇ ଆପ୍ ଖୋଲନ୍ତୁ ।<br>
+        <small>Or open the app from your home screen.</small>
+      </div>
+    `;
+  }
+
+  // Already installed → show app directly
+  if (isStandalone) {
     if (appContainer) appContainer.style.display = '';
     if (appFooter) appFooter.style.display = '';
     document.body.style.overflow = 'auto';
     document.body.style.background = '';
-    gate.classList.remove('visible');
     gate.style.display = 'none';
-  }
-
-  // If already installed → show app, skip gate entirely
-  if (isStandalone) {
-    showApp();
     return;
   }
 
@@ -1447,27 +1460,25 @@ document.getElementById('searchInput').addEventListener('input', () => {
   hideApp();
   gate.classList.add('visible');
 
-  // ── iOS Detection ──
+  // iOS
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   if (isIOS) {
     iosSteps.style.display = 'block';
     installNote.innerHTML =
       '👆 Follow the steps above to install.<br>' +
       '<small>ଉପରୋକ୍ତ ପଦ୍ଧତି ଅନୁସରଣ କରି ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।</small>';
-
-    // iOS: poll for standalone mode every second
-    // (iOS doesn't fire appinstalled event)
     const iosPoller = setInterval(() => {
       if (window.navigator.standalone === true) {
         clearInterval(iosPoller);
-        showApp();
+        showOpenButton();
       }
     }, 1000);
     return;
   }
 
-  // ── Android/Chrome ──
+  // Android/Chrome
   let deferredPrompt;
+  let installAccepted = false;
 
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
@@ -1480,8 +1491,6 @@ document.getElementById('searchInput').addEventListener('input', () => {
 
   gateBtn.addEventListener('click', async () => {
     if (!deferredPrompt) return;
-
-    // Show loading state during installation dialog
     gateBtn.textContent = '⏳ Installing...';
     gateBtn.disabled = true;
     installNote.innerHTML =
@@ -1493,12 +1502,33 @@ document.getElementById('searchInput').addEventListener('input', () => {
     deferredPrompt = null;
 
     if (result.outcome === 'accepted') {
-      // User accepted — wait for appinstalled event to confirm
+      installAccepted = true;
       installNote.innerHTML =
-        '✅ Installing... Please wait.<br>' +
-        '<small>ଦୟାକରି ଅପେକ୍ଷା କରନ୍ତୁ ।</small>';
+        '✅ Installing... please wait a moment.<br>' +
+        '<small>ଦୟାକରି ଅଳ୍ପ ଅପେକ୍ଷା କରନ୍ତୁ ।</small>';
+
+      // Start polling — appinstalled event is unreliable on many devices
+      // Poll every 800ms for up to 30 seconds
+      let pollCount = 0;
+      const pollTimer = setInterval(() => {
+        pollCount++;
+        const nowStandalone = window.matchMedia('(display-mode: standalone)').matches;
+        if (nowStandalone) {
+          clearInterval(pollTimer);
+          // Already opened as PWA — just show app
+          if (appContainer) appContainer.style.display = '';
+          if (appFooter) appFooter.style.display = '';
+          document.body.style.overflow = 'auto';
+          document.body.style.background = '';
+          gate.style.display = 'none';
+        } else if (pollCount >= 5) {
+          // After ~4 seconds, install is likely done — show Open button
+          clearInterval(pollTimer);
+          showOpenButton();
+        }
+      }, 800);
+
     } else {
-      // User dismissed the prompt
       gateBtn.textContent = '⬇️ Install App — ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ';
       gateBtn.disabled = false;
       installNote.innerHTML =
@@ -1507,19 +1537,12 @@ document.getElementById('searchInput').addEventListener('input', () => {
     }
   });
 
-  // ── THIS IS THE KEY EVENT — fires only when install is 100% complete ──
+  // appinstalled as backup (fires on some devices)
   window.addEventListener('appinstalled', () => {
-    installNote.innerHTML =
-      '🎉 Installed! Opening app...<br>' +
-      '<small>ଆପ୍ ଖୋଲୁଛି...</small>';
-
-    // Short delay then reload — app will reopen in standalone mode
-    setTimeout(() => {
-      window.location.reload();
-    }, 1500);
+    if (installAccepted) showOpenButton();
   });
 
-  // ── Fallback: prompt never fired (browser already dismissed it before) ──
+  // Fallback if beforeinstallprompt never fires
   setTimeout(() => {
     if (!deferredPrompt && gateBtn.style.display === 'none') {
       installNote.innerHTML =
