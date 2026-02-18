@@ -196,6 +196,49 @@
 .info-modal-body .eng-text { color: #2d3748; margin-bottom: 6px; }
 .info-modal-body .legal-notice { background: #fff5f5; border: 2px solid #fc8181; border-radius: 10px; padding: 12px; margin-top: 14px; }
 .info-modal-body .legal-notice p { color: #c53030; font-weight: 700; margin: 0; font-size: 0.95em; }
+
+        /* PWA Install Modal */
+.pwa-modal-overlay {
+  display: none; position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.75); z-index: 9000;
+  justify-content: center; align-items: center; padding: 20px;
+}
+.pwa-modal-overlay.active { display: flex; }
+.pwa-modal-box {
+  background: white; border-radius: 24px; padding: 32px 24px;
+  max-width: 340px; width: 100%; text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  border: 3px solid rgba(102,126,234,0.3);
+}
+.pwa-modal-icon { font-size: 3em; margin-bottom: 10px; }
+.pwa-modal-title {
+  color: #667eea; font-size: 1.4em; font-weight: 900;
+  margin-bottom: 8px;
+}
+.pwa-modal-subtitle {
+  color: #764ba2; font-size: 0.85em; font-weight: 700;
+  margin-bottom: 10px; line-height: 1.5;
+}
+.pwa-modal-desc {
+  color: #555; font-size: 0.82em; margin-bottom: 22px; line-height: 1.6;
+}
+.pwa-modal-install-btn {
+  display: block; width: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white; border: none; padding: 15px;
+  border-radius: 14px; font-size: 1em; font-weight: 800;
+  cursor: pointer; margin-bottom: 10px;
+  box-shadow: 0 4px 15px rgba(102,126,234,0.5);
+  transition: transform 0.2s;
+}
+.pwa-modal-install-btn:active { transform: scale(0.97); }
+.pwa-modal-dismiss-btn {
+  background: none; border: none; color: #aaa;
+  font-size: 0.85em; cursor: pointer; padding: 8px;
+  text-decoration: underline;
+}
     </style>
 </head>
 <body>
@@ -1298,40 +1341,68 @@ document.getElementById('searchInput').addEventListener('input', () => {
 });
 
 // ─── PWA ──────────────────────────────────────────────────────────────────────
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('SW registered:', reg.scope))
-            .catch(err => console.log('SW failed:', err));
-    });
-}
-
 let deferredPrompt;
+
 window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    document.getElementById('pwa-install-btn').style.display = 'block';
+  e.preventDefault();
+  deferredPrompt = e;
+
+  // Show the small button (keep it as fallback)
+  document.getElementById('pwa-install-btn').style.display = 'block';
+
+  // Show the prominent modal after a short delay (less intrusive)
+  setTimeout(() => {
+    document.getElementById('pwaInstallModal').classList.add('active');
+  }, 2000); // 2-second delay so the page loads first
 });
 
+function triggerInstallFromModal() {
+  dismissInstallModal();
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((result) => {
+      if (result.outcome === 'accepted') {
+        document.getElementById('pwa-install-btn').style.display = 'none';
+      }
+      deferredPrompt = null;
+    });
+  }
+}
+
+function dismissInstallModal() {
+  document.getElementById('pwaInstallModal').classList.remove('active');
+}
+
 function triggerInstall() {
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((result) => {
-            if (result.outcome === 'accepted') {
-                document.getElementById('pwa-install-btn').style.display = 'none';
-            }
-            deferredPrompt = null;
-        });
-    }
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((result) => {
+      if (result.outcome === 'accepted') {
+        document.getElementById('pwa-install-btn').style.display = 'none';
+      }
+      deferredPrompt = null;
+    });
+  }
 }
 
 window.addEventListener('appinstalled', () => {
-    document.getElementById('pwa-install-btn').style.display = 'none';
-    deferredPrompt = null;
+  document.getElementById('pwa-install-btn').style.display = 'none';
+  dismissInstallModal();
+  deferredPrompt = null;
 });
-
 // ─── Init ─────────────────────────────────────────────────────────────────────
 showLevels();
 </script>
+    <!-- PWA Install Modal -->
+<div class="pwa-modal-overlay" id="pwaInstallModal">
+  <div class="pwa-modal-box">
+    <div class="pwa-modal-icon">📲</div>
+    <h2 class="pwa-modal-title">Install E-Vidya App</h2>
+    <p class="pwa-modal-subtitle">ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ — ଇଣ୍ଟରନେଟ୍ ବିନା ମଧ୍ୟ ବ୍ୟବହାର କରିପାରିବେ</p>
+    <p class="pwa-modal-desc">Get faster access, offline support, and a home screen icon — just like a real app!</p>
+    <button class="pwa-modal-install-btn" onclick="triggerInstallFromModal()">⬇️ Install Now — ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ</button>
+    <button class="pwa-modal-dismiss-btn" onclick="dismissInstallModal()">Not Now — ପରେ କରିବି</button>
+  </div>
+</div>
 </body>
 </html>
