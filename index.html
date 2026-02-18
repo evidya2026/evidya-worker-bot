@@ -197,7 +197,7 @@
 .info-modal-body .legal-notice { background: #fff5f5; border: 2px solid #fc8181; border-radius: 10px; padding: 12px; margin-top: 14px; }
 .info-modal-body .legal-notice p { color: #c53030; font-weight: 700; margin: 0; font-size: 0.95em; }
 
-        /* Install Gate */
+/* ── Install Gate ── */
 #install-gate {
   display: none;
   position: fixed;
@@ -219,10 +219,7 @@
   width: 100%;
   box-shadow: 0 20px 60px rgba(0,0,0,0.3);
 }
-.install-logo {
-  font-size: 4em;
-  margin-bottom: 10px;
-}
+.install-logo { font-size: 4em; margin-bottom: 10px; }
 .install-title {
   font-size: 1.4em;
   font-weight: 900;
@@ -236,7 +233,7 @@
   color: #666;
   font-size: 0.9em;
   margin-bottom: 24px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 .install-btn {
   width: 100%;
@@ -253,15 +250,15 @@
 }
 .install-note {
   color: #999;
-  font-size: 0.75em;
-  line-height: 1.5;
+  font-size: 0.78em;
+  line-height: 1.6;
   margin-top: 10px;
 }
 .install-steps {
   background: #f7f8ff;
   border-radius: 12px;
   padding: 14px;
-  margin: 16px 0;
+  margin: 0 0 16px 0;
   text-align: left;
 }
 .install-step {
@@ -270,11 +267,21 @@
   padding: 4px 0;
   font-weight: 600;
 }
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  margin: 20px auto;
+  width: 48px;
+  height: 48px;
+  border: 5px solid rgba(102,126,234,0.2);
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
     </style>
 </head>
 <body>
 
-    <!-- Install Gate — shown to non-installed browser users -->
+<!-- Install Gate -->
 <div id="install-gate">
   <div class="install-card">
     <div class="install-logo">🎓</div>
@@ -284,11 +291,10 @@
       <small>Please install the app to continue.</small>
     </div>
 
-    <!-- Step-by-step for iOS (Safari doesn't support install prompt) -->
     <div class="install-steps" id="ios-steps" style="display:none;">
       <div class="install-step">1️⃣ Tap the <strong>Share</strong> button (□↑)</div>
-      <div class="install-step">2️⃣ Scroll and tap <strong>"Add to Home Screen"</strong></div>
-      <div class="install-step">3️⃣ Tap <strong>"Add"</strong> — done! ✅</div>
+      <div class="install-step">2️⃣ Tap <strong>"Add to Home Screen"</strong></div>
+      <div class="install-step">3️⃣ Tap <strong>"Add"</strong> ✅</div>
     </div>
 
     <button class="install-btn" id="gate-install-btn" style="display:none;">
@@ -296,7 +302,7 @@
     </button>
 
     <div class="install-note" id="install-note">
-      ⏳ Install prompt loading...<br>
+      ⏳ Loading...<br>
       <small>ଦୟାକରି ଟିକିଏ ଅପେକ୍ଷା କରନ୍ତୁ ।</small>
     </div>
   </div>
@@ -1399,42 +1405,44 @@ document.getElementById('searchInput').addEventListener('input', () => {
     noResults.style.display = hasResults ? 'none' : 'block';
 });
 
+// ─── PWA Install Gate ─────────────────────────────────────────────────────────
 (function () {
+
   const isStandalone =
     window.matchMedia('(display-mode: standalone)').matches ||
     window.navigator.standalone === true;
 
-  const gate = document.getElementById('install-gate');
-  const gateBtn = document.getElementById('gate-install-btn');
+  const gate       = document.getElementById('install-gate');
+  const gateBtn    = document.getElementById('gate-install-btn');
   const installNote = document.getElementById('install-note');
 
-  const appContainer = document.querySelector('.container');
-  const appFooter = document.querySelector('footer');
-  const payModal = document.getElementById('payModal');
-  const subjectModal = document.getElementById('subjectModal');
-  const pwaBtn = document.getElementById('pwa-install-btn');
+  const appContainer  = document.querySelector('.container');
+  const appFooter     = document.querySelector('footer');
+  const payModal      = document.getElementById('payModal');
+  const subjectModal  = document.getElementById('subjectModal');
+  const pwaBtn        = document.getElementById('pwa-install-btn');
 
-  // ── Hide full app ──
+  // ── Hide entire app ──────────────────────────────────────────────────────────
   function hideApp() {
     if (appContainer) appContainer.style.display = 'none';
-    if (appFooter) appFooter.style.display = 'none';
-    if (payModal) payModal.style.display = 'none';
+    if (appFooter)    appFooter.style.display    = 'none';
+    if (payModal)     payModal.style.display     = 'none';
     if (subjectModal) subjectModal.style.display = 'none';
-    if (pwaBtn) pwaBtn.style.display = 'none';
-    document.body.style.overflow = 'hidden';
+    if (pwaBtn)       pwaBtn.style.display       = 'none';
+    document.body.style.overflow   = 'hidden';
     document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
   }
 
-  // ── Show full app (when already installed/standalone) ──
+  // ── Show entire app (called when already installed) ──────────────────────────
   function showApp() {
     if (appContainer) appContainer.style.display = '';
-    if (appFooter) appFooter.style.display = '';
-    document.body.style.overflow = 'auto';
+    if (appFooter)    appFooter.style.display    = '';
+    document.body.style.overflow   = 'auto';
     document.body.style.background = '';
     if (gate) gate.style.display = 'none';
   }
 
-  // ── Show "Installing, please wait" state ──
+  // ── State 2: Installing spinner ──────────────────────────────────────────────
   function showInstallingState() {
     const card = document.querySelector('.install-card');
     if (!card) return;
@@ -1443,69 +1451,63 @@ document.getElementById('searchInput').addEventListener('input', () => {
       <div class="install-title">Installing...</div>
       <div class="install-subtitle">
         ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ ହେଉଛି, ଦୟାକରି ଅପେକ୍ଷା କରନ୍ତୁ ।<br>
-        <small>This application is being installed, please wait.</small>
+        <small>This application is being installed,<br>please wait.</small>
       </div>
-      <div style="margin: 20px auto; width: 48px; height: 48px;
-        border: 5px solid rgba(102,126,234,0.2);
-        border-top-color: #667eea;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;">
-      </div>
-      <style>
-        @keyframes spin { to { transform: rotate(360deg); } }
-      </style>
+      <div class="spinner"></div>
     `;
   }
 
-  // ── Show "Installation complete, go to home screen" state ──
+  // ── State 3: Installation complete ──────────────────────────────────────────
   function showDoneState() {
     const card = document.querySelector('.install-card');
     if (!card) return;
+    // Guard: don't overwrite if already showing done state
+    if (card.dataset.done === '1') return;
+    card.dataset.done = '1';
     card.innerHTML = `
       <div class="install-logo">✅</div>
-      <div class="install-title" style="color:#22c55e;">
+      <div class="install-title" style="-webkit-text-fill-color:#22c55e; color:#22c55e;">
         Installation Successful!
       </div>
       <div class="install-subtitle" style="margin-top:12px; line-height:1.8;">
-        ଆପ୍ ସଫଳଭାବରେ ଇନ୍‌ସ୍ଟଲ୍ ହୋଇଛି ।<br>
+        ଆପ୍ ସଫଳଭାବରେ ଇନ୍‌ସ୍ଟଲ୍ ହୋଇଛି ।<br><br>
         <strong>ଆପ୍ ଖୋଲିବା ପାଇଁ ହୋମ ସ୍କ୍ରିନ୍‌କୁ ଯାଆନ୍ତୁ ଏବଂ
-        ଆପ୍ ଆଇକନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ ।</strong><br><br>
-        <small>
-          Installation has been completed successfully.<br>
-          To open the app, please go to your
-          <strong>Home Screen</strong> and tap the
-          <strong>E-Vidya Academy</strong> app icon.
-        </small>
+        ଆପ୍ ଆଇକନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ ।</strong>
       </div>
       <div style="
-        background: #f0fdf4;
-        border: 2px solid #22c55e;
-        border-radius: 14px;
-        padding: 14px 16px;
-        margin-top: 16px;
-        font-size: 0.82em;
-        color: #15803d;
-        font-weight: 600;
-        line-height: 1.7;
-        text-align: left;">
-        📱 Step 1: Press the <strong>Home</strong> button<br>
-        🔍 Step 2: Find <strong>"ଇ-ବିଦ୍ୟା"</strong> icon<br>
-        👆 Step 3: Tap to open the app
+        background:#f0fdf4;
+        border:2px solid #22c55e;
+        border-radius:14px;
+        padding:14px 16px;
+        margin-top:16px;
+        font-size:0.82em;
+        color:#15803d;
+        font-weight:600;
+        line-height:1.9;
+        text-align:left;">
+        📱 Step 1 — Press the <strong>Home</strong> button<br>
+        🔍 Step 2 — Find <strong>"ଇ-ବିଦ୍ୟା"</strong> icon on your screen<br>
+        👆 Step 3 — Tap the icon to open the app
+      </div>
+      <div style="margin-top:14px; font-size:0.75em; color:#999;">
+        Installation has been completed successfully.<br>
+        To open the app, go to your <strong>Home Screen</strong><br>
+        and tap the <strong>E-Vidya Academy</strong> app icon.
       </div>
     `;
   }
 
-  // ── Already installed as PWA → show app directly ──
+  // ── Already running as installed PWA → show app immediately ─────────────────
   if (isStandalone) {
     showApp();
     return;
   }
 
-  // ── Not installed → hide app, show gate ──
+  // ── Not installed → hide app, show gate ─────────────────────────────────────
   hideApp();
   gate.classList.add('visible');
 
-  // ── iOS (no beforeinstallprompt support) ──
+  // ── iOS (Safari has no beforeinstallprompt) ──────────────────────────────────
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   if (isIOS) {
     const iosSteps = document.getElementById('ios-steps');
@@ -1513,6 +1515,7 @@ document.getElementById('searchInput').addEventListener('input', () => {
     installNote.innerHTML =
       '👆 Follow the steps above to install.<br>' +
       '<small>ଉପରୋକ୍ତ ପଦ୍ଧତି ଅନୁସରଣ କରି ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।</small>';
+    // Poll every second — iOS never fires appinstalled
     const iosPoller = setInterval(() => {
       if (window.navigator.standalone === true) {
         clearInterval(iosPoller);
@@ -1522,7 +1525,7 @@ document.getElementById('searchInput').addEventListener('input', () => {
     return;
   }
 
-  // ── Android / Chrome ──
+  // ── Android / Chrome ─────────────────────────────────────────────────────────
   let deferredPrompt;
 
   window.addEventListener('beforeinstallprompt', (e) => {
@@ -1542,31 +1545,57 @@ document.getElementById('searchInput').addEventListener('input', () => {
     deferredPrompt = null;
 
     if (result.outcome === 'accepted') {
-      // Immediately show "installing, please wait" spinner
+
+      // ── Immediately show spinner ─────────────────────────────────────────────
       showInstallingState();
 
-      // appinstalled fires when Chrome finishes — use it as primary trigger
+      let appInstalledFired = false;
+      let minWaitDone       = false;
+      let doneShown         = false;
+
+      function tryShowDone() {
+        // Show done ONLY when BOTH are true:
+        // 1. appinstalled event has fired
+        // 2. Minimum 8 seconds have passed
+        // This prevents success showing while dialog is still open
+        if (appInstalledFired && minWaitDone && !doneShown) {
+          doneShown = true;
+          showDoneState();
+        }
+      }
+
+      // Condition 1 — appinstalled event (primary trigger)
       window.addEventListener('appinstalled', () => {
-        showDoneState();
+        appInstalledFired = true;
+        tryShowDone();
       });
 
-      // Safety fallback: if appinstalled never fires within 20 seconds,
-      // show done state anyway (installation is certainly complete by then)
+      // Condition 2 — minimum 8 second wait
       setTimeout(() => {
-        showDoneState();
-      }, 20000);
+        minWaitDone = true;
+        tryShowDone();
+      }, 8000);
+
+      // Hard fallback — show done after 25 seconds no matter what
+      // (handles devices where appinstalled never fires)
+      setTimeout(() => {
+        if (!doneShown) {
+          doneShown = true;
+          showDoneState();
+        }
+      }, 25000);
 
     } else {
-      // User cancelled
+      // User cancelled the install dialog
       gateBtn.textContent = '⬇️ Install App — ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ';
-      gateBtn.disabled = false;
+      gateBtn.disabled    = false;
       installNote.innerHTML =
         '⚠️ Installation cancelled. Please try again.<br>' +
         '<small>ଦୟାକରି ପୁନଃ ଚେଷ୍ଟା କରନ୍ତୁ ।</small>';
     }
   });
 
-  // ── Fallback if beforeinstallprompt never fires ──
+  // ── Fallback if beforeinstallprompt never fires ──────────────────────────────
   setTimeout(() => {
     if (!deferredPrompt && gateBtn.style.display === 'none') {
       installNote.innerHTML =
@@ -1576,6 +1605,7 @@ document.getElementById('searchInput').addEventListener('input', () => {
   }, 5000);
 
 })();
+// ─── End PWA Install Gate ─────────────────────────────────────────────────────
 // ─── Init ─────────────────────────────────────────────────────────────────────
 showLevels();
 </script>
