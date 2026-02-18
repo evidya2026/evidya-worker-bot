@@ -1403,69 +1403,132 @@ document.getElementById('searchInput').addEventListener('input', () => {
 (function () {
   const isStandalone =
     window.matchMedia('(display-mode: standalone)').matches ||
-    window.navigator.standalone === true; // iOS Safari
+    window.navigator.standalone === true;
 
   const gate = document.getElementById('install-gate');
   const gateBtn = document.getElementById('gate-install-btn');
   const iosSteps = document.getElementById('ios-steps');
   const installNote = document.getElementById('install-note');
 
-  // If already installed as PWA → skip gate, show app normally
-  if (isStandalone) {
+  // ── CRITICAL: Hide the entire app content immediately ──
+  // This runs before anything renders
+  const appContainer = document.querySelector('.container');
+  const appFooter = document.querySelector('footer');
+  const payModal = document.getElementById('payModal');
+  const subjectModal = document.getElementById('subjectModal');
+  const pwaBtn = document.getElementById('pwa-install-btn');
+
+  function hideApp() {
+    if (appContainer) appContainer.style.display = 'none';
+    if (appFooter) appFooter.style.display = 'none';
+    if (payModal) payModal.style.display = 'none';
+    if (subjectModal) subjectModal.style.display = 'none';
+    if (pwaBtn) pwaBtn.style.display = 'none';
+    document.body.style.overflow = 'hidden';
+    document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+  }
+
+  function showApp() {
+    if (appContainer) appContainer.style.display = '';
+    if (appFooter) appFooter.style.display = '';
+    document.body.style.overflow = 'auto';
+    document.body.style.background = '';
     gate.classList.remove('visible');
+    gate.style.display = 'none';
+  }
+
+  // If already installed → show app, skip gate entirely
+  if (isStandalone) {
+    showApp();
     return;
   }
 
-  // Not installed → show gate, hide body scrolling
+  // Not installed → hide app, show gate
+  hideApp();
   gate.classList.add('visible');
-  document.body.style.overflow = 'hidden';
 
-  // Detect iOS
+  // ── iOS Detection ──
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   if (isIOS) {
     iosSteps.style.display = 'block';
-    installNote.innerHTML = '👆 Follow the steps above to install.<br><small>ଉପରୋକ୍ତ ପଦ୍ଧତି ଅନୁସରଣ କରି ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।</small>';
+    installNote.innerHTML =
+      '👆 Follow the steps above to install.<br>' +
+      '<small>ଉପରୋକ୍ତ ପଦ୍ଧତି ଅନୁସରଣ କରି ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।</small>';
+
+    // iOS: poll for standalone mode every second
+    // (iOS doesn't fire appinstalled event)
+    const iosPoller = setInterval(() => {
+      if (window.navigator.standalone === true) {
+        clearInterval(iosPoller);
+        showApp();
+      }
+    }, 1000);
     return;
   }
 
-  // Android/Chrome: wait for beforeinstallprompt
+  // ── Android/Chrome ──
   let deferredPrompt;
 
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
     gateBtn.style.display = 'block';
-    installNote.innerHTML = '👆 Click the button above to install.<br><small>ଉପରୋକ୍ତ ବଟନ୍ ଦବାଇ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।</small>';
+    installNote.innerHTML =
+      '👆 Click the button above to install.<br>' +
+      '<small>ଉପରୋକ୍ତ ବଟନ୍ ଦବାଇ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।</small>';
   });
 
   gateBtn.addEventListener('click', async () => {
     if (!deferredPrompt) return;
+
+    // Show loading state during installation dialog
+    gateBtn.textContent = '⏳ Installing...';
+    gateBtn.disabled = true;
+    installNote.innerHTML =
+      '📲 Complete the installation in the popup...<br>' +
+      '<small>ଇନ୍‌ସ୍ଟଲ୍ ଡାୟଲଗ୍ ରେ ନିଶ୍ଚିତ କରନ୍ତୁ ।</small>';
+
     deferredPrompt.prompt();
     const result = await deferredPrompt.userChoice;
     deferredPrompt = null;
+
     if (result.outcome === 'accepted') {
-      installNote.innerHTML = '✅ App installed! Opening now...<br><small>ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ ହୋଇଛି! ଖୋଲୁଛି...</small>';
-      gateBtn.style.display = 'none';
-      // App will relaunch in standalone mode automatically
-    }
-  });
-
-  window.addEventListener('appinstalled', () => {
-    gate.classList.remove('visible');
-    document.body.style.overflow = 'auto';
-  });
-
-  // Timeout fallback — if prompt never fires (e.g. already dismissed before)
-  setTimeout(() => {
-    if (gateBtn.style.display === 'none' && !isIOS) {
+      // User accepted — wait for appinstalled event to confirm
       installNote.innerHTML =
-        '⚠️ Install prompt unavailable.<br>' +
-        'Use browser menu → "Add to Home Screen"<br>' +
-        '<small>Browser menu → Add to Home Screen ବ୍ୟବହାର କରନ୍ତୁ ।</small>';
+        '✅ Installing... Please wait.<br>' +
+        '<small>ଦୟାକରି ଅପେକ୍ଷା କରନ୍ତୁ ।</small>';
+    } else {
+      // User dismissed the prompt
+      gateBtn.textContent = '⬇️ Install App — ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ';
+      gateBtn.disabled = false;
+      installNote.innerHTML =
+        '⚠️ Installation cancelled. Please try again.<br>' +
+        '<small>ଦୟାକରି ପୁନଃ ଚେଷ୍ଟା କରନ୍ତୁ ।</small>';
     }
-  }, 4000);
-})();
+  });
 
+  // ── THIS IS THE KEY EVENT — fires only when install is 100% complete ──
+  window.addEventListener('appinstalled', () => {
+    installNote.innerHTML =
+      '🎉 Installed! Opening app...<br>' +
+      '<small>ଆପ୍ ଖୋଲୁଛି...</small>';
+
+    // Short delay then reload — app will reopen in standalone mode
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
+  });
+
+  // ── Fallback: prompt never fired (browser already dismissed it before) ──
+  setTimeout(() => {
+    if (!deferredPrompt && gateBtn.style.display === 'none') {
+      installNote.innerHTML =
+        '⚠️ Use your browser menu → "Add to Home Screen"<br>' +
+        '<small>Browser Menu → Add to Home Screen ବ୍ୟବହାର କରନ୍ତୁ ।</small>';
+    }
+  }, 5000);
+
+})();
 // ─── Init ─────────────────────────────────────────────────────────────────────
 showLevels();
 </script>
