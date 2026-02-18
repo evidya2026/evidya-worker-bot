@@ -1405,121 +1405,80 @@ document.getElementById('searchInput').addEventListener('input', () => {
     noResults.style.display = hasResults ? 'none' : 'block';
 });
 
-// ─── PWA Install Gate ─────────────────────────────────────────────────────────
 (function () {
-
   const isStandalone =
     window.matchMedia('(display-mode: standalone)').matches ||
     window.navigator.standalone === true;
 
-  const gate       = document.getElementById('install-gate');
-  const gateBtn    = document.getElementById('gate-install-btn');
-  const installNote = document.getElementById('install-note');
+  const gate = document.getElementById('install-gate');
+  const appContainer = document.querySelector('.container');
+  const appFooter = document.querySelector('footer');
+  const payModal = document.getElementById('payModal');
+  const subjectModal = document.getElementById('subjectModal');
+  const pwaBtn = document.getElementById('pwa-install-btn');
 
-  const appContainer  = document.querySelector('.container');
-  const appFooter     = document.querySelector('footer');
-  const payModal      = document.getElementById('payModal');
-  const subjectModal  = document.getElementById('subjectModal');
-  const pwaBtn        = document.getElementById('pwa-install-btn');
-
-  // ── Hide entire app ──────────────────────────────────────────────────────────
   function hideApp() {
     if (appContainer) appContainer.style.display = 'none';
-    if (appFooter)    appFooter.style.display    = 'none';
-    if (payModal)     payModal.style.display     = 'none';
+    if (appFooter) appFooter.style.display = 'none';
+    if (payModal) payModal.style.display = 'none';
     if (subjectModal) subjectModal.style.display = 'none';
-    if (pwaBtn)       pwaBtn.style.display       = 'none';
-    document.body.style.overflow   = 'hidden';
+    if (pwaBtn) pwaBtn.style.display = 'none';
+    document.body.style.overflow = 'hidden';
     document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
   }
 
-  // ── Show entire app (called when already installed) ──────────────────────────
   function showApp() {
     if (appContainer) appContainer.style.display = '';
-    if (appFooter)    appFooter.style.display    = '';
-    document.body.style.overflow   = 'auto';
+    if (appFooter) appFooter.style.display = '';
+    document.body.style.overflow = 'auto';
     document.body.style.background = '';
     if (gate) gate.style.display = 'none';
   }
 
-  // ── State 2: Installing spinner ──────────────────────────────────────────────
-  function showInstallingState() {
+  function showWaitMessage() {
     const card = document.querySelector('.install-card');
     if (!card) return;
     card.innerHTML = `
-      <div class="install-logo">⏳</div>
-      <div class="install-title">Installing...</div>
-      <div class="install-subtitle">
-        ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ ହେଉଛି, ଦୟାକରି ଅପେକ୍ଷା କରନ୍ତୁ ।<br>
-        <small>This application is being installed,<br>please wait.</small>
-      </div>
-      <div class="spinner"></div>
-    `;
-  }
-
-  // ── State 3: Installation complete ──────────────────────────────────────────
-  function showDoneState() {
-    const card = document.querySelector('.install-card');
-    if (!card) return;
-    // Guard: don't overwrite if already showing done state
-    if (card.dataset.done === '1') return;
-    card.dataset.done = '1';
-    card.innerHTML = `
-      <div class="install-logo">✅</div>
-      <div class="install-title" style="-webkit-text-fill-color:#22c55e; color:#22c55e;">
-        Installation is being continued!
-      </div>
-      <div class="install-subtitle" style="margin-top:12px; line-height:1.8;">
-        ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ ହେଉଛି । ଦୟାକରି ହୋମ ସ୍କ୍ରିନ୍‌ ରେ ଅପେକ୍ଷା କରନ୍ତୁ । ଅଳ୍ପ କିଛି ସେକେଣ୍ଡ୍ ମଧ୍ୟରେ ଆପଣ ଆପ୍ ଚିତ୍ର ଦେଖିବାକୁ ପାଇବେ । ଆପ୍ କୁ ଖୋଲିବା ପାଇଁ ସର୍ବଦା ଉକ୍ତ ଆପ୍ ଚିତ୍ର କୁ ବ୍ୟବହାର କରିବେ ।<br><br>
+      <div style="font-size:3.5em; margin-bottom:16px;">📲</div>
+      <div style="
+        font-size:1.2em;
+        font-weight:900;
+        background:linear-gradient(135deg,#667eea,#764ba2);
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;
+        background-clip:text;
+        margin-bottom:16px;">
+        Installing...
       </div>
       <div style="
-        background:#f0fdf4;
-        border:2px solid #22c55e;
-        border-radius:14px;
-        padding:14px 16px;
-        margin-top:16px;
-        font-size:0.82em;
-        color:#15803d;
-        font-weight:600;
+        color:#555;
+        font-size:0.92em;
         line-height:1.9;
-        text-align:left;">
-        ଇ-ବିଦ୍ୟା ଏକାଡେମିରେ ଆପଣଙ୍କୁ ସ୍ଵାଗତ । 
-      </div>
-      <div style="margin-top:14px; font-size:0.75em; color:#999;">
-       ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ ହେଉଛି । ଦୟାକରି ହୋମ ସ୍କ୍ରିନ୍‌ ରେ ଅପେକ୍ଷା କରନ୍ତୁ । ଅଳ୍ପ କିଛି ସେକେଣ୍ଡ୍ ମଧ୍ୟରେ ଆପଣ ଆପ୍ ଚିତ୍ର ଦେଖିବାକୁ ପାଇବେ । ଆପ୍ କୁ ଖୋଲିବା ପାଇଁ ସର୍ବଦା ଉକ୍ତ ଆପ୍ ଚିତ୍ର କୁ ବ୍ୟବହାର କରିବେ ।
+        font-weight:600;">
+        ଏହି ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ ହେଉଛି ।<br>
+        ଦୟାକରି ହୋମ ସ୍କ୍ରିନ୍‌ରେ ଅପେକ୍ଷା କରନ୍ତୁ —<br>
+        ଆପ୍ ଆଇକନ୍ ଶୀଘ୍ର ଦେଖାଯିବ ।<br><br>
+        <small style="color:#888;">
+          This app is being installed.<br>
+          Please wait on your home screen —<br>
+          you will see the app icon very soon.
+        </small>
       </div>
     `;
   }
 
-  // ── Already running as installed PWA → show app immediately ─────────────────
+  // Already installed → show app directly
   if (isStandalone) {
     showApp();
     return;
   }
 
-  // ── Not installed → hide app, show gate ─────────────────────────────────────
+  // Not installed → hide app, show gate
   hideApp();
   gate.classList.add('visible');
 
-  // ── iOS (Safari has no beforeinstallprompt) ──────────────────────────────────
-  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  if (isIOS) {
-    const iosSteps = document.getElementById('ios-steps');
-    if (iosSteps) iosSteps.style.display = 'block';
-    installNote.innerHTML =
-      '👆 Follow the steps above to install.<br>' +
-      '<small>ଉପରୋକ୍ତ ପଦ୍ଧତି ଅନୁସରଣ କରି ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।</small>';
-    // Poll every second — iOS never fires appinstalled
-    const iosPoller = setInterval(() => {
-      if (window.navigator.standalone === true) {
-        clearInterval(iosPoller);
-        showDoneState();
-      }
-    }, 1000);
-    return;
-  }
-
-  // ── Android / Chrome ─────────────────────────────────────────────────────────
+  const gateBtn = document.getElementById('gate-install-btn');
+  const installNote = document.getElementById('install-note');
   let deferredPrompt;
 
   window.addEventListener('beforeinstallprompt', (e) => {
@@ -1533,63 +1492,24 @@ document.getElementById('searchInput').addEventListener('input', () => {
 
   gateBtn.addEventListener('click', async () => {
     if (!deferredPrompt) return;
-
     deferredPrompt.prompt();
     const result = await deferredPrompt.userChoice;
     deferredPrompt = null;
 
     if (result.outcome === 'accepted') {
-
-      // ── Immediately show spinner ─────────────────────────────────────────────
-      showInstallingState();
-
-      let appInstalledFired = false;
-      let minWaitDone       = false;
-      let doneShown         = false;
-
-      function tryShowDone() {
-        // Show done ONLY when BOTH are true:
-        // 1. appinstalled event has fired
-        // 2. Minimum 8 seconds have passed
-        // This prevents success showing while dialog is still open
-        if (appInstalledFired && minWaitDone && !doneShown) {
-          doneShown = true;
-          showDoneState();
-        }
-      }
-
-      // Condition 1 — appinstalled event (primary trigger)
-      window.addEventListener('appinstalled', () => {
-        appInstalledFired = true;
-        tryShowDone();
-      });
-
-      // Condition 2 — minimum 8 second wait
-      setTimeout(() => {
-        minWaitDone = true;
-        tryShowDone();
-      }, 10000);
-
-      // Hard fallback — show done after 25 seconds no matter what
-      // (handles devices where appinstalled never fires)
-      setTimeout(() => {
-        if (!doneShown) {
-          doneShown = true;
-          showDoneState();
-        }
-      }, 25000);
-
+      // User tapped Install — immediately show the wait message
+      // Nothing else. No success banner. No open button. Just wait.
+      showWaitMessage();
     } else {
-      // User cancelled the install dialog
-      gateBtn.textContent = '⬇️ Install App — ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।';
-      gateBtn.disabled    = false;
+      gateBtn.textContent = '⬇️ Install App — ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ';
+      gateBtn.disabled = false;
       installNote.innerHTML =
         '⚠️ Installation cancelled. Please try again.<br>' +
         '<small>ଦୟାକରି ପୁନଃ ଚେଷ୍ଟା କରନ୍ତୁ ।</small>';
     }
   });
 
-  // ── Fallback if beforeinstallprompt never fires ──────────────────────────────
+  // Fallback if beforeinstallprompt never fires
   setTimeout(() => {
     if (!deferredPrompt && gateBtn.style.display === 'none') {
       installNote.innerHTML =
