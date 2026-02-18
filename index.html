@@ -197,21 +197,84 @@
 .info-modal-body .legal-notice { background: #fff5f5; border: 2px solid #fc8181; border-radius: 10px; padding: 12px; margin-top: 14px; }
 .info-modal-body .legal-notice p { color: #c53030; font-weight: 700; margin: 0; font-size: 0.95em; }
 
-/* Install Gate */
-#install-gate { display: none; position: fixed; inset: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); z-index: 99999; justify-content: center; align-items: center; padding: 30px; }
+        /* Install Gate */
+#install-gate {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  z-index: 99999;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  text-align: center;
+}
 #install-gate.visible { display: flex; }
-.install-card { background: white; border-radius: 24px; padding: 40px 30px; max-width: 340px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; }
-.install-logo { font-size: 3.5em; margin-bottom: 16px; }
-.install-title { font-size: 1.3em; font-weight: 900; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 10px; }
-.install-subtitle { color: #666; font-size: 0.88em; line-height: 1.7; margin-bottom: 24px; }
-.install-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 14px; font-size: 1em; font-weight: 800; cursor: pointer; box-shadow: 0 6px 20px rgba(102,126,234,0.4); }
-.install-note { color: #999; font-size: 0.78em; margin-top: 14px; line-height: 1.6; }
-.ios-steps { background: #f7f8ff; border-radius: 12px; padding: 14px; margin-bottom: 16px; text-align: left; display: none; }
-.ios-step { font-size: 0.82em; color: #444; padding: 4px 0; font-weight: 600; }
+
+.install-card {
+  background: white;
+  border-radius: 24px;
+  padding: 40px 30px;
+  max-width: 340px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.install-logo {
+  font-size: 4em;
+  margin-bottom: 10px;
+}
+.install-title {
+  font-size: 1.4em;
+  font-weight: 900;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 6px;
+}
+.install-subtitle {
+  color: #666;
+  font-size: 0.9em;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+.install-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 1.05em;
+  font-weight: 800;
+  cursor: pointer;
+  margin-bottom: 12px;
+  box-shadow: 0 6px 20px rgba(102,126,234,0.4);
+}
+.install-note {
+  color: #999;
+  font-size: 0.75em;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+.install-steps {
+  background: #f7f8ff;
+  border-radius: 12px;
+  padding: 14px;
+  margin: 16px 0;
+  text-align: left;
+}
+.install-step {
+  font-size: 0.82em;
+  color: #444;
+  padding: 4px 0;
+  font-weight: 600;
+}
     </style>
 </head>
 <body>
 
+    <!-- Install Gate — shown to non-installed browser users -->
 <div id="install-gate">
   <div class="install-card">
     <div class="install-logo">🎓</div>
@@ -220,16 +283,21 @@
       ଏହି ଆପ୍ ବ୍ୟବହାର କରିବା ପାଇଁ ଦୟାକରି ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।<br>
       <small>Please install the app to continue.</small>
     </div>
-    <div class="ios-steps" id="ios-steps">
-      <div class="ios-step">1️⃣ Tap the <strong>Share</strong> button (□↑)</div>
-      <div class="ios-step">2️⃣ Tap <strong>"Add to Home Screen"</strong></div>
-      <div class="ios-step">3️⃣ Tap <strong>"Add"</strong> ✅</div>
+
+    <!-- Step-by-step for iOS (Safari doesn't support install prompt) -->
+    <div class="install-steps" id="ios-steps" style="display:none;">
+      <div class="install-step">1️⃣ Tap the <strong>Share</strong> button (□↑)</div>
+      <div class="install-step">2️⃣ Scroll and tap <strong>"Add to Home Screen"</strong></div>
+      <div class="install-step">3️⃣ Tap <strong>"Add"</strong> — done! ✅</div>
     </div>
+
     <button class="install-btn" id="gate-install-btn" style="display:none;">
       ⬇️ Install App — ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ
     </button>
+
     <div class="install-note" id="install-note">
-      ⏳ Loading...<br><small>ଦୟାକରି ଟିକିଏ ଅପେକ୍ଷା କରନ୍ତୁ ।</small>
+      ⏳ Install prompt loading...<br>
+      <small>ଦୟାକରି ଟିକିଏ ଅପେକ୍ଷା କରନ୍ତୁ ।</small>
     </div>
   </div>
 </div>
@@ -338,7 +406,10 @@
     </div>
 </div>
 
-
+<!-- PWA Install Button -->
+<button id="pwa-install-btn" onclick="triggerInstall()">
+    ⬇️ Install App — ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।
+</button>
 
 <footer>
     <h3>🌹 E-Vidya Academy 🌹</h3>
@@ -1332,93 +1403,39 @@ document.getElementById('searchInput').addEventListener('input', () => {
 (function () {
   const isStandalone =
     window.matchMedia('(display-mode: standalone)').matches ||
-    window.navigator.standalone === true;
+    window.navigator.standalone === true; // iOS Safari
 
-  const gate        = document.getElementById('install-gate');
-  const gateBtn     = document.getElementById('gate-install-btn');
+  const gate = document.getElementById('install-gate');
+  const gateBtn = document.getElementById('gate-install-btn');
+  const iosSteps = document.getElementById('ios-steps');
   const installNote = document.getElementById('install-note');
-  const iosSteps    = document.getElementById('ios-steps');
 
-  const appContainer = document.querySelector('.container');
-  const appFooter    = document.querySelector('footer');
-  const payModal     = document.getElementById('payModal');
-  const subjectModal = document.getElementById('subjectModal');
-  const pwaBtn       = document.getElementById('pwa-install-btn');
-
-  function hideApp() {
-    if (appContainer) appContainer.style.display = 'none';
-    if (appFooter)    appFooter.style.display    = 'none';
-    if (payModal)     payModal.style.display     = 'none';
-    if (subjectModal) subjectModal.style.display = 'none';
-    if (pwaBtn)       pwaBtn.style.display       = 'none';
-    document.body.style.overflow   = 'hidden';
-    document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-  }
-
-  function showApp() {
-    if (appContainer) appContainer.style.display = '';
-    if (appFooter)    appFooter.style.display    = '';
-    document.body.style.overflow   = 'auto';
-    document.body.style.background = '';
-    gate.style.display = 'none';
-  }
-
-  function showInstallingMessage() {
-    const card = document.querySelector('.install-card');
-    if (!card) return;
-    card.innerHTML = `
-      <div class="install-logo">📲</div>
-      <div class="install-title">Installing...</div>
-      <div class="install-subtitle" style="font-size:0.95em; line-height:2; color:#444;">
-        ଏହି ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ ହେଉଛି ।<br>
-        ଦୟାକରି ହୋମ ସ୍କ୍ରିନ୍‌ରେ ଅପେକ୍ଷା କରନ୍ତୁ —<br>
-        ଆପ୍ ଆଇକନ୍ ଶୀଘ୍ର ଦେଖାଯିବ ।<br><br>
-        <small style="color:#888;">
-          This app is being installed.<br>
-          Please wait on your home screen —<br>
-          you will see the app icon very soon.
-        </small>
-      </div>
-    `;
-  }
-
-  // ── Already installed as PWA → show app directly ──
+  // If already installed as PWA → skip gate, show app normally
   if (isStandalone) {
-    showApp();
+    gate.classList.remove('visible');
     return;
   }
 
-  // ── Not installed → hide app, show gate ──
-  hideApp();
+  // Not installed → show gate, hide body scrolling
   gate.classList.add('visible');
+  document.body.style.overflow = 'hidden';
 
-  // ── iOS (no install prompt support) ──
+  // Detect iOS
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   if (isIOS) {
     iosSteps.style.display = 'block';
-    installNote.innerHTML  =
-      '👆 Follow the steps above.<br>' +
-      '<small>ଉପରୋକ୍ତ ପଦ୍ଧତି ଅନୁସରଣ କରି ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।</small>';
-    // Poll until iOS opens in standalone
-    const iosPoller = setInterval(() => {
-      if (window.navigator.standalone === true) {
-        clearInterval(iosPoller);
-        showApp();
-      }
-    }, 1000);
+    installNote.innerHTML = '👆 Follow the steps above to install.<br><small>ଉପରୋକ୍ତ ପଦ୍ଧତି ଅନୁସରଣ କରି ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।</small>';
     return;
   }
 
-  // ── Android / Chrome ──
+  // Android/Chrome: wait for beforeinstallprompt
   let deferredPrompt;
 
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
     gateBtn.style.display = 'block';
-    installNote.innerHTML =
-      '👆 Click the button above to install.<br>' +
-      '<small>ଉପରୋକ୍ତ ବଟନ୍ ଦବାଇ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।</small>';
+    installNote.innerHTML = '👆 Click the button above to install.<br><small>ଉପରୋକ୍ତ ବଟନ୍ ଦବାଇ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।</small>';
   });
 
   gateBtn.addEventListener('click', async () => {
@@ -1426,40 +1443,29 @@ document.getElementById('searchInput').addEventListener('input', () => {
     deferredPrompt.prompt();
     const result = await deferredPrompt.userChoice;
     deferredPrompt = null;
-
     if (result.outcome === 'accepted') {
-      // User tapped Install in the browser dialog
-      // Just show the simple "installing, go to home screen" message
-      showInstallingMessage();
-    } else {
-      // User cancelled
-      gateBtn.textContent  = '⬇️ Install App — ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ';
-      gateBtn.disabled     = false;
-      installNote.innerHTML =
-        '⚠️ Cancelled. Please try again.<br>' +
-        '<small>ଦୟାକରି ପୁନଃ ଚେଷ୍ଟା କରନ୍ତୁ ।</small>';
+      installNote.innerHTML = '✅ App installed! Opening now...<br><small>ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ ହୋଇଛି! ଖୋଲୁଛି...</small>';
+      gateBtn.style.display = 'none';
+      // App will relaunch in standalone mode automatically
     }
   });
 
-  // ── Fallback: if beforeinstallprompt never fires ──
+  window.addEventListener('appinstalled', () => {
+    gate.classList.remove('visible');
+    document.body.style.overflow = 'auto';
+  });
+
+  // Timeout fallback — if prompt never fires (e.g. already dismissed before)
   setTimeout(() => {
-    if (!deferredPrompt && gateBtn.style.display === 'none') {
+    if (gateBtn.style.display === 'none' && !isIOS) {
       installNote.innerHTML =
-        '⚠️ Use browser menu → "Add to Home Screen"<br>' +
-        '<small>Browser Menu → Add to Home Screen ବ୍ୟବହାର କରନ୍ତୁ ।</small>';
+        '⚠️ Install prompt unavailable.<br>' +
+        'Use browser menu → "Add to Home Screen"<br>' +
+        '<small>Browser menu → Add to Home Screen ବ୍ୟବହାର କରନ୍ତୁ ।</small>';
     }
-  }, 5000);
-
-  // ── Register Service Worker ──
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js').catch(err => {
-        console.log('SW failed:', err);
-      });
-    });
-  }
-
+  }, 4000);
 })();
+
 // ─── Init ─────────────────────────────────────────────────────────────────────
 showLevels();
 </script>
