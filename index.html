@@ -1406,7 +1406,6 @@ document.getElementById('searchInput').addEventListener('input', () => {
 
   const gate = document.getElementById('install-gate');
   const gateBtn = document.getElementById('gate-install-btn');
-  const iosSteps = document.getElementById('ios-steps');
   const installNote = document.getElementById('install-note');
 
   const appContainer = document.querySelector('.container');
@@ -1415,6 +1414,7 @@ document.getElementById('searchInput').addEventListener('input', () => {
   const subjectModal = document.getElementById('subjectModal');
   const pwaBtn = document.getElementById('pwa-install-btn');
 
+  // ── Hide full app ──
   function hideApp() {
     if (appContainer) appContainer.style.display = 'none';
     if (appFooter) appFooter.style.display = 'none';
@@ -1425,79 +1425,98 @@ document.getElementById('searchInput').addEventListener('input', () => {
     document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
   }
 
-  function showOpenButton() {
-    const card = document.querySelector('.install-card');
-    if (!card) return;
-
-    // The correct way to open a PWA is to use its exact origin URL
-    // This triggers the browser to open the already-installed PWA
-    const pwaUrl = window.location.origin + '/';
-
-    card.innerHTML = `
-      <div class="install-logo">🎉</div>
-      <div class="install-title" style="margin-bottom:10px;">
-        Installation Complete!
-      </div>
-      <div class="install-subtitle">
-        ଆପ୍ ସଫଳଭାବରେ ଇନ୍‌ସ୍ଟଲ୍ ହୋଇଛି ।<br>
-        <small>Now open it from your Home Screen,<br>or tap the button below.</small>
-      </div>
-      <button class="install-btn" id="open-app-btn">
-        🚀 Open App — ଆପ୍ ଖୋଲନ୍ତୁ
-      </button>
-      <div class="install-note">
-        ଆପ୍ ଆଇକନ୍ ଆପଣଙ୍କ ହୋମ ସ୍କ୍ରିନ୍ ରେ ଯୋଡ଼ା ହୋଇଛି ।<br>
-        <small>The app icon has been added to your home screen.</small>
-      </div>
-    `;
-
-    // The open button must use location.replace to force a true navigation
-    // which the browser will intercept and open in the installed PWA
-    document.getElementById('open-app-btn').addEventListener('click', () => {
-      // Mark that install is done so next load knows to show app
-      try { localStorage.setItem('pwa_installed', '1'); } catch(e) {}
-      // Force navigate to origin — browser opens installed PWA
-      window.location.replace(pwaUrl);
-    });
-  }
-
-  // ── Already running as installed PWA → show app ──
-  if (isStandalone) {
+  // ── Show full app (when already installed/standalone) ──
+  function showApp() {
     if (appContainer) appContainer.style.display = '';
     if (appFooter) appFooter.style.display = '';
     document.body.style.overflow = 'auto';
     document.body.style.background = '';
-    gate.style.display = 'none';
-    return;
+    if (gate) gate.style.display = 'none';
   }
 
-  // ── Also check localStorage flag (fallback for some browsers) ──
-  try {
-    if (localStorage.getItem('pwa_installed') === '1') {
-      if (appContainer) appContainer.style.display = '';
-      if (appFooter) appFooter.style.display = '';
-      document.body.style.overflow = 'auto';
-      document.body.style.background = '';
-      gate.style.display = 'none';
-      return;
-    }
-  } catch(e) {}
+  // ── Show "Installing, please wait" state ──
+  function showInstallingState() {
+    const card = document.querySelector('.install-card');
+    if (!card) return;
+    card.innerHTML = `
+      <div class="install-logo">⏳</div>
+      <div class="install-title">Installing...</div>
+      <div class="install-subtitle">
+        ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ ହେଉଛି, ଦୟାକରି ଅପେକ୍ଷା କରନ୍ତୁ ।<br>
+        <small>This application is being installed, please wait.</small>
+      </div>
+      <div style="margin: 20px auto; width: 48px; height: 48px;
+        border: 5px solid rgba(102,126,234,0.2);
+        border-top-color: #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;">
+      </div>
+      <style>
+        @keyframes spin { to { transform: rotate(360deg); } }
+      </style>
+    `;
+  }
+
+  // ── Show "Installation complete, go to home screen" state ──
+  function showDoneState() {
+    const card = document.querySelector('.install-card');
+    if (!card) return;
+    card.innerHTML = `
+      <div class="install-logo">✅</div>
+      <div class="install-title" style="color:#22c55e;">
+        Installation Successful!
+      </div>
+      <div class="install-subtitle" style="margin-top:12px; line-height:1.8;">
+        ଆପ୍ ସଫଳଭାବରେ ଇନ୍‌ସ୍ଟଲ୍ ହୋଇଛି ।<br>
+        <strong>ଆପ୍ ଖୋଲିବା ପାଇଁ ହୋମ ସ୍କ୍ରିନ୍‌କୁ ଯାଆନ୍ତୁ ଏବଂ
+        ଆପ୍ ଆଇକନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ ।</strong><br><br>
+        <small>
+          Installation has been completed successfully.<br>
+          To open the app, please go to your
+          <strong>Home Screen</strong> and tap the
+          <strong>E-Vidya Academy</strong> app icon.
+        </small>
+      </div>
+      <div style="
+        background: #f0fdf4;
+        border: 2px solid #22c55e;
+        border-radius: 14px;
+        padding: 14px 16px;
+        margin-top: 16px;
+        font-size: 0.82em;
+        color: #15803d;
+        font-weight: 600;
+        line-height: 1.7;
+        text-align: left;">
+        📱 Step 1: Press the <strong>Home</strong> button<br>
+        🔍 Step 2: Find <strong>"ଇ-ବିଦ୍ୟା"</strong> icon<br>
+        👆 Step 3: Tap to open the app
+      </div>
+    `;
+  }
+
+  // ── Already installed as PWA → show app directly ──
+  if (isStandalone) {
+    showApp();
+    return;
+  }
 
   // ── Not installed → hide app, show gate ──
   hideApp();
   gate.classList.add('visible');
 
-  // ── iOS ──
+  // ── iOS (no beforeinstallprompt support) ──
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   if (isIOS) {
-    iosSteps.style.display = 'block';
+    const iosSteps = document.getElementById('ios-steps');
+    if (iosSteps) iosSteps.style.display = 'block';
     installNote.innerHTML =
       '👆 Follow the steps above to install.<br>' +
       '<small>ଉପରୋକ୍ତ ପଦ୍ଧତି ଅନୁସରଣ କରି ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।</small>';
     const iosPoller = setInterval(() => {
       if (window.navigator.standalone === true) {
         clearInterval(iosPoller);
-        showOpenButton();
+        showDoneState();
       }
     }, 1000);
     return;
@@ -1505,8 +1524,6 @@ document.getElementById('searchInput').addEventListener('input', () => {
 
   // ── Android / Chrome ──
   let deferredPrompt;
-  let installAccepted = false;
-  let pollTimer = null;
 
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
@@ -1520,57 +1537,27 @@ document.getElementById('searchInput').addEventListener('input', () => {
   gateBtn.addEventListener('click', async () => {
     if (!deferredPrompt) return;
 
-    gateBtn.textContent = '⏳ Installing...';
-    gateBtn.disabled = true;
-    installNote.innerHTML =
-      '📲 Complete the installation in the popup...<br>' +
-      '<small>ଇନ୍‌ସ୍ଟଲ୍ ଡାୟଲଗ୍ ରେ ନିଶ୍ଚିତ କରନ୍ତୁ ।</small>';
-
     deferredPrompt.prompt();
     const result = await deferredPrompt.userChoice;
     deferredPrompt = null;
 
     if (result.outcome === 'accepted') {
-      installAccepted = true;
+      // Immediately show "installing, please wait" spinner
+      showInstallingState();
 
-      // Show a "waiting" message — NOT the open button yet
-      installNote.innerHTML =
-        '⏳ Finishing installation...<br>' +
-        '<small>ଦୟାକରି ଅଳ୍ପ ଅପେକ୍ଷା କରନ୍ତୁ ।</small>';
+      // appinstalled fires when Chrome finishes — use it as primary trigger
+      window.addEventListener('appinstalled', () => {
+        showDoneState();
+      });
 
-      // Poll for standalone mode every second
-      // Only show Open button AFTER standalone is confirmed
-      // OR after a generous 15-second timeout
-      let pollCount = 0;
-      const MAX_POLLS = 15; // 15 seconds max wait
-
-      pollTimer = setInterval(() => {
-        pollCount++;
-
-        const nowStandalone =
-          window.matchMedia('(display-mode: standalone)').matches;
-
-        if (nowStandalone) {
-          // PWA already opened in standalone — just reveal app
-          clearInterval(pollTimer);
-          if (appContainer) appContainer.style.display = '';
-          if (appFooter) appFooter.style.display = '';
-          document.body.style.overflow = 'auto';
-          document.body.style.background = '';
-          gate.style.display = 'none';
-
-        } else if (pollCount >= MAX_POLLS) {
-          // 15 seconds passed, installation must be done
-          // Now safe to show Open button
-          clearInterval(pollTimer);
-          showOpenButton();
-        }
-        // else: still waiting — keep showing "Finishing installation..."
-
-      }, 1000);
+      // Safety fallback: if appinstalled never fires within 20 seconds,
+      // show done state anyway (installation is certainly complete by then)
+      setTimeout(() => {
+        showDoneState();
+      }, 20000);
 
     } else {
-      // User cancelled the install dialog
+      // User cancelled
       gateBtn.textContent = '⬇️ Install App — ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ';
       gateBtn.disabled = false;
       installNote.innerHTML =
@@ -1579,19 +1566,11 @@ document.getElementById('searchInput').addEventListener('input', () => {
     }
   });
 
-  // appinstalled fires on some devices — use it as primary trigger
-  window.addEventListener('appinstalled', () => {
-    if (!installAccepted) return;
-    // Cancel the poll timer since we got a definitive signal
-    if (pollTimer) clearInterval(pollTimer);
-    showOpenButton();
-  });
-
-  // Fallback if beforeinstallprompt never fires
+  // ── Fallback if beforeinstallprompt never fires ──
   setTimeout(() => {
-    if (gateBtn.style.display === 'none' && !installAccepted) {
+    if (!deferredPrompt && gateBtn.style.display === 'none') {
       installNote.innerHTML =
-        '⚠️ Use your browser menu → "Add to Home Screen"<br>' +
+        '⚠️ Use browser menu → "Add to Home Screen"<br>' +
         '<small>Browser Menu → Add to Home Screen ବ୍ୟବହାର କରନ୍ତୁ ।</small>';
     }
   }, 5000);
