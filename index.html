@@ -679,10 +679,10 @@ function getOdiaName(k) { return odiaSubjectNames[k] || null; }
 
 
 // ─── Payment Config ───────────────────────────────────────────────────────────
-const EVIDYA_UPI_ID = '8260825712-0@airtel';
+const EVIDYA_UPI_ID = '8457059917@jio';
 const EVIDYA_UPI_NAME = 'The Proprietor of E-Vidya Academy';
 const EVIDYA_AMOUNT = '150';
-const EVIDYA_NOTE = 'ଏହି ଦେୟ ଇ-ବିଦ୍ୟା ଏକାଡେମୀ କୁ ପ୍ରଦାନ କରାଯାଉଛି । ଠିକଣା : ଗ୍ରାମ-ହରସିଂହପୁର, ପୋଷ୍ଟ-ପିରାହାଟ, ଜିଲ୍ଲା-ଭଦ୍ରକ, ଓଡିଶା-୭୫୬୧୩୧, ମୋବାଇଲ/ହ୍ବାଟ୍ସ ଆପ୍ ନମ୍ବର-6372296357';
+const EVIDYA_NOTE = 'ଏହି ଦେୟ ଇ-ବିଦ୍ୟା ଏକାଡେମୀ ର କୋଷାଧ୍ୟକ୍ଷ, ମାନସୀ ପରିଡାଙ୍କୁ ପ୍ରଦାନ କରାଯାଉଛି । ଠିକଣା : ଇ-ବିଦ୍ୟା ଏକାଡେମୀ, ଗ୍ରାମ-ହରସିଂହପୁର, ପୋଷ୍ଟ-ପିରାହାଟ, ଜିଲ୍ଲା-ଭଦ୍ରକ, ଓଡିଶା-୭୫୬୧୩୧, ମୋବାଇଲ/ହ୍ବାଟ୍ସ ଆପ୍ ନମ୍ବର-6372296357';
 const upiLink = `upi://pay?pa=${EVIDYA_UPI_ID}&pn=${encodeURIComponent(EVIDYA_UPI_NAME)}&am=${EVIDYA_AMOUNT}&cu=INR&tn=${EVIDYA_NOTE}`;
 
 window.addEventListener('load', () => {
