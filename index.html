@@ -108,11 +108,16 @@
         .submit-btn:active { transform: scale(0.97); }
         .back-to-options { flex: 0.5; background: #f3f4f6; color: #666; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; }
 
-        /* Payment Button */
-        .pay-floating-btn { display: block; width: calc(100% - 40px); margin: 20px auto 0; padding: 16px 20px; background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%); color: #1a1a2e; border: none; border-radius: 16px; font-size: 1.05em; font-weight: 900; cursor: pointer; box-shadow: 0 6px 24px rgba(247,151,30,0.5); transition: all 0.3s; position: relative; overflow: hidden; }
-        .pay-floating-btn::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 60%); animation: shimmer 2.5s infinite; }
-        @keyframes shimmer { 0% { transform: translateX(-100%) rotate(45deg); } 100% { transform: translateX(100%) rotate(45deg); } }
-        .pay-floating-btn:active { transform: scale(0.97); }
+        .pay-floating-btn {
+    display: block; width: calc(100% - 40px); margin: 20px auto 0;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+    color: #1a1a2e; text-decoration: none; text-align: center;
+    border: none; border-radius: 16px;
+    font-size: 1.05em; font-weight: 900; cursor: pointer;
+    box-shadow: 0 6px 24px rgba(247,151,30,0.5);
+}
+.pay-floating-btn:active { transform: scale(0.97); }
 
       /* Payment Modal */
 .pay-floating-btn { display: block; width: calc(100% - 40px); margin: 20px auto 0; padding: 16px 20px; background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%); color: #1a1a2e; border: none; border-radius: 16px; font-size: 1.05em; font-weight: 900; cursor: pointer; box-shadow: 0 6px 24px rgba(247,151,30,0.5); transition: all 0.3s; position: relative; overflow: hidden; }
@@ -140,8 +145,7 @@
 .pay-howto.open { display: block; }
 .pay-step { color: rgba(255,255,255,0.85); font-size: 0.78em; font-weight: 600; padding: 5px 0; line-height: 1.5; border-bottom: 1px solid rgba(255,255,255,0.07); }
 .pay-step:last-child { border-bottom: none; }
-        .pay-wa-btn { display: block; width: 100%; padding: 14px; background: #25D366; color: white; border: none; border-radius: 14px; font-size: 0.92em; font-weight: 800; cursor: pointer; text-decoration: none; text-align: center; }
-
+       
         /* PWA Install Button */
         #pwa-install-btn { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 14px 28px; border-radius: 25px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 20px rgba(102,126,234,0.5); z-index: 9999; white-space: nowrap; }
 
@@ -266,10 +270,10 @@
     <div class="grid" id="mainGrid"></div>
     <div class="no-results" id="noResults">No results found matching your search.</div>
 
-    <!-- Payment Button -->
-    <button class="pay-floating-btn" onclick="openPayModal()">
-        💳 ଫି ପେମେଣ୍ଟ କରିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ ।
-    </button>
+ <!-- Payment Button -->
+<a href="#" class="pay-floating-btn" onclick="doPay(); return false;">
+    💳 ଫି ପେମେଣ୍ଟ କରିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ ।
+</a>
 </div>
 
 <!-- Subject Modal -->
@@ -312,40 +316,6 @@
     </div>
 </div>
 
-<!-- Payment Modal -->
-<div class="pay-modal-overlay" id="payModal" onclick="handlePayModalClick(event)">
-    <div class="pay-modal-sheet" id="payModalSheet">
-        <div class="pay-close-bar" onclick="closePayModal()"></div>
-        <div class="pay-modal-title">💳 Monthly Fee Payment</div>
-        <div class="pay-modal-subtitle">E-Vidya Academy — ₹150 / Month</div>
-
-        <!-- 4 Buttons -->
-        <div class="pay-btn-grid">
-            <a href="#" id="directPayBtn" class="pay-action-btn pay-btn-pay">
-                ⚡ ଏଠାରେ ପେମେଣ୍ଟ କରନ୍ତୁ । 
-            </a>
-            <button class="pay-action-btn pay-btn-how" onclick="toggleHowTo()">
-                📋 କିପରି ପେମେଣ୍ଟ କରିବେ ଏଠାରେ ଜାଣନ୍ତୁ । 
-            </button>
-            <a href="https://wa.me/+918260825712?text=I%20have%20paid%20%E2%82%B9150%20fee%20for%20E-Vidya%20Academy."
-               target="_blank" class="pay-action-btn pay-btn-wa">
-                📲 ପେମେଣ୍ଟ ର ସ୍କ୍ରିନ୍-ସଟ୍ କୁ ଏଠାରେ ପଠାନ୍ତୁ । 
-            </a>
-            <button class="pay-action-btn pay-btn-close" onclick="closePayModal()">
-                ✕ ଏଠାରେ ବନ୍ଦ କରନ୍ତୁ । 
-            </button>
-        </div>
-
-        <!-- How To Pay (hidden by default) -->
-        <div class="pay-howto" id="payHowTo">
-            <div class="pay-step">1️⃣ &nbsp;⚡ ବଟନ୍ ଦବାନ୍ତୁ — UPI ଆପ୍ ଖୋଲିଯିବ ।</div>
-            <div class="pay-step">3️⃣ &nbsp;ଏହାପରେ Pay ବଟନ୍ ଦବାନ୍ତୁ ।</div>
-            <div class="pay-step">4️⃣ &nbsp;ଏହାପରେ ପେମେଣ୍ଟ ର ସ୍କ୍ରିନ୍-ସଟ୍ ନିଅନ୍ତୁ ।</div>
-            <div class="pay-step">5️⃣ &nbsp;📲 ଏହାପରେ ପେମେଣ୍ଟ ର ସ୍କ୍ରିନ୍-ସଟ୍ କୁ ପଠାନ୍ତୁ । </div>
-            <div class="pay-step">6️⃣ &nbsp;1 ଘଣ୍ଟା ମଧ୍ୟରେ ସେବା ପୁନଃ ପ୍ରାପ୍ତ କରିପାରିବେ ।</div>
-        </div>
-    </div>
-</div>
 
 <!-- PWA Install Button -->
 <button id="pwa-install-btn" onclick="triggerInstall()">
@@ -678,59 +648,16 @@ function getOdiaName(k) { return odiaSubjectNames[k] || null; }
 
 
 
-// ─── Payment Config ───────────────────────────────────────────────────────────
 const EVIDYA_UPI_ID = '8260825712-0@airtel';
 const EVIDYA_UPI_NAME = 'Ranjan Behera, The Proprietor of E-Vidya Academy';
 const EVIDYA_AMOUNT = '150';
-const EVIDYA_NOTE = 'ଏହି ଦେୟ ଇ-ବିଦ୍ୟା ଏକାଡେମୀର ପ୍ରତିଷ୍ଠାତା ଶ୍ରୀଯୁକ୍ତ ରଞ୍ଜନ ବେହେରାଙ୍କୁ ଦିଆଯାଉଛି । ଠିକଣା : ଗ୍ରାମ-ହରସିଂହପୁର, ପୋଷ୍ଟ-ପିରାହାଟ, ଜିଲ୍ଲା-ଭଦ୍ରକ, ଓଡିଶା-୭୫୬୧୩୧, ମୋବାଇଲ/ହ୍ବାଟ୍ସ ଆପ୍ ନମ୍ବର-୮୨୬୦୮୨୫୭୧୨';
-const upiLink = `upi://pay?pa=${EVIDYA_UPI_ID}&pn=${encodeURIComponent(EVIDYA_UPI_NAME)}&am=${EVIDYA_AMOUNT}&cu=INR&tn=${EVIDYA_NOTE}`;
+const EVIDYA_NOTE = 'E-Vidya Academy Monthly Fee';
 
-window.addEventListener('load', () => {
-    const btn = document.getElementById('directPayBtn');
-    const disp = document.getElementById('upiDisplay');
-    if (btn) btn.href = upiLink;
-    if (disp) disp.textContent = EVIDYA_UPI_ID;
-});
-
-// ─── Payment Modal Functions ──────────────────────────────────────────────────
-function openPayModal() {
-    document.getElementById('payModal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-function closePayModal() {
-    document.getElementById('payModal').classList.remove('active');
-    document.body.style.overflow = 'auto';
-}
-function handlePayModalClick(e) {
-    if (e.target === document.getElementById('payModal')) closePayModal();
-}
-function directPay() {
+function doPay() {
+    const upiLink = `upi://pay?pa=${EVIDYA_UPI_ID}&pn=${encodeURIComponent(EVIDYA_UPI_NAME)}&am=${EVIDYA_AMOUNT}&cu=INR&tn=${encodeURIComponent(EVIDYA_NOTE)}`;
     window.location.href = upiLink;
 }
-function copyUPINew() {
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(EVIDYA_UPI_ID).then(() => alert('UPI ID Copied! ✅\n' + EVIDYA_UPI_ID));
-    } else {
-        const el = document.createElement('textarea');
-        el.value = EVIDYA_UPI_ID;
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand('copy');
-        document.body.removeChild(el);
-        alert('UPI ID Copied! ✅\n' + EVIDYA_UPI_ID);
-    }
-}
 
-    function toggleHowTo() {
-    const howTo = document.getElementById('payHowTo');
-    howTo.classList.toggle('open');
-}
-
-    function closePayModal() {
-    document.getElementById('payModal').classList.remove('active');
-    document.getElementById('payHowTo').classList.remove('open');
-    document.body.style.overflow = 'auto';
-}
 
 // ─── Info Modal Content ───────────────────────────────────────────────────────
 const infoContent = {
