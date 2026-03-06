@@ -680,17 +680,13 @@ function getOdiaName(k) { return odiaSubjectNames[k] || null; }
 
 // ─── Payment Config ───────────────────────────────────────────────────────────
 const EVIDYA_UPI_ID = '8457059917@jio';
-const upiLink = `upi://pay?pa=${EVIDYA_UPI_ID}&pn=E-Vidya+Academy&am=${EVIDYA_AMOUNT}&cu=INR&tn=Monthly+Fee`;
 const EVIDYA_AMOUNT = '150';
-const EVIDYA_NOTE = 'E-Vidya Academy Monthly Fee';
-const upiLink = `upi://pay?pa=${EVIDYA_UPI_ID}&pn=${encodeURIComponent(EVIDYA_UPI_NAME)}&am=${EVIDYA_AMOUNT}&cu=INR&tn=${EVIDYA_NOTE}`;
+const upiLink = `upi://pay?pa=${EVIDYA_UPI_ID}&pn=E-Vidya+Academy&am=${EVIDYA_AMOUNT}&cu=INR&tn=Monthly+Fee`;
 
 window.addEventListener('load', () => {
     const btn = document.getElementById('directPayBtn');
     if (btn) {
         btn.href = upiLink;
-        btn.target = '_blank';
-        btn.rel = 'noopener noreferrer';
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             window.location.href = upiLink;
