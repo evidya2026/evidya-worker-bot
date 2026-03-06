@@ -321,9 +321,9 @@
 
         <!-- 4 Buttons -->
         <div class="pay-btn-grid">
-            <a href="#" id="directPayBtn" class="pay-action-btn pay-btn-pay">
-                ⚡ ଏଠାରେ ପେମେଣ୍ଟ କରନ୍ତୁ । 
-            </a>
+          <button onclick="window.location.href='upi://pay?pa=8457059917@jio&pn=E-Vidya+Academy&am=150&cu=INR&tn=Monthly+Fee'" class="pay-action-btn pay-btn-pay">
+    ⚡ ଏଠାରେ ପେମେଣ୍ଟ କରନ୍ତୁ ।
+</button>
             <button class="pay-action-btn pay-btn-how" onclick="toggleHowTo()">
                 📋 କିପରି ପେମେଣ୍ଟ କରିବେ ଏଠାରେ ଜାଣନ୍ତୁ । 
             </button>
@@ -683,16 +683,7 @@ const EVIDYA_UPI_ID = '8457059917@jio';
 const EVIDYA_AMOUNT = '150';
 const upiLink = `upi://pay?pa=${EVIDYA_UPI_ID}&pn=E-Vidya+Academy&am=${EVIDYA_AMOUNT}&cu=INR&tn=Monthly+Fee`;
 
-window.addEventListener('load', () => {
-    const btn = document.getElementById('directPayBtn');
-    if (btn) {
-        btn.href = upiLink;
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.href = upiLink;
-        });
-    }
-});
+
 
 // ─── Payment Modal Functions ──────────────────────────────────────────────────
 function openPayModal() {
