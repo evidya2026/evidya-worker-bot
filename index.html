@@ -266,10 +266,10 @@
     <div class="grid" id="mainGrid"></div>
     <div class="no-results" id="noResults">No results found matching your search.</div>
 
-    <!-- Payment Button -->
-    <button class="pay-floating-btn" onclick="openPayModal()">
-        💳 ଫି ପେମେଣ୍ଟ କରିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ ।
-    </button>
+
+<button class="pay-floating-btn" onclick="openPayModal()">
+    💳 ଫି ପେମେଣ୍ଟ କରିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ ।
+</button>
 </div>
 
 <!-- Subject Modal -->
@@ -313,41 +313,58 @@
 </div>
 
 <!-- Payment Modal -->
+
 <div class="pay-modal-overlay" id="payModal" onclick="handlePayModalClick(event)">
     <div class="pay-modal-sheet" id="payModalSheet">
         <div class="pay-close-bar" onclick="closePayModal()"></div>
         <div class="pay-modal-title">💳 Monthly Fee Payment</div>
         <div class="pay-modal-subtitle">E-Vidya Academy — ₹150 / Month</div>
 
-        <!-- 4 Buttons -->
         <div class="pay-btn-grid">
-           <a href="upi://pay?pa=7735772693@indie&pn=Kumudini%20Rout%20E-Vidya%20Academy&am=150&cu=INR&tn=E-Vidya%20Academy%20Monthly%20Fee" 
-   id="directPayBtn" 
-   class="pay-action-btn pay-btn-pay">
-                ⚡ ଏଠାରେ ପେମେଣ୍ଟ କରନ୍ତୁ । 
+            <!-- FIX: href is set immediately via JS below, not on window.load -->
+            <a id="directPayBtn"
+               href="upi://pay?pa=7735772693%40indie&pn=E-Vidya%20Academy&am=150&cu=INR&tn=E-Vidya%20Academy%20Monthly%20Fee%20Payment"
+               class="pay-action-btn pay-btn-pay"
+               onclick="handleUPIClick(event)">
+                ⚡ ଏଠାରେ ପେମେଣ୍ଟ କରନ୍ତୁ ।
             </a>
             <button class="pay-action-btn pay-btn-how" onclick="toggleHowTo()">
-                📋 କିପରି ପେମେଣ୍ଟ କରିବେ ଏଠାରେ ଜାଣନ୍ତୁ । 
+                📋 କିପରି ପେମେଣ୍ଟ କରିବେ ଏଠାରେ ଜାଣନ୍ତୁ ।
             </button>
             <a href="https://wa.me/+916372296357?text=I%20have%20paid%20%E2%82%B9150%20fee%20for%20E-Vidya%20Academy."
-               target="_blank" class="pay-action-btn pay-btn-wa">
-                📲 ପେମେଣ୍ଟ ର ସ୍କ୍ରିନ୍-ସଟ୍ କୁ ଏଠାରେ ପଠାନ୍ତୁ । 
+               target="_blank" rel="noopener noreferrer"
+               class="pay-action-btn pay-btn-wa">
+                📲 ପେମେଣ୍ଟ ର ସ୍କ୍ରିନ୍-ସଟ୍ କୁ ଏଠାରେ ପଠାନ୍ତୁ ।
             </a>
             <button class="pay-action-btn pay-btn-close" onclick="closePayModal()">
-                ✕ ଏଠାରେ ବନ୍ଦ କରନ୍ତୁ । 
+                ✕ ଏଠାରେ ବନ୍ଦ କରନ୍ତୁ ।
             </button>
         </div>
 
-        <!-- How To Pay (hidden by default) -->
+        <!-- UPI ID fallback copy box — shown when UPI app not found -->
+        <div id="upiCopyBox" style="display:none; margin-top:14px; background:rgba(255,255,255,0.08); border-radius:12px; padding:14px; text-align:center; border:1px solid rgba(255,215,0,0.3);">
+            <div style="color:rgba(255,255,255,0.7); font-size:0.75em; font-weight:600; margin-bottom:8px;">
+                📱 UPI App ନ ଖୋଲିଲେ — ନିଚ UPI ID ଟି Copy କରି ଆପଣଙ୍କ UPI App ରେ Paste କରି Pay କରନ୍ତୁ ।
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; justify-content:center;">
+                <span id="upiDisplayText" style="color:#ffd700; font-weight:800; font-size:1em; letter-spacing:0.5px;">7735772693@indie</span>
+                <button onclick="copyUPINew()" style="background:rgba(255,215,0,0.2); border:1px solid rgba(255,215,0,0.5); color:#ffd700; padding:6px 12px; border-radius:8px; font-size:0.75em; font-weight:800; cursor:pointer;">
+                    📋 Copy
+                </button>
+            </div>
+        </div>
+
         <div class="pay-howto" id="payHowTo">
-            <div class="pay-step">1️⃣ &nbsp;⚡ ବଟନ୍ ଦବାନ୍ତୁ — UPI ଆପ୍ ଖୋଲିଯିବ ।</div>
-            <div class="pay-step">3️⃣ &nbsp;ଏହାପରେ Pay ବଟନ୍ ଦବାନ୍ତୁ ।</div>
-            <div class="pay-step">4️⃣ &nbsp;ଏହାପରେ ପେମେଣ୍ଟ ର ସ୍କ୍ରିନ୍-ସଟ୍ ନିଅନ୍ତୁ ।</div>
-            <div class="pay-step">5️⃣ &nbsp;📲 ଏହାପରେ ପେମେଣ୍ଟ ର ସ୍କ୍ରିନ୍-ସଟ୍ କୁ ପଠାନ୍ତୁ । </div>
+            <div class="pay-step">1️⃣ &nbsp;⚡ ବଟନ୍ ଦବାନ୍ତୁ — ଆପଣଙ୍କ UPI App ଖୋଲ ଯିବ (GPay/PhonePe/Paytm) ।</div>
+            <div class="pay-step">2️⃣ &nbsp;ଯଦି App ନ ଖୋଲେ, UPI ID ଟି Copy କରି ଆପଣଙ୍କ UPI App ରେ Paste କରି Pay କରନ୍ତୁ ।</div>
+            <div class="pay-step">3️⃣ &nbsp;Amount: ₹150 — ଏହି ପରିମାଣ ଦେଖି Pay ବଟନ୍ ଦବାନ୍ତୁ ।</div>
+            <div class="pay-step">4️⃣ &nbsp;Payment ସଫଳ ହେଲେ Screenshot ନିଅନ୍ତୁ ।</div>
+            <div class="pay-step">5️⃣ &nbsp;📲 WhatsApp ବଟନ୍ ଦବାଇ Screenshot ପଠାନ୍ତୁ ।</div>
             <div class="pay-step">6️⃣ &nbsp;1 ଘଣ୍ଟା ମଧ୍ୟରେ ସେବା ପୁନଃ ପ୍ରାପ୍ତ କରିପାରିବେ ।</div>
         </div>
     </div>
 </div>
+
 
 <!-- PWA Install Button -->
 <button id="pwa-install-btn" onclick="triggerInstall()">
@@ -680,58 +697,115 @@ function getOdiaName(k) { return odiaSubjectNames[k] || null; }
 
 
 
-// ─── Payment Config ───────────────────────────────────────────────────────────
-const EVIDYA_UPI_ID = '7735772693@indie';
-const EVIDYA_UPI_NAME = 'Kumudini Rout, The Proprietor of E-Vidya Academy';
-const EVIDYA_AMOUNT = '150';
-const EVIDYA_NOTE = 'ଏହି ଦେୟ ଇ-ବିଦ୍ୟା ଏକାଡେମୀ କୁ ଦିଆଯାଉଛି । ଠିକଣା : ଗ୍ରାମ-ହରସିଂହପୁର, ପୋଷ୍ଟ-ପିରାହାଟ, ଜିଲ୍ଲା-ଭଦ୍ରକ, ଓଡିଶା-୭୫୬୧୩୧, ମୋବାଇଲ/ହ୍ବାଟ୍ସ ଆପ୍ ନମ୍ବର-6372296357';
-const upiLink = `upi://pay?pa=${EVIDYA_UPI_ID}&pn=${encodeURIComponent(EVIDYA_UPI_NAME)}&am=${EVIDYA_AMOUNT}&cu=INR&tn=${EVIDYA_NOTE}`;
 
-window.addEventListener('load', () => {
+// ─── Payment Config ───────────────────────────────────────────────────────────
+const EVIDYA_UPI_ID   = '7735772693@indie';
+const EVIDYA_AMOUNT   = '150';
+const EVIDYA_NAME     = 'E-Vidya Academy';
+const EVIDYA_NOTE     = 'E-Vidya Academy Monthly Fee Payment';
+
+// Build UPI link — keep note short & ASCII only so all UPI apps accept it
+function buildUPILink() {
+    return 'upi://pay'
+        + '?pa='  + encodeURIComponent(EVIDYA_UPI_ID)
+        + '&pn='  + encodeURIComponent(EVIDYA_NAME)
+        + '&am='  + EVIDYA_AMOUNT
+        + '&cu=INR'
+        + '&tn='  + encodeURIComponent(EVIDYA_NOTE);
+}
+
+// Set UPI href immediately on script parse (not waiting for window.load)
+(function setUPIHref() {
     const btn = document.getElementById('directPayBtn');
-    const disp = document.getElementById('upiDisplay');
-    if (btn) btn.href = upiLink;
-    if (disp) disp.textContent = EVIDYA_UPI_ID;
+    if (btn) btn.href = buildUPILink();
+})();
+
+// Also set it on DOMContentLoaded as a safety net
+document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('directPayBtn');
+    if (btn) btn.href = buildUPILink();
 });
+
+// ─── UPI Click Handler ────────────────────────────────────────────────────────
+// Shows the copy-fallback box in case the UPI app doesn't open
+function handleUPIClick(event) {
+    // Let the <a> href do its job naturally — don't preventDefault
+    // Show fallback copy box after 2.5 seconds if still on page
+    setTimeout(function() {
+        const copyBox = document.getElementById('upiCopyBox');
+        if (copyBox && document.getElementById('payModal').classList.contains('active')) {
+            copyBox.style.display = 'block';
+        }
+    }, 2500);
+}
 
 // ─── Payment Modal Functions ──────────────────────────────────────────────────
 function openPayModal() {
+    // Re-set href every time modal opens — belt and suspenders
+    const btn = document.getElementById('directPayBtn');
+    if (btn) btn.href = buildUPILink();
+
+    document.getElementById('upiCopyBox').style.display = 'none';
+    document.getElementById('payHowTo').classList.remove('open');
     document.getElementById('payModal').classList.add('active');
     document.body.style.overflow = 'hidden';
 }
+
 function closePayModal() {
     document.getElementById('payModal').classList.remove('active');
+    document.getElementById('payHowTo').classList.remove('open');
+    document.getElementById('upiCopyBox').style.display = 'none';
     document.body.style.overflow = 'auto';
 }
+
 function handlePayModalClick(e) {
     if (e.target === document.getElementById('payModal')) closePayModal();
 }
-function directPay() {
-    window.location.href = upiLink;
+
+function toggleHowTo() {
+    document.getElementById('payHowTo').classList.toggle('open');
 }
+
 function copyUPINew() {
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(EVIDYA_UPI_ID).then(() => alert('UPI ID Copied! ✅\n' + EVIDYA_UPI_ID));
+    const id = EVIDYA_UPI_ID;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(id).then(function() {
+            showCopySuccess();
+        }).catch(function() {
+            fallbackCopy(id);
+        });
     } else {
-        const el = document.createElement('textarea');
-        el.value = EVIDYA_UPI_ID;
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand('copy');
-        document.body.removeChild(el);
-        alert('UPI ID Copied! ✅\n' + EVIDYA_UPI_ID);
+        fallbackCopy(id);
     }
 }
 
-    function toggleHowTo() {
-    const howTo = document.getElementById('payHowTo');
-    howTo.classList.toggle('open');
+function fallbackCopy(text) {
+    const el = document.createElement('textarea');
+    el.value = text;
+    el.style.position = 'fixed';
+    el.style.opacity = '0';
+    document.body.appendChild(el);
+    el.focus();
+    el.select();
+    try { document.execCommand('copy'); showCopySuccess(); } catch(e) {}
+    document.body.removeChild(el);
 }
 
-    function closePayModal() {
-    document.getElementById('payModal').classList.remove('active');
-    document.getElementById('payHowTo').classList.remove('open');
-    document.body.style.overflow = 'auto';
+function showCopySuccess() {
+    const btn = document.querySelector('#upiCopyBox button');
+    if (btn) {
+        const orig = btn.textContent;
+        btn.textContent = '✅ Copied!';
+        btn.style.background = 'rgba(56,239,125,0.25)';
+        btn.style.borderColor = '#38ef7d';
+        btn.style.color = '#38ef7d';
+        setTimeout(function() {
+            btn.textContent = orig;
+            btn.style.background = '';
+            btn.style.borderColor = '';
+            btn.style.color = '';
+        }, 2000);
+    }
 }
 
 // ─── Info Modal Content ───────────────────────────────────────────────────────
