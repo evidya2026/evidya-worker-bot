@@ -389,8 +389,11 @@
                 ସେ E-Vidya Academy ର <strong>ଅଧିକୃତ କ୍ୟାଶିଅର</strong> ଅଟନ୍ତି ।<br><br>
                 ଏ ଛଡ଼ା ଅନ୍ୟ କୌଣସି ବ୍ୟକ୍ତିଙ୍କୁ ଟଙ୍କା ପଠାଇଲେ<br>
                 <strong>E-Vidya Academy ଦାୟୀ ରହିବ ନାହିଁ ।</strong><br><br>
-                ମାସିକ ଶୁଳ୍କ:
-                <br><span class="pay-amount-badge">₹150 ମାତ୍ର</span>
+                ଦେୟ ପରିମାଣ ଲେଖନ୍ତୁ:<br>
+                <div style="margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;">
+                    <span style="color:#ffd700;font-size:1.2em;font-weight:900;">₹</span>
+                    <input id="payAmountInput" type="number" min="1" placeholder="ପରିମାଣ ଲେଖନ୍ତୁ" style="background:rgba(255,255,255,0.12);border:2px solid #ffd700;border-radius:10px;color:#ffd700;font-size:1.1em;font-weight:800;padding:7px 14px;width:160px;outline:none;text-align:center;" oninput="syncAmount(this.value)">
+                </div>
             </div>
         </div>
 
@@ -457,7 +460,7 @@
                 <div class="bill-row"><span>ମାସ</span><span id="rcptMonth"></span></div>
                 <div class="bill-row"><span>Txn ID</span><span id="rcptTxn"></span></div>
                 <div class="bill-row"><span>ଭୁଗ୍ତାନ ପ୍ରାପ୍ତକର୍ତ୍ତା</span><span>ମାନସୀ ପରିଡ଼ା (Cashier)</span></div>
-                <div class="bill-total-row"><span>ମୋଟ ଶୁଳ୍କ</span><span>₹150/-</span></div>
+                <div class="bill-total-row"><span>ମୋଟ ଶୁଳ୍କ</span><span id="billAmountDisplay">₹?</span></div>
                 <div class="bill-footer-note">
                     ଏହି ରସିଦ E-Vidya Academy ଦ୍ୱାରା ଜାରି ।<br>
                     ⚠️ Private service — Not affiliated with any Government, Board, or University.
@@ -957,20 +960,35 @@ function getOdiaName(k) { return odiaSubjectNames[k] || null; }
 // ─── UPI PAYMENT ─────────────────────────────────────────────────────────────
 const EVIDYA_UPI_ID = '8457059917@jio';
 const EVIDYA_UPI_NAME = 'Manasi Parida';
-const EVIDYA_AMOUNT = '150';
+const EVIDYA_AMOUNT = '';  // dynamic — set by user input
 const EVIDYA_NOTE = 'E-Vidya Academy Monthly Fee';
 
-function doPay() {
-    // Try standard UPI deep link
-    const upiLink = `upi://pay?pa=${EVIDYA_UPI_ID}&pn=${encodeURIComponent(EVIDYA_UPI_NAME)}&am=${EVIDYA_AMOUNT}&cu=INR&tn=${encodeURIComponent(EVIDYA_NOTE)}`;
-    window.location.href = upiLink;
-    // After delay, show fallback modal with direct app links + copy option
-    setTimeout(showUPIFallback, 1500);
+function syncAmount(val) {
+    // keep fallback modal in sync if open
+    const disp = document.getElementById('upi-amount-display');
+    if (disp) disp.textContent = val ? '₹' + val + '/-' : '₹?';
 }
 
-function showUPIFallback() {
+function doPay() {
+    const amtInput = document.getElementById('payAmountInput');
+    const amt = amtInput ? amtInput.value.trim() : '';
+    if (!amt || isNaN(amt) || Number(amt) <= 0) {
+        amtInput && (amtInput.style.border = '2px solid red');
+        alert('⚠️ ଦୟାକରି ସଠିକ ଟଙ୍କା ପରିମାଣ ଲେଖନ୍ତୁ!');
+        return;
+    }
+    amtInput && (amtInput.style.border = '2px solid #ffd700');
+    const upiLink = `upi://pay?pa=${EVIDYA_UPI_ID}&pn=${encodeURIComponent(EVIDYA_UPI_NAME)}&am=${amt}&cu=INR&tn=${encodeURIComponent(EVIDYA_NOTE)}`;
+    window.location.href = upiLink;
+    setTimeout(() => showUPIFallback(amt), 1500);
+}
+
+function showUPIFallback(amt) {
+    amt = amt || document.getElementById('payAmountInput')?.value || '?';
     if (document.getElementById('upi-fallback-modal')) {
         document.getElementById('upi-fallback-modal').style.display = 'flex';
+        const disp = document.getElementById('upi-amount-display');
+        if (disp) disp.textContent = '₹' + amt + '/-';
         return;
     }
     const modal = document.createElement('div');
@@ -986,12 +1004,12 @@ function showUPIFallback() {
                 <div style="color:#ffd700;font-size:1.35em;font-weight:900;letter-spacing:1px;">8457059917@jio</div>
                 <div style="color:rgba(255,255,255,0.55);font-size:0.72em;margin-top:8px;">ନାମ / Name</div>
                 <div style="color:white;font-weight:700;font-size:0.95em;">Manasi Parida</div>
-                <div style="margin-top:10px;"><span style="background:linear-gradient(135deg,#f7971e,#ffd200);color:#1a1a2e;font-weight:900;font-size:1.05em;padding:4px 20px;border-radius:20px;">₹150/-</span></div>
+                <div style="margin-top:10px;"><span id="upi-amount-display" style="background:linear-gradient(135deg,#f7971e,#ffd200);color:#1a1a2e;font-weight:900;font-size:1.05em;padding:4px 20px;border-radius:20px;">₹${amt}/-</span></div>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
-                <a href="tez://upi/pay?pa=8457059917%40jio&pn=Manasi%20Parida&am=150&cu=INR" style="background:#4285F4;color:white;padding:10px 4px;border-radius:10px;font-size:0.72em;font-weight:800;text-decoration:none;display:block;">Google<br>Pay</a>
-                <a href="phonepe://pay?pa=8457059917%40jio&pn=Manasi%20Parida&am=150&cu=INR" style="background:#6739B7;color:white;padding:10px 4px;border-radius:10px;font-size:0.72em;font-weight:800;text-decoration:none;display:block;">Phone<br>Pe</a>
-                <a href="paytmmp://pay?pa=8457059917%40jio&pn=Manasi%20Parida&am=150&cu=INR" style="background:#00BAF2;color:#1a1a2e;padding:10px 4px;border-radius:10px;font-size:0.72em;font-weight:800;text-decoration:none;display:block;">Pay<br>tm</a>
+                <a href="#" onclick="window.location.href='tez://upi/pay?pa=8457059917%40jio&pn=Manasi%20Parida&am='+amt+'&cu=INR'" style="background:#4285F4;color:white;padding:10px 4px;border-radius:10px;font-size:0.72em;font-weight:800;text-decoration:none;display:block;">Google<br>Pay</a>
+                <a href="#" onclick="window.location.href='phonepe://pay?pa=8457059917%40jio&pn=Manasi%20Parida&am='+amt+'&cu=INR'" style="background:#6739B7;color:white;padding:10px 4px;border-radius:10px;font-size:0.72em;font-weight:800;text-decoration:none;display:block;">Phone<br>Pe</a>
+                <a href="#" onclick="window.location.href='paytmmp://pay?pa=8457059917%40jio&pn=Manasi%20Parida&am='+amt+'&cu=INR'" style="background:#00BAF2;color:#1a1a2e;padding:10px 4px;border-radius:10px;font-size:0.72em;font-weight:800;text-decoration:none;display:block;">Pay<br>tm</a>
             </div>
             <button onclick="copyUPIId()" style="width:100%;background:rgba(255,215,0,0.15);color:#ffd700;border:1.5px solid #ffd700;border-radius:10px;padding:11px;font-size:0.88em;font-weight:800;cursor:pointer;margin-bottom:8px;">📋 UPI ID କପି କରନ୍ତୁ</button>
             <button onclick="document.getElementById('upi-fallback-modal').style.display='none'" style="width:100%;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.45);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:8px;font-size:0.8em;cursor:pointer;">✕ ବନ୍ଦ କରନ୍ତୁ</button>
@@ -1025,6 +1043,9 @@ function openBillModal() {
     closePayModal();
     document.getElementById('billModal').classList.add('active');
     document.body.style.overflow = 'hidden';
+    const amt = document.getElementById('payAmountInput')?.value || '';
+    const disp = document.getElementById('billAmountDisplay');
+    if (disp) disp.textContent = amt ? '₹' + amt + '/-' : '₹?';
 }
 function closeBillModal() {
     document.getElementById('billModal').classList.remove('active');
@@ -1066,7 +1087,7 @@ function shareBillWhatsApp() {
     const msg = `🧾 *E-Vidya Academy — ଅଧିକୃତ ରସିଦ*\n\n` +
         `ରସିଦ ନମ୍ବର: ${rcptNo}\nତାରିଖ: ${date}\n\n` +
         `👤 ଛାତ୍ରଙ୍କ ନାମ: ${name}\n📱 ଫୋନ: ${phone}\n📚 ବର୍ଗ: ${cls}\n📅 ମାସ: ${month}\n🔖 Txn ID: ${txn}\n\n` +
-        `💰 ଭୁଗ୍ତାନ: ₹150/-\n👩‍💼 ପ୍ରାପ୍ତକର୍ତ୍ତା: ମାନସୀ ପରିଡ଼ା (Cashier)\n\n` +
+        `💰 ଭୁଗ୍ତାନ: ₹' + (document.getElementById('payAmountInput')?.value || '?') + '\n👩‍💼 ପ୍ରାପ୍ତକର୍ତ୍ତା: ମାନସୀ ପରିଡ଼ା (Cashier)\n\n` +
         `⚠️ Private service — Not affiliated with Govt, Board or University.`;
     window.open(`https://wa.me/918260825712?text=${encodeURIComponent(msg)}`, '_blank');
 }
@@ -1092,7 +1113,7 @@ function sendProofWhatsApp() {
     const month = document.getElementById('proofMonth').value.trim();
     if (!name || !phone || !txn) { alert('ଦୟାକରି ନାମ, ଫୋନ ଓ Txn ID ଲେଖନ୍ତୁ ।'); return; }
     const msg = `📸 *E-Vidya Academy — ପେମେଣ୍ଟ ପ୍ରମାଣ*\n\n` +
-        `👤 ନାମ: ${name}\n📱 ଫୋନ: ${phone}\n🔖 UPI Txn ID: ${txn}\n📅 ମାସ: ${month || '-'}\n💰 ପରିମାଣ: ₹150/-\n\n` +
+        `👤 ନାମ: ${name}\n📱 ଫୋନ: ${phone}\n🔖 UPI Txn ID: ${txn}\n📅 ମାସ: ${month || '-'}\n💰 ପରିମାଣ: ₹' + (document.getElementById('payAmountInput')?.value || '?') + '\n\n` +
         `⬆️ ଏହି ସଂଦେଶ ସହ ଆପଣଙ୍କ ପେମେଣ୍ଟ ସ୍କ୍ରିନଶଟ୍ ଯୋଡ଼ି ପଠାନ୍ତୁ ।`;
     window.open(`https://wa.me/918260825712?text=${encodeURIComponent(msg)}`, '_blank');
 }
