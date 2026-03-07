@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="or">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Vidya Academy — Payment</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 40px;
+  }
+
+  h1 {
+    font-size: 1.25em;
+    font-weight: 800;
+    color: #1a1a2e;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-size: 0.82em;
+    color: #888;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .qr-box {
+    background: white;
+    border-radius: 20px;
+    padding: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    margin-bottom: 28px;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .qr-box img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 10px;
+  }
+
+  .qr-hint {
+    text-align: center;
+    font-size: 0.78em;
+    color: #aaa;
+    margin-top: 10px;
+    font-weight: 600;
+  }
+
+  .fees-box {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    width: 100%;
+    max-width: 320px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+
+  .fees-title {
+    font-size: 0.78em;
+    font-weight: 800;
+    color: #aaa;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+
+  .fee-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .fee-row:last-child { border-bottom: none; }
+
+  .fee-label {
+    font-size: 0.9em;
+    font-weight: 700;
+    color: #333;
+  }
+
+  .fee-label span {
+    display: block;
+    font-size: 0.75em;
+    color: #aaa;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  .fee-amount {
+    font-size: 1.2em;
+    font-weight: 900;
+    color: #1a1a2e;
+  }
+
+  .wa-btn {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    margin-top: 20px;
+    padding: 15px;
+    background: #25D366;
+    color: white;
+    border-radius: 14px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 0.95em;
+    font-weight: 800;
+    box-shadow: 0 4px 16px rgba(37,211,102,0.3);
+  }
+</style>
+</head>
+<body>
+
+  <h1>E-Vidya Academy</h1>
+  <p class="subtitle">ଏହି QR କୋଡ କୁ ସ୍କାନ୍ କରି ପେମେଣ୍ଟ କରନ୍ତୁ । </p>
+
+  <div class="qr-box">
+    <img src="https://raw.githubusercontent.com/happysangitanms/evidya/main/SMRUTIREKHA%20QR.jpeg" alt="UPI QR Code">
+    <p class="qr-hint">Any UPI app — PhonePe · GPay · Paytm</p>
+  </div>
+
+  <div class="fees-box">
+    <div class="fees-title">ପେମେଣ୍ଟ ବିବରଣୀ</div>
+
+    <div class="fee-row">
+      <div class="fee-label">
+        ଡିଜିଟାଲ କ୍ଲାସ୍ ପାଇଁ ମାସିକ ଫୀ 
+        <span>Monthly Class Fee</span>
+      </div>
+      <div class="fee-amount">₹150</div>
+    </div>
+
+    <div class="fee-row">
+      <div class="fee-label">
+        ଯେକୌଣସି ଆବେଦନ ନମୁନା
+        <span>Specimen of Application</span>
+      </div>
+      <div class="fee-amount">₹120</div>
+    </div>
+
+    <div class="fee-row">
+      <div class="fee-label">
+        ଆଇନ ସଚେତନତା ପୁସ୍ତକ ର ମୂଲ୍ୟ 
+        <span>Book Fee</span>
+      </div>
+      <div class="fee-amount">₹20</div>
+    </div>
+  </div>
+
+<a class="wa-btn" href="https://wa.me/916372296357" target="_blank" rel="noopener noreferrer">
+  📲 ପେମେଣ୍ଟ ର ପ୍ରମାଣ ପଠାନ୍ତୁ ।  
+</a>
+
+</body>
+</html>
