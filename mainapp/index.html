@@ -841,7 +841,7 @@ function submitApplication(event) {
     if (!name || !contact) { alert('ଦୟାକରି ସମସ୍ତ ଫିଲ୍ଡ ପୂରଣ କରନ୍ତୁ'); return; }
     if (!/^[0-9]{10}$/.test(contact)) { alert('ଦୟାକରି ସଠିକ୍ 10 ଅଙ୍କ ନମ୍ବର ପ୍ରଦାନ କରନ୍ତୁ'); return; }
     const subjectName = currentSubjectInfo ? currentSubjectInfo.name : 'ବିଷୟ';
-    const message = `E-Vidya Academy - Coaching Application*\n\nନାମ: ${name}\nଯୋଗାଯୋଗ: ${contact}\nବିଷୟ: ${subjectName}\n\nମୁଁ ଏହି ବିଷୟ ପାଇଁ କୋଚିଂ ନେବାକୁ ଇଛୁକ ।`;
+    const message = `*E-Vidya Academy - Coaching Application*\n\n*ନାମ:* ${name}\n*ଯୋଗାଯୋଗ:* ${contact}\n*ବିଷୟ:* ${subjectName}\n\nମୁଁ ଏହି ବିଷୟ ପାଇଁ କୋଚିଂ ନେବାକୁ ଇଛୁକ ।`;
     const whatsappURL = `https://wa.me/+916372296357?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, '_blank');
     alert('ଆପଣଙ୍କ ଆବେଦନ ପଠାଯାଇଛି!');
@@ -1079,7 +1079,7 @@ function showLevels() {
     plus3.href = '#';
     plus3.className = 'level-card plus3-arts';
     plus3.onclick = (e) => { e.preventDefault(); showPlus3Options(); };
-    plus3.innerHTML = `<div class="level-icon">🎓</div><div class="level-name">+3</div><div class="level-subtitle">Arts & Commerce</div>`;
+    plus3.innerHTML = `<div class="level-icon">📘</div><div class="level-name">+3</div><div class="level-subtitle">Arts & Commerce</div>`;
     grid.appendChild(plus3);
 
     // School card
