@@ -778,7 +778,7 @@ function createBasicTrainingCard() {
     c.className = 'level-card';
     c.innerHTML = `
         <div class="level-icon">🌟</div>
-        <div class="level-subtitle">ଶିକ୍ଷାର୍ଥୀଙ୍କ ସର୍ବାଙ୍ଗୀନ ବିକାଶ ପାଇଁ ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନି</div>
+        <div class="level-subtitle">ଶିକ୍ଷାର୍ଥୀଙ୍କ ସର୍ବାଙ୍ଗୀନ ବିକାଶ ପାଇଁ ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ</div>
     `;
     return c;
 }
@@ -1066,6 +1066,9 @@ function showLevels() {
     // Special Training card
     grid.appendChild(createBasicTrainingCard());
 
+        // School card
+    grid.appendChild(createLevelCard('SCHOOL'));
+
     // +2 card
     const plus2 = document.createElement('a');
     plus2.href = '#';
@@ -1082,8 +1085,7 @@ function showLevels() {
     plus3.innerHTML = `<div class="level-icon">📘</div><div class="level-name">+3</div><div class="level-subtitle">Arts & Commerce</div>`;
     grid.appendChild(plus3);
 
-    // School card
-    grid.appendChild(createLevelCard('SCHOOL'));
+
 
     // Second long button - below last two cards
     const btn2 = document.createElement('a');
