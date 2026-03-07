@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Vidya Academy</title>
+    <link rel="manifest" href="./manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="E-Vidya">
+    <link rel="apple-touch-icon" href="./icon-192.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 20px 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        /* ── Disclaimer ── */
+        .disclaimer-bar {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .disclaimer-bar p {
+            color: #856404;
+            font-size: 0.7em;
+            font-weight: 600;
+            margin: 0;
+        }
+        .disclaimer-bar a {
+            color: #8B0000;
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
+        /* ── Header ── */
+        .logo-wrap { text-align: center; margin-bottom: 8px; }
+        .logo-wrap img { width: 220px; max-width: 80%; height: auto; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 8px; font-size: 0.85em; font-weight: 600; }
+
+        /* ── Back Button ── */
+        .btn-back {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 25px;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(102,126,234,0.4);
+            transition: transform 0.2s;
+            cursor: pointer;
+            border: none;
+            margin: 0 auto 15px;
+        }
+        .btn-back.visible { display: inline-flex; }
+        .btn-back:active { transform: scale(0.95); }
+        .back-wrap { text-align: center; }
+
+
+
+        /* ── Grid ── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        /* ── Wide banner buttons ── */
+        .btn-wide {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-size: 1.05em;
+            font-weight: 900;
+            letter-spacing: 0.4px;
+            transition: transform 0.2s;
+        }
+        .btn-wide:active { transform: scale(0.98); }
+        .btn-wide.red {
+            background: linear-gradient(135deg, #d32f2f 0%, #8b0000 100%);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(211,47,47,0.4);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        .btn-wide.gold {
+            background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+            color: #1a1a2e;
+            box-shadow: 0 6px 20px rgba(247,151,30,0.4);
+        }
+
+        /* ── Level Cards ── */
+        .level-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 16px 12px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100px;
+            position: relative;
+            box-shadow: 0 8px 25px rgba(102,126,234,0.4);
+            border: 3px solid rgba(255,255,255,0.3);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .level-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -10%;
+            width: 150px; height: 150px;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .level-card:active { transform: scale(0.97); }
+        .level-card.school   { background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%); }
+        .level-card.plus2-arts { background: linear-gradient(135deg, #4E65FF 0%, #92EFFD 100%); }
+        .level-card.plus2-com  { background: linear-gradient(135deg, #11998E 0%, #38EF7D 100%); }
+        .level-card.plus3-arts { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
+        .level-card.plus3-com  { background: linear-gradient(135deg, #FD6585 0%, #0D25B9 100%); }
+        .level-card.plus2      { background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%); }
+        .level-card.plus3      { background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); }
+        .level-card.special    { background: linear-gradient(135deg, #3b0764 0%, #6b21a8 50%, #4c1d95 100%) !important; min-height: 100px; border: 3px solid rgba(255,255,255,0.5); }
+
+        .level-icon   { font-size: 2.1em; margin-bottom: 7px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+        .level-name   { font-size: 1.2em; font-weight: 900; letter-spacing: 0.5px; margin-bottom: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .level-sub    { font-size: 0.78em; opacity: 0.95; font-weight: 600; line-height: 1.3; }
+
+        /* ── Class / Semester Cards ── */
+        .class-card {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            border-radius: 14px;
+            padding: 14px 12px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 90px;
+            box-shadow: 0 6px 20px rgba(30,58,138,0.3);
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.3s;
+        }
+        .class-card:active { transform: scale(0.97); }
+        .class-label  { font-size: 0.78em; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .class-title  { font-size: 1.05em; font-weight: 800; color: white; line-height: 1.3; }
+
+        /* Honour card variant */
+        .honour-card { background: linear-gradient(135deg, #3730a3 0%, #6366f1 100%); }
+        .honour-badge { background: rgba(255,255,255,0.15); border-radius: 8px; padding: 4px 9px; margin-top: 6px; font-size: 0.68em; font-weight: 800; color: #e0e7ff; }
+
+
+
+        /* ── Modal Overlay ── */
+        .modal-overlay {
+            display: none;
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            padding: 28px 22px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn { from { transform: translateY(-40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .modal-title { color: #667eea; font-size: 1.35em; font-weight: 900; margin-bottom: 4px; text-align: center; }
+        .modal-detail { color: #888; font-size: 0.88em; text-align: center; margin-bottom: 20px; }
+
+        .modal-btns { display: flex; flex-direction: column; gap: 12px; }
+        .mbtn {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .mbtn:active { transform: scale(0.97); }
+        .mbtn.classroom { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; box-shadow: 0 4px 12px rgba(102,126,234,0.35); }
+        .mbtn.apply     { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; box-shadow: 0 4px 12px rgba(245,87,108,0.35); }
+        .mbtn.enquiry   { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; box-shadow: 0 4px 12px rgba(17,153,142,0.35); }
+        .mbtn.close-btn { background: #f3f4f6; color: #555; font-size: 14px; }
+
+        /* Application Form (inside modal) */
+        .app-form { display: none; }
+        .app-form.active { display: block; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; color: #333; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
+        .form-group input {
+            width: 100%; padding: 12px 15px;
+            border: 2px solid #e5e7eb; border-radius: 10px;
+            font-size: 15px; outline: none; transition: all 0.3s;
+        }
+        .form-group input:focus { border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+        .form-actions { display: flex; gap: 10px; margin-top: 18px; }
+        .btn-submit {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; border: none; padding: 13px;
+            border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer;
+        }
+        .btn-back-form { flex: 0.5; background: #f3f4f6; color: #666; border: none; padding: 13px; border-radius: 10px; font-weight: 600; cursor: pointer; }
+
+        /* ── Info Modal ── */
+        .info-overlay {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.75); z-index: 3000;
+            justify-content: center; align-items: center; padding: 16px;
+        }
+        .info-overlay.active { display: flex; }
+        .info-box {
+            background: white; border-radius: 18px;
+            width: 100%; max-width: 480px; max-height: 82vh;
+            display: flex; flex-direction: column;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+            overflow: hidden;
+        }
+        @keyframes popIn { from { transform: scale(0.88); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .info-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 16px 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-shrink: 0;
+        }
+        .info-header h2 { color: white; font-size: 1em; font-weight: 900; margin: 0; line-height: 1.3; }
+        .info-close {
+            background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.4);
+            color: white; width: 34px; height: 34px; border-radius: 50%;
+            font-size: 1em; font-weight: 900; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .info-close:active { transform: scale(0.9); }
+        .info-body {
+            padding: 20px; overflow-y: auto;
+            font-size: 0.82em; line-height: 1.75; color: #2d3748; text-align: justify;
+        }
+        .info-body h3 { color: #667eea; font-size: 0.95em; font-weight: 900; margin: 16px 0 6px; border-left: 3px solid #667eea; padding-left: 8px; }
+        .info-body h3:first-child { margin-top: 0; }
+        .info-body .odia { color: #4a5568; background: #f7f8ff; border-radius: 8px; padding: 8px 10px; border-left: 3px solid #764ba2; margin-bottom: 8px; }
+        .info-body .eng { color: #2d3748; margin-bottom: 6px; }
+        .info-body .legal { background: #fff5f5; border: 2px solid #fc8181; border-radius: 10px; padding: 12px; margin-top: 14px; }
+        .info-body .legal p { color: #c53030; font-weight: 700; margin: 0; }
+
+        /* ── PWA Install Modal ── */
+        .pwa-overlay {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.75); z-index: 9000;
+            justify-content: center; align-items: center; padding: 20px;
+        }
+        .pwa-overlay.active { display: flex; }
+        .pwa-box {
+            background: white; border-radius: 24px; padding: 32px 24px;
+            max-width: 340px; width: 100%; text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            border: 3px solid rgba(102,126,234,0.3);
+        }
+        .pwa-icon  { font-size: 3em; margin-bottom: 10px; }
+        .pwa-title { color: #667eea; font-size: 1.4em; font-weight: 900; margin-bottom: 8px; }
+        .pwa-sub   { color: #764ba2; font-size: 0.85em; font-weight: 700; margin-bottom: 18px; line-height: 1.5; }
+        .pwa-install {
+            display: block; width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; border: none; padding: 15px; border-radius: 14px;
+            font-size: 1em; font-weight: 800; cursor: pointer; margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.5);
+        }
+        .pwa-dismiss { background: none; border: none; color: #aaa; font-size: 0.85em; cursor: pointer; padding: 8px; text-decoration: underline; }
+
+        /* ── PWA floating button ── */
+        #pwaBtn {
+            display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; border: none; padding: 14px 28px; border-radius: 25px;
+            font-size: 15px; font-weight: 700; cursor: pointer;
+            box-shadow: 0 6px 20px rgba(102,126,234,0.5); z-index: 9999; white-space: nowrap;
+        }
+
+        /* ── Footer ── */
+        footer {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: white; padding: 28px 15px 15px;
+            margin-top: 40px; border-radius: 20px;
+        }
+        footer h3 { color: #fff; font-size: 1.1em; margin-bottom: 6px; text-align: center; }
+        footer p  { color: #cbd5e0; font-size: 0.82em; text-align: center; line-height: 1.6; margin-bottom: 12px; }
+        .footer-links {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px; margin: 12px 0;
+        }
+        .footer-links a:last-child:nth-child(odd) { grid-column: 1 / -1; }
+        .footer-links a {
+            display: block;
+            background: rgba(102,126,234,0.2);
+            padding: 9px 6px; border-radius: 8px;
+            text-decoration: none; color: #90cdf4;
+            font-weight: 600; text-align: center; font-size: 0.78em;
+            border: 1px solid rgba(102,126,234,0.3);
+        }
+        .footer-copy { text-align: center; color: #a0aec0; font-size: 0.73em; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.1); }
+
+        /* ── Responsive ── */
+        @media (min-width: 600px) {
+            .container { padding: 30px 25px; max-width: 700px; margin: 0 auto; }
+            .grid { gap: 15px; }
+            .level-card { min-height: 120px; }
+        }
+        @media (min-width: 900px) {
+            .container { max-width: 1000px; padding: 40px; }
+            .grid { gap: 18px; }
+            .level-card:hover   { transform: translateY(-5px); box-shadow: 0 12px 35px rgba(102,126,234,0.5); }
+            .class-card:hover   { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+            .mbtn.classroom:hover, .mbtn.apply:hover, .mbtn.enquiry:hover { transform: translateY(-2px); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Disclaimer bar -->
+    <div class="disclaimer-bar">
+        <p>
+            <strong style="color:#8B0000;">⚠️ Private service • Not affiliated with any Board, University or Government •</strong>
+            <a href="#" onclick="openInfo('disclaimer'); return false;">Full Disclaimer</a>
+        </p>
+    </div>
+
+    <!-- Logo -->
+    <div class="logo-wrap">
+        <img src="https://raw.githubusercontent.com/happysangitanms/assets/main/LOGO.png" alt="E-Vidya Academy">
+    </div>
+    <p class="subtitle">Empowering Parents to Teach Their Children</p>
+
+    <!-- Back button -->
+    <div class="back-wrap">
+        <button class="btn-back" id="backBtn">← <span id="backLabel">ଏଠାରେ ପଛକୁ ଫେରନ୍ତୁ</span></button>
+    </div>
+
+    <!-- Main grid -->
+    <div class="grid" id="mainGrid"></div>
+
+
+</div><!-- /container -->
+
+<!-- ── Subject / Class Modal ── -->
+<div class="modal-overlay" id="classModal">
+    <div class="modal-box">
+        <div id="modalMainView">
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-detail" id="modalDetail"></div>
+            <div class="modal-btns">
+                <button class="mbtn classroom" onclick="goToClassroom()">
+                    📖 ଏହି ଶ୍ରେଣୀ ପାଇଁ ଉଦ୍ଦିଷ୍ଟ ସ୍ଵତନ୍ତ୍ର ଆପ୍ କୁ ଏଠାରେ ଇନ୍ସଟଲ୍ କରନ୍ତୁ । 
+                </button>
+                <button class="mbtn apply" onclick="showApplyForm()">
+                    🏆 ଆବେଦନ କରିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ ।
+                </button>
+                <button class="mbtn enquiry" onclick="goToEnquiry()">
+                    💬 ଅଧିକ ଜାଣିବାକୁ ଚାହୁଁଛନ୍ତି କି? ଅନୁସନ୍ଧାନ ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ ।
+                </button>
+                <button class="mbtn close-btn" onclick="closeModal()">
+                    ବନ୍ଦ କରିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ ।
+                </button>
+            </div>
+        </div>
+        <div class="app-form" id="applyForm">
+            <form onsubmit="submitApplication(event)">
+                <div class="form-group">
+                    <label>ଆପଣଙ୍କ ନାମ *</label>
+                    <input type="text" id="appName" required placeholder="ନାମ ଲେଖନ୍ତୁ">
+                </div>
+                <div class="form-group">
+                    <label>ଯୋଗାଯୋଗ ନମ୍ବର *</label>
+                    <input type="tel" id="appPhone" required pattern="[0-9]{10}" placeholder="10 ଅଙ୍କ ନମ୍ବର">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">ପଠାନ୍ତୁ</button>
+                    <button type="button" class="btn-back-form" onclick="hideApplyForm()">ପଛକୁ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ── Info Modal ── -->
+<div class="info-overlay" id="infoModal" onclick="handleInfoClick(event)">
+    <div class="info-box" id="infoBox">
+        <div class="info-header">
+            <h2 id="infoTitle"></h2>
+            <button class="info-close" onclick="closeInfo()">✕</button>
+        </div>
+        <div class="info-body" id="infoBody"></div>
+    </div>
+</div>
+
+<!-- ── PWA Install Modal ── -->
+<div class="pwa-overlay" id="pwaModal">
+    <div class="pwa-box">
+        <div class="pwa-icon">📲</div>
+        <h2 class="pwa-title">Install E-Vidya App</h2>
+        <p class="pwa-sub">ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।</p>
+        <button class="pwa-install" onclick="doInstall()">⬇️ Install Now — ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।</button>
+        <button class="pwa-dismiss" onclick="dismissPwa()">Not Now — ପରେ କରିବି</button>
+    </div>
+</div>
+
+<!-- PWA floating button -->
+<button id="pwaBtn" onclick="doInstall()">⬇️ Install App — ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।</button>
+
+<!-- Footer -->
+<footer>
+    <h3>🌹 E-Vidya Academy 🌹</h3>
+    <p>Private Online Parent Coaching Service<br><strong style="color:#fc8181;">NOT affiliated with Government</strong></p>
+    <div class="footer-links">
+        <a href="#" onclick="openInfo('contact'); return false;">📧 Contact Us</a>
+        <a href="#" onclick="openInfo('about'); return false;">ℹ️ About Us</a>
+        <a href="#" onclick="openInfo('terms'); return false;">📜 Terms &amp; Conditions</a>
+        <a href="#" onclick="openInfo('privacy'); return false;">🔒 Privacy Policy</a>
+        <a href="#" onclick="openInfo('refund'); return false;">💰 Refund Policy</a>
+        <a href="#" onclick="openInfo('disclaimer'); return false;">⚠️ Full Disclaimer</a>
+    </div>
+    <div class="footer-copy">© 2026 E-Vidya Academy. All Rights Reserved.<br>Private educational business under Indian law.</div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════════════════ */
+const DEFAULT_URL = 'https://sites.google.com/view/eguruodishastp/cc';
+
+const levels = {
+    SCHOOL: {
+        name: 'ସ୍କୁଲ୍',
+        icon: '🏫',
+        cssClass: 'school',
+        classes: {
+            'CLASS-1':  { name: 'Class 1',  url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'CLASS-2':  { name: 'Class 2',  url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'CLASS-3':  { name: 'Class 3',  url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'CLASS-4':  { name: 'Class 4',  url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'CLASS-5':  { name: 'Class 5',  url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'CLASS-6':  { name: 'Class 6',  url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'CLASS-7':  { name: 'Class 7',  url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'CLASS-8':  { name: 'Class 8',  url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'CLASS-9':  { name: 'Class 9',  url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'CLASS-10': { name: 'Class 10', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+        }
+    },
+    'PLUS2-ARTS': {
+        name: '+2 Arts',
+        icon: '🎨',
+        cssClass: 'plus2-arts',
+        classes: {
+            'FIRST-YEAR':  { name: '1st Year', url: 'https://special-training.pages.dev/' },
+            'SECOND-YEAR': { name: '2nd Year', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+        }
+    },
+    'PLUS2-COM': {
+        name: '+2 Commerce',
+        icon: '💼',
+        cssClass: 'plus2-com',
+        classes: {
+            'FIRST-YEAR':  { name: '1st Year', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'SECOND-YEAR': { name: '2nd Year', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+        }
+    },
+    'PLUS3-ARTS': {
+        name: '+3 Arts',
+        icon: '📚',
+        cssClass: 'plus3-arts',
+        honours: {
+            'POLITICAL-SCIENCE-HON': {
+                name: 'Political Science Honours', odia: 'ରାଜନୀତି ବିଜ୍ଞାନ (ଅନର୍ସ)',
+                semesters: [
+                    { name: '1st Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '2nd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '3rd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '4th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '5th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '6th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '7th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '8th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+                ]
+            },
+            'HISTORY-HON': {
+                name: 'History Honours', odia: 'ଇତିହାସ (ଅନର୍ସ)',
+                semesters: [
+                    { name: '1st Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '2nd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '3rd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '4th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '5th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '6th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '7th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '8th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+                ]
+            },
+            'SOCIOLOGY-HON': {
+                name: 'Sociology Honours', odia: 'ସମାଜ ବିଜ୍ଞାନ (ଅନର୍ସ)',
+                semesters: [
+                    { name: '1st Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '2nd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '3rd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '4th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '5th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '6th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '7th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '8th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+                ]
+            },
+            'ECONOMICS-HON': {
+                name: 'Economics Honours', odia: 'ଅର୍ଥନୀତି (ଅନର୍ସ)',
+                semesters: [
+                    { name: '1st Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '2nd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '3rd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '4th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '5th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '6th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '7th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '8th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+                ]
+            },
+            'EDUCATION-HON': {
+                name: 'Education Honours', odia: 'ଶିକ୍ଷା (ଅନର୍ସ)',
+                semesters: [
+                    { name: '1st Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '2nd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '3rd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '4th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '5th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '6th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '7th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '8th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+                ]
+            },
+            'PUBLIC-ADMIN-HON': {
+                name: 'Public Administration Honours', odia: 'ଲୋକ ପ୍ରଶାସନ (ଅନର୍ସ)',
+                semesters: [
+                    { name: '1st Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '2nd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '3rd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '4th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '5th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '6th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '7th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '8th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+                ]
+            },
+            'PSYCHOLOGY-HON': {
+                name: 'Psychology Honours', odia: 'ମନୋ ବିଜ୍ଞାନ (ଅନର୍ସ)',
+                semesters: [
+                    { name: '1st Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '2nd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '3rd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '4th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '5th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '6th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '7th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '8th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+                ]
+            }
+        }
+    },
+    'PLUS3-COM': {
+        name: '+3 Commerce',
+        icon: '📊',
+        cssClass: 'plus3-com',
+        semesters: [
+            { name: '1st Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            { name: '2nd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            { name: '3rd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            { name: '4th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            { name: '5th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            { name: '6th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            { name: '7th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            { name: '8th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+        ]
+    }
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════════════ */
+let state = { view: 'levels', level: null, honour: null };
+let currentUrl = DEFAULT_URL;
+let currentTitle = '';
+
+/* ═══════════════════════════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════════════════════════ */
+function openModal(title, detail, url) {
+    currentTitle = title;
+    currentUrl   = url || DEFAULT_URL;
+    document.getElementById('modalTitle').textContent  = title;
+    document.getElementById('modalDetail').textContent = detail || '';
+    document.getElementById('modalMainView').style.display = 'block';
+    document.getElementById('applyForm').classList.remove('active');
+    document.getElementById('applyForm').querySelector('form').reset();
+    document.getElementById('classModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    document.getElementById('classModal').classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+function showApplyForm() {
+    document.getElementById('modalMainView').style.display = 'none';
+    document.getElementById('applyForm').classList.add('active');
+}
+
+function hideApplyForm() {
+    document.getElementById('applyForm').classList.remove('active');
+    document.getElementById('modalMainView').style.display = 'block';
+}
+
+function goToClassroom() {
+    closeModal();
+    window.location.href = currentUrl;
+}
+
+function goToEnquiry() {
+    window.open('https://evidya.pages.dev/CONTACT%20US/', '_blank');
+    closeModal();
+}
+
+function submitApplication(e) {
+    e.preventDefault();
+    const name  = document.getElementById('appName').value.trim();
+    const phone = document.getElementById('appPhone').value.trim();
+    if (!name || !phone) { alert('ଦୟାକରି ସମସ୍ତ ଫିଲ୍ଡ ପୂରଣ କରନ୍ତୁ'); return; }
+    if (!/^[0-9]{10}$/.test(phone)) { alert('ଦୟାକରି ସଠିକ୍ 10 ଅଙ୍କ ନମ୍ବର ପ୍ରଦାନ କରନ୍ତୁ'); return; }
+    const msg = `*E-Vidya Academy - Coaching Application*\n\n*ନାମ:* ${name}\n*ଯୋଗାଯୋଗ:* ${phone}\n*ବିଷୟ:* ${currentTitle}\n\nମୁଁ ଏହି ବିଷୟ ପାଇଁ କୋଚିଂ ନେବାକୁ ଇଛୁକ ।`;
+    window.open(`https://wa.me/+916372296357?text=${encodeURIComponent(msg)}`, '_blank');
+    alert('ଆପଣଙ୍କ ଆବେଦନ ପଠାଯାଇଛି!');
+    closeModal();
+}
+
+document.getElementById('classModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   RENDER HELPERS
+═══════════════════════════════════════════════════════════════ */
+const grid = () => document.getElementById('mainGrid');
+
+function setBack(show) {
+    const btn = document.getElementById('backBtn');
+    btn.classList.toggle('visible', show);
+}
+
+function makeLevelCard(key, label, icon, cssClass, onClick) {
+    const a = document.createElement('a');
+    a.href = '#';
+    a.className = `level-card ${cssClass}`;
+    a.onclick = (e) => { e.preventDefault(); onClick(); };
+    a.innerHTML = `<div class="level-icon">${icon}</div><div class="level-name">${label}</div>`;
+    return a;
+}
+
+function makeClassCard(label, sublabel, cssExtra, onClick) {
+    const a = document.createElement('a');
+    a.href = '#';
+    a.className = `class-card${cssExtra ? ' ' + cssExtra : ''}`;
+    a.onclick = (e) => { e.preventDefault(); onClick(); };
+    a.innerHTML = `<div class="class-label">${sublabel}</div><div class="class-title">${label}</div>`;
+    return a;
+}
+
+function makeWideBtn(text, href, cssClass) {
+    const a = document.createElement('a');
+    a.href = href;
+    a.target = '_blank'; a.rel = 'noopener noreferrer';
+    a.className = `btn-wide ${cssClass}`;
+    a.textContent = text;
+    return a;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   VIEWS
+═══════════════════════════════════════════════════════════════ */
+function showLevels() {
+    state = { view: 'levels', level: null, honour: null };
+    setBack(false);
+    const g = grid(); g.innerHTML = '';
+
+    g.appendChild(makeWideBtn('ଏଠାରେ ମୋ ସାଥି ଆପ୍ କୁ ଯାଆନ୍ତୁ ।', 'https://evidya.pages.dev/MO%20SATHI/', 'red'));
+
+  const special = document.createElement('a');
+special.href = 'https://special-training.pages.dev/';
+special.className = 'level-card special';
+special.innerHTML = '<div class="level-icon">🌟</div><div class="level-name">ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ</div></div>';
+g.appendChild(special);
+
+    g.appendChild(makeLevelCard('SCHOOL', 'ସ୍କୁଲ୍', '🏫', 'school', () => showClasses('SCHOOL')));
+
+    const plus2 = makeLevelCard('PLUS2', '+2', '📘', 'plus2', () => showPlus2Choice());
+    g.appendChild(plus2);
+
+    const plus3 = makeLevelCard('PLUS3', '+3', '📘', 'plus3', () => showPlus3Choice());
+    g.appendChild(plus3);
+
+    g.appendChild(makeWideBtn('ଏଠାରେ ପେମେଣ୍ଟ କରନ୍ତୁ ।', 'https://evidya.pages.dev/PAYMENT/', 'gold'));
+}
+
+function showPlus2Choice() {
+    state = { view: 'plus2choice', level: null, honour: null };
+    setBack(true);
+    const g = grid(); g.innerHTML = '';
+    g.appendChild(makeLevelCard('PLUS2-ARTS', '+2 Arts',     '🎨', 'plus2-arts', () => showClasses('PLUS2-ARTS')));
+    g.appendChild(makeLevelCard('PLUS2-COM',  '+2 Commerce', '💼', 'plus2-com',  () => showClasses('PLUS2-COM')));
+}
+
+function showPlus3Choice() {
+    state = { view: 'plus3choice', level: null, honour: null };
+    setBack(true);
+    const g = grid(); g.innerHTML = '';
+    g.appendChild(makeLevelCard('PLUS3-ARTS', '+3 Arts',     '📚', 'plus3-arts', () => showClasses('PLUS3-ARTS')));
+    g.appendChild(makeLevelCard('PLUS3-COM',  '+3 Commerce', '📊', 'plus3-com',  () => showClasses('PLUS3-COM')));
+}
+
+function showClasses(levelKey) {
+    state = { view: 'classes', level: levelKey, honour: null };
+    setBack(true);
+    const lv = levels[levelKey];
+    const g  = grid(); g.innerHTML = '';
+
+    if (levelKey === 'PLUS3-ARTS') {
+        // Show honours list — clicking honour goes to its semesters
+        for (const hk in lv.honours) {
+            const h  = lv.honours[hk];
+            const card = makeClassCard(h.name, lv.name, 'honour-card', () => showSemesters(levelKey, hk));
+            const badge = document.createElement('div');
+            badge.className = 'honour-badge';
+            badge.textContent = h.odia;
+            card.appendChild(badge);
+            g.appendChild(card);
+        }
+    } else if (levelKey === 'PLUS3-COM') {
+        // Each semester has its own url
+        lv.semesters.forEach(sem => {
+            g.appendChild(makeClassCard(sem.name, lv.name, '', () => {
+                openModal(sem.name, lv.name, sem.url);
+            }));
+        });
+    } else {
+        // SCHOOL, PLUS2-ARTS, PLUS2-COM — each class has its own url
+        for (const ck in lv.classes) {
+            const cls = lv.classes[ck];
+            g.appendChild(makeClassCard(cls.name, lv.name, '', () => {
+                openModal(cls.name, lv.name, cls.url);
+            }));
+        }
+    }
+}
+
+function showSemesters(levelKey, honourKey) {
+    state = { view: 'semesters', level: levelKey, honour: honourKey };
+    setBack(true);
+    const hon = levels[levelKey].honours[honourKey];
+    const g   = grid(); g.innerHTML = '';
+    // Each semester has its own url
+    hon.semesters.forEach(sem => {
+        g.appendChild(makeClassCard(sem.name, hon.name, '', () => {
+            openModal(sem.name, hon.name + ' | ' + hon.odia, sem.url);
+        }));
+    });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BACK BUTTON
+═══════════════════════════════════════════════════════════════ */
+document.getElementById('backBtn').addEventListener('click', () => {
+    const v = state.view;
+    if (v === 'semesters')  { showClasses(state.level); }
+    else if (v === 'classes') {
+        if (state.level === 'PLUS2-ARTS' || state.level === 'PLUS2-COM') showPlus2Choice();
+        else if (state.level === 'PLUS3-ARTS' || state.level === 'PLUS3-COM') showPlus3Choice();
+        else showLevels();
+    }
+    else showLevels();
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   INFO MODAL CONTENT
+═══════════════════════════════════════════════════════════════ */
+const infoContent = {
+    contact: {
+        title: '📧 Contact Us — ଆମ୍ଭ ସହିତ ଯୋଗାଯୋଗ',
+        body: `
+            <h3>ଯୋଗାଯୋଗ — Contact</h3>
+            <div class="odia">ଯଦି ଆପଣଙ୍କର କୌଣସି ପ୍ରଶ୍ନ, ଅଭିଯୋଗ, କିମ୍ବା ଅନୁସନ୍ଧାନ ଅଛି, ଦୟାକରି ନିମ୍ନ ଚ୍ୟାନେଲ ମାଧ୍ୟମରେ ଆମ୍ଭ ସହିତ ଯୋଗାଯୋଗ କରନ୍ତୁ ।</div>
+            <div class="eng">For any query, complaint, or general enquiry regarding E-Vidya Academy services, please reach us through the following channels. We are committed to responding within 24 hours on working days.</div>
+            <h3>📱 WhatsApp</h3>
+            <div class="eng"><strong>+91 6372296357</strong><br>Monday to Saturday — 9:00 AM to 8:00 PM</div>
+            <div class="odia">ସୋମବାର ଠାରୁ ଶନିବାର — ସକାଳ ୯ ଟାରୁ ସନ୍ଧ୍ୟା ୮ ଟା ।</div>
+            <h3>📍 Business Address</h3>
+            <div class="eng">At-Harasinghpur, Po.-Pirahat, Dist.-Bhadrak, Odisha-756131<br>Email: evidya2026@gmail.com | Phone: 6372296357<br>Grievance Officer: Sangita Behera</div>
+            <div class="legal"><p>⚠️ This is a PRIVATE service. NOT affiliated with any Government body, Board, or University.</p></div>
+        `
+    },
+    about: {
+        title: 'ℹ️ About Us — ଆମ୍ଭ ବିଷୟରେ',
+        body: `
+            <h3>ଆମ୍ଭ ପରିଚୟ — Who We Are</h3>
+            <div class="odia">E-Vidya Academy ଏକ ଅଭିଭାବକ-ଶିକ୍ଷା ଆଧାରିତ ଅନଲାଇନ୍ କୋଚିଂ ସେବା । ଆମ୍ଭର ଲକ୍ଷ୍ୟ ହେଉଛି ଅଭିଭାବକମାନଙ୍କୁ ସକ୍ଷମ କରିବା ଯଦ୍ଦ୍ୱାରା ସେମାନେ ନିଜ ସନ୍ତାନଙ୍କୁ ଘରେ ବସି ପ୍ରଭାବଶାଳୀ ଭାବରେ ପଢ଼ାଇ ପାରିବେ ।</div>
+            <div class="eng">E-Vidya Academy is a privately operated online coaching platform founded to empower parents to become their children's most trusted teachers. We provide structured coaching content for School (Class 1–10), +2 Arts, +2 Commerce, +3 Arts (Honours), and +3 Commerce.</div>
+            <h3>ଆମ୍ଭ ସ୍ଥିତି — Our Standing</h3>
+            <div class="eng">Owned and operated by <strong>Kumudini Rout</strong> as a sole proprietorship under the laws of India.</div>
+            <div class="odia">ଦୟାକରି ଧ୍ୟାନ ଦିଅନ୍ତୁ: ଏହି ଆପ୍ ଏକ ବ୍ୟକ୍ତିଗତ ପ୍ରୟାସ ଅଟେ । ଏହା କୌଣସି ସରକାରୀ ସଂସ୍ଥାକୁ ପ୍ରତିନିଧିତ୍ୱ କରେ ନାହିଁ । ଏହି ଆପ୍ କୁ ବ୍ୟବହାର କରିବା ଦ୍ଵାରା ଆପଣ ଏହି ଆପ୍ ର ସମସ୍ତ ନୀତି, ପ୍ରାଇଭେସୀ ପଲିସି, ସର୍ତ୍ତାବଳୀ ଏବଂ ଅସ୍ବୀକରଣ ରେ ଆପଣଙ୍କ ସହମତି ପ୍ରଦାନ କରୁଛନ୍ତି ।</div>
+            <div class="legal"><p>⚠️ NOT affiliated with, endorsed by, or connected to any Government, Board, or University.</p></div>
+        `
+    },
+    terms: {
+        title: '📜 Terms & Conditions — ସର୍ତ୍ତ ଓ ନିୟମ',
+        body: `
+            <h3>ସ୍ୱୀକୃତି — Acceptance</h3>
+            <div class="odia">ଏହି ସେବା ବ୍ୟବହାର କରି ଆପଣ ଏହି ସର୍ତ୍ତ ଓ ନିୟମ ଗ୍ରହଣ କରୁଛନ୍ତି । ଏହି ଆପ୍ ଏକ ବ୍ୟକ୍ତିଗତ ପ୍ରୟାସ; କୌଣସି ସରକାରୀ ସଂସ୍ଥା ସହ ସଂଯୁକ୍ତ ନୁହେଁ ।</div>
+            <div class="eng">By accessing E-Vidya Academy's services, you unconditionally agree to these Terms. If you do not agree, discontinue use immediately.</div>
+            <h3>ସେବାର ପ୍ରକୃତି — Nature of Service</h3>
+            <div class="eng">This is a private coaching service for parents. No certificate, degree, or official qualification is issued. Content is for guidance only.</div>
+            <h3>ଶୁଳ୍କ — Fee</h3>
+            <div class="odia">ମାସିକ ଶୁଳ୍କ ₹150 ଅଟେ ।</div>
+            <div class="eng">Monthly fee: ₹150, payable in advance. The proprietor reserves the right to revise fees with prior notice.</div>
+            <h3>ଦାୟଭାର ସୀମା — Limitation of Liability</h3>
+            <div class="eng">E-Vidya Academy bears no liability for any academic result or examination outcome. Results depend entirely on the student and parent's effort.</div>
+            <div class="legal"><p>⚠️ These Terms are legally binding under the Indian Contract Act, 1872.</p></div>
+        `
+    },
+    privacy: {
+        title: '🔒 Privacy Policy — ଗୋପନୀୟତା ନୀତି',
+        body: `
+            <h3>ତଥ୍ୟ ସଂଗ୍ରହ — Data Collection</h3>
+            <div class="odia">ଆବେଦନ ସମୟରେ ଆପଣଙ୍କ ନାମ ଓ ଫୋନ ନମ୍ବର ସଂଗ୍ରହ କରାଯାଏ ।</div>
+            <div class="eng">We collect only your name and contact number during enrolment. No sensitive personal data (Aadhaar, financial details, passwords) is collected.</div>
+            <h3>ତଥ୍ୟ ବ୍ୟବହାର — Use of Data</h3>
+            <div class="eng">Your data is used exclusively for service delivery and communication. It is never sold or transferred to any third party without explicit consent.</div>
+            <h3>ଅଧିକାର — Your Rights</h3>
+            <div class="eng">You may request deletion of your data at any time via WhatsApp. We will comply within 7 working days under the Digital Personal Data Protection Act, 2023.</div>
+            <div class="legal"><p>⚠️ Governed by the Digital Personal Data Protection Act, 2023.</p></div>
+        `
+    },
+    refund: {
+        title: '💰 Refund Policy — ଫେରସ୍ତ ନୀତି',
+        body: `
+            <h3>ସ୍ପଷ୍ଟ ଘୋଷଣା — Declaration</h3>
+            <div class="odia">E-Vidya Academy ର ସମସ୍ତ ଶୁଳ୍କ ଅଣ-ଫେରସ୍ତଯୋଗ୍ୟ ।</div>
+            <div class="eng"><strong>ALL FEES PAID TO E-VIDYA ACADEMY ARE STRICTLY NON-REFUNDABLE.</strong> By making payment you have read, understood, and accepted this policy.</div>
+            <h3>ବ୍ୟତିକ୍ରମ — Exception</h3>
+            <div class="eng">A refund may be considered ONLY if E-Vidya Academy permanently ceases operations before the paid period is utilized. Any such refund is at the sole discretion of the proprietor.</div>
+            <h3>ଅଭିଯୋଗ — Dispute</h3>
+            <div class="eng">Disputes are subject to the jurisdiction of courts in Bhadrak, Odisha, governed by the Consumer Protection Act, 2019 and IT Act, 2000.</div>
+            <div class="legal"><p>⚠️ Ignorance of this policy shall not constitute grounds for a refund claim.</p></div>
+        `
+    },
+    disclaimer: {
+        title: '⚠️ Full Disclaimer — ସମ୍ପୂର୍ଣ୍ଣ ଦାବିତ୍ୟାଗ',
+        body: `
+            <h3>ସ୍ୱତନ୍ତ୍ର ଘୋଷଣା</h3>
+            <div class="odia">E-Vidya Academy କୌଣସି ସରକାରୀ ସଂସ୍ଥା, ବୋର୍ଡ, ବିଶ୍ୱବିଦ୍ୟାଳୟ ସହ ସଂଯୁକ୍ତ ନୁହେଁ । ଏହି ଆପ୍ ଏକ ବ୍ୟକ୍ତିଗତ ପ୍ରୟାସ । ଏଥିରେ ଦର୍ଶାଯାଇଥିବା ତଥ୍ୟ କେବଳ ଉପଦେଶାତ୍ମକ । ଏହାକୁ ଅଦାଲତ/ସରକାରୀ ଅଫିସ୍ ରେ ଅଧିକାରିକ ତଥ୍ୟ ଭାବରେ ବ୍ୟବହାର ହୋଇନପାରେ । ଏହି ଆପ୍ ବ୍ୟବହାର କରିବା ଦ୍ଵାରା ଆପଣ ସମସ୍ତ ନୀତି, ପ୍ରାଇଭେସୀ ପଲିସି, ସର୍ତ୍ତାବଳୀ ଓ ଅସ୍ବୀକରଣ ରେ ସହମତ ।</div>
+            <div class="eng"><strong>E-Vidya Academy has absolutely NO affiliation with the Government of India, Government of Odisha, any Board, any University, or any statutory body whatsoever.</strong></div>
+            <h3>ଶିକ୍ଷାଗତ ଫଳ</h3>
+            <div class="eng">No warranty is made regarding any academic result, exam score, or educational outcome. All content is for general guidance only.</div>
+            <h3>ଶୁଳ୍କ</h3>
+            <div class="eng">The ₹150 monthly fee is for coaching guidance access only — NOT an admission fee, exam fee, or registration with any Board or University.</div>
+            <h3>ଆଇନ</h3>
+            <div class="eng">Governed by Indian law. Disputes subject to exclusive jurisdiction of competent courts of Odisha.</div>
+            <div class="legal"><p>⚠️ By using this service you conclusively accept this Full Disclaimer, Privacy Policy, Terms & Conditions, and Refund Policy.</p></div>
+        `
+    }
+};
+
+function openInfo(key) {
+    const c = infoContent[key];
+    if (!c) return;
+    document.getElementById('infoTitle').textContent = c.title;
+    document.getElementById('infoBody').innerHTML    = c.body;
+    document.getElementById('infoModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+function closeInfo() {
+    document.getElementById('infoModal').classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+function handleInfoClick(e) {
+    if (e.target === document.getElementById('infoModal')) closeInfo();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PWA
+═══════════════════════════════════════════════════════════════ */
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('pwaBtn').style.display = 'block';
+    setTimeout(() => document.getElementById('pwaModal').classList.add('active'), 2000);
+});
+function doInstall() {
+    dismissPwa();
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(r => {
+            if (r.outcome === 'accepted') document.getElementById('pwaBtn').style.display = 'none';
+            deferredPrompt = null;
+        });
+    }
+}
+function dismissPwa() {
+    document.getElementById('pwaModal').classList.remove('active');
+}
+window.addEventListener('appinstalled', () => {
+    document.getElementById('pwaBtn').style.display = 'none';
+    dismissPwa();
+    deferredPrompt = null;
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   SERVICE WORKER
+═══════════════════════════════════════════════════════════════ */
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then(r  => console.log('SW registered:', r.scope))
+            .catch(er => console.log('SW error:', er));
+    });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════════════ */
+showLevels();
+</script>
+</body>
+</html>
