@@ -4,835 +4,578 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Vidya Academy</title>
-   <link rel="manifest" href="./manifest.json">
+    <link rel="manifest" href="./manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="E-Vidya">
-   <link rel="apple-touch-icon" href="./icon-192.png">
+    <link rel="apple-touch-icon" href="./icon-192.png">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 10px; overflow-x: hidden; }
-        .container { max-width: 100%; margin: 0 auto; background: white; border-radius: 20px; padding: 20px 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
-        .minimal-disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 8px 12px; margin-bottom: 15px; text-align: center; }
-        .minimal-disclaimer p { color: #856404; font-size: 0.7em; line-height: 1.4; margin: 0; font-weight: 600; }
-        .minimal-disclaimer a { color: #856404; text-decoration: underline; font-weight: 700; }
-        h1 { text-align: center; color: #333; margin-bottom: 8px; font-size: 1.3em; font-weight: 900; line-height: 1.4; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 20px 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        /* ── Disclaimer ── */
+        .disclaimer-bar {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .disclaimer-bar p {
+            color: #856404;
+            font-size: 0.7em;
+            font-weight: 600;
+            margin: 0;
+        }
+        .disclaimer-bar a {
+            color: #8B0000;
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
+        /* ── Header ── */
+        .logo-wrap { text-align: center; margin-bottom: 8px; }
+        .logo-wrap img { width: 220px; max-width: 80%; height: auto; }
         .subtitle { text-align: center; color: #666; margin-bottom: 8px; font-size: 0.85em; font-weight: 600; }
-        .search-box { margin-bottom: 15px; }
-        .search-box input { width: 100%; padding: 12px 15px; font-size: 15px; border: 2px solid #e5e7eb; border-radius: 12px; outline: none; transition: all 0.3s; background: #f9fafb; }
-        .search-box input:focus { border-color: #667eea; background: white; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
-        .button-container { text-align: center; margin-bottom: 15px; }
-        .back-button { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 25px; padding: 10px 20px; text-decoration: none; color: white; font-weight: 700; font-size: 14px; box-shadow: 0 4px 12px rgba(102,126,234,0.4); transition: transform 0.2s; }
-        .back-button:active { transform: scale(0.95); }
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px; }
-        .level-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 20px 15px; text-align: center; cursor: pointer; text-decoration: none; color: white; display: flex; flex-direction: column; align-items: center; min-height: 120px; position: relative; box-shadow: 0 8px 25px rgba(102,126,234,0.4); border: 3px solid rgba(255,255,255,0.3); overflow: hidden; transition: all 0.3s; }
-        .level-card::before { content: ''; position: absolute; top: -50%; right: -10%; width: 150px; height: 150px; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%); border-radius: 50%; }
+
+        /* ── Back Button ── */
+        .btn-back {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 25px;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(102,126,234,0.4);
+            transition: transform 0.2s;
+            cursor: pointer;
+            border: none;
+            margin: 0 auto 15px;
+        }
+        .btn-back.visible { display: inline-flex; }
+        .btn-back:active { transform: scale(0.95); }
+        .back-wrap { text-align: center; }
+
+
+
+        /* ── Grid ── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        /* ── Wide banner buttons ── */
+        .btn-wide {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-size: 1.05em;
+            font-weight: 900;
+            letter-spacing: 0.4px;
+            transition: transform 0.2s;
+        }
+        .btn-wide:active { transform: scale(0.98); }
+        .btn-wide.red {
+            background: linear-gradient(135deg, #d32f2f 0%, #8b0000 100%);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(211,47,47,0.4);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        .btn-wide.gold {
+            background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+            color: #1a1a2e;
+            box-shadow: 0 6px 20px rgba(247,151,30,0.4);
+        }
+
+        /* ── Level Cards ── */
+        .level-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 12px 10px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 85px;
+            position: relative;
+            box-shadow: 0 8px 25px rgba(102,126,234,0.4);
+            border: 3px solid rgba(255,255,255,0.3);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .level-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -10%;
+            width: 150px; height: 150px;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
         .level-card:active { transform: scale(0.97); }
-        .level-card.school { background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%); }
+        .level-card.school   { background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%); }
         .level-card.plus2-arts { background: linear-gradient(135deg, #4E65FF 0%, #92EFFD 100%); }
-        .level-card.plus2-com { background: linear-gradient(135deg, #11998E 0%, #38EF7D 100%); }
+        .level-card.plus2-com  { background: linear-gradient(135deg, #11998E 0%, #38EF7D 100%); }
         .level-card.plus3-arts { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
-        .level-card.plus3-com { background: linear-gradient(135deg, #FD6585 0%, #0D25B9 100%); }
-        .level-card.llb { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
-        .level-icon { font-size: 2.5em; margin-bottom: 10px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
-        .level-name { font-size: 1.3em; font-weight: 900; letter-spacing: 0.5px; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-        .level-subtitle { font-size: 0.85em; opacity: 0.95; font-weight: 600; line-height: 1.3; }
-        .class-card { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); border-radius: 14px; padding: 18px 15px; text-align: center; cursor: pointer; text-decoration: none; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 110px; position: relative; box-shadow: 0 6px 20px rgba(30,58,138,0.3); border: 2px solid rgba(255,255,255,0.3); transition: all 0.3s; }
-        .class-card:active { transform: scale(0.97); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-        .class-number { font-size: 0.9em; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 8px; letter-spacing: 0.5px; text-transform: uppercase; }
-        .class-title { font-size: 1.15em; font-weight: 800; color: white; letter-spacing: 0.3px; line-height: 1.3; }
-        .parent-badge { background: #fbbf24; color: #78350f; font-size: 0.7em; padding: 4px 10px; border-radius: 10px; font-weight: 800; margin-top: 8px; display: inline-block; }
-        .subject-card { background: linear-gradient(135deg, #3730a3 0%, #6366f1 100%); border-radius: 14px; padding: 18px 15px; text-align: center; cursor: pointer; text-decoration: none; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100px; position: relative; box-shadow: 0 6px 20px rgba(55,48,163,0.3); border: 2px solid rgba(255,255,255,0.3); transition: all 0.3s; }
-        .subject-card:active { transform: scale(0.97); }
-        .subject-name { font-size: 1.2em; font-weight: 900; letter-spacing: 0.3px; margin-bottom: 5px; }
-        .subject-description { font-size: 0.8em; opacity: 0.95; font-weight: 600; }
+        .level-card.plus3-com  { background: linear-gradient(135deg, #FD6585 0%, #0D25B9 100%); }
+        .level-card.plus2      { background: linear-gradient(135deg, #4E65FF 0%, #92EFFD 100%); }
+        .level-card.plus3      { background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); }
+        .level-card.special    { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); min-height: 85px; border: 3px solid rgba(255,255,255,0.5); }
 
-        /* HC Resources */
-        .hc-section-header { grid-column: 1 / -1; background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); border-radius: 12px; padding: 14px 18px; text-align: center; margin-top: 8px; border: 2px solid rgba(255,215,0,0.4); }
-        .hc-section-header h3 { color: #ffd700; font-size: 1em; font-weight: 900; margin-bottom: 4px; }
-        .hc-section-header p { color: rgba(255,255,255,0.75); font-size: 0.72em; font-weight: 600; margin: 0; }
-        .hc-resources-card { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); border-radius: 14px; padding: 16px 15px; text-align: center; text-decoration: none; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100px; position: relative; box-shadow: 0 6px 20px rgba(0,0,0,0.3); border: 2px solid rgba(255,215,0,0.3); overflow: hidden; transition: all 0.3s; }
-        .hc-resources-card::before { content: ''; position: absolute; top: -30%; right: -5%; width: 100px; height: 100px; background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%); border-radius: 50%; }
-        .hc-resources-card:active { transform: scale(0.97); }
-        .hc-name { font-size: 1em; font-weight: 900; color: #ffd700; letter-spacing: 0.3px; margin-bottom: 5px; line-height: 1.3; }
-        .hc-desc { font-size: 0.75em; color: rgba(255,255,255,0.78); font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
-        .hc-badge { background: rgba(255,215,0,0.15); border: 1px solid rgba(255,215,0,0.4); border-radius: 8px; padding: 3px 10px; display: inline-block; }
-        .hc-badge span { color: #ffd700; font-size: 0.68em; font-weight: 800; }
+        .level-icon   { font-size: 1.8em; margin-bottom: 5px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+        .level-name   { font-size: 1.05em; font-weight: 900; letter-spacing: 0.5px; margin-bottom: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .level-sub    { font-size: 0.72em; opacity: 0.95; font-weight: 600; line-height: 1.3; }
 
-        /* HC Dropdown */
-        .hc-dropdown-container { grid-column: 1 / -1; margin-top: 8px; }
-        .hc-dropdown-header { background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); border-radius: 12px; padding: 14px 18px; text-align: center; border: 2px solid rgba(255,215,0,0.4); margin-bottom: 12px; }
-        .hc-dropdown-header h3 { color: #ffd700; font-size: 1em; font-weight: 900; margin-bottom: 4px; }
-        .hc-dropdown-header p { color: rgba(255,255,255,0.75); font-size: 0.72em; font-weight: 600; margin: 0; }
-        .hc-dropdown-select { width: 100%; padding: 14px 16px; font-size: 15px; font-weight: 600; color: #1a1a2e; background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); border: 2px solid rgba(255,215,0,0.6); border-radius: 12px; cursor: pointer; outline: none; transition: all 0.3s; box-shadow: 0 4px 12px rgba(255,215,0,0.3); }
-        .hc-dropdown-select:focus { border-color: #ffd700; box-shadow: 0 0 0 3px rgba(255,215,0,0.2); }
-        .hc-dropdown-select option { padding: 12px; background: white; color: #1a1a2e; font-weight: 600; }
-        .hc-dropdown-select option:first-child { color: #666; font-style: italic; }
+        /* ── Class / Semester Cards ── */
+        .class-card {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            border-radius: 14px;
+            padding: 12px 10px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 80px;
+            box-shadow: 0 6px 20px rgba(30,58,138,0.3);
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.3s;
+        }
+        .class-card:active { transform: scale(0.97); }
+        .class-label  { font-size: 0.72em; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .class-title  { font-size: 0.95em; font-weight: 800; color: white; line-height: 1.3; }
 
-        /* Basic Training Card */
-        .basic-training-card { grid-column: 1 / -1; background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); border-radius: 16px; padding: 18px 20px; text-align: center; cursor: pointer; text-decoration: none; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90px; position: relative; box-shadow: 0 8px 30px rgba(102,126,234,0.4); border: 3px solid rgba(255,255,255,0.5); overflow: hidden; transition: all 0.3s; margin-bottom: 8px; }
-        .basic-training-card::before { content: ''; position: absolute; top: -40%; right: -8%; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 70%); border-radius: 50%; }
-        .basic-training-card:active { transform: scale(0.98); }
-        .basic-training-title { font-size: 1.05em; font-weight: 900; margin-bottom: 5px; position: relative; }
-        .basic-training-subtitle { font-size: 0.82em; opacity: 0.9; font-weight: 600; position: relative; }
+        /* Honour card variant */
+        .honour-card { background: linear-gradient(135deg, #3730a3 0%, #6366f1 100%); }
+        .honour-badge { background: rgba(255,255,255,0.15); border-radius: 8px; padding: 3px 8px; margin-top: 5px; font-size: 0.65em; font-weight: 800; color: #e0e7ff; }
 
-        /* No Results */
-        .no-results { text-align: center; padding: 40px 20px; color: #9ca3af; font-size: 0.95em; display: none; }
 
-        /* Subject Modal */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+
+        /* ── Modal Overlay ── */
+        .modal-overlay {
+            display: none;
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: white; border-radius: 20px; padding: 30px 25px; max-width: 400px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.3); animation: slideIn 0.3s ease; }
-        @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .modal-header { text-align: center; margin-bottom: 20px; }
-        .modal-header h2 { color: #667eea; font-size: 1.5em; margin-bottom: 5px; }
-        .modal-header p { color: #666; font-size: 0.9em; }
-        .modal-buttons { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; }
-        .modal-btn { padding: 15px 20px; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s; text-align: center; }
-        .apply-btn { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; box-shadow: 0 4px 12px rgba(102,126,234,0.4); }
-        .apply-btn:active { transform: scale(0.97); }
-        .continuing-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; box-shadow: 0 4px 12px rgba(240,147,251,0.4); }
-        .continuing-btn:active { transform: scale(0.97); }
-        .enquiry-btn { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; box-shadow: 0 4px 12px rgba(17,153,142,0.4); }
-        .enquiry-btn:active { transform: scale(0.97); }
-        .close-modal-btn { background: #f3f4f6; color: #666; padding: 12px; font-size: 14px; }
-        .application-form { display: none; }
-        .application-form.active { display: block; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; color: #333; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
-        .form-group input { width: 100%; padding: 12px 15px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; outline: none; transition: all 0.3s; }
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            padding: 28px 22px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn { from { transform: translateY(-40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .modal-title { color: #667eea; font-size: 1.35em; font-weight: 900; margin-bottom: 4px; text-align: center; }
+        .modal-detail { color: #888; font-size: 0.88em; text-align: center; margin-bottom: 20px; }
+
+        .modal-btns { display: flex; flex-direction: column; gap: 12px; }
+        .mbtn {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .mbtn:active { transform: scale(0.97); }
+        .mbtn.classroom { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; box-shadow: 0 4px 12px rgba(102,126,234,0.35); }
+        .mbtn.apply     { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; box-shadow: 0 4px 12px rgba(245,87,108,0.35); }
+        .mbtn.enquiry   { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; box-shadow: 0 4px 12px rgba(17,153,142,0.35); }
+        .mbtn.close-btn { background: #f3f4f6; color: #555; font-size: 14px; }
+
+        /* Application Form (inside modal) */
+        .app-form { display: none; }
+        .app-form.active { display: block; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; color: #333; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
+        .form-group input {
+            width: 100%; padding: 12px 15px;
+            border: 2px solid #e5e7eb; border-radius: 10px;
+            font-size: 15px; outline: none; transition: all 0.3s;
+        }
         .form-group input:focus { border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
-        .form-actions { display: flex; gap: 10px; margin-top: 20px; }
-        .submit-btn { flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.3s; }
-        .submit-btn:active { transform: scale(0.97); }
-        .back-to-options { flex: 0.5; background: #f3f4f6; color: #666; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; }
+        .form-actions { display: flex; gap: 10px; margin-top: 18px; }
+        .btn-submit {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; border: none; padding: 13px;
+            border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer;
+        }
+        .btn-back-form { flex: 0.5; background: #f3f4f6; color: #666; border: none; padding: 13px; border-radius: 10px; font-weight: 600; cursor: pointer; }
 
-      
+        /* ── Info Modal ── */
+        .info-overlay {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.75); z-index: 3000;
+            justify-content: center; align-items: center; padding: 16px;
+        }
+        .info-overlay.active { display: flex; }
+        .info-box {
+            background: white; border-radius: 18px;
+            width: 100%; max-width: 480px; max-height: 82vh;
+            display: flex; flex-direction: column;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+            overflow: hidden;
+        }
+        @keyframes popIn { from { transform: scale(0.88); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .info-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 16px 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-shrink: 0;
+        }
+        .info-header h2 { color: white; font-size: 1em; font-weight: 900; margin: 0; line-height: 1.3; }
+        .info-close {
+            background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.4);
+            color: white; width: 34px; height: 34px; border-radius: 50%;
+            font-size: 1em; font-weight: 900; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .info-close:active { transform: scale(0.9); }
+        .info-body {
+            padding: 20px; overflow-y: auto;
+            font-size: 0.82em; line-height: 1.75; color: #2d3748; text-align: justify;
+        }
+        .info-body h3 { color: #667eea; font-size: 0.95em; font-weight: 900; margin: 16px 0 6px; border-left: 3px solid #667eea; padding-left: 8px; }
+        .info-body h3:first-child { margin-top: 0; }
+        .info-body .odia { color: #4a5568; background: #f7f8ff; border-radius: 8px; padding: 8px 10px; border-left: 3px solid #764ba2; margin-bottom: 8px; }
+        .info-body .eng { color: #2d3748; margin-bottom: 6px; }
+        .info-body .legal { background: #fff5f5; border: 2px solid #fc8181; border-radius: 10px; padding: 12px; margin-top: 14px; }
+        .info-body .legal p { color: #c53030; font-weight: 700; margin: 0; }
 
-  
-        /* PWA Install Button */
-        #pwa-install-btn { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 14px 28px; border-radius: 25px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 20px rgba(102,126,234,0.5); z-index: 9999; white-space: nowrap; }
+        /* ── PWA Install Modal ── */
+        .pwa-overlay {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.75); z-index: 9000;
+            justify-content: center; align-items: center; padding: 20px;
+        }
+        .pwa-overlay.active { display: flex; }
+        .pwa-box {
+            background: white; border-radius: 24px; padding: 32px 24px;
+            max-width: 340px; width: 100%; text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            border: 3px solid rgba(102,126,234,0.3);
+        }
+        .pwa-icon  { font-size: 3em; margin-bottom: 10px; }
+        .pwa-title { color: #667eea; font-size: 1.4em; font-weight: 900; margin-bottom: 8px; }
+        .pwa-sub   { color: #764ba2; font-size: 0.85em; font-weight: 700; margin-bottom: 18px; line-height: 1.5; }
+        .pwa-install {
+            display: block; width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; border: none; padding: 15px; border-radius: 14px;
+            font-size: 1em; font-weight: 800; cursor: pointer; margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.5);
+        }
+        .pwa-dismiss { background: none; border: none; color: #aaa; font-size: 0.85em; cursor: pointer; padding: 8px; text-decoration: underline; }
 
-        /* Footer */
-        footer { background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%); color: white; padding: 30px 15px 15px; margin-top: 40px; border-radius: 20px; }
-        footer h3 { color: #fff; font-size: 1.2em; margin-bottom: 8px; text-align: center; }
-        footer p { color: #cbd5e0; font-size: 0.85em; text-align: center; line-height: 1.6; margin-bottom: 12px; }
-        .footer-links { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 15px 0; }
-.footer-links a:last-child:nth-child(odd) { grid-column: 1 / -1; }
-        .footer-links a { display: block; background: rgba(102,126,234,0.2); padding: 10px; border-radius: 8px; text-decoration: none; color: #90cdf4; font-weight: 600; text-align: center; font-size: 0.85em; border: 1px solid rgba(102,126,234,0.3); }
-        .footer-notice { background: rgba(252,129,129,0.15); border: 2px solid #fc8181; border-radius: 10px; padding: 15px; margin: 15px 0; }
-        .footer-notice h4 { color: #fc8181; font-size: 0.95em; margin-bottom: 8px; text-align: center; }
-        .footer-notice ul { color: #cbd5e0; font-size: 0.75em; line-height: 1.6; list-style-position: inside; text-align: left; }
-        .footer-notice li { margin-bottom: 5px; }
-        .footer-copyright { text-align: center; color: #a0aec0; font-size: 0.75em; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
+        /* ── PWA floating button ── */
+        #pwaBtn {
+            display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; border: none; padding: 14px 28px; border-radius: 25px;
+            font-size: 15px; font-weight: 700; cursor: pointer;
+            box-shadow: 0 6px 20px rgba(102,126,234,0.5); z-index: 9999; white-space: nowrap;
+        }
 
-        /* Responsive */
+        /* ── Footer ── */
+        footer {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: white; padding: 28px 15px 15px;
+            margin-top: 40px; border-radius: 20px;
+        }
+        footer h3 { color: #fff; font-size: 1.1em; margin-bottom: 6px; text-align: center; }
+        footer p  { color: #cbd5e0; font-size: 0.82em; text-align: center; line-height: 1.6; margin-bottom: 12px; }
+        .footer-links {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px; margin: 12px 0;
+        }
+        .footer-links a:last-child:nth-child(odd) { grid-column: 1 / -1; }
+        .footer-links a {
+            display: block;
+            background: rgba(102,126,234,0.2);
+            padding: 9px 6px; border-radius: 8px;
+            text-decoration: none; color: #90cdf4;
+            font-weight: 600; text-align: center; font-size: 0.78em;
+            border: 1px solid rgba(102,126,234,0.3);
+        }
+        .footer-copy { text-align: center; color: #a0aec0; font-size: 0.73em; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.1); }
+
+        /* ── Responsive ── */
         @media (min-width: 600px) {
-            .container { padding: 30px 25px; max-width: 700px; }
-            h1 { font-size: 1.8em; }
-            .grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-            .level-card { min-height: 140px; }
+            .container { padding: 30px 25px; max-width: 700px; margin: 0 auto; }
+            .grid { gap: 15px; }
+            .level-card { min-height: 100px; }
         }
         @media (min-width: 900px) {
             .container { max-width: 1000px; padding: 40px; }
-            h1 { font-size: 2.2em; }
             .grid { gap: 18px; }
-            .level-card:hover { transform: translateY(-5px); box-shadow: 0 12px 35px rgba(102,126,234,0.5); }
-            .class-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-            .subject-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(102,126,234,0.4); }
-            .hc-resources-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.35); }
-            .basic-training-card:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(118,75,162,0.6); }
-            .hc-dropdown-select:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255,215,0,0.5); }
-            .apply-btn:hover, .enquiry-btn:hover, .continuing-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.5); }
-            .submit-btn:hover { transform: translateY(-2px); }
-            .pay-floating-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(247,151,30,0.6); }
+            .level-card:hover   { transform: translateY(-5px); box-shadow: 0 12px 35px rgba(102,126,234,0.5); }
+            .class-card:hover   { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+            .mbtn.classroom:hover, .mbtn.apply:hover, .mbtn.enquiry:hover { transform: translateY(-2px); }
         }
-
-        /* Info Modal */
-.info-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 3000; justify-content: center; align-items: center; padding: 16px; }
-.info-modal-overlay.active { display: flex; }
-.info-modal-box { background: white; border-radius: 18px; width: 100%; max-width: 480px; max-height: 82vh; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.4); animation: infoPopIn 0.3s cubic-bezier(0.34,1.56,0.64,1); overflow: hidden; }
-@keyframes infoPopIn { from { transform: scale(0.88); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.info-modal-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-.info-modal-header h2 { color: white; font-size: 1.05em; font-weight: 900; margin: 0; line-height: 1.3; }
-.info-modal-close { background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.4); color: white; width: 34px; height: 34px; border-radius: 50%; font-size: 1em; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
-.info-modal-close:active { transform: scale(0.9); background: rgba(255,255,255,0.35); }
-.info-modal-body { padding: 20px; overflow-y: auto; font-size: 0.82em; line-height: 1.75; color: #2d3748; text-align: justify; }
-.info-modal-body h3 { color: #667eea; font-size: 0.95em; font-weight: 900; margin: 16px 0 6px; border-left: 3px solid #667eea; padding-left: 8px; }
-.info-modal-body h3:first-child { margin-top: 0; }
-.info-modal-body .odia-text { color: #4a5568; font-size: 0.97em; line-height: 1.85; margin-bottom: 10px; background: #f7f8ff; border-radius: 8px; padding: 8px 10px; border-left: 3px solid #764ba2; }
-.info-modal-body .eng-text { color: #2d3748; margin-bottom: 6px; }
-.info-modal-body .legal-notice { background: #fff5f5; border: 2px solid #fc8181; border-radius: 10px; padding: 12px; margin-top: 14px; }
-.info-modal-body .legal-notice p { color: #c53030; font-weight: 700; margin: 0; font-size: 0.95em; }
-
-        /* PWA Install Modal */
-.pwa-modal-overlay {
-  display: none; position: fixed; top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.75); z-index: 9000;
-  justify-content: center; align-items: center; padding: 20px;
-}
-.pwa-modal-overlay.active { display: flex; }
-.pwa-modal-box {
-  background: white; border-radius: 24px; padding: 32px 24px;
-  max-width: 340px; width: 100%; text-align: center;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-  animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
-  border: 3px solid rgba(102,126,234,0.3);
-}
-.pwa-modal-icon { font-size: 3em; margin-bottom: 10px; }
-.pwa-modal-title {
-  color: #667eea; font-size: 1.4em; font-weight: 900;
-  margin-bottom: 8px;
-}
-.pwa-modal-subtitle {
-  color: #764ba2; font-size: 0.85em; font-weight: 700;
-  margin-bottom: 10px; line-height: 1.5;
-}
-.pwa-modal-desc {
-  color: #555; font-size: 0.82em; margin-bottom: 22px; line-height: 1.6;
-}
-.pwa-modal-install-btn {
-  display: block; width: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white; border: none; padding: 15px;
-  border-radius: 14px; font-size: 1em; font-weight: 800;
-  cursor: pointer; margin-bottom: 10px;
-  box-shadow: 0 4px 15px rgba(102,126,234,0.5);
-  transition: transform 0.2s;
-}
-.pwa-modal-install-btn:active { transform: scale(0.97); }
-.pwa-modal-dismiss-btn {
-  background: none; border: none; color: #aaa;
-  font-size: 0.85em; cursor: pointer; padding: 8px;
-  text-decoration: underline;
-}
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="minimal-disclaimer">
-      <p>
-<strong style="color:#8B0000;">
-⚠️ Private service • Not affiliated with any Board, University or Government •
-</strong>
-<a href="#" onclick="openInfoModal('disclaimer'); return false;" style="color:#8B0000;font-weight:700;text-decoration:underline;">
-Full Disclaimer
-</a>
-</p>
-    </div>
-    <div style="text-align:center; margin-bottom: 8px;">
-        <img src="https://raw.githubusercontent.com/happysangitanms/assets/main/LOGO.png"
-             alt="E-Vidya Academy"
-             style="width: 220px; max-width: 80%; height: auto; display: inline-block;">
-    </div>
-    <p class="subtitle" style="margin-top:0;">Empowering Parents to Teach Their Children</p>
 
-    <div class="button-container">
-        <a href="#" class="back-button" id="backButton" style="display: none;">
-            <span>←</span>
-            <span id="backButtonText">Back</span>
-        </a>
+    <!-- Disclaimer bar -->
+    <div class="disclaimer-bar">
+        <p>
+            <strong style="color:#8B0000;">⚠️ Private service • Not affiliated with any Board, University or Government •</strong>
+            <a href="#" onclick="openInfo('disclaimer'); return false;">Full Disclaimer</a>
+        </p>
     </div>
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="🔍 Search for class, subject, or level..." autocomplete="off">
+
+    <!-- Logo -->
+    <div class="logo-wrap">
+        <img src="https://raw.githubusercontent.com/happysangitanms/assets/main/LOGO.png" alt="E-Vidya Academy">
     </div>
+    <p class="subtitle">Empowering Parents to Teach Their Children</p>
+
+    <!-- Back button -->
+    <div class="back-wrap">
+        <button class="btn-back" id="backBtn">← <span id="backLabel">ଏଠାରେ ପଛକୁ ଫେରନ୍ତୁ</span></button>
+    </div>
+
+    <!-- Main grid -->
     <div class="grid" id="mainGrid"></div>
-    <div class="no-results" id="noResults">No results found matching your search.</div>
 
-    
-</div>
 
-<!-- Subject Modal -->
-<div class="modal-overlay" id="subjectModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 id="modalSubjectName">ବିଷୟ ଚୟନ</h2>
-            <p id="modalSubjectDetails"></p>
+</div><!-- /container -->
+
+<!-- ── Subject / Class Modal ── -->
+<div class="modal-overlay" id="classModal">
+    <div class="modal-box">
+        <div id="modalMainView">
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-detail" id="modalDetail"></div>
+            <div class="modal-btns">
+                <button class="mbtn classroom" onclick="goToClassroom()">
+                    📖 ଏହି କୋଚିଂ ନେଉଛନ୍ତି କି? କ୍ଲାସ୍-ରୁମ୍ କୁ ଯିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ ।
+                </button>
+                <button class="mbtn apply" onclick="showApplyForm()">
+                    🏆 ଏହି କୋଚିଂ ନେବାକୁ ଚାହୁଁଛନ୍ତି କି? ଆବେଦନ ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ ।
+                </button>
+                <button class="mbtn enquiry" onclick="goToEnquiry()">
+                    💬 ଅଧିକ ଜାଣିବାକୁ ଚାହୁଁଛନ୍ତି କି? ଅନୁସନ୍ଧାନ ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ ।
+                </button>
+                <button class="mbtn close-btn" onclick="closeModal()">
+                    ବନ୍ଦ କରିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ ।
+                </button>
+            </div>
         </div>
-        <div class="modal-buttons" id="modalButtons">
-            <button class="modal-btn continuing-btn" onclick="goToContinuingClass()">
-                📖 ଏହି କୋଚିଂ ନେଉଛନ୍ତି କି? କ୍ଲାସ୍-ରୁମ୍ କୁ ଯିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ ।
-            </button>
-            <button class="modal-btn apply-btn" onclick="showApplicationForm()">
-                🏆 ଏହି କୋଚିଂ ନେବାକୁ ଚାହୁଁଛନ୍ତି କି ? କୋଚିଂ ପାଇଁ ଏଠାରେ ଆବେଦନ କରନ୍ତୁ ।
-            </button>
-            <button class="modal-btn enquiry-btn" onclick="goToEnquiry()">
-                💬 ଏହି କୋଚିଂ ବାବଦରେ କିଛି ଜାଣିବାକୁ ଚାହୁଁଛନ୍ତି କି? ଅନୁସନ୍ଧାନ ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ ।
-            </button>
-            <button class="modal-btn close-modal-btn" onclick="closeModal()">
-                ବନ୍ଦ କରିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ ।
-            </button>
-        </div>
-        <div class="application-form" id="applicationForm">
-            <form id="coachingForm" onsubmit="submitApplication(event)">
+        <div class="app-form" id="applyForm">
+            <form onsubmit="submitApplication(event)">
                 <div class="form-group">
-                    <label for="studentName">ଆପଣଙ୍କ ନାମ *</label>
-                    <input type="text" id="studentName" name="studentName" required placeholder="ନାମ ଲେଖନ୍ତୁ">
+                    <label>ଆପଣଙ୍କ ନାମ *</label>
+                    <input type="text" id="appName" required placeholder="ନାମ ଲେଖନ୍ତୁ">
                 </div>
                 <div class="form-group">
-                    <label for="contactNumber">ଯୋଗାଯୋଗ ନମ୍ବର *</label>
-                    <input type="tel" id="contactNumber" name="contactNumber" required pattern="[0-9]{10}" placeholder="10 ଅଙ୍କ ନମ୍ବର">
+                    <label>ଯୋଗାଯୋଗ ନମ୍ବର *</label>
+                    <input type="tel" id="appPhone" required pattern="[0-9]{10}" placeholder="10 ଅଙ୍କ ନମ୍ବର">
                 </div>
                 <div class="form-actions">
-                    <button type="submit" class="submit-btn">ପଠାନ୍ତୁ</button>
-                    <button type="button" class="back-to-options" onclick="backToOptions()">ପଛକୁ</button>
+                    <button type="submit" class="btn-submit">ପଠାନ୍ତୁ</button>
+                    <button type="button" class="btn-back-form" onclick="hideApplyForm()">ପଛକୁ</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
+<!-- ── Info Modal ── -->
+<div class="info-overlay" id="infoModal" onclick="handleInfoClick(event)">
+    <div class="info-box" id="infoBox">
+        <div class="info-header">
+            <h2 id="infoTitle"></h2>
+            <button class="info-close" onclick="closeInfo()">✕</button>
+        </div>
+        <div class="info-body" id="infoBody"></div>
+    </div>
+</div>
 
+<!-- ── PWA Install Modal ── -->
+<div class="pwa-overlay" id="pwaModal">
+    <div class="pwa-box">
+        <div class="pwa-icon">📲</div>
+        <h2 class="pwa-title">Install E-Vidya App</h2>
+        <p class="pwa-sub">ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।</p>
+        <button class="pwa-install" onclick="doInstall()">⬇️ Install Now — ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।</button>
+        <button class="pwa-dismiss" onclick="dismissPwa()">Not Now — ପରେ କରିବି</button>
+    </div>
+</div>
 
-<!-- PWA Install Button -->
-<button id="pwa-install-btn" onclick="triggerInstall()">
-    ⬇️ Install App — ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।
-</button>
+<!-- PWA floating button -->
+<button id="pwaBtn" onclick="doInstall()">⬇️ Install App — ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ ।</button>
 
+<!-- Footer -->
 <footer>
     <h3>🌹 E-Vidya Academy 🌹</h3>
     <p>Private Online Parent Coaching Service<br><strong style="color:#fc8181;">NOT affiliated with Government</strong></p>
     <div class="footer-links">
-       <a href="#" onclick="openInfoModal('contact'); return false;">📧 Contact Us (ଆମ୍ଭ ସହିତ ଯୋଗାଯୋଗ)</a>
-<a href="#" onclick="openInfoModal('about'); return false;">ℹ️ About Us (ଆମ୍ଭ ବିଷୟରେ)</a>
-<a href="#" onclick="openInfoModal('terms'); return false;">📜 Terms & Conditions (ବ୍ୟବହାର ସର୍ତ୍ତାବଳୀ)</a>
-<a href="#" onclick="openInfoModal('privacy'); return false;">🔒 Privacy Policy (ପ୍ରାଇଭେସୀ ପଲିସି)</a>
-<a href="#" onclick="openInfoModal('refund'); return false;">💰 Refund Policy (ଫେରସ୍ତ ନୀତି) </a>
-<a href="#" onclick="openInfoModal('disclaimer'); return false;">⚠️ Full Disclaimer (ଅସ୍ବୀକାରଣ) </a>
+        <a href="#" onclick="openInfo('contact'); return false;">📧 Contact Us</a>
+        <a href="#" onclick="openInfo('about'); return false;">ℹ️ About Us</a>
+        <a href="#" onclick="openInfo('terms'); return false;">📜 Terms &amp; Conditions</a>
+        <a href="#" onclick="openInfo('privacy'); return false;">🔒 Privacy Policy</a>
+        <a href="#" onclick="openInfo('refund'); return false;">💰 Refund Policy</a>
+        <a href="#" onclick="openInfo('disclaimer'); return false;">⚠️ Full Disclaimer</a>
     </div>
-    <div class="footer-copyright">© 2026 E-Vidya Academy. All Rights Reserved.<br>Private educational business under Indian law.</div>
+    <div class="footer-copy">© 2026 E-Vidya Academy. All Rights Reserved.<br>Private educational business under Indian law.</div>
 </footer>
 
-<!-- Info Modal -->
-<div class="info-modal-overlay" id="infoModal" onclick="handleInfoModalClick(event)">
-    <div class="info-modal-box" id="infoModalBox">
-        <div class="info-modal-header">
-            <h2 id="infoModalTitle"></h2>
-            <button class="info-modal-close" onclick="closeInfoModal()">✕</button>
-        </div>
-        <div class="info-modal-body" id="infoModalBody"></div>
-    </div>
-</div>
-
 <script>
-// ─── Education Levels Data ────────────────────────────────────────────────────
-const educationLevels = {
+/* ═══════════════════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════════════════ */
+const DEFAULT_URL = 'https://sites.google.com/view/eguruodishastp/cc';
+
+const levels = {
+    SCHOOL: {
+        name: 'ସ୍କୁଲ୍',
+        icon: '🏫',
+        cssClass: 'school',
+        classes: {
+            'CLASS-1':  'Class 1',
+            'CLASS-2':  'Class 2',
+            'CLASS-3':  'Class 3',
+            'CLASS-4':  'Class 4',
+            'CLASS-5':  'Class 5',
+            'CLASS-6':  'Class 6',
+            'CLASS-7':  'Class 7',
+            'CLASS-8':  'Class 8',
+            'CLASS-9':  'Class 9',
+            'CLASS-10': 'Class 10'
+        }
+    },
     'PLUS2-ARTS': {
         name: '+2 Arts',
-        subtitle: 'E-Vidya Academy',
         icon: '🎨',
+        cssClass: 'plus2-arts',
         classes: {
-            'FIRST-YEAR': {
-                name: '1st Year',
-                subjects: {
-                    'ENGLISH': { name: 'English', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'HISTORY': { name: 'History', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'POLITICAL-SCIENCE': { name: 'Political Science', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'LOGIC': { name: 'Logic', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'ECONOMICS': { name: 'Economics', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'STATISTICS': { name: 'Statistics', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'SOCIOLOGY': { name: 'Sociology', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'GEOGRAPHY': { name: 'Geography', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'EDUCATION': { name: 'Education', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'ANTHROPOLOGY': { name: 'Anthropology', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'PSYCHOLOGY': { name: 'Psychology', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'HOME-SCIENCE': { name: 'Home Science', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'INFO-TECH': { name: 'Information Technology', url: 'https://sites.google.com/view/eguruodishastp/cc' }
-                }
-            },
-            'SECOND-YEAR': {
-                name: '2nd Year',
-                subjects: {
-                    'ENGLISH': { name: 'English', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'HISTORY': { name: 'History', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'POLITICAL-SCIENCE': { name: 'Political Science', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'LOGIC': { name: 'Logic', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'ECONOMICS': { name: 'Economics', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'STATISTICS': { name: 'Statistics', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'SOCIOLOGY': { name: 'Sociology', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'GEOGRAPHY': { name: 'Geography', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'EDUCATION': { name: 'Education', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'ANTHROPOLOGY': { name: 'Anthropology', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'PSYCHOLOGY': { name: 'Psychology', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'HOME-SCIENCE': { name: 'Home Science', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'INFO-TECH': { name: 'Information Technology', url: 'https://sites.google.com/view/eguruodishastp/cc' }
-                }
-            }
+            'FIRST-YEAR':  '1st Year',
+            'SECOND-YEAR': '2nd Year'
         }
     },
     'PLUS2-COM': {
         name: '+2 Commerce',
-        subtitle: 'E-Vidya Academy',
         icon: '💼',
+        cssClass: 'plus2-com',
         classes: {
-            'FIRST-YEAR': {
-                name: '1st Year',
-                subjects: {
-                    'ENGLISH': { name: 'English', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'ACCOUNTANCY-1': { name: 'Accountancy', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'BUSINESS-STUDIES-1': { name: 'Business Studies & Management', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'BUSINESS-MATHS-1': { name: 'Business Mathematics & Statistics', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'BANKING-INSURANCE': { name: 'Banking & Insurance', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'ENTREPRENEURSHIP': { name: 'Fundamentals of Entrepreneurship', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'SALESMANSHIP': { name: 'Salesmanship', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'INFO-TECH-1': { name: 'Information Technology', url: 'https://sites.google.com/view/eguruodishastp/cc' }
-                }
-            },
-            'SECOND-YEAR': {
-                name: '2nd Year',
-                subjects: {
-                    'ENGLISH': { name: 'English', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'ACCOUNTANCY-2': { name: 'Accountancy', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'BUSINESS-STUDIES-2': { name: 'Business Studies & Management', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'BUSINESS-MATHS-2': { name: 'Business Mathematics & Statistics', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'COST-ACCOUNTING': { name: 'Cost Accounting', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'MGMT-ACCOUNTING': { name: 'Fundamentals of Management Accounting', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'BUSINESS-ECONOMICS': { name: 'Business Economics', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'INFO-TECH-2': { name: 'Information Technology', url: 'https://sites.google.com/view/eguruodishastp/cc' }
-                }
-            }
+            'FIRST-YEAR':  '1st Year',
+            'SECOND-YEAR': '2nd Year'
         }
     },
     'PLUS3-ARTS': {
         name: '+3 Arts',
-        subtitle: 'E-Vidya Academy',
         icon: '📚',
+        cssClass: 'plus3-arts',
         honours: {
-            'POLITICAL-SCIENCE-HON': {
-                name: 'Political Science Honours',
-                semesters: {
-                    'SEMESTER-1': { name: '1st Semester', papers: { 'PAPER-I': { name: 'Fundamentals of Political Science', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-II': { name: 'Introduction to the Constitution Of India', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-2': { name: '2nd Semester', papers: { 'PAPER-III': { name: 'Introduction to Political Theory', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-IV': { name: 'Comparative Governments', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-3': { name: '3rd Semester', papers: { 'PAPER-V': { name: 'Colonialism and Nationalism in India', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-VI': { name: 'International Relations', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-VII': { name: 'Western Political Thought-I', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-4': { name: '4th Semester', papers: { 'PAPER-VIII': { name: 'Indian Politics', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-IX': { name: 'Western Political Thought-II', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-X': { name: 'Public Administration', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-5': { name: '5th Semester', papers: { 'PAPER-XI': { name: 'Global Politics', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XII': { name: 'Comparative Politics', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XIII': { name: 'Indian Political Ideas-I', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-6': { name: '6th Semester', papers: { 'PAPER-XIV': { name: "India's Foreign Policy", url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XV': { name: 'Government and Politics in Odisha', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-7': { name: '7th Semester', papers: { 'PAPER-XVI': { name: 'Contemporary Political Theory', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XVII': { name: 'Research Methodology', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XVIII': { name: 'Public Policy and Governance in India', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XIX': { name: 'Indian Political Ideas-II', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-8': { name: '8th Semester', papers: { 'PAPER-XX': { name: 'Social and Political Movements in Contemporary India', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XXI': { name: 'Climate Change And Politics', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XXII': { name: 'Social Exclusion and Inclusive Policies in India', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XXIII': { name: 'Democratic Decentralization in India', url: 'https://sites.google.com/view/eguruodishastp/cc' } } }
-                }
-            },
-            'HISTORY-HON': {
-                name: 'History Honours',
-                semesters: {
-                    'SEMESTER-1': { name: '1st Semester', papers: { 'PAPER-I': { name: 'History of India-I', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-II': { name: 'Social Formations and Cultural Pattern of Ancient World', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-2': { name: '2nd Semester', papers: { 'PAPER-III': { name: 'History of India-II', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-IV': { name: 'Social Formations and Cultural Patterns of the Medieval World', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-3': { name: '3rd Semester', papers: { 'PAPER-V': { name: 'History of India-III', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-VI': { name: 'Rise of the Modern West – I', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-VII': { name: 'History of India', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-4': { name: '4th Semester', papers: { 'PAPER-VIII': { name: 'Rise of the Modern West– II', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-IX': { name: 'History of India - Mughal India', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-X': { name: 'Historical Theories & Methods', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-5': { name: '5th Semester', papers: { 'PAPER-XI': { name: 'History of Modern Europe-I', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XII': { name: 'History of India', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XIII': { name: 'History of India', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-6': { name: '6th Semester', papers: { 'PAPER-XIV': { name: 'History and Culture of Odisha-I', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XV': { name: 'History of Odisha-II', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-7': { name: '7th Semester', papers: { 'PAPER-XVI': { name: 'History of Modern Europe II', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XVII': { name: 'History of Modern China', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XVIII': { name: 'Evolution of Modern Political Thought in India', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XIX': { name: 'Basic Principles and Methods in Archaeology', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-8': { name: '8th Semester', papers: { 'PAPER-XX': { name: 'Art and Architecture in India', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XXI': { name: 'Popular Cultures: Cinema, TV, Sports and Cuisine', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XXII': { name: 'Tribes of Odisha through Ages', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XXIII': { name: 'Reading Historical Essays and Writings', url: 'https://sites.google.com/view/eguruodishastp/cc' } } }
-                }
-            },
-            'SOCIOLOGY-HON': {
-                name: 'Sociology Honours',
-                semesters: {
-                    'SEMESTER-1': { name: '1st Semester', papers: { 'PAPER-I': { name: 'Introduction to Sociology-I', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-II': { name: 'Introduction to Sociology-II', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-2': { name: '2nd Semester', papers: { 'PAPER-III': { name: 'Indian Society', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-IV': { name: 'Classical Sociological Thinkers', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-3': { name: '3rd Semester', papers: { 'PAPER-V': { name: 'Social Change and Development', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-VI': { name: 'Sociology of Gender', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-VII': { name: 'Sociology of Vulnerable Communities in India', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-4': { name: '4th Semester', papers: { 'PAPER-VIII': { name: 'Sociology of Environment', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-IX': { name: 'Rural Sociology', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-X': { name: 'Research Methodology-I', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-5': { name: '5th Semester', papers: { 'PAPER-XI': { name: 'Contemporary Social Issues in India', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XII': { name: 'Social Movements in India', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XIII': { name: 'Globalisation and Society', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-6': { name: '6th Semester', papers: { 'PAPER-XIV': { name: 'Urban Sociology', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XV': { name: 'Sociology of Health', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-7': { name: '7th Semester', papers: { 'PAPER-XVI': { name: 'Research Methodology-II', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XVII': { name: 'Advanced Sociological Theories-I', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XVIII': { name: 'Sociology of Tribes', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XIX': { name: 'Media, Culture and Society', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-8': { name: '8th Semester', papers: { 'PAPER-XX': { name: 'Advanced Sociological Theory-II', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XXI': { name: 'Perspectives on Indian Society', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XXII': { name: 'Sociology of Religion', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XXIII': { name: 'Sociology of Education', url: 'https://sites.google.com/view/eguruodishastp/cc' } } }
-                }
-            },
-            'ECONOMICS-HON': {
-                name: 'Economics Honours',
-                semesters: {
-                    'SEMESTER-1': { name: '1st Semester', papers: { 'PAPER-1': { name: 'Basic Economics I', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-2': { name: 'Indian Economy I', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-2': { name: '2nd Semester', papers: { 'PAPER-3': { name: 'Basic Economics II', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-4': { name: 'Indian Economy II', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-3': { name: '3rd Semester', papers: { 'PAPER-5': { name: 'Microeconomics I', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-6': { name: 'Macroeconomics I', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-7': { name: 'Mathematical Methods for Economics I', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-4': { name: '4th Semester', papers: { 'PAPER-8': { name: 'Microeconomics II', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-9': { name: 'Macroeconomics II', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-10': { name: 'Statistical Methods for Economics', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-5': { name: '5th Semester', papers: { 'PAPER-11': { name: 'Development Economics I', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-12': { name: 'Mathematical Methods for Economics II', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-13': { name: 'History of Economic Thought / Money and Banking / Economy of Odisha', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-6': { name: '6th Semester', papers: { 'PAPER-14': { name: 'Introductory Econometrics / Public Economics I / Development Economics II', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-15': { name: 'Computational Methods / Environmental Economics / International Economics', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-7': { name: '7th Semester', papers: { 'PAPER-16': { name: 'Quantitative Methods', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-17': { name: 'Research Methodology', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-18': { name: 'Basic Econometrics', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-19': { name: 'Economics of Growth and Development', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-8': { name: '8th Semester', papers: { 'PAPER-20': { name: 'Microeconomics III', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-21': { name: 'Macroeconomics III', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-22': { name: 'Public Economics II', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-23': { name: 'Economics of Social Sector', url: 'https://sites.google.com/view/eguruodishastp/cc' } } }
-                }
-            },
-            'EDUCATION-HON': {
-                name: 'Education Honours',
-                semesters: {
-                    'SEMESTER-1': { name: '1st Semester', papers: { 'PAPER-I': { name: 'Philosophical Foundations of Education', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-II': { name: 'Psychological Foundations of Education', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-2': { name: '2nd Semester', papers: { 'PAPER-III': { name: 'Sociology of Education', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-IV': { name: 'Pedagogical Perspectives in Education', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-3': { name: '3rd Semester', papers: { 'PAPER-V': { name: 'Assessment and Evaluation in Education', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-VI': { name: 'Historical Bases of Indian Education', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-VII': { name: 'Educational Thinkers of Modern India', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-4': { name: '4th Semester', papers: { 'PAPER-VIII': { name: 'Early Childhood Care and Education', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-IX': { name: 'Trends, Policies and Practices in Education', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-X': { name: 'ICT in Education', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-5': { name: '5th Semester', papers: { 'PAPER-XI': { name: 'Pedagogy of Odia / Pedagogy of English', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XII': { name: 'Pedagogy of Social Science / Pedagogy of Mathematics', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XIII': { name: 'Pedagogy of Mathematics', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-6': { name: '6th Semester', papers: { 'PAPER-XIV': { name: 'Knowledge and Curriculum', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XV': { name: 'Community Engagement and Services', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-7': { name: '7th Semester', papers: { 'PAPER-XVI': { name: 'Educational Management and Leadership', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XVII': { name: 'Fundamentals of Educational Research', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XVIII': { name: 'Statistics in Education', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XIX': { name: 'Guidance and Counselling in Education', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-8': { name: '8th Semester', papers: { 'PAPER-XX': { name: 'Art and Craft Education', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XXI': { name: 'Inclusive Education', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XXII': { name: 'Teacher Education', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XXIII': { name: 'Computer Applications in Teaching Learning', url: 'https://sites.google.com/view/eguruodishastp/cc' } } }
-                }
-            },
-            'PUBLIC-ADMIN-HON': {
-                name: 'Public Administration Honours',
-                semesters: {
-                    'SEMESTER-1': { name: '1st Semester', papers: { 'PAPER-I': { name: 'An Introduction to Public Administration', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-II': { name: 'Classical Administrative Theory', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-2': { name: '2nd Semester', papers: { 'PAPER-III': { name: 'Contemporary Administrative Theory', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-IV': { name: 'Administrative Thinkers – I', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-3': { name: '3rd Semester', papers: { 'PAPER-V': { name: 'Comparative Public Administration', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-VI': { name: 'Administrative Thinkers – II', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-VII': { name: 'Indian Administration', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-4': { name: '4th Semester', papers: { 'PAPER-VIII': { name: 'State Administration', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-IX': { name: 'Rural Governance', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-X': { name: 'Introduction to Public Policy', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-5': { name: '5th Semester', papers: { 'PAPER-XI': { name: 'Organisational Behaviour', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XII': { name: 'Financial Administration', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XIII': { name: 'Public Personnel Administration', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-6': { name: '6th Semester', papers: { 'PAPER-XIV': { name: 'Management: Concepts and Principles', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XV': { name: 'Welfare Administration', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-7': { name: '7th Semester', papers: { 'PAPER-XVI': { name: 'Public Policy and Administration In India', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XVII': { name: 'Urban Governance', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XVIII': { name: 'Research Methodology', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XIX': { name: 'Public System Management', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-8': { name: '8th Semester', papers: { 'PAPER-XX': { name: 'E-Governance', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XXI': { name: 'Ethics and Governance', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XXII': { name: 'Development Administration', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XXIII': { name: 'Tribal Administration', url: 'https://sites.google.com/view/eguruodishastp/cc' } } }
-                }
-            },
-            'PSYCHOLOGY-HON': {
-                name: 'Psychology Honours',
-                semesters: {
-                    'SEMESTER-1': { name: '1st Semester', papers: { 'PAPER-I': { name: 'Introductory Psychology', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-II': { name: 'Basic Psychological Processes', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-2': { name: '2nd Semester', papers: { 'PAPER-III': { name: 'Processes of Human Empowerment', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-IV': { name: 'Basic Developmental Processes', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-3': { name: '3rd Semester', papers: { 'PAPER-V': { name: 'Fundamentals of Social Psychology', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-VI': { name: 'Psychological Statistics – I', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-VII': { name: 'Psychopathology- I', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-4': { name: '4th Semester', papers: { 'PAPER-VIII': { name: 'Introduction to Educational Psychology', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-IX': { name: 'Applied Psychology – I', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-X': { name: 'Psychological Assessment', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-5': { name: '5th Semester', papers: { 'PAPER-XI': { name: 'Organisational Behaviour', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XII': { name: 'Psychology for Healthy Living', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XIII': { name: 'Fundamentals of Counselling Psychology', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-6': { name: '6th Semester', papers: { 'PAPER-XIV': { name: 'Introduction to Positive Psychology', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XV': { name: 'Psychological Research and Measurement-I', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-7': { name: '7th Semester', papers: { 'PAPER-XVI': { name: 'Psychological Research and Measurement- II', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XVII': { name: 'Psychological Statistics II', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XVIII': { name: 'Applied Psychology-II', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XIX': { name: 'Disability & Rehabilitation Psychology', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-                    'SEMESTER-8': { name: '8th Semester', papers: { 'PAPER-XX': { name: 'Indian Psychological Thought', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XXI': { name: 'Data Analysis in Psychological Research', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XXII': { name: 'Psychopathology- II', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'PAPER-XXIII': { name: 'Introduction to Bio-Psychology', url: 'https://sites.google.com/view/eguruodishastp/cc' } } }
-                }
-            }
+            'POLITICAL-SCIENCE-HON': { name: 'Political Science Honours',    odia: 'ରାଜନୀତି ବିଜ୍ଞାନ (ଅନର୍ସ)',   semesters: 8 },
+            'HISTORY-HON':           { name: 'History Honours',               odia: 'ଇତିହାସ (ଅନର୍ସ)',              semesters: 8 },
+            'SOCIOLOGY-HON':         { name: 'Sociology Honours',             odia: 'ସମାଜ ବିଜ୍ଞାନ (ଅନର୍ସ)',       semesters: 8 },
+            'ECONOMICS-HON':         { name: 'Economics Honours',             odia: 'ଅର୍ଥନୀତି (ଅନର୍ସ)',            semesters: 8 },
+            'EDUCATION-HON':         { name: 'Education Honours',             odia: 'ଶିକ୍ଷା (ଅନର୍ସ)',              semesters: 8 },
+            'PUBLIC-ADMIN-HON':      { name: 'Public Administration Honours', odia: 'ଲୋକ ପ୍ରଶାସନ (ଅନର୍ସ)',        semesters: 8 },
+            'PSYCHOLOGY-HON':        { name: 'Psychology Honours',            odia: 'ମନୋ ବିଜ୍ଞାନ (ଅନର୍ସ)',        semesters: 8 }
         }
     },
     'PLUS3-COM': {
         name: '+3 Commerce',
-        subtitle: 'E-Vidya Academy',
         icon: '📊',
-        classes: {
-            'SEMESTER-1': { name: '1st Semester', subjects: { 'FINANCIAL-ACCOUNTING': { name: 'Financial Accounting', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'COST-ACCOUNTING': { name: 'Cost Accounting', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'BUSINESS-ORG-MGT': { name: 'Business Organization & Management', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-            'SEMESTER-2': { name: '2nd Semester', subjects: { 'CORPORATE-ACCOUNTING': { name: 'Corporate Accounting and Reporting', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'INCOME-TAX': { name: 'Income Tax Law & Practice', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'BUSINESS-STATISTICS': { name: 'Business Statistics and Data Interpretation', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-            'SEMESTER-3': { name: '3rd Semester', subjects: { 'FINANCIAL-MARKETS': { name: 'Financial Markets and Institutions', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'GST-INDIRECT-TAX': { name: 'GST and other Indirect Taxes', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'FINANCIAL-LITERACY': { name: 'Financial Literacy', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'INVESTMENT-PLANNING': { name: 'Fundamentals of Investment and Planning', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-            'SEMESTER-4': { name: '4th Semester', subjects: { 'MANAGEMENT-ACCOUNTING': { name: 'Management Accounting', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'FINANCIAL-MANAGEMENT': { name: 'Financial Management & Risk Management', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'AUDITING': { name: 'Auditing and Corporate Governance', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'CORPORATE-LAW': { name: 'Corporate Legal Framework', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'BUSINESS-REGULATORY': { name: 'Business Regulatory Framework', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-            'SEMESTER-5': { name: '5th Semester', subjects: { 'FINANCIAL-STATEMENT': { name: 'Financial Statement Analysis', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'BUSINESS-DATA-ANALYTICS': { name: 'Business Data Analytics', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'IND-AS-IFRS': { name: 'Fundamentals of IND-AS & IFRS', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'DIGITAL-MARKETING': { name: 'Digital Marketing', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'INSURANCE': { name: 'Insurance Theory and Practices', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-            'SEMESTER-6': { name: '6th Semester', subjects: { 'FINANCIAL-MODELLING': { name: 'Fundamentals of Financial Modelling', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'BUSINESS-SOFTWARE': { name: 'Business Application Software', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'HRM': { name: 'Human Resource Management', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-            'SEMESTER-7': { name: '7th Semester', subjects: { 'RESEARCH-METHODOLOGY': { name: 'Research Methodology & Research Ethics', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'SECURITIES-ANALYSIS': { name: 'Fundamentals of Securities Analysis and Portfolio Management', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'OPERATION-RESEARCH': { name: 'Fundamentals of Operation Research', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'CORPORATE-RESTRUCTURING': { name: 'Corporate Restructuring & Business Valuation', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'MARKETING-SCM': { name: 'Marketing and Supply Chain Management', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'TREASURY-FOREX': { name: 'Treasury & Forex Management', url: 'https://sites.google.com/view/eguruodishastp/cc' } } },
-            'SEMESTER-8': { name: '8th Semester', subjects: { 'INTERNATIONAL-BUSINESS': { name: 'International Business Environment', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'SUSTAINABLE-DEV': { name: 'Sustainable Development and CSR', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'COMMODITY-MARKETS': { name: 'Fundamentals of Commodity Markets', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'SOCIAL-ENTREPRENEURSHIP': { name: 'Social Entrepreneurship and Incubation', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'BANKING': { name: 'Banking Theory and Practices', url: 'https://sites.google.com/view/eguruodishastp/cc' }, 'SECURITIES-MARKET': { name: 'Securities Market Operations', url: 'https://sites.google.com/view/eguruodishastp/cc' } } }
-        }
-    },
-     'SCHOOL': {
-        name: 'ସ୍କୁଲ୍ ଛାତ୍ରଛାତ୍ରୀ',
-        subtitle: 'E-Vidya Academy',
-        icon: '🏫',
-        classes: {
-            'CLASS-1': {
-                name: 'Class 1',
-                subjects: {
-                    'ENGLISH': { name: 'English', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'MATHEMATICS': { name: 'Mathematics', url: 'https://sites.google.com/view/eguruodishastp/cc' }
-                }
-            },
-            'CLASS-2': {
-                name: 'Class 2',
-                subjects: {
-                    'ENGLISH': { name: 'English', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'MATHEMATICS': { name: 'Mathematics', url: 'https://sites.google.com/view/eguruodishastp/cc' }
-                }
-            },
-            'CLASS-3': {
-                name: 'Class 3',
-                subjects: {
-                    'ENGLISH': { name: 'English', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'MATHEMATICS': { name: 'Mathematics', url: 'https://sites.google.com/view/eguruodishastp/cc' }
-                }
-            },
-            'CLASS-4': {
-                name: 'Class 4',
-                subjects: {
-                    'ENGLISH': { name: 'English', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'MATHEMATICS': { name: 'Mathematics', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'SCIENCE': { name: 'Science', url: 'https://sites.google.com/view/eguruodishastp/cc' }
-                }
-            },
-            'CLASS-5': {
-                name: 'Class 5',
-                subjects: {
-                    'ENGLISH': { name: 'English', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'MATHEMATICS': { name: 'Mathematics', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'SCIENCE': { name: 'Science', url: 'https://sites.google.com/view/eguruodishastp/cc' }
-                }
-            },
-            'CLASS-6': {
-                name: 'Class 6',
-                subjects: {
-                    'ENGLISH': { name: 'English', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'MATHEMATICS': { name: 'Mathematics', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'SCIENCE': { name: 'Science', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'HISTORY': { name: 'History', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'GEOGRAPHY': { name: 'Geography', url: 'https://sites.google.com/view/eguruodishastp/cc' }
-                }
-            },
-            'CLASS-7': {
-                name: 'Class 7',
-                subjects: {
-                    'ENGLISH': { name: 'English', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'MATHEMATICS': { name: 'Mathematics', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'SCIENCE': { name: 'Science', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'HISTORY': { name: 'History', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'GEOGRAPHY': { name: 'Geography', url: 'https://sites.google.com/view/eguruodishastp/cc' }
-                }
-            },
-            'CLASS-8': {
-                name: 'Class 8',
-                subjects: {
-                    'ENGLISH': { name: 'English', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'MATHEMATICS': { name: 'Mathematics', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'SCIENCE': { name: 'Science', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'HISTORY': { name: 'History', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'GEOGRAPHY': { name: 'Geography', url: 'https://sites.google.com/view/eguruodishastp/cc' }
-                }
-            },
-            'CLASS-9': {
-                name: 'Class 9',
-                subjects: {
-                    'ENGLISH': { name: 'English', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'MATHEMATICS': { name: 'Mathematics', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'SCIENCE': { name: 'Science', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'HISTORY': { name: 'History', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'GEOGRAPHY': { name: 'Geography', url: 'https://sites.google.com/view/eguruodishastp/cc' }
-                }
-            },
-            'CLASS-10': {
-                name: 'Class 10',
-                subjects: {
-                    'ENGLISH': { name: 'English', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'MATHEMATICS': { name: 'Mathematics', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'SCIENCE': { name: 'Science', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'HISTORY': { name: 'History', url: 'https://sites.google.com/view/eguruodishastp/cc' },
-                    'GEOGRAPHY': { name: 'Geography', url: 'https://sites.google.com/view/eguruodishastp/cc' }
-                }
-            }
-        }
+        cssClass: 'plus3-com',
+        semesters: ['1st Semester','2nd Semester','3rd Semester','4th Semester','5th Semester','6th Semester','7th Semester','8th Semester']
     }
 };
 
-// ─── Odia Subject Names ───────────────────────────────────────────────────────
-const odiaSubjectNames = {
-    'ENGLISH':'ଇଂରାଜୀ','MATHEMATICS':'ଗଣିତ','SCIENCE':'ବିଜ୍ଞାନ','HISTORY':'ଇତିହାସ','GEOGRAPHY':'ଭୂଗୋଳ','ODIA':'ଓଡ଼ିଆ','HINDI':'ହିନ୍ଦୀ','SANSKRIT':'ସଂସ୍କୃତ',
-    'POLITICAL-SCIENCE':'ରାଜନୀତି ବିଜ୍ଞାନ','LOGIC':'ତର୍କଶାସ୍ତ୍ର','ECONOMICS':'ଅର୍ଥନୀତି','STATISTICS':'ପରିସଂଖ୍ୟାନ','SOCIOLOGY':'ସମାଜ ବିଜ୍ଞାନ','EDUCATION':'ଶିକ୍ଷା','ANTHROPOLOGY':'ମାନବ ବିଜ୍ଞାନ','PSYCHOLOGY':'ମନୋ ବିଜ୍ଞାନ','HOME-SCIENCE':'ଗୃହ ବିଜ୍ଞାନ','INFO-TECH':'ସୂଚନା ପ୍ରଯୁକ୍ତି',
-    'ACCOUNTANCY-1':'ହିସାବ ରକ୍ଷଣ - ପ୍ରଥମ','ACCOUNTANCY-2':'ହିସାବ ରକ୍ଷଣ - ଦ୍ୱିତୀୟ','BUSINESS-STUDIES-1':'ବ୍ୟବସାୟ ଅଧ୍ୟୟନ - ପ୍ରଥମ','BUSINESS-STUDIES-2':'ବ୍ୟବସାୟ ଅଧ୍ୟୟନ - ଦ୍ୱିତୀୟ','BUSINESS-MATHS-1':'ବ୍ୟବସାୟ ଗଣିତ - ପ୍ରଥମ','BUSINESS-MATHS-2':'ବ୍ୟବସାୟ ଗଣିତ - ଦ୍ୱିତୀୟ','BANKING-INSURANCE':'ବ୍ୟାଙ୍କିଂ ଓ ବୀମା','ENTREPRENEURSHIP':'ଉଦ୍ୟୋଗ ମୂଳତତ୍ତ୍ୱ','SALESMANSHIP':'ବିକ୍ରୟ କଳା','INFO-TECH-1':'ସୂଚନା ପ୍ରଯୁକ୍ତି - ପ୍ରଥମ','INFO-TECH-2':'ସୂଚନା ପ୍ରଯୁକ୍ତି - ଦ୍ୱିତୀୟ','COST-ACCOUNTING':'ଖର୍ଚ୍ଚ ହିସାବ','MGMT-ACCOUNTING':'ପରିଚାଳନା ହିସାବ','BUSINESS-ECONOMICS':'ବ୍ୟବସାୟ ଅର୍ଥନୀତି',
-    'FINANCIAL-ACCOUNTING':'ଆର୍ଥିକ ହିସାବ ରକ୍ଷଣ','BUSINESS-ORG-MGT':'ବ୍ୟବସାୟ ସଂଗଠନ ଓ ପରିଚାଳନା','CORPORATE-ACCOUNTING':'କର୍ପୋରେଟ ହିସାବ','INCOME-TAX':'ଆୟକର ଆଇନ','BUSINESS-STATISTICS':'ବ୍ୟବସାୟ ପରିସଂଖ୍ୟାନ','FINANCIAL-MARKETS':'ଆର୍ଥିକ ବଜାର','GST-INDIRECT-TAX':'ଜିଏସ୍‌ଟି ଓ ଟ୍ୟାକ୍ସ','FINANCIAL-LITERACY':'ଆର୍ଥିକ ସାକ୍ଷରତା','INVESTMENT-PLANNING':'ବିନିଯୋଗ ଯୋଜନା','MANAGEMENT-ACCOUNTING':'ପରିଚାଳନା ହିସାବ','FINANCIAL-MANAGEMENT':'ଆର୍ଥିକ ପରିଚାଳନା','AUDITING':'ଅଡ଼ିଟ ଓ ଶାସନ','CORPORATE-LAW':'କର୍ପୋରେଟ ଆଇନ','BUSINESS-REGULATORY':'ବ୍ୟବସାୟ ନିୟାମକ','FINANCIAL-STATEMENT':'ଆର୍ଥିକ ବିବୃତ୍ତି','BUSINESS-DATA-ANALYTICS':'ବ୍ୟବସାୟ ତଥ୍ୟ ବିଶ୍ଳେଷଣ','IND-AS-IFRS':'ଆଇଏନ୍‌ଡି-ଏଏସ','DIGITAL-MARKETING':'ଡିଜିଟାଲ ମାର୍କେଟିଂ','INSURANCE':'ବୀମା ତତ୍ତ୍ୱ','FINANCIAL-MODELLING':'ଆର୍ଥିକ ମଡ଼େଲିଂ','BUSINESS-SOFTWARE':'ବ୍ୟବସାୟ ସଫ୍ଟୱେୟାର','HRM':'ମାନବ ସଂସାଧନ','RESEARCH-METHODOLOGY':'ଅନୁସନ୍ଧାନ ପଦ୍ଧତି','SECURITIES-ANALYSIS':'ସିକ୍ୟୁରିଟି ବିଶ୍ଳେଷଣ','OPERATION-RESEARCH':'ଅପରେସନ ରିସର୍ଚ','CORPORATE-RESTRUCTURING':'କର୍ପୋରେଟ ପୁନଃଗଠନ','MARKETING-SCM':'ମାର୍କେଟିଂ ଓ SCM','TREASURY-FOREX':'ଟ୍ରେଜ଼ରୀ ଓ ଫୋରେକ୍ସ','INTERNATIONAL-BUSINESS':'ଆନ୍ତର୍ଜାତୀୟ ବ୍ୟବସାୟ','SUSTAINABLE-DEV':'ଧାରଣୀୟ ବିକାଶ','COMMODITY-MARKETS':'ଦ୍ରବ୍ୟ ବଜାର','SOCIAL-ENTREPRENEURSHIP':'ସାମାଜିକ ଉଦ୍ୟୋଗ','BANKING':'ବ୍ୟାଙ୍କିଂ ତତ୍ତ୍ୱ','SECURITIES-MARKET':'ସିକ୍ୟୁରିଟି ବଜାର',
-    'POLITICAL-SCIENCE-HON':'ରାଜନୀତି ବିଜ୍ଞାନ (ଅନର୍ସ)','HISTORY-HON':'ଇତିହାସ (ଅନର୍ସ)','SOCIOLOGY-HON':'ସମାଜ ବିଜ୍ଞାନ (ଅନର୍ସ)','ECONOMICS-HON':'ଅର୍ଥନୀତି (ଅନର୍ସ)','EDUCATION-HON':'ଶିକ୍ଷା (ଅନର୍ସ)','PUBLIC-ADMIN-HON':'ଲୋକ ପ୍ରଶାସନ (ଅନର୍ସ)','PSYCHOLOGY-HON':'ମନୋ ବିଜ୍ଞାନ (ଅନର୍ସ)',
-    'CONSTITUTIONAL-LAW':'ସାମ୍ବିଧାନିକ ଆଇନ','CPC':'ଦେୱାନୀ ଦଣ୍ଡ ଆଇନ ସଂହିତା','BNSS':'ଭାରତୀୟ ନାଗରିକ ସୁରକ୍ଷା ସଂହିତା','BNS':'ଭାରତୀୟ ନ୍ୟାୟ ସଂହିତା','BSA':'ଭାରତୀୟ ସାକ୍ଷ୍ୟ ଅଧିନିୟମ','PWDVA':'ଘରୋଇ ହିଂସା ସୁରକ୍ଷା ଆଇନ','HINDU-MARRIAGE-ACT':'ହିନ୍ଦୁ ବିବାହ ଅଧିନିୟମ','SCST-ATROCITIES':'ଅନୁସୂଚିତ ଜାତି ଓ ଜନଜାତି ଅତ୍ୟାଚାର ନିରୋଧ ଆଇନ','LEGAL-DRAFTING':'ଆଇନ ଡ୍ରାଫ୍ଟିଂ'
-};
-function getOdiaName(k) { return odiaSubjectNames[k] || null; }
+/* ═══════════════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════════════ */
+let state = { view: 'levels', level: null, honour: null };
+let currentUrl = DEFAULT_URL;
+let currentTitle = '';
 
-
-
-
-// ─── Info Modal Content ───────────────────────────────────────────────────────
-const infoContent = {
-    contact: {
-        title: '📧 Contact Us — ଆମ୍ଭ ସହିତ ଯୋଗାଯୋଗ',
-        body: `
-            <h3>ଯୋଗାଯୋଗ — Contact</h3>
-            <div class="odia-text">ଯଦି ଆପଣଙ୍କର କୌଣସି ପ୍ରଶ୍ନ, ଅଭିଯୋଗ, କିମ୍ବା ଅନୁସନ୍ଧାନ ଅଛି, ଦୟାକରି ନିମ୍ନ ଚ୍ୟାନେଲ ମାଧ୍ୟମରେ ଆମ୍ଭ ସହିତ ଯୋଗାଯୋଗ କରନ୍ତୁ । ଆମ୍ଭେ ସର୍ବଦା ଆପଣଙ୍କ ସହାୟତା ପାଇଁ ଉପଲବ୍ଧ ।</div>
-            <div class="eng-text">For any query, complaint, or general enquiry regarding E-Vidya Academy services, please reach us through the following channels. We are committed to responding within 24 hours on working days.</div>
-            <h3>📱 WhatsApp</h3>
-            <div class="eng-text"><strong>+91 6372296357</strong><br>Monday to Saturday — 9:00 AM to 8:00 PM</div>
-            <div class="odia-text">ସୋମବାର ଠାରୁ ଶନିବାର — ସକାଳ ୯ ଟାରୁ ସନ୍ଧ୍ୟା ୮ ଟା ପର୍ଯ୍ୟନ୍ତ ।</div>
-            <h3>📍 Business Address</h3>
-            <div class="eng-text">Postal Address: E-Vidya Academy, At-Harasinghpur, Po.-Pirahat, Dist.-Bhadrak, Odisha-756131</div>
-            <div class="eng-text">E-mail Address: evidya2026@gmail.com</div>
-            <div class="eng-text">Phone: 6372296357</div>
-            <div class="eng-text">Chief Grievance Officer: Sangita Behera</div>
-            <div class="eng-text">E-Vidya Academy is a private online coaching service operating under Indian law. All communications are handled digitally.</div>
-            <div class="odia-text">E-Vidya Academy ଏକ ବ୍ୟକ୍ତିଗତ ଅନଲାଇନ୍ କୋଚିଂ ସେବା ଯାହା ଭାରତୀୟ ଆଇନ ଅନୁସାରେ ପରିଚାଳିତ ।</div>
-            <div class="legal-notice"><p>⚠️ This is a PRIVATE service. NOT affiliated with any Government body, Board, or University. ଏହା ଏକ ବ୍ୟକ୍ତିଗତ ସେବା — ସରକାରୀ ନୁହେଁ ।</p></div>
-        `
-    },
-    about: {
-        title: 'ℹ️ About Us — ଆମ୍ଭ ବିଷୟରେ',
-        body: `
-            <h3>ଆମ୍ଭ ପରିଚୟ — Who We Are</h3>
-            <div class="odia-text">E-Vidya Academy ଏକ ଅଭିଭାବକ-ଶିକ୍ଷା ଆଧାରିତ ଅନଲାଇନ୍ କୋଚିଂ ସେବା । ଆମ୍ଭର ଲକ୍ଷ୍ୟ ହେଉଛି ଅଭିଭାବକମାନଙ୍କୁ ସକ୍ଷମ କରିବା ଯଦ୍ଦ୍ୱାରା ସେମାନେ ନିଜ ସନ୍ତାନଙ୍କୁ ଘରେ ବସି ପ୍ରଭାବଶାଳୀ ଭାବରେ ପଢ଼ାଇ ପାରିବେ ।</div>
-            <div class="eng-text">E-Vidya Academy is a privately operated online coaching platform founded with a single powerful mission — to empower parents to become their children's most trusted teachers. We provide structured, syllabus-aligned coaching content for School (Class 1–10), +2 Arts, +2 Commerce, +3 Arts (Honours), +3 Commerce, and LLB.</div>
-            <h3>ଆମ୍ଭ ଦୃଷ୍ଟିଭଙ୍ଗୀ — Our Vision</h3>
-            <div class="odia-text">ପ୍ରତ୍ୟେକ ଶିକ୍ଷାର୍ଥୀ ଗୁଣସମ୍ପନ୍ନ ଶିକ୍ଷା ପ୍ରାପ୍ତ କରନ୍ତୁ — ଏହା ଆମ୍ଭ ସ୍ୱପ୍ନ । ଦୟାକରି ଧ୍ୟାନ ଦିଅନ୍ତୁ: ଏହି ଆପ୍ ଏକ ବ୍ୟକ୍ତିଗତ ପ୍ରୟାସ ଅଟେ ଏବଂ ଏହା କୌଣସି ସରକାରୀ ସେବା କିମ୍ବା ସୁବିଧା ପ୍ରଦାନ କରେ ନାହିଁ । ଏହି ଆପ୍ କୌଣସି ସରକାରୀ ସଂସ୍ଥାକୁ ପ୍ରତିନିଧିତ୍ୱ କରେ ନାହିଁ । ଏଥିରେ ଦର୍ଶାଯାଇଥିବା ତଥ୍ୟ, ଭିଡିଓ, ସଜ୍ଞା, ମତ, ବକ୍ତବ୍ୟ, ଚରିତ୍ର ଏବଂ ଅଳଙ୍କରଣ କେବଳ ଉପଦେଶାତ୍ମକ ଅଟେ । ଏହାକୁ କୌଣସି ଅଦାଲତ/ସରକାରୀ/ବେସରକାରୀ କାର୍ଯ୍ୟାଳୟରେ ଅଧିକାରିକ ତଥ୍ୟ କିମ୍ବା ଆଇନ ସମ୍ବଳିତ ପୁସ୍ତକ ଭାବରେ ବ୍ୟବହାର କରାଯାଇନପାରେ । ଏହି ଆପ୍ ରେ ତ୍ରୁଟି ସଂଶୋଧନ ପାଇଁ ଯଥାସାଧ୍ୟ ଚେଷ୍ଟା କରାଯାଇଥିଲେ ମଧ୍ୟ ବ୍ୟବହାରକାରୀ କୌଣସି ମାନବିକ କିମ୍ବା ଯାନ୍ତ୍ରିକ ତ୍ରୁଟିର ସମ୍ମୁଖୀନ ହୋଇପାରନ୍ତି । ବ୍ୟବହାର ସମୟରେ କୌଣସି ତ୍ରୁଟି ପରିଲକ୍ଷିତ ହେଲେ ଆପ୍ ର ଡେଭେଲପର ଙ୍କୁ ତୁରନ୍ତ ଜଣାଇବାକୁ ଅନୁରୋଧ । ଏହି ଆପ୍ କୁ ବ୍ୟବହାର କରିବା ଦ୍ଵାରା ଆପଣ ଏହି ଆପ୍ ର ସମସ୍ତ ନୀତି,  ପ୍ରାଇଭେସୀ ପଲିସି,  ସର୍ତ୍ତାବଳୀ (Terms and Conditions)  ଏବଂ  ଅସ୍ବୀକରଣ (Disclaimers) ରେ ଆପଣଙ୍କ ସହମତି ପ୍ରଦାନ କରୁଛନ୍ତି । 
-</div>
-            <div class="eng-text">Every student deserves quality education without the financial burden of expensive private tuition. We bridge that gap by coaching the parents directly so the learning happens at home, organically and affordably.</div>
-            <h3>ଆମ୍ଭ ସ୍ଥିତି — Our Standing</h3>
-            <div class="eng-text">E-Vidya Academy is owned and operated by <strong>Kumudini Rout</strong> as a sole proprietorship, a lawful private educational business registered and operating under the laws of India.</div>
-            <div class="odia-text">E-Vidya Academy କୁମୁଦିନୀ ରାଉତଙ୍କ ଦ୍ୱାରା ପରିଚାଳିତ ଏକ ବୈଧ ବ୍ୟକ୍ତିଗତ ବ୍ୟବସାୟ ।</div>
-            <div class="legal-notice"><p>⚠️ E-Vidya Academy is NOT affiliated with, endorsed by, or connected to any Government, Board, or University. ଏହା କୌଣସି ସରକାରୀ ସଂସ୍ଥା ସହ ସଂଯୁକ୍ତ ନୁହେଁ ।</p></div>
-        `
-    },
-    terms: {
-        title: '📜 Terms & Conditions — ସର୍ତ୍ତ ଓ ନିୟମ',
-        body: `
-            <h3>ସ୍ୱୀକୃତି — Acceptance of Terms</h3>
-            <div class="odia-text">ଏହି ସେବା ବ୍ୟବହାର କରି ଆପଣ ସ୍ୱୀକାର କରୁଛନ୍ତି ଯେ ଆପଣ ଏହି ସର୍ତ୍ତ ଓ ନିୟମ ଗୁଡ଼ିକୁ ସ୍ପଷ୍ଟ ଭାବରେ ପଢ଼ି, ବୁଝି ଏବଂ ସ୍ୱେଚ୍ଛାକ୍ରମେ ଗ୍ରହଣ କରୁଛନ୍ତି । ଦୟାକରି ଧ୍ୟାନ ଦିଅନ୍ତୁ: ଏହି ଆପ୍ ଏକ ବ୍ୟକ୍ତିଗତ ପ୍ରୟାସ ଅଟେ ଏବଂ ଏହା କୌଣସି ସରକାରୀ ସେବା କିମ୍ବା ସୁବିଧା ପ୍ରଦାନ କରେ ନାହିଁ । ଏହି ଆପ୍ କୌଣସି ସରକାରୀ ସଂସ୍ଥାକୁ ପ୍ରତିନିଧିତ୍ୱ କରେ ନାହିଁ । ଏଥିରେ ଦର୍ଶାଯାଇଥିବା ତଥ୍ୟ, ଭିଡିଓ, ସଜ୍ଞା, ମତ, ବକ୍ତବ୍ୟ, ଚରିତ୍ର ଏବଂ ଅଳଙ୍କରଣ କେବଳ ଉପଦେଶାତ୍ମକ ଅଟେ । ଏହାକୁ କୌଣସି ଅଦାଲତ/ସରକାରୀ/ବେସରକାରୀ କାର୍ଯ୍ୟାଳୟରେ ଅଧିକାରିକ ତଥ୍ୟ କିମ୍ବା ଆଇନ ସମ୍ବଳିତ ପୁସ୍ତକ ଭାବରେ ବ୍ୟବହାର କରାଯାଇନପାରେ । ଏହି ଆପ୍ ରେ ତ୍ରୁଟି ସଂଶୋଧନ ପାଇଁ ଯଥାସାଧ୍ୟ ଚେଷ୍ଟା କରାଯାଇଥିଲେ ମଧ୍ୟ ବ୍ୟବହାରକାରୀ କୌଣସି ମାନବିକ କିମ୍ବା ଯାନ୍ତ୍ରିକ ତ୍ରୁଟିର ସମ୍ମୁଖୀନ ହୋଇପାରନ୍ତି । ବ୍ୟବହାର ସମୟରେ କୌଣସି ତ୍ରୁଟି ପରିଲକ୍ଷିତ ହେଲେ ଆପ୍ ର ଡେଭେଲପର ଙ୍କୁ ତୁରନ୍ତ ଜଣାଇବାକୁ ଅନୁରୋଧ । ଏହି ଆପ୍ କୁ ବ୍ୟବହାର କରିବା ଦ୍ଵାରା ଆପଣ ଏହି ଆପ୍ ର ସମସ୍ତ ନୀତି,  ପ୍ରାଇଭେସୀ ପଲିସି,  ସର୍ତ୍ତାବଳୀ (Terms and Conditions)  ଏବଂ  ଅସ୍ବୀକରଣ (Disclaimers) ରେ ଆପଣଙ୍କ ସହମତି ପ୍ରଦାନ କରୁଛନ୍ତି । 
-</div>
-            <div class="eng-text">By accessing or using E-Vidya Academy's services, you unconditionally agree to be legally bound by these Terms and Conditions. If you do not agree, you must immediately discontinue use of this service.</div>
-            <h3>ସେବାର ପ୍ରକୃତି — Nature of Service</h3>
-            <div class="odia-text">E-Vidya Academy ଏକ ଅଭିଭାବକ-ଶିକ୍ଷା ଆଧାରିତ ଅନଲାଇନ୍ ସ୍ୱତନ୍ତ୍ର ବ୍ୟକ୍ତିଗତ କୋଚିଂ ସେବା । </div>
-            <div class="eng-text">This is a private coaching service designed to guide parents. E-Vidya Academy does not issue any certificate, degree, diploma, or official qualification of any kind. No content provided herein shall be construed as equivalent to formal education.</div>
-            <h3>ଶୁଳ୍କ ଓ ସଦସ୍ୟତା — Fee and Membership</h3>
-            <div class="odia-text">ମାସିକ ଶୁଳ୍କ ₹150 ଅଟେ । ଶୁଳ୍କ ପ୍ରଦାନ ବ୍ୟତୀତ ସେବାଗ୍ରହଣ ଆଇନ ଅନୁସାରେ ଗ୍ରହଣୀୟ ନୁହେଁ ।</div>
-            <div class="eng-text">The monthly subscription fee is ₹150. Payment must be made in advance. Access to services will be suspended without notice upon non-payment. The proprietor reserves the absolute right to revise fees with prior intimation.</div>
-            <h3>ବ୍ୟବହାର ନୀତି — Acceptable Use</h3>
-            <div class="eng-text">You shall not reproduce, redistribute, resell, or commercially exploit any content from E-Vidya Academy without express written permission. Violation shall attract legal action under applicable Indian intellectual property laws.</div>
-            <div class="odia-text">ଏହି ସେବାର ବିଷୟବସ୍ତୁ ଅନୁମତି ବିନା ବ୍ୟବହାର, ବ୍ୟବସାୟ, କିମ୍ବା ଅନ୍ୟ କୌଣସି ଉଦ୍ଦେଶ୍ୟରେ ବ୍ୟବହାର ଭାରତୀୟ ଆଇନ ଅନୁସାରେ ଦଣ୍ଡନୀୟ ।</div>
-            <h3>ଦାୟଭାର ସୀମା — Limitation of Liability</h3>
-            <div class="eng-text">E-Vidya Academy, its proprietor, and associates shall bear no liability for any academic result, examination outcome, or consequence arising from the use of this service. Results depend entirely on the effort of the student and parent.</div>
-            <div class="odia-text">ପରୀକ୍ଷା ଫଳ ବା ଶିକ୍ଷାଗତ ପ୍ରଦର୍ଶନ ସଂପୂର୍ଣ୍ଣ ଶିକ୍ଷାର୍ଥୀ ଓ ଅଭିଭାବকଙ୍କ ପ୍ରୟାସ ଉପରେ ନିର୍ଭର କରେ । E-Vidya Academy ଦାୟୀ ନୁହେଁ ।</div>
-            <div class="legal-notice"><p>⚠️ These Terms are legally binding under the Indian Contract Act, 1872.</p></div>
-        `
-    },
-    privacy: {
-        title: '🔒 Privacy Policy — ଗୋପନୀୟତା ନୀତି',
-        body: `
-            <h3>ତଥ୍ୟ ସଂଗ୍ରହ — Data Collection</h3>
-            <div class="odia-text">ଆପଣ ଆବେଦନ କଲା ବେଳେ ଆପଣଙ୍କ ନାମ ଓ ଫୋନ ନମ୍ବର ସଂଗ୍ରହ କରାଯାଏ । ଏହି ତଥ୍ୟ ବ୍ୟତୀତ ଅନ୍ୟ କୌଣସି ବ୍ୟକ୍ତିଗତ ତଥ୍ୟ ଆମ୍ଭ ସଂଗ୍ରହ କରୁ ନାହୁଁ ।</div>
-            <div class="eng-text">E-Vidya Academy collects only the minimum personal data necessary to provide its services — specifically your name and contact number submitted during enrolment. We do not collect sensitive personal data including financial details, Aadhaar, or passwords.</div>
-            <h3>ତଥ୍ୟ ବ୍ୟବହାର — Use of Data</h3>
-            <div class="odia-text">ଆପଣଙ୍କ ତଥ୍ୟ କେବଳ ସେବା ଯୋଗାଯୋଗ ପାଇଁ ବ୍ୟବହୃତ ହୁଏ । ଏହା ତୃତୀୟ ପକ୍ଷଙ୍କ ନିକଟରେ ବିକ୍ରୟ ବା ହସ୍ତାନ୍ତର କରାଯାଏ ନାହିଁ ।</div>
-            <div class="eng-text">Your personal data is used exclusively for the purpose of service delivery, communication, and fee reminders. Under no circumstances shall your data be sold, rented, traded, or transferred to any third party without your explicit consent.</div>
-            <h3>ତଥ୍ୟ ସୁରକ୍ଷା — Data Security</h3>
-            <div class="eng-text">We take reasonable precautions to protect your data from unauthorized access. However, no digital transmission is 100% secure. You acknowledge and accept this inherent risk when using any online service.</div>
-            <div class="odia-text">ଆମ୍ଭ ଆପଣଙ୍କ ତଥ୍ୟ ସୁରକ୍ଷା ପାଇଁ ଯଥାସାଧ୍ୟ ପ୍ରୟାସ କରୁ, ତଥାପି ଅନଲାଇନ ପ୍ରସାରଣ ସଂପୂର୍ଣ୍ଣ ସୁରକ୍ଷିତ ନୁହେଁ — ଏହା ଆପଣ ସ୍ୱୀକାର କରୁଛନ୍ତି ।</div>
-            <h3>ତୃତୀୟ ପକ୍ଷ — Third Parties</h3>
-            <div class="eng-text">Our service integrates with WhatsApp and UPI payment platforms. Their use is governed by their own respective privacy policies. E-Vidya Academy bears no responsibility for data handled by these third-party platforms.</div>
-            <div class="odia-text">WhatsApp ଓ UPI ପ୍ଲାଟଫର୍ମ ସେମାନଙ୍କ ନିଜ ନୀତି ଅନୁସାରେ ଚାଲେ — ସେ ବ୍ୟାପାରରେ E-Vidya Academy ଦାୟୀ ନୁହେଁ ।</div>
-            <h3>ଅଧିକାର — Your Rights</h3>
-            <div class="eng-text">You have the right to request deletion of your personal data at any time by contacting us on WhatsApp. We will comply within 7 working days as required under the Digital Personal Data Protection Act, 2023.</div>
-            <div class="odia-text">ଡିଜିଟାଲ ବ୍ୟକ୍ତିଗତ ତଥ୍ୟ ସୁରକ୍ଷା ଆଇନ 2023 ଅନୁସାରେ ଆପଣ ଆପଣଙ୍କ ତଥ୍ୟ ମୋଛିବାର ଅଧିକାର ରଖନ୍ତି ।</div>
-            <div class="legal-notice"><p>⚠️ ଭାରତୀୟ ତଥ୍ୟ ସୁରକ୍ଷା ଆଇନ 2023 ଅନୁଯାୟୀ ଏହି ନୀତି ପ୍ରଣୀତ । This Policy is governed by the Digital Personal Data Protection Act, 2023.</p></div>
-        `
-    },
-    refund: {
-        title: '💰 Refund Policy — ଫେରସ୍ତ ନୀତି',
-        body: `
-            <h3>ସ୍ପଷ୍ଟ ଘୋଷଣା — Clear Declaration</h3>
-            <div class="odia-text">E-Vidya Academy ର ସମସ୍ତ ଶୁଳ୍କ ପ୍ରଦାନ ଅଣ-ଫେରସ୍ତଯୋଗ୍ୟ ଅଟେ । ଏହାକୁ ଆପଣ ସ୍ୱୀକାର କରି ଶୁଳ୍କ ପ୍ରଦାନ କରୁଛନ୍ତି ।</div>
-            <div class="eng-text"><strong>ALL FEES PAID TO E-VIDYA ACADEMY ARE STRICTLY NON-REFUNDABLE.</strong> By making payment, you acknowledge and agree that you have read, understood, and accepted this refund policy in full before completing the transaction.</div>
-            <h3>ଫେରସ୍ତ ନ ହେବାର କାରଣ — Why No Refund</h3>
-            <div class="eng-text">The monthly fee of ₹150 provides immediate and continuous access to digital coaching content, live sessions, and support services. Once access is granted, the service has been fully rendered and therefore no refund shall be issued under any circumstance including — but not limited to — dissatisfaction, non-usage, internet failure, or device issues.</div>
-            <div class="odia-text">ଶୁଳ୍କ ପ୍ରଦାନ ସଙ୍ଗେ ସଙ୍ଗେ ଡିଜିଟାଲ ସେବା ପ୍ରଦାନ ଆରମ୍ଭ ହୋଇଯାଏ । </div>
-            <h3>ବ୍ୟତିକ୍ରମ — Exception</h3>
-            <div class="eng-text">A refund may be considered ONLY in the exceptional circumstance where E-Vidya Academy itself has permanently ceased operations and the paid service period has not yet been utilized. In such event, a pro-rata refund may be issued at the sole discretion of the proprietor.</div>
-            <div class="odia-text">କେବଳ ଯଦି E-Vidya Academy ସ୍ୱୟଂ ସ୍ଥାୟୀ ଭାବରେ ବନ୍ଦ ହୋଇଯାଏ ଏବଂ ସେବା ଅସଂପୂର୍ଣ୍ଣ ରହିଯାଏ, ସ୍ୱତ୍ୱାଧିକାରୀଙ୍କ ବିବେଚନାରେ ଆଂଶିକ ଫେରସ୍ତ ସମ୍ଭବ ।</div>
-            <h3>ଅଭିଯୋଗ — Grievance</h3>
-            <div class="eng-text">Any dispute regarding this policy shall be subject to the jurisdiction of courts located in Bhadrak, Odisha, India. Governing law shall be the laws of India including the Consumer Protection Act, 2019 and the Information Technology Act, 2000.</div>
-            <div class="odia-text">ଯେ କୌଣସି ବିବାଦ ଓଡ଼ିଶା ରାଜ୍ୟର ଭଦ୍ରକ ଜିଲ୍ଲା ଆଦାଲତ ଅଧୀନସ୍ଥ ରହିବ । ଭାରତୀୟ ଗ୍ରାହକ ସୁରକ୍ଷା ଆଇନ 2019 ଏବଂ ସୂଚନା ଓ ପ୍ରଯୁକ୍ତି ଆଇନ 2000 ଏଠାରେ ପ୍ରଯୁଜ୍ୟ ।</div>
-            <div class="legal-notice"><p>⚠️ ଭୁଲ ବୁଝାମଣା ବା ଅଜ୍ଞତା ଫେରସ୍ତ ଦାବି ଆଧାର ନୁହେଁ । Ignorance of this policy shall not constitute grounds for a refund claim.</p></div>
-        `
-    },
-    disclaimer: {
-        title: '⚠️ Full Disclaimer — ସମ୍ପୂର୍ଣ୍ଣ ଦାବିତ୍ୟାଗ:',
-        body: `
-            <h3>ସ୍ୱତନ୍ତ୍ର ଘୋଷଣା — Independent Declaration</h3>
-            <div class="odia-text">E-Vidya Academy କୌଣସି ସରକାରୀ ସଂସ୍ଥା, ବୋର୍ଡ, ବିଶ୍ୱବିଦ୍ୟାଳୟ, କିମ୍ବା ସରକାରୀ ସଂଗଠନ ସହ ସଂଯୁକ୍ତ ନୁହେଁ । ଏ ସ୍ଥାନରେ ଦ୍ୱ୍ୟର୍ଥ ନ ରଖି ଏହା ସ୍ପଷ୍ଟ ଭାବରେ ଘୋଷଣା କରାଯାଉଛି । ଦୟାକରି ଧ୍ୟାନ ଦିଅନ୍ତୁ: ଏହି ଆପ୍ ଏକ ବ୍ୟକ୍ତିଗତ ପ୍ରୟାସ ଅଟେ ଏବଂ ଏହା କୌଣସି ସରକାରୀ ସେବା କିମ୍ବା ସୁବିଧା ପ୍ରଦାନ କରେ ନାହିଁ । ଏହି ଆପ୍ କୌଣସି ସରକାରୀ ସଂସ୍ଥାକୁ ପ୍ରତିନିଧିତ୍ୱ କରେ ନାହିଁ । ଏଥିରେ ଦର୍ଶାଯାଇଥିବା ତଥ୍ୟ, ଭିଡିଓ, ସଜ୍ଞା, ମତ, ବକ୍ତବ୍ୟ, ଚରିତ୍ର ଏବଂ ଅଳଙ୍କରଣ କେବଳ ଉପଦେଶାତ୍ମକ ଅଟେ । ଏହାକୁ କୌଣସି ଅଦାଲତ/ସରକାରୀ/ବେସରକାରୀ କାର୍ଯ୍ୟାଳୟରେ ଅଧିକାରିକ ତଥ୍ୟ କିମ୍ବା ଆଇନ ସମ୍ବଳିତ ପୁସ୍ତକ ଭାବରେ ବ୍ୟବହାର କରାଯାଇନପାରେ । ଏହି ଆପ୍ ରେ ତ୍ରୁଟି ସଂଶୋଧନ ପାଇଁ ଯଥାସାଧ୍ୟ ଚେଷ୍ଟା କରାଯାଇଥିଲେ ମଧ୍ୟ ବ୍ୟବହାରକାରୀ କୌଣସି ମାନବିକ କିମ୍ବା ଯାନ୍ତ୍ରିକ ତ୍ରୁଟିର ସମ୍ମୁଖୀନ ହୋଇପାରନ୍ତି । ବ୍ୟବହାର ସମୟରେ କୌଣସି ତ୍ରୁଟି ପରିଲକ୍ଷିତ ହେଲେ ଆପ୍ ର ଡେଭେଲପର ଙ୍କୁ ତୁରନ୍ତ ଜଣାଇବାକୁ ଅନୁରୋଧ । ଏହି ଆପ୍ କୁ ବ୍ୟବହାର କରିବା ଦ୍ଵାରା ଆପଣ ଏହି ଆପ୍ ର ସମସ୍ତ ନୀତି,  ପ୍ରାଇଭେସୀ ପଲିସି,  ସର୍ତ୍ତାବଳୀ (Terms and Conditions)  ଏବଂ  ଅସ୍ବୀକରଣ (Disclaimers) ରେ ଆପଣଙ୍କ ସହମତି ପ୍ରଦାନ କରୁଛନ୍ତି । 
-</div>
-            <div class="eng-text"><strong>E-Vidya Academy is a fully independent, privately owned and operated educational coaching service. It has absolutely NO affiliation, association, endorsement, recognition, or connection of any kind with the Government of India, Government of Odisha, any State or Central Board of Education, any University, or any statutory body whatsoever.</strong></div>
-
-            <h3>ନାମ ଓ ଚିହ୍ନ — Name and Branding</h3>
-            <div class="eng-text">The name "E-Vidya Academy", its logo, and all associated branding are the exclusive intellectual property of its proprietor. Any similarity to any government scheme, portal, or programme bearing similar names is purely coincidental. The use of educational terminology does not imply any official status or government recognition.</div>
-            <div class="odia-text">"E-Vidya Academy" ନାମ ଏବଂ ଏହାର ଲୋଗୋ ସ୍ୱତ୍ୱାଧିକାରୀଙ୍କ ଏକଚ୍ଛତ୍ର ଜ୍ଞାନ-ସ୍ୱତ୍ୱ ସମ୍ପତ୍ତି ଅଟେ । ସରକାରୀ ଯୋଜନା ସହ ଏହି ନାମର ଯଦି ସାମ୍ୟ ଦେଖାଯାଏ ତାହା ସଂପୂର୍ଣ୍ଣ ଅନିଚ୍ଛାକୃତ ।</div>
-
-            <h3>ଶିକ୍ଷାଗତ ଫଳ — Academic Outcomes</h3>
-            <div class="eng-text">E-Vidya Academy makes no warranty, guarantee, or representation — express or implied — regarding any academic result, examination score, pass percentage, rank, or educational outcome. All content provided is for general guidance and coaching support purposes only. The proprietor, its coaches, and associates expressly disclaim all liability for any direct, indirect, incidental, or consequential loss arising from use or reliance upon this service.</div>
-            <div class="odia-text">E-Vidya Academy ପରୀକ୍ଷା ଫଳ, ଶ୍ରେଣୀ ଉତ୍ତୀର୍ଣ୍ଣ, ବା ଶିକ୍ଷାଗତ ଉନ୍ନତି ବିଷୟରେ କୌଣସି ନିଶ୍ଚୟତା ଦିଏ ନାହିଁ । ଏହି ସେବାର ଉଦ୍ଦେଶ୍ୟ କେବଳ ମାର୍ଗଦର୍ଶନ ।</div>
-
-            <h3>ବିଷୟବସ୍ତୁ ଦାୟଭାର — Content Liability</h3>
-            <div class="eng-text">While every effort is made to ensure accuracy, E-Vidya Academy does not warrant that the content is error-free, complete, or up to date with the latest syllabus changes made by any Board or University. Users are advised to independently verify all information against official sources before relying upon it for examination preparation.</div>
-            <div class="odia-text">ଆମ୍ଭ ବିଷୟବସ୍ତୁ ସଠିକ ରଖିବା ପ୍ରୟାସ କରୁ, ତଥାପି ଯେ କୌଣସି ବୋର୍ଡ ବା ବିଶ୍ୱବିଦ୍ୟାଳୟ ର ଆଧିକାରିକ ସୂଚନା ସହ ଯୋଗ୍ୟ ଯାଞ୍ଚ ଆବଶ୍ୟକ ।</div>
-
-            <h3>ଇଣ୍ଟରନେଟ ଓ ସ୍ୱତନ୍ତ୍ର ସ୍ଥଳ — Platform Disclaimer</h3>
-            <div class="eng-text">E-Vidya Academy operates through digital platforms including WhatsApp, Google Sites, and web applications. The availability, uptime, and performance of these platforms are beyond our direct control. We shall not be liable for any service interruption caused by internet failure, platform downtime, or technical malfunction beyond our control.</div>
-            <div class="odia-text">ଡିଜିଟାଲ ପ୍ଲାଟଫର୍ମ ପ୍ରଦର୍ଶନ ଆମ୍ଭ ନିୟନ୍ତ୍ରଣ ବାହାରେ ଥିବାରୁ ଇଣ୍ଟରନେଟ ବ୍ୟର୍ଥତା ବା ଟେକ୍ନିକ ସମସ୍ୟା ପାଇଁ E-Vidya Academy ଦାୟୀ ନୁହେଁ ।</div>
-
-            <h3>ଶୁଳ୍କ ଅସ୍ୱୀକୃତି — Fee Disclaimer</h3>
-            <div class="eng-text">The monthly fee of ₹150 is charged for access to coaching guidance content only. It does not constitute any form of school or university admission fee, examination fee, registration fee with any Board or University, or any official educational enrolment. No receipt issued by E-Vidya Academy shall be treated as an official educational document.</div>
-            <div class="odia-text">₹150 ମାସିକ ଶୁଳ୍କ କୋଚିଂ ମାର୍ଗଦର୍ଶନ ପ୍ରବେଶ ପାଇଁ ମାତ୍ର । ଏହା ବୋର୍ଡ, ବିଶ୍ୱବିଦ୍ୟାଳୟ, ବା ଅନ୍ୟ ଆଧିକାରିକ ଶୁଳ୍କ ନୁହେଁ ।</div>
-
-            <h3>ଆଇନ ଅଧିକ୍ଷେତ୍ର — Governing Law</h3>
-            <div class="eng-text">This disclaimer and all matters arising from the use of E-Vidya Academy services shall be governed by and construed in accordance with the laws of India. Any dispute shall be subject to the exclusive jurisdiction of the competent courts of Odisha.</div>
-            <div class="odia-text">ଏହି ଦାବିତ୍ୟାଗ ଭାରତୀୟ ଆଇନ ଅନୁସାରେ ବ୍ୟାଖ୍ୟାଯୋଗ୍ୟ ।</div>
-
-            <div class="legal-notice"><p>⚠️ ଏହି ଆପ୍ କୁ ବ୍ୟବହାର କରି ଆପଣ ଏହି ସମ୍ପୂର୍ଣ୍ଣ ଦାବିତ୍ୟାଗ ସହିତ ପ୍ରାଇଭେସୀ ପଲିସି, ସର୍ତ୍ତାବଳୀ, ଏବଂ ଫେରସ୍ତ ନିୟମ ଗୁଡିକୁ ସ୍ୱୀକାର କରୁଛନ୍ତି । By using this service you conclusively accept this Full Disclaimer in its entirety.</p></div>
-        `
-    }
-};
-
-function openInfoModal(key) {
-    const content = infoContent[key];
-    if (!content) return;
-    document.getElementById('infoModalTitle').textContent = content.title;
-    document.getElementById('infoModalBody').innerHTML = content.body;
-    document.getElementById('infoModal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeInfoModal() {
-    document.getElementById('infoModal').classList.remove('active');
-    document.body.style.overflow = 'auto';
-}
-
-function handleInfoModalClick(e) {
-    if (e.target === document.getElementById('infoModal')) closeInfoModal();
-}
-
-
-
-    
-// ─── Basic Training Card ──────────────────────────────────────────────────────
-
-function createBasicTrainingCard() {
-    const c = document.createElement('a');
-    c.href = 'https://special-training.pages.dev/';
-    c.target = '_blank';
-    c.rel = 'noopener noreferrer';
-    c.className = 'level-card';
-    c.innerHTML = `
-        <div class="level-icon">🌟</div>
-        <div class="level-subtitle">ଶିକ୍ଷାର୍ଥୀଙ୍କ ସର୍ବାଙ୍ଗୀନ ବିକାଶ ପାଇଁ ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ</div>
-    `;
-    return c;
-}
-    
-// ─── State ───────────────────────────────────────────────────────────────────
-let viewMode = 'levels', selectedLevel = null, selectedClass = null;
-let currentSubjectInfo = null;
-
-// ─── Subject Modal Functions ──────────────────────────────────────────────────
-function openSubjectModal(subjectName, subjectDetails, subjectUrl) {
-    currentSubjectInfo = {
-        name: subjectName,
-        details: subjectDetails,
-        url: subjectUrl || 'https://sites.google.com/view/eguruodishastp/cc'
-    };
-    document.getElementById('modalSubjectName').textContent = subjectName;
-    document.getElementById('modalSubjectDetails').textContent = subjectDetails;
-    document.getElementById('subjectModal').classList.add('active');
+/* ═══════════════════════════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════════════════════════ */
+function openModal(title, detail, url) {
+    currentTitle = title;
+    currentUrl   = url || DEFAULT_URL;
+    document.getElementById('modalTitle').textContent  = title;
+    document.getElementById('modalDetail').textContent = detail || '';
+    document.getElementById('modalMainView').style.display = 'block';
+    document.getElementById('applyForm').classList.remove('active');
+    document.getElementById('applyForm').querySelector('form').reset();
+    document.getElementById('classModal').classList.add('active');
     document.body.style.overflow = 'hidden';
 }
 
 function closeModal() {
-    document.getElementById('subjectModal').classList.remove('active');
-    document.getElementById('modalButtons').style.display = 'flex';
-    document.getElementById('applicationForm').classList.remove('active');
-    document.getElementById('coachingForm').reset();
+    document.getElementById('classModal').classList.remove('active');
     document.body.style.overflow = 'auto';
-    currentSubjectInfo = null;
 }
 
-function showApplicationForm() {
-    document.getElementById('modalButtons').style.display = 'none';
-    document.getElementById('applicationForm').classList.add('active');
+function showApplyForm() {
+    document.getElementById('modalMainView').style.display = 'none';
+    document.getElementById('applyForm').classList.add('active');
 }
 
-function backToOptions() {
-    document.getElementById('applicationForm').classList.remove('active');
-    document.getElementById('modalButtons').style.display = 'flex';
-    document.getElementById('coachingForm').reset();
+function hideApplyForm() {
+    document.getElementById('applyForm').classList.remove('active');
+    document.getElementById('modalMainView').style.display = 'block';
 }
 
-function goToContinuingClass() {
-    if (currentSubjectInfo && currentSubjectInfo.url) {
-        window.open(currentSubjectInfo.url, '_blank');
-    } else {
-        window.open('https://sites.google.com/view/eguruodishastp/cc', '_blank');
-    }
+function goToClassroom() {
+    window.open(currentUrl, '_blank');
     closeModal();
 }
 
@@ -841,531 +584,314 @@ function goToEnquiry() {
     closeModal();
 }
 
-function submitApplication(event) {
-    event.preventDefault();
-    const name = document.getElementById('studentName').value.trim();
-    const contact = document.getElementById('contactNumber').value.trim();
-    if (!name || !contact) { alert('ଦୟାକରି ସମସ୍ତ ଫିଲ୍ଡ ପୂରଣ କରନ୍ତୁ'); return; }
-    if (!/^[0-9]{10}$/.test(contact)) { alert('ଦୟାକରି ସଠିକ୍ 10 ଅଙ୍କ ନମ୍ବର ପ୍ରଦାନ କରନ୍ତୁ'); return; }
-    const subjectName = currentSubjectInfo ? currentSubjectInfo.name : 'ବିଷୟ';
-    const message = `*E-Vidya Academy - Coaching Application*\n\n*ନାମ:* ${name}\n*ଯୋଗାଯୋଗ:* ${contact}\n*ବିଷୟ:* ${subjectName}\n\nମୁଁ ଏହି ବିଷୟ ପାଇଁ କୋଚିଂ ନେବାକୁ ଇଛୁକ ।`;
-    const whatsappURL = `https://wa.me/+916372296357?text=${encodeURIComponent(message)}`;
-    window.open(whatsappURL, '_blank');
+function submitApplication(e) {
+    e.preventDefault();
+    const name  = document.getElementById('appName').value.trim();
+    const phone = document.getElementById('appPhone').value.trim();
+    if (!name || !phone) { alert('ଦୟାକରି ସମସ୍ତ ଫିଲ୍ଡ ପୂରଣ କରନ୍ତୁ'); return; }
+    if (!/^[0-9]{10}$/.test(phone)) { alert('ଦୟାକରି ସଠିକ୍ 10 ଅଙ୍କ ନମ୍ବର ପ୍ରଦାନ କରନ୍ତୁ'); return; }
+    const msg = `*E-Vidya Academy - Coaching Application*\n\n*ନାମ:* ${name}\n*ଯୋଗାଯୋଗ:* ${phone}\n*ବିଷୟ:* ${currentTitle}\n\nମୁଁ ଏହି ବିଷୟ ପାଇଁ କୋଚିଂ ନେବାକୁ ଇଛୁକ ।`;
+    window.open(`https://wa.me/+916372296357?text=${encodeURIComponent(msg)}`, '_blank');
     alert('ଆପଣଙ୍କ ଆବେଦନ ପଠାଯାଇଛି!');
     closeModal();
 }
 
-document.getElementById('subjectModal').addEventListener('click', function(e) {
+document.getElementById('classModal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
 });
 
-// ─── Card Creators ────────────────────────────────────────────────────────────
-function createLevelCard(lk) {
-    const l = educationLevels[lk];
-    const c = document.createElement('a');
-    c.href = '#';
-    c.className = `level-card ${lk.toLowerCase()}`;
-    c.onclick = (e) => { e.preventDefault(); showClasses(lk); };
-    c.innerHTML = `<div class="level-icon">${l.icon}</div><div class="level-name">${l.name}</div><div class="level-subtitle">${l.subtitle}</div>`;
-    return c;
+/* ═══════════════════════════════════════════════════════════════
+   RENDER HELPERS
+═══════════════════════════════════════════════════════════════ */
+const grid = () => document.getElementById('mainGrid');
+
+function setBack(show) {
+    const btn = document.getElementById('backBtn');
+    btn.classList.toggle('visible', show);
 }
 
-function createHCDropdownContainer() {
-    const container = document.createElement('div');
-    container.className = 'hc-dropdown-container';
-    const header = document.createElement('div');
-    header.className = 'hc-dropdown-header';
-    header.innerHTML = `<h3>⚖️ HC GR&CO & Official Court Resources</h3><p>Orissa High Court Rules, Circulars, Handbooks & Bare Acts</p>`;
-    const select = document.createElement('select');
-    select.className = 'hc-dropdown-select';
-    select.setAttribute('aria-label', 'Select HC Resource');
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.textContent = '📚 Select a Court Resource';
-    defaultOption.disabled = true;
-    defaultOption.selected = true;
-    select.appendChild(defaultOption);
-    hcResources.forEach(resource => {
-        const option = document.createElement('option');
-        option.value = resource.url;
-        option.textContent = `${resource.name} — ${resource.odia}`;
-        select.appendChild(option);
-    });
-    select.addEventListener('change', function() {
-        if (this.value) {
-            window.open(this.value, '_blank', 'noopener,noreferrer');
-            setTimeout(() => { this.selectedIndex = 0; }, 300);
-        }
-    });
-    container.appendChild(header);
-    container.appendChild(select);
-    return container;
+function makeLevelCard(key, label, icon, cssClass, onClick) {
+    const a = document.createElement('a');
+    a.href = '#';
+    a.className = `level-card ${cssClass}`;
+    a.onclick = (e) => { e.preventDefault(); onClick(); };
+    a.innerHTML = `<div class="level-icon">${icon}</div><div class="level-name">${label}</div>`;
+    return a;
 }
 
-function createLLBSubjectCard(lk, sk) {
-    const l = educationLevels[lk];
-    const subjectData = l.subjects[sk];
-    const sn = typeof subjectData === 'string' ? subjectData : subjectData.name;
-    const subjectUrl = typeof subjectData === 'object' ? subjectData.url : null;
-    const on = getOdiaName(sk);
-    const c = document.createElement('a');
-    c.href = '#';
-    c.className = 'subject-card';
-    c.onclick = (e) => { e.preventDefault(); openSubjectModal(sn, on || '', subjectUrl); };
-    c.innerHTML = `<div class="subject-name">${sn}</div>${on ? `<div class="subject-description">${on}</div>` : ''}`;
-    return c;
+function makeClassCard(label, sublabel, cssExtra, onClick) {
+    const a = document.createElement('a');
+    a.href = '#';
+    a.className = `class-card${cssExtra ? ' ' + cssExtra : ''}`;
+    a.onclick = (e) => { e.preventDefault(); onClick(); };
+    a.innerHTML = `<div class="class-label">${sublabel}</div><div class="class-title">${label}</div>`;
+    return a;
 }
 
-function createSemesterCardCom(lk, sk) {
-    const l = educationLevels[lk], s = l.classes[sk];
-    const c = document.createElement('a');
-    c.href = '#';
-    c.className = 'class-card';
-    c.onclick = (e) => { e.preventDefault(); showSubjectsCom(lk, sk); };
-    c.innerHTML = `<div class="class-number">${l.name}</div><div class="class-title">${s.name}</div><div class="parent-badge"></div>`;
-    return c;
+function makeWideBtn(text, href, cssClass) {
+    const a = document.createElement('a');
+    a.href = href;
+    a.target = '_blank'; a.rel = 'noopener noreferrer';
+    a.className = `btn-wide ${cssClass}`;
+    a.textContent = text;
+    return a;
 }
 
-function createSubjectCardCom(lk, sk, subk) {
-    const s = educationLevels[lk].classes[sk];
-    const subjectData = s.subjects[subk];
-    const sn = typeof subjectData === 'string' ? subjectData : subjectData.name;
-    const subjectUrl = typeof subjectData === 'object' ? subjectData.url : null;
-    const on = getOdiaName(subk);
-    const c = document.createElement('a');
-    c.href = '#';
-    c.className = 'subject-card';
-    c.onclick = (e) => { e.preventDefault(); openSubjectModal(sn, on || '', subjectUrl); };
-    c.innerHTML = `<div class="subject-name">${sn}</div>${on ? `<div class="subject-description">${on}</div>` : ''}`;
-    return c;
-}
-
-function createHonourCard(lk, hk) {
-    const l = educationLevels[lk], h = l.honours[hk], on = getOdiaName(hk);
-    const c = document.createElement('a');
-    c.href = '#';
-    c.className = 'class-card';
-    c.onclick = (e) => { e.preventDefault(); showSemesters(lk, hk); };
-    c.innerHTML = `<div class="class-number">${l.name}</div><div class="class-title">${h.name}</div>${on ? `<div class="parent-badge" style="background:#e0e7ff;color:#3730a3;">${on}</div>` : '<div class="parent-badge">👨‍👩‍👧‍👦 For Parents</div>'}`;
-    return c;
-}
-
-function createSemesterCard(lk, hk, sk) {
-    const h = educationLevels[lk].honours[hk], s = h.semesters[sk], on = getOdiaName(hk);
-    const c = document.createElement('a');
-    c.href = '#';
-    c.className = 'subject-card';
-    c.onclick = (e) => { e.preventDefault(); showPapers(lk, hk, sk); };
-    c.innerHTML = `<div class="subject-name">${s.name}</div><div class="subject-description">${h.name}${on ? ' | ' + on : ''}</div>`;
-    return c;
-}
-
-function createPaperCard(lk, hk, sk, pk) {
-    const s = educationLevels[lk].honours[hk].semesters[sk];
-    const paperData = s.papers[pk];
-    const pn = typeof paperData === 'string' ? paperData : paperData.name;
-    const paperUrl = typeof paperData === 'object' ? paperData.url : null;
-    const on = getOdiaName(hk);
-    const c = document.createElement('a');
-    c.href = '#';
-    c.className = 'subject-card';
-    c.onclick = (e) => { e.preventDefault(); openSubjectModal(pn, on || '', paperUrl); };
-    c.innerHTML = `<div class="subject-name">${pn}</div>${on ? `<div class="subject-description">${on}</div>` : ''}`;
-    return c;
-}
-
-function createPlus2ClassCard(lk, ck) {
-    const l = educationLevels[lk], cd = l.classes[ck];
-    const c = document.createElement('a');
-    c.href = '#';
-    c.className = 'class-card';
-    c.onclick = (e) => { e.preventDefault(); showPlus2Subjects(lk, ck); };
-    c.innerHTML = `<div class="class-number">${l.name}</div><div class="class-title">${cd.name}</div><div class="parent-badge"></div>`;
-    return c;
-}
-
-function createPlus2SubjectCard(lk, ck, sk) {
-    const cd = educationLevels[lk].classes[ck];
-    const subjectData = cd.subjects[sk];
-    const sn = typeof subjectData === 'string' ? subjectData : subjectData.name;
-    const subjectUrl = typeof subjectData === 'object' ? subjectData.url : null;
-    const on = getOdiaName(sk);
-    const c = document.createElement('a');
-    c.href = '#';
-    c.className = 'subject-card';
-    c.onclick = (e) => { e.preventDefault(); openSubjectModal(sn, on || '', subjectUrl); };
-    c.innerHTML = `<div class="subject-name">${sn}</div>${on ? `<div class="subject-description">${on}</div>` : ''}`;
-    return c;
-}
-
-function createSchoolClassCard(lk, ck) {
-    const l = educationLevels[lk], cd = l.classes[ck];
-    const c = document.createElement('a');
-    c.href = '#';
-    c.className = 'class-card';
-    c.onclick = (e) => { e.preventDefault(); showSchoolSubjects(lk, ck); };
-    c.innerHTML = `<div class="class-number">${l.name}</div><div class="class-title">${cd.name}</div><div class="parent-badge"></div>`;
-    return c;
-}
-
-function createSchoolSubjectCard(lk, ck, sk) {
-    const cd = educationLevels[lk].classes[ck];
-    const subjectData = cd.subjects[sk];
-    const sn = typeof subjectData === 'string' ? subjectData : subjectData.name;
-    const subjectUrl = typeof subjectData === 'object' ? subjectData.url : null;
-    const on = getOdiaName(sk);
-    const c = document.createElement('a');
-    c.href = '#';
-    c.className = 'subject-card';
-    c.onclick = (e) => { e.preventDefault(); openSubjectModal(sn, on || '', subjectUrl); };
-    c.innerHTML = `<div class="subject-name">${sn}</div>${on ? `<div class="subject-description">${on}</div>` : ''}`;
-    return c;
-}
-
-function createClassCard(lk, ck) {
-    const l = educationLevels[lk], cn = l.classes[ck];
-    const c = document.createElement('a');
-    c.href = '#';
-    c.className = 'class-card';
-    c.onclick = (e) => { e.preventDefault(); };
-    c.innerHTML = `<div class="class-number">${l.name}</div><div class="class-title">${cn}</div><div class="parent-badge"></div>`;
-    return c;
-}
-    
-
-// ─── View Functions ───────────────────────────────────────────────────────────
-
-    function showPlus2Options() {
-    viewMode = 'classes'; selectedLevel = 'PLUS2';
-    document.getElementById('backButton').style.display = 'inline-flex';
-    document.getElementById('backButtonText').textContent = 'ଏଠାରେ ପଛକୁ ଫେରନ୍ତୁ';
-    const grid = document.getElementById('mainGrid');
-    grid.innerHTML = '';
-    grid.appendChild(createLevelCard('PLUS2-ARTS'));
-    grid.appendChild(createLevelCard('PLUS2-COM'));
-}
-
-function showPlus3Options() {
-    viewMode = 'classes'; selectedLevel = 'PLUS3';
-    document.getElementById('backButton').style.display = 'inline-flex';
-    document.getElementById('backButtonText').textContent = 'ଏଠାରେ ପଛକୁ ଫେରନ୍ତୁ';
-    const grid = document.getElementById('mainGrid');
-    grid.innerHTML = '';
-    grid.appendChild(createLevelCard('PLUS3-ARTS'));
-    grid.appendChild(createLevelCard('PLUS3-COM'));
-}
-    
+/* ═══════════════════════════════════════════════════════════════
+   VIEWS
+═══════════════════════════════════════════════════════════════ */
 function showLevels() {
-    viewMode = 'levels'; selectedLevel = null; selectedClass = null;
-    document.getElementById('backButton').style.display = 'none';
-    const grid = document.getElementById('mainGrid');
-    grid.innerHTML = '';
+    state = { view: 'levels', level: null, honour: null };
+    setBack(false);
+    const g = grid(); g.innerHTML = '';
 
-   // First long button - above first two cards 
-const btn1 = document.createElement('a');
-btn1.href = 'https://evidya.pages.dev/MO%20SATHI/';
-btn1.target = '_blank';
-btn1.rel = 'noopener noreferrer';
-btn1.style.cssText = 'grid-column:1/-1;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#d32f2f 0%,#8b0000 100%);color:#ffffff;font-size:1.1em;font-weight:900;padding:18px;border-radius:14px;text-decoration:none;box-shadow:0 6px 20px rgba(211,47,47,0.45);letter-spacing:0.5px;text-shadow:0 1px 2px rgba(0,0,0,0.35);';
-btn1.textContent = 'ଏଠାରେ ମୋ ସାଥି ଆପ୍ କୁ ଯାଆନ୍ତୁ ।';
-grid.appendChild(btn1);
+    g.appendChild(makeWideBtn('ଏଠାରେ ମୋ ସାଥି ଆପ୍ କୁ ଯାଆନ୍ତୁ ।', 'https://evidya.pages.dev/MO%20SATHI/', 'red'));
 
-    // Special Training card
-    grid.appendChild(createBasicTrainingCard());
+    // Special Training - full width
+    const special = document.createElement('a');
+    special.href = 'https://special-training.pages.dev/';
+    special.target = '_blank'; special.rel = 'noopener noreferrer';
+    special.className = 'level-card special';
+    special.innerHTML = '<div class="level-icon">🌟</div><div class="level-name">ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ</div><div class="level-sub">ଶିକ୍ଷାର୍ଥୀଙ୍କ ସର୍ବାଙ୍ଗୀନ ବିକାଶ ପାଇଁ</div>';
+    g.appendChild(special);
 
-        // School card
-    grid.appendChild(createLevelCard('SCHOOL'));
+    g.appendChild(makeLevelCard('SCHOOL', 'ସ୍କୁଲ୍', '🏫', 'school', () => showClasses('SCHOOL')));
 
-    // +2 card
-    const plus2 = document.createElement('a');
-    plus2.href = '#';
-    plus2.className = 'level-card plus2-arts';
-    plus2.onclick = (e) => { e.preventDefault(); showPlus2Options(); };
-    plus2.innerHTML = `<div class="level-icon">📘</div><div class="level-name">+2</div><div class="level-subtitle">Arts & Commerce</div>`;
-    grid.appendChild(plus2);
+    const plus2 = makeLevelCard('PLUS2', '+2', '📘', 'plus2', () => showPlus2Choice());
+    g.appendChild(plus2);
 
-    // +3 card
-    const plus3 = document.createElement('a');
-    plus3.href = '#';
-    plus3.className = 'level-card plus3-arts';
-    plus3.onclick = (e) => { e.preventDefault(); showPlus3Options(); };
-    plus3.innerHTML = `<div class="level-icon">📘</div><div class="level-name">+3</div><div class="level-subtitle">Arts & Commerce</div>`;
-    grid.appendChild(plus3);
+    const plus3 = makeLevelCard('PLUS3', '+3', '📘', 'plus3', () => showPlus3Choice());
+    g.appendChild(plus3);
 
-
-
-    // Second long button - below last two cards
-    const btn2 = document.createElement('a');
-    btn2.href = 'https://evidya.pages.dev/PAYMENT/';
-    btn2.target = '_blank';
-    btn2.rel = 'noopener noreferrer';
-    btn2.style.cssText = 'grid-column:1/-1;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#f7971e 0%,#ffd200 100%);color:#1a1a2e;font-size:1.1em;font-weight:900;padding:18px;border-radius:14px;text-decoration:none;box-shadow:0 6px 20px rgba(247,151,30,0.4);letter-spacing:0.5px;';
-    btn2.textContent = 'ଏଠାରେ ପେମେଣ୍ଟ କରନ୍ତୁ ।';
-    grid.appendChild(btn2);
+    g.appendChild(makeWideBtn('ଏଠାରେ ପେମେଣ୍ଟ କରନ୍ତୁ ।', 'https://evidya.pages.dev/PAYMENT/', 'gold'));
 }
 
-function showClasses(lk) {
-    viewMode = 'classes'; selectedLevel = lk;
-    const level = educationLevels[lk];
-    document.getElementById('backButton').style.display = 'inline-flex';
-    document.getElementById('backButtonText').textContent = 'ଏଠାରେ ପଛକୁ ଫେରନ୍ତୁ';
-    const grid = document.getElementById('mainGrid');
-    grid.innerHTML = '';
-    if (lk === 'PLUS3-ARTS') { for (const hk in level.honours) grid.appendChild(createHonourCard(lk, hk)); }
-    else if (lk === 'PLUS3-COM') { for (const sk in level.classes) grid.appendChild(createSemesterCardCom(lk, sk)); }
-    else if (lk === 'LLB') {
-        for (const sk in level.subjects) grid.appendChild(createLLBSubjectCard(lk, sk));
-        grid.appendChild(createHCDropdownContainer());
-    }
-    else if (lk === 'PLUS2-ARTS' || lk === 'PLUS2-COM') { for (const ck in level.classes) grid.appendChild(createPlus2ClassCard(lk, ck)); }
-    else if (lk === 'SCHOOL') { for (const ck in level.classes) grid.appendChild(createSchoolClassCard(lk, ck)); }
-    else { for (const ck in level.classes) grid.appendChild(createClassCard(lk, ck)); }
+function showPlus2Choice() {
+    state = { view: 'plus2choice', level: null, honour: null };
+    setBack(true);
+    const g = grid(); g.innerHTML = '';
+    g.appendChild(makeLevelCard('PLUS2-ARTS', '+2 Arts',     '🎨', 'plus2-arts', () => showClasses('PLUS2-ARTS')));
+    g.appendChild(makeLevelCard('PLUS2-COM',  '+2 Commerce', '💼', 'plus2-com',  () => showClasses('PLUS2-COM')));
 }
 
-function showSubjectsCom(lk, sk) {
-    viewMode = 'subjects'; selectedClass = sk;
-    document.getElementById('backButton').style.display = 'inline-flex';
-    document.getElementById('backButtonText').textContent = 'ଏଠାରେ ପଛକୁ ଫେରନ୍ତୁ';
-    const grid = document.getElementById('mainGrid');
-    grid.innerHTML = '';
-    const sem = educationLevels[lk].classes[sk];
-    for (const subk in sem.subjects) grid.appendChild(createSubjectCardCom(lk, sk, subk));
+function showPlus3Choice() {
+    state = { view: 'plus3choice', level: null, honour: null };
+    setBack(true);
+    const g = grid(); g.innerHTML = '';
+    g.appendChild(makeLevelCard('PLUS3-ARTS', '+3 Arts',     '📚', 'plus3-arts', () => showClasses('PLUS3-ARTS')));
+    g.appendChild(makeLevelCard('PLUS3-COM',  '+3 Commerce', '📊', 'plus3-com',  () => showClasses('PLUS3-COM')));
 }
 
-function showSemesters(lk, hk) {
-    viewMode = 'semesters'; selectedClass = hk;
-    const hon = educationLevels[lk].honours[hk];
-    document.getElementById('backButton').style.display = 'inline-flex';
-    document.getElementById('backButtonText').textContent = 'ଏଠାରେ ପଛକୁ ଫେରନ୍ତୁ';
-    const grid = document.getElementById('mainGrid');
-    grid.innerHTML = '';
-    for (const sk in hon.semesters) grid.appendChild(createSemesterCard(lk, hk, sk));
-}
+function showClasses(levelKey) {
+    state = { view: 'classes', level: levelKey, honour: null };
+    setBack(true);
+    const lv = levels[levelKey];
+    const g  = grid(); g.innerHTML = '';
 
-function showPapers(lk, hk, sk) {
-    viewMode = 'papers'; selectedClass = `${hk}-${sk}`;
-    document.getElementById('backButton').style.display = 'inline-flex';
-    document.getElementById('backButtonText').textContent = 'ଏଠାରେ ପଛକୁ ଫେରନ୍ତୁ';
-    const grid = document.getElementById('mainGrid');
-    grid.innerHTML = '';
-    const sem = educationLevels[lk].honours[hk].semesters[sk];
-    for (const pk in sem.papers) grid.appendChild(createPaperCard(lk, hk, sk, pk));
-}
-
-function showPlus2Subjects(lk, ck) {
-    viewMode = 'subjects'; selectedClass = ck;
-    document.getElementById('backButton').style.display = 'inline-flex';
-    document.getElementById('backButtonText').textContent = 'ଏଠାରେ ପଛକୁ ଫେରନ୍ତୁ';
-    const grid = document.getElementById('mainGrid');
-    grid.innerHTML = '';
-    const cd = educationLevels[lk].classes[ck];
-    for (const sk in cd.subjects) grid.appendChild(createPlus2SubjectCard(lk, ck, sk));
-}
-
-function showSchoolSubjects(lk, ck) {
-    viewMode = 'subjects'; selectedClass = ck;
-    document.getElementById('backButton').style.display = 'inline-flex';
-    document.getElementById('backButtonText').textContent = 'ଏଠାରେ ପଛକୁ ଫେରନ୍ତୁ';
-    const grid = document.getElementById('mainGrid');
-    grid.innerHTML = '';
-    const cd = educationLevels[lk].classes[ck];
-    if (cd.subjects && Object.keys(cd.subjects).length > 0) {
-        for (const sk in cd.subjects) grid.appendChild(createSchoolSubjectCard(lk, ck, sk));
-    } else {
-        const msg = document.createElement('div');
-        msg.className = 'no-results';
-        msg.style.display = 'block';
-        msg.textContent = 'No subjects available for this class yet.';
-        grid.appendChild(msg);
-    }
-}
-
-// ─── Back Button ──────────────────────────────────────────────────────────────
-document.getElementById('backButton').addEventListener('click', (e) => {
-    e.preventDefault();
-    if (viewMode === 'papers') {
-        const parts = selectedClass.split('-SEMESTER-');
-        showSemesters(selectedLevel, parts[0]);
-    } else if (viewMode === 'semesters') {
-        showClasses(selectedLevel);
-    } else if (viewMode === 'subjects') {
-        showClasses(selectedLevel);
-    } else if (viewMode === 'classes') {
-        if (selectedLevel === 'PLUS2-ARTS' || selectedLevel === 'PLUS2-COM') {
-            showPlus2Options();
-        } else if (selectedLevel === 'PLUS3-ARTS' || selectedLevel === 'PLUS3-COM') {
-            showPlus3Options();
-        } else {
-            showLevels();
+    if (levelKey === 'PLUS3-ARTS') {
+        // Show honours list
+        for (const hk in lv.honours) {
+            const h  = lv.honours[hk];
+            const card = makeClassCard(h.name, lv.name, 'honour-card', () => showSemesters(levelKey, hk));
+            const badge = document.createElement('div');
+            badge.className = 'honour-badge';
+            badge.textContent = h.odia;
+            card.appendChild(badge);
+            g.appendChild(card);
         }
+    } else if (levelKey === 'PLUS3-COM') {
+        lv.semesters.forEach((sem, i) => {
+            g.appendChild(makeClassCard(sem, lv.name, '', () => {
+                openModal(sem, lv.name, DEFAULT_URL);
+            }));
+        });
     } else {
-        showLevels();
+        // SCHOOL, PLUS2-ARTS, PLUS2-COM
+        for (const ck in lv.classes) {
+            const cn = lv.classes[ck];
+            g.appendChild(makeClassCard(cn, lv.name, '', () => {
+                openModal(cn, lv.name, DEFAULT_URL);
+            }));
+        }
     }
+}
+
+function showSemesters(levelKey, honourKey) {
+    state = { view: 'semesters', level: levelKey, honour: honourKey };
+    setBack(true);
+    const hon = levels[levelKey].honours[honourKey];
+    const g   = grid(); g.innerHTML = '';
+    for (let i = 1; i <= hon.semesters; i++) {
+        const semName = `${i}${['st','nd','rd','th','th','th','th','th'][i-1]} Semester`;
+        g.appendChild(makeClassCard(semName, hon.name, '', () => {
+            openModal(semName, hon.name + ' | ' + hon.odia, DEFAULT_URL);
+        }));
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BACK BUTTON
+═══════════════════════════════════════════════════════════════ */
+document.getElementById('backBtn').addEventListener('click', () => {
+    const v = state.view;
+    if (v === 'semesters')  { showClasses(state.level); }
+    else if (v === 'classes') {
+        if (state.level === 'PLUS2-ARTS' || state.level === 'PLUS2-COM') showPlus2Choice();
+        else if (state.level === 'PLUS3-ARTS' || state.level === 'PLUS3-COM') showPlus3Choice();
+        else showLevels();
+    }
+    else showLevels();
 });
 
-// ─── Search ───────────────────────────────────────────────────────────────────
-document.getElementById('searchInput').addEventListener('input', () => {
-    const filter = document.getElementById('searchInput').value.toLowerCase().trim();
-    const noResults = document.getElementById('noResults');
-    const grid = document.getElementById('mainGrid');
-    if (filter.length === 0) {
-        noResults.style.display = 'none';
-        if (viewMode === 'levels') showLevels();
-        else if (viewMode === 'classes') showClasses(selectedLevel);
-        else if (viewMode === 'semesters') showSemesters(selectedLevel, selectedClass);
-        else if (viewMode === 'subjects') {
-            if (selectedLevel === 'PLUS3-COM') showSubjectsCom(selectedLevel, selectedClass);
-            else if (selectedLevel === 'LLB') showClasses(selectedLevel);
-            else if (selectedLevel === 'SCHOOL') showSchoolSubjects(selectedLevel, selectedClass);
-            else if (selectedLevel === 'PLUS2-ARTS' || selectedLevel === 'PLUS2-COM') showPlus2Subjects(selectedLevel, selectedClass);
-        }
-        else if (viewMode === 'papers') {
-            const p = selectedClass.split('-SEMESTER-');
-            showPapers(selectedLevel, p[0], 'SEMESTER-' + p[1]);
-        }
-        return;
+/* ═══════════════════════════════════════════════════════════════
+   INFO MODAL CONTENT
+═══════════════════════════════════════════════════════════════ */
+const infoContent = {
+    contact: {
+        title: '📧 Contact Us — ଆମ୍ଭ ସହିତ ଯୋଗାଯୋଗ',
+        body: `
+            <h3>ଯୋଗାଯୋଗ — Contact</h3>
+            <div class="odia">ଯଦି ଆପଣଙ୍କର କୌଣସି ପ୍ରଶ୍ନ, ଅଭିଯୋଗ, କିମ୍ବା ଅନୁସନ୍ଧାନ ଅଛି, ଦୟାକରି ନିମ୍ନ ଚ୍ୟାନେଲ ମାଧ୍ୟମରେ ଆମ୍ଭ ସହିତ ଯୋଗାଯୋଗ କରନ୍ତୁ ।</div>
+            <div class="eng">For any query, complaint, or general enquiry regarding E-Vidya Academy services, please reach us through the following channels. We are committed to responding within 24 hours on working days.</div>
+            <h3>📱 WhatsApp</h3>
+            <div class="eng"><strong>+91 6372296357</strong><br>Monday to Saturday — 9:00 AM to 8:00 PM</div>
+            <div class="odia">ସୋମବାର ଠାରୁ ଶନିବାର — ସକାଳ ୯ ଟାରୁ ସନ୍ଧ୍ୟା ୮ ଟା ।</div>
+            <h3>📍 Business Address</h3>
+            <div class="eng">At-Harasinghpur, Po.-Pirahat, Dist.-Bhadrak, Odisha-756131<br>Email: evidya2026@gmail.com | Phone: 6372296357<br>Grievance Officer: Sangita Behera</div>
+            <div class="legal"><p>⚠️ This is a PRIVATE service. NOT affiliated with any Government body, Board, or University.</p></div>
+        `
+    },
+    about: {
+        title: 'ℹ️ About Us — ଆମ୍ଭ ବିଷୟରେ',
+        body: `
+            <h3>ଆମ୍ଭ ପରିଚୟ — Who We Are</h3>
+            <div class="odia">E-Vidya Academy ଏକ ଅଭିଭାବକ-ଶିକ୍ଷା ଆଧାରିତ ଅନଲାଇନ୍ କୋଚିଂ ସେବା । ଆମ୍ଭର ଲକ୍ଷ୍ୟ ହେଉଛି ଅଭିଭାବକମାନଙ୍କୁ ସକ୍ଷମ କରିବା ଯଦ୍ଦ୍ୱାରା ସେମାନେ ନିଜ ସନ୍ତାନଙ୍କୁ ଘରେ ବସି ପ୍ରଭାବଶାଳୀ ଭାବରେ ପଢ଼ାଇ ପାରିବେ ।</div>
+            <div class="eng">E-Vidya Academy is a privately operated online coaching platform founded to empower parents to become their children's most trusted teachers. We provide structured coaching content for School (Class 1–10), +2 Arts, +2 Commerce, +3 Arts (Honours), and +3 Commerce.</div>
+            <h3>ଆମ୍ଭ ସ୍ଥିତି — Our Standing</h3>
+            <div class="eng">Owned and operated by <strong>Kumudini Rout</strong> as a sole proprietorship under the laws of India.</div>
+            <div class="odia">ଦୟାକରି ଧ୍ୟାନ ଦିଅନ୍ତୁ: ଏହି ଆପ୍ ଏକ ବ୍ୟକ୍ତିଗତ ପ୍ରୟାସ ଅଟେ । ଏହା କୌଣସି ସରକାରୀ ସଂସ୍ଥାକୁ ପ୍ରତିନିଧିତ୍ୱ କରେ ନାହିଁ । ଏହି ଆପ୍ କୁ ବ୍ୟବହାର କରିବା ଦ୍ଵାରା ଆପଣ ଏହି ଆପ୍ ର ସମସ୍ତ ନୀତି, ପ୍ରାଇଭେସୀ ପଲିସି, ସର୍ତ୍ତାବଳୀ ଏବଂ ଅସ୍ବୀକରଣ ରେ ଆପଣଙ୍କ ସହମତି ପ୍ରଦାନ କରୁଛନ୍ତି ।</div>
+            <div class="legal"><p>⚠️ NOT affiliated with, endorsed by, or connected to any Government, Board, or University.</p></div>
+        `
+    },
+    terms: {
+        title: '📜 Terms & Conditions — ସର୍ତ୍ତ ଓ ନିୟମ',
+        body: `
+            <h3>ସ୍ୱୀକୃତି — Acceptance</h3>
+            <div class="odia">ଏହି ସେବା ବ୍ୟବହାର କରି ଆପଣ ଏହି ସର୍ତ୍ତ ଓ ନିୟମ ଗ୍ରହଣ କରୁଛନ୍ତି । ଏହି ଆପ୍ ଏକ ବ୍ୟକ୍ତିଗତ ପ୍ରୟାସ; କୌଣସି ସରକାରୀ ସଂସ୍ଥା ସହ ସଂଯୁକ୍ତ ନୁହେଁ ।</div>
+            <div class="eng">By accessing E-Vidya Academy's services, you unconditionally agree to these Terms. If you do not agree, discontinue use immediately.</div>
+            <h3>ସେବାର ପ୍ରକୃତି — Nature of Service</h3>
+            <div class="eng">This is a private coaching service for parents. No certificate, degree, or official qualification is issued. Content is for guidance only.</div>
+            <h3>ଶୁଳ୍କ — Fee</h3>
+            <div class="odia">ମାସିକ ଶୁଳ୍କ ₹150 ଅଟେ ।</div>
+            <div class="eng">Monthly fee: ₹150, payable in advance. The proprietor reserves the right to revise fees with prior notice.</div>
+            <h3>ଦାୟଭାର ସୀମା — Limitation of Liability</h3>
+            <div class="eng">E-Vidya Academy bears no liability for any academic result or examination outcome. Results depend entirely on the student and parent's effort.</div>
+            <div class="legal"><p>⚠️ These Terms are legally binding under the Indian Contract Act, 1872.</p></div>
+        `
+    },
+    privacy: {
+        title: '🔒 Privacy Policy — ଗୋପନୀୟତା ନୀତି',
+        body: `
+            <h3>ତଥ୍ୟ ସଂଗ୍ରହ — Data Collection</h3>
+            <div class="odia">ଆବେଦନ ସମୟରେ ଆପଣଙ୍କ ନାମ ଓ ଫୋନ ନମ୍ବର ସଂଗ୍ରହ କରାଯାଏ ।</div>
+            <div class="eng">We collect only your name and contact number during enrolment. No sensitive personal data (Aadhaar, financial details, passwords) is collected.</div>
+            <h3>ତଥ୍ୟ ବ୍ୟବହାର — Use of Data</h3>
+            <div class="eng">Your data is used exclusively for service delivery and communication. It is never sold or transferred to any third party without explicit consent.</div>
+            <h3>ଅଧିକାର — Your Rights</h3>
+            <div class="eng">You may request deletion of your data at any time via WhatsApp. We will comply within 7 working days under the Digital Personal Data Protection Act, 2023.</div>
+            <div class="legal"><p>⚠️ Governed by the Digital Personal Data Protection Act, 2023.</p></div>
+        `
+    },
+    refund: {
+        title: '💰 Refund Policy — ଫେରସ୍ତ ନୀତି',
+        body: `
+            <h3>ସ୍ପଷ୍ଟ ଘୋଷଣା — Declaration</h3>
+            <div class="odia">E-Vidya Academy ର ସମସ୍ତ ଶୁଳ୍କ ଅଣ-ଫେରସ୍ତଯୋଗ୍ୟ ।</div>
+            <div class="eng"><strong>ALL FEES PAID TO E-VIDYA ACADEMY ARE STRICTLY NON-REFUNDABLE.</strong> By making payment you have read, understood, and accepted this policy.</div>
+            <h3>ବ୍ୟତିକ୍ରମ — Exception</h3>
+            <div class="eng">A refund may be considered ONLY if E-Vidya Academy permanently ceases operations before the paid period is utilized. Any such refund is at the sole discretion of the proprietor.</div>
+            <h3>ଅଭିଯୋଗ — Dispute</h3>
+            <div class="eng">Disputes are subject to the jurisdiction of courts in Bhadrak, Odisha, governed by the Consumer Protection Act, 2019 and IT Act, 2000.</div>
+            <div class="legal"><p>⚠️ Ignorance of this policy shall not constitute grounds for a refund claim.</p></div>
+        `
+    },
+    disclaimer: {
+        title: '⚠️ Full Disclaimer — ସମ୍ପୂର୍ଣ୍ଣ ଦାବିତ୍ୟାଗ',
+        body: `
+            <h3>ସ୍ୱତନ୍ତ୍ର ଘୋଷଣା</h3>
+            <div class="odia">E-Vidya Academy କୌଣସି ସରକାରୀ ସଂସ୍ଥା, ବୋର୍ଡ, ବିଶ୍ୱବିଦ୍ୟାଳୟ ସହ ସଂଯୁକ୍ତ ନୁହେଁ । ଏହି ଆପ୍ ଏକ ବ୍ୟକ୍ତିଗତ ପ୍ରୟାସ । ଏଥିରେ ଦର୍ଶାଯାଇଥିବା ତଥ୍ୟ କେବଳ ଉପଦେଶାତ୍ମକ । ଏହାକୁ ଅଦାଲତ/ସରକାରୀ ଅଫିସ୍ ରେ ଅଧିକାରିକ ତଥ୍ୟ ଭାବରେ ବ୍ୟବହାର ହୋଇନପାରେ । ଏହି ଆପ୍ ବ୍ୟବହାର କରିବା ଦ୍ଵାରା ଆପଣ ସମସ୍ତ ନୀତି, ପ୍ରାଇଭେସୀ ପଲିସି, ସର୍ତ୍ତାବଳୀ ଓ ଅସ୍ବୀକରଣ ରେ ସହମତ ।</div>
+            <div class="eng"><strong>E-Vidya Academy has absolutely NO affiliation with the Government of India, Government of Odisha, any Board, any University, or any statutory body whatsoever.</strong></div>
+            <h3>ଶିକ୍ଷାଗତ ଫଳ</h3>
+            <div class="eng">No warranty is made regarding any academic result, exam score, or educational outcome. All content is for general guidance only.</div>
+            <h3>ଶୁଳ୍କ</h3>
+            <div class="eng">The ₹150 monthly fee is for coaching guidance access only — NOT an admission fee, exam fee, or registration with any Board or University.</div>
+            <h3>ଆଇନ</h3>
+            <div class="eng">Governed by Indian law. Disputes subject to exclusive jurisdiction of competent courts of Odisha.</div>
+            <div class="legal"><p>⚠️ By using this service you conclusively accept this Full Disclaimer, Privacy Policy, Terms & Conditions, and Refund Policy.</p></div>
+        `
     }
-    grid.innerHTML = '';
-    let hasResults = false;
-    for (const lk in educationLevels) {
-        const l = educationLevels[lk];
-        if (l.name.toLowerCase().includes(filter) || l.subtitle.toLowerCase().includes(filter)) {
-            grid.appendChild(createLevelCard(lk));
-            hasResults = true;
-            continue;
-        }
-        if (lk === 'PLUS3-ARTS' && l.honours) {
-            for (const hk in l.honours) {
-                const h = l.honours[hk];
-                if (h.name.toLowerCase().includes(filter)) { grid.appendChild(createHonourCard(lk, hk)); hasResults = true; continue; }
-                for (const sk in h.semesters) {
-                    const s = h.semesters[sk];
-                    if (s.papers) {
-                        for (const pk in s.papers) {
-                            const paperData = s.papers[pk];
-                            const paperName = typeof paperData === 'string' ? paperData : paperData.name;
-                            if (paperName.toLowerCase().includes(filter)) { grid.appendChild(createPaperCard(lk, hk, sk, pk)); hasResults = true; }
-                        }
-                    }
-                }
-            }
-        } else if (lk === 'PLUS3-COM' && l.classes) {
-            for (const sk in l.classes) {
-                const s = l.classes[sk];
-                if (s.subjects) {
-                    for (const subk in s.subjects) {
-                        const subjectData = s.subjects[subk];
-                        const subjectName = typeof subjectData === 'string' ? subjectData : subjectData.name;
-                        if (subjectName.toLowerCase().includes(filter)) { grid.appendChild(createSubjectCardCom(lk, sk, subk)); hasResults = true; }
-                    }
-                }
-            }
-        } else if (lk === 'LLB' && l.subjects) {
-            for (const sk in l.subjects) {
-                const subjectData = l.subjects[sk];
-                const subjectName = typeof subjectData === 'string' ? subjectData : subjectData.name;
-                if (subjectName.toLowerCase().includes(filter)) { grid.appendChild(createLLBSubjectCard(lk, sk)); hasResults = true; }
-            }
-            if (hasResults) { grid.appendChild(createHCDropdownContainer()); }
-        } else if ((lk === 'PLUS2-ARTS' || lk === 'PLUS2-COM') && l.classes) {
-            for (const ck in l.classes) {
-                const cd = l.classes[ck];
-                if (cd.subjects) {
-                    for (const sk in cd.subjects) {
-                        const subjectData = cd.subjects[sk];
-                        const subjectName = typeof subjectData === 'string' ? subjectData : subjectData.name;
-                        if (subjectName.toLowerCase().includes(filter)) { grid.appendChild(createPlus2SubjectCard(lk, ck, sk)); hasResults = true; }
-                    }
-                }
-            }
-        } else if (lk === 'SCHOOL' && l.classes) {
-            for (const ck in l.classes) {
-                const cd = l.classes[ck];
-                if (cd.name.toLowerCase().includes(filter)) { grid.appendChild(createSchoolClassCard(lk, ck)); hasResults = true; }
-                if (cd.subjects) {
-                    for (const sk in cd.subjects) {
-                        const subjectData = cd.subjects[sk];
-                        const subjectName = typeof subjectData === 'string' ? subjectData : subjectData.name;
-                        if (subjectName.toLowerCase().includes(filter)) { grid.appendChild(createSchoolSubjectCard(lk, ck, sk)); hasResults = true; }
-                    }
-                }
-            }
-        }
-    }
-    noResults.style.display = hasResults ? 'none' : 'block';
-});
+};
 
-// ─── PWA ──────────────────────────────────────────────────────────────────────
+function openInfo(key) {
+    const c = infoContent[key];
+    if (!c) return;
+    document.getElementById('infoTitle').textContent = c.title;
+    document.getElementById('infoBody').innerHTML    = c.body;
+    document.getElementById('infoModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+function closeInfo() {
+    document.getElementById('infoModal').classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+function handleInfoClick(e) {
+    if (e.target === document.getElementById('infoModal')) closeInfo();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PWA
+═══════════════════════════════════════════════════════════════ */
 let deferredPrompt;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-
-  // Show the small button (keep it as fallback)
-  document.getElementById('pwa-install-btn').style.display = 'block';
-
-  // Show the prominent modal after a short delay (less intrusive)
-  setTimeout(() => {
-    document.getElementById('pwaInstallModal').classList.add('active');
-  }, 2000); // 2-second delay so the page loads first
+window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('pwaBtn').style.display = 'block';
+    setTimeout(() => document.getElementById('pwaModal').classList.add('active'), 2000);
 });
-
-function triggerInstallFromModal() {
-  dismissInstallModal();
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((result) => {
-      if (result.outcome === 'accepted') {
-        document.getElementById('pwa-install-btn').style.display = 'none';
-      }
-      deferredPrompt = null;
-    });
-  }
+function doInstall() {
+    dismissPwa();
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(r => {
+            if (r.outcome === 'accepted') document.getElementById('pwaBtn').style.display = 'none';
+            deferredPrompt = null;
+        });
+    }
 }
-
-function dismissInstallModal() {
-  document.getElementById('pwaInstallModal').classList.remove('active');
+function dismissPwa() {
+    document.getElementById('pwaModal').classList.remove('active');
 }
-
-function triggerInstall() {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((result) => {
-      if (result.outcome === 'accepted') {
-        document.getElementById('pwa-install-btn').style.display = 'none';
-      }
-      deferredPrompt = null;
-    });
-  }
-}
-
 window.addEventListener('appinstalled', () => {
-  document.getElementById('pwa-install-btn').style.display = 'none';
-  dismissInstallModal();
-  deferredPrompt = null;
+    document.getElementById('pwaBtn').style.display = 'none';
+    dismissPwa();
+    deferredPrompt = null;
 });
-// ─── Init ─────────────────────────────────────────────────────────────────────
-showLevels();
-</script>
-    <!-- PWA Install Modal -->
-<div class="pwa-modal-overlay" id="pwaInstallModal">
-  <div class="pwa-modal-box">
-    <div class="pwa-modal-icon">📲</div>
-    <h2 class="pwa-modal-title">Install E-Vidya App</h2>
-    <p class="pwa-modal-subtitle">ଆପ୍ ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ । </p>
-    <button class="pwa-modal-install-btn" onclick="triggerInstallFromModal()">⬇️ Install Now — ଇନ୍‌ସ୍ଟଲ୍ କରନ୍ତୁ । </button>
-    <button class="pwa-modal-dismiss-btn" onclick="dismissInstallModal()">Not Now — ପରେ କରିବି</button>
-  </div>
-</div>
-    <script>
-  if ('serviceWorker' in navigator) {
+
+/* ═══════════════════════════════════════════════════════════════
+   SERVICE WORKER
+═══════════════════════════════════════════════════════════════ */
+if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(r => console.log('SW registered:', r.scope))
-        .catch(e => console.log('SW error:', e));
+        navigator.serviceWorker.register('./sw.js')
+            .then(r  => console.log('SW registered:', r.scope))
+            .catch(er => console.log('SW error:', er));
     });
-  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════════════ */
+showLevels();
 </script>
 </body>
 </html>
