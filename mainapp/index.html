@@ -740,13 +740,11 @@ function showLevels() {
 
     g.appendChild(makeWideBtn('ଏଠାରେ ମୋ ସାଥି ଆପ୍ କୁ ଯାଆନ୍ତୁ ।', 'https://evidya.pages.dev/MO%20SATHI/', 'red'));
 
-    // Special Training - full width
-    const special = document.createElement('a');
-    special.href = 'https://special-training.pages.dev/';
-    special.target = '_blank'; special.rel = 'noopener noreferrer';
-    special.className = 'level-card special';
-    special.innerHTML = '<div class="level-icon">🌟</div><div class="level-name">ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ</div></div>';
-    g.appendChild(special);
+  const special = document.createElement('a');
+special.href = 'https://special-training.pages.dev/';
+special.className = 'level-card special';
+special.innerHTML = '<div class="level-icon">🌟</div><div class="level-name">ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ</div></div>';
+g.appendChild(special);
 
     g.appendChild(makeLevelCard('SCHOOL', 'ସ୍କୁଲ୍', '🏫', 'school', () => showClasses('SCHOOL')));
 
