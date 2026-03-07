@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="or">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ମୋ ସାଥୀ - Mo Saathi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Nirmala UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+            padding-bottom: 30px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .disclaimer {
+            display: flex;
+            align-items: center;
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 12px;
+            color: #856404;
+        }
+
+        .how-to-use-compact {
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .how-to-button {
+            display: flex;
+            align-items: center;
+            padding: 15px 18px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .how-to-button:active {
+            transform: scale(0.98);
+        }
+
+        .how-to-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            padding: 0 18px;
+            background: white;
+        }
+
+        .how-to-content.open {
+            max-height: 500px;
+            padding: 18px;
+        }
+
+        .instruction-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            min-width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            box-shadow: 0 3px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .step-text {
+            flex: 1;
+            font-size: 13px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .category-card:active {
+            transform: scale(0.98);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .category-header:active {
+            transform: scale(0.97);
+        }
+
+        .category-icon {
+            font-size: 32px;
+            margin-right: 15px;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .category-title {
+            font-size: 18px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .arrow {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .arrow.open {
+            transform: rotate(90deg);
+        }
+
+        .subcategory-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .subcategory-content.open {
+            max-height: 2000px;
+        }
+
+        .subcategory-item {
+            background: #f8f9ff;
+            margin: 10px 0;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .subcategory-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .subcategory-header:active {
+            opacity: 0.8;
+        }
+
+        .subcategory-icon {
+            font-size: 24px;
+            margin-right: 12px;
+        }
+
+        .subcategory-title {
+            font-size: 16px;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .links-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: white;
+        }
+
+        .links-container.open {
+            max-height: 1500px;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .link-item:last-child {
+            border-bottom: none;
+        }
+
+        .link-item:active {
+            background: #f8f9ff;
+            transform: scale(0.98);
+        }
+
+        .link-icon {
+            font-size: 20px;
+            margin-right: 12px;
+            min-width: 30px;
+        }
+
+        .link-text {
+            flex: 1;
+            font-size: 15px;
+        }
+
+        .emergency-badge {
+            background: #ff4757;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .call-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .call-button:active {
+            transform: scale(0.95);
+            background: #45a049;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .footer-links {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .footer-link {
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .footer-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-link:active {
+            transform: scale(0.95);
+        }
+
+        .footer-separator {
+            color: white;
+            opacity: 0.6;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            display: block;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 20px;
+            max-width: 90%;
+            max-height: 80vh;
+            width: 500px;
+            z-index: 1000;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal.show {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translate(-50%, -40%);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 24px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-close:active {
+            transform: scale(0.9);
+        }
+
+        .modal-content {
+            padding: 25px;
+            max-height: calc(80vh - 80px);
+            overflow-y: auto;
+        }
+
+        .modal-content h3 {
+            color: #667eea;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .modal-content h4 {
+            color: #764ba2;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        .modal-content p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            font-size: 14px;
+            text-align: justify;
+        }
+
+        .modal-content em {
+            color: #777;
+            font-size: 13px;
+            display: block;
+            margin-top: 5px;
+            text-align: justify;
+        }
+
+        .search-box {
+            background: white;
+            border-radius: 15px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .search-box input::placeholder {
+            color: #999;
+        }
+
+        .search-icon {
+            font-size: 20px;
+            color: #667eea;
+            margin-right: 10px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .category-card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .category-card:nth-child(1) { animation-delay: 0.1s; }
+        .category-card:nth-child(2) { animation-delay: 0.2s; }
+        .category-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .quick-access {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quick-btn {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .quick-btn:active {
+            transform: scale(0.95);
+        }
+
+        .quick-btn-icon {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+
+        .quick-btn-text {
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏛️ ମୋ ସାଥୀ</h1>
+            <p style="font-weight: 600; color: #764ba2;">ଆପଣଙ୍କ ଅଭିଯୋଗ ସମାଧାନର ମାର୍ଗଦର୍ଶକ</p>
+            <p style="font-size: 13px; margin-top: 8px; line-height: 1.5;">ଏହି ଆପ୍ ଗ୍ରାମାଞ୍ଚଳର ଲୋକମାନଙ୍କୁ ସଠିକ୍ ସରକାରୀ ପୋର୍ଟାଲରେ ପହଞ୍ଚିବାରେ ସାହାଯ୍ୟ କରେ। ସମ୍ପୂର୍ଣ୍ଣ ମାଗଣା ଏବଂ ଶିକ୍ଷାମୂଳକ ସେବା।</p>
+            
+            <!-- Disclaimer -->
+            <div class="disclaimer">
+                <span style="font-size: 16px; margin-right: 5px;">⚠️</span>
+                <span style="font-size: 11px; line-height: 1.4;">ଏହି ଆପ୍ ସରକାରଙ୍କ ସହିତ ସମ୍ବନ୍ଧିତ ନୁହେଁ। କେବଳ ଶିକ୍ଷାମୂଳକ ଉଦ୍ଦେଶ୍ୟରେ ସୂଚନା ପ୍ରଦାନ କରେ।</span>
+            </div>
+        </div>
+
+        <!-- How to Use Section - Collapsible -->
+        <div class="how-to-use-compact">
+            <div class="how-to-button" onclick="toggleHowTo()">
+                <span style="font-size: 20px; margin-right: 8px;">📱</span>
+                <span style="font-weight: 600; flex: 1;">କିପରି ବ୍ୟବହାର କରିବେ?</span>
+                <span class="arrow" id="arrow-howto">▶</span>
+            </div>
+            
+            <div class="how-to-content" id="howToContent">
+                <p style="margin-bottom: 15px; color: #555; font-size: 14px;">ଆପଣଙ୍କ ସମସ୍ୟା ଅନୁସାରେ ନିମ୍ନରୁ ଗୋଟିଏ ବିକଳ୍ପ ବାଛନ୍ତୁ</p>
+                
+                <div class="instruction-step">
+                    <div class="step-number">1</div>
+                    <div class="step-text">ଆପଣଙ୍କ ସମସ୍ୟାର ପ୍ରକାର ବାଛନ୍ତୁ</div>
+                </div>
+                
+                <div class="instruction-step">
+                    <div class="step-number">2</div>
+                    <div class="step-text">ବଟନ୍ ଦବାଇଲେ ସରକାରୀ ପୋର୍ଟାଲ ଖୋଲିବ</div>
+                </div>
+                
+                <div class="instruction-step">
+                    <div class="step-number">3</div>
+                    <div class="step-text">ସେଠାରେ ଆପଣଙ୍କ ଅଭିଯୋଗ ଦାଖଲ କରନ୍ତୁ</div>
+                </div>
+                
+                <div class="instruction-step">
+                    <div class="step-number">4</div>
+                    <div class="step-text">ଅଭିଯୋଗ ନମ୍ବର ସୁରକ୍ଷିତ ରଖନ୍ତୁ</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Box -->
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="ସେବା ଖୋଜନ୍ତୁ...">
+        </div>
+
+        <!-- Quick Access -->
+        <div class="quick-access">
+            <a href="https://citizenportal-op.gov.in/Citizen/Login.aspx" class="quick-btn" target="_blank">
+                <div class="quick-btn-icon">🚔</div>
+                <div class="quick-btn-text">ଅନ୍‌ଲାଇନ୍‌ରେ FIR ଦେବା</div>
+            </a>
+            <a href="https://dwistodisha.nic.in/" class="quick-btn" target="_blank">
+                <div class="quick-btn-icon">🏛️</div>
+                <div class="quick-btn-text">ଅନ୍‌ଲାଇନ୍‌ରେ ତହସିଲଦାରଙ୍କୁ ଅଭିଯୋଗ ଜଣାଇବା</div>
+            </a>
+            <a href="https://janasunani.odisha.gov.in/grievance-details/" class="quick-btn" target="_blank">
+                <div class="quick-btn-icon">📢</div>
+                <div class="quick-btn-text">ଅନ୍‌ଲାଇନ୍‌ରେ ରାଜ୍ୟ ସରକାରଙ୍କୁ ଅଭିଯୋଗ ଜଣାଇବା</div>
+            </a>
+            <a href="https://pgportal.gov.in/" class="quick-btn" target="_blank">
+                <div class="quick-btn-icon">🇮🇳</div>
+                <div class="quick-btn-text">ଅନ୍‌ଲାଇନ୍‌ରେ କେନ୍ଦ୍ର ସରକାରଙ୍କୁ ଅଭିଯୋଗ ଜଣାଇବା</div>
+            </a>
+            <a href="https://consumerhelpline.gov.in/user/signup.php" class="quick-btn" target="_blank">
+                <div class="quick-btn-icon">🛒</div>
+                <div class="quick-btn-text">କୌଣସି ଦୋକାନୀ ଠକିଲେ ଏଠାରେ ଅଭିଯୋଗ କରନ୍ତୁ</div>
+            </a>
+            <a href="https://cybercrime.gov.in/Default.aspx" class="quick-btn" target="_blank">
+                <div class="quick-btn-icon">💻</div>
+                <div class="quick-btn-text">କୌଣସି ଅନ୍‌ଲାଇନ୍ ଠକାମିର ଶିକାର ହେଲେ ଏଠାରେ ଅଭିଯୋଗ କରନ୍ତୁ</div>
+            </a>
+        </div>
+
+        <!-- Emergency Services -->
+        <div class="category-card">
+            <div class="category-header" onclick="toggleCategory('emergency')">
+                <span class="category-icon">🚨</span>
+                <span class="category-title">ଜରୁରୀକାଳୀନ ସେବା</span>
+                <span class="arrow" id="arrow-emergency">▶</span>
+            </div>
+            <div class="subcategory-content" id="emergency">
+                
+                <!-- Critical Emergency -->
+                <div class="subcategory-item">
+                    <div class="subcategory-header" onclick="toggleLinks('critical')">
+                        <span class="subcategory-icon">🆘</span>
+                        <span class="subcategory-title">ତୁରନ୍ତ ଜରୁରୀକାଳୀନ</span>
+                        <span class="arrow" id="arrow-critical">▶</span>
+                    </div>
+                    <div class="links-container" id="critical">
+                        <a href="tel:112" class="link-item">
+                            <span class="link-icon">📞</span>
+                            <span class="link-text">112 - ଯେକୌଣସି ଜରୁରୀ ପରିସ୍ଥିତି</span>
+                            <span class="emergency-badge">ଜରୁରୀ</span>
+                        </a>
+                        <a href="tel:100" class="link-item">
+                            <span class="link-icon">🚔</span>
+                            <span class="link-text">100 - ପୋଲିସ୍</span>
+                        </a>
+                        <a href="tel:101" class="link-item">
+                            <span class="link-icon">🚒</span>
+                            <span class="link-text">101 - ଦମକଳ</span>
+                        </a>
+                        <a href="tel:102" class="link-item">
+                            <span class="link-icon">🚑</span>
+                            <span class="link-text">102 - ଜନନୀ ଆମ୍ବୁଲାନ୍ସ</span>
+                        </a>
+                        <a href="tel:108" class="link-item">
+                            <span class="link-icon">🚑</span>
+                            <span class="link-text">108 - ଆମ୍ବୁଲାନ୍ସ</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Safety Helplines -->
+                <div class="subcategory-item">
+                    <div class="subcategory-header" onclick="toggleLinks('safety')">
+                        <span class="subcategory-icon">🛡️</span>
+                        <span class="subcategory-title">ସୁରକ୍ଷା ହେଲ୍ପଲାଇନ୍</span>
+                        <span class="arrow" id="arrow-safety">▶</span>
+                    </div>
+                    <div class="links-container" id="safety">
+                        <a href="tel:1091" class="link-item">
+                            <span class="link-icon">👩</span>
+                            <span class="link-text">1091 - ମହିଳା ସୁରକ୍ଷା</span>
+                        </a>
+                        <a href="tel:1098" class="link-item">
+                            <span class="link-icon">👶</span>
+                            <span class="link-text">1098 - ଶିଶୁ ସୁରକ୍ଷା</span>
+                        </a>
+                        <a href="tel:14567" class="link-item">
+                            <span class="link-icon">👴</span>
+                            <span class="link-text">14567 - ବୃଦ୍ଧ ସୁରକ୍ଷା</span>
+                        </a>
+                        <a href="tel:155620" class="link-item">
+                            <span class="link-icon">💻</span>
+                            <span class="link-text">155620 - ସାଇବର କ୍ରାଇମ୍</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Transport -->
+                <div class="subcategory-item">
+                    <div class="subcategory-header" onclick="toggleLinks('transport')">
+                        <span class="subcategory-icon">🚗</span>
+                        <span class="subcategory-title">ପରିବହନ ଓ ଟ୍ରାଫିକ୍</span>
+                        <span class="arrow" id="arrow-transport">▶</span>
+                    </div>
+                    <div class="links-container" id="transport">
+                        <a href="tel:1095" class="link-item">
+                            <span class="link-icon">🚦</span>
+                            <span class="link-text">1095 - ଟ୍ରାଫିକ୍ ହେଲ୍ପଲାଇନ୍</span>
+                        </a>
+                        <a href="tel:1033" class="link-item">
+                            <span class="link-icon">🛣️</span>
+                            <span class="link-text">1033 - ରାଜପଥ ଦୁର୍ଘଟଣା</span>
+                        </a>
+                        <a href="tel:18003451122" class="link-item">
+                            <span class="link-icon">🚌</span>
+                            <span class="link-text">1800-345-1122 - ବସ୍ ଯାତ୍ରୀ ସେବା</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Railway -->
+                <div class="subcategory-item">
+                    <div class="subcategory-header" onclick="toggleLinks('railway')">
+                        <span class="subcategory-icon">🚂</span>
+                        <span class="subcategory-title">ରେଳ ସେବା</span>
+                        <span class="arrow" id="arrow-railway">▶</span>
+                    </div>
+                    <div class="links-container" id="railway">
+                        <a href="tel:1800111139" class="link-item">
+                            <span class="link-icon">ℹ️</span>
+                            <span class="link-text">1800-111-139 - ରେଳ ସୂଚନା</span>
+                        </a>
+                        <a href="tel:1800111322" class="link-item">
+                            <span class="link-icon">🚔</span>
+                            <span class="link-text">1800-111-322 - ରେଳ ପୋଲିସ୍</span>
+                        </a>
+                        <a href="tel:138" class="link-item">
+                            <span class="link-icon">📝</span>
+                            <span class="link-text">138 - ରେଳ ଅଭିଯୋଗ</span>
+                        </a>
+                        <a href="tel:1072" class="link-item">
+                            <span class="link-icon">🆘</span>
+                            <span class="link-text">1072 - ରେଳ ଦୁର୍ଘଟଣା</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Tourism -->
+                <div class="subcategory-item">
+                    <div class="subcategory-header" onclick="toggleLinks('tourism')">
+                        <span class="subcategory-icon">🏨</span>
+                        <span class="subcategory-title">ପର୍ଯ୍ୟଟନ ଓ ଅନ୍ୟାନ୍ୟ</span>
+                        <span class="arrow" id="arrow-tourism">▶</span>
+                    </div>
+                    <div class="links-container" id="tourism">
+                        <a href="tel:1800111363" class="link-item">
+                            <span class="link-icon">🗺️</span>
+                            <span class="link-text">1800-111-363 - ପର୍ଯ୍ୟଟନ</span>
+                        </a>
+                        <a href="tel:18002002524" class="link-item">
+                            <span class="link-icon">🏖️</span>
+                            <span class="link-text">1800-200-2524 - ପୁରୀ ପର୍ଯ୍ୟଟନ</span>
+                        </a>
+                        <a href="tel:06752222001" class="link-item">
+                            <span class="link-icon">🛕</span>
+                            <span class="link-text">06752-222001 - ଜଗନ୍ନାଥ ମନ୍ଦିର</span>
+                        </a>
+                        <a href="tel:1906" class="link-item">
+                            <span class="link-icon">⚠️</span>
+                            <span class="link-text">1906 - ଗ୍ୟାସ ଲିକ୍</span>
+                        </a>
+                        <a href="tel:18001801551" class="link-item">
+                            <span class="link-icon">🌾</span>
+                            <span class="link-text">1800-180-1551 - କୃଷି ସହାୟତା</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Government Administration -->
+        <div class="category-card">
+            <div class="category-header" onclick="toggleCategory('govt')">
+                <span class="category-icon">🏛️</span>
+                <span class="category-title">ସରକାରୀ ପ୍ରଶାସନ</span>
+                <span class="arrow" id="arrow-govt">▶</span>
+            </div>
+            <div class="subcategory-content" id="govt">
+                
+                <!-- Odisha Government -->
+                <div class="subcategory-item">
+                    <div class="subcategory-header" onclick="toggleLinks('odisha')">
+                        <span class="subcategory-icon">🏛️</span>
+                        <span class="subcategory-title">ଓଡିଶା ସରକାର</span>
+                        <span class="arrow" id="arrow-odisha">▶</span>
+                    </div>
+                    <div class="links-container" id="odisha">
+                        <a href="https://cm.odisha.gov.in/index" class="link-item" target="_blank">
+                            <span class="link-icon">👤</span>
+                            <span class="link-text">ମୁଖ୍ୟମନ୍ତ୍ରୀଙ୍କ ଅଫିସ୍</span>
+                        </a>
+                        <a href="https://www.rajbhavanodisha.gov.in/view/index.php" class="link-item" target="_blank">
+                            <span class="link-icon">🏛️</span>
+                            <span class="link-text">ରାଜ୍ୟପାଳଙ୍କ ଅଫିସ୍</span>
+                        </a>
+                        <a href="https://odishaassembly.nic.in/House.aspx" class="link-item" target="_blank">
+                            <span class="link-icon">🏢</span>
+                            <span class="link-text">ବିଧାନ ସଭା</span>
+                        </a>
+                        <a href="https://odisha.gov.in/government/department-list" class="link-item" target="_blank">
+                            <span class="link-icon">📋</span>
+                            <span class="link-text">ରାଜ୍ୟ ବିଭାଗ</span>
+                        </a>
+                        <a href="https://odisha.gov.in/or" class="link-item" target="_blank">
+                            <span class="link-icon">🌐</span>
+                            <span class="link-text">ଓଡିଶା ସରକାର ୱେବସାଇଟ୍</span>
+                        </a>
+                        <a href="https://www.odishaone.gov.in/citizen/list-of-services" class="link-item" target="_blank">
+                            <span class="link-icon">💻</span>
+                            <span class="link-text">ଅନ୍-ଲାଇନ୍ ସେବା</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- District Administration -->
+                <div class="subcategory-item">
+                    <div class="subcategory-header" onclick="toggleLinks('district')">
+                        <span class="subcategory-icon">🏙️</span>
+                        <span class="subcategory-title">ଜିଲ୍ଲା ପ୍ରଶାସନ</span>
+                        <span class="arrow" id="arrow-district">▶</span>
+                    </div>
+                    <div class="links-container" id="district">
+                        <a href="https://odisha.s3waas.gov.in/" class="link-item" target="_blank">
+                            <span class="link-icon">🏢</span>
+                            <span class="link-text">କଲେକ୍ଟର ଅଫିସ୍</span>
+                        </a>
+                        <a href="https://dwistodisha.nic.in/" class="link-item" target="_blank">
+                            <span class="link-icon">🏛️</span>
+                            <span class="link-text">ତହସିଲ ଅଫିସ୍</span>
+                        </a>
+                        <a href="https://panchayat.odisha.gov.in/about-us/field-officials/block-development-officers" class="link-item" target="_blank">
+                            <span class="link-icon">🏘️</span>
+                            <span class="link-text">BDO ଅଫିସ୍</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Central Government -->
+                <div class="subcategory-item">
+                    <div class="subcategory-header" onclick="toggleLinks('central')">
+                        <span class="subcategory-icon">🇮🇳</span>
+                        <span class="subcategory-title">କେନ୍ଦ୍ର ସରକାର</span>
+                        <span class="arrow" id="arrow-central">▶</span>
+                    </div>
+                    <div class="links-container" id="central">
+                        <a href="https://www.pmindia.gov.in/en/" class="link-item" target="_blank">
+                            <span class="link-icon">👤</span>
+                            <span class="link-text">ପ୍ରଧାନମନ୍ତ୍ରୀଙ୍କ ଅଫିସ୍</span>
+                        </a>
+                        <a href="https://presidentofindia.nic.in/" class="link-item" target="_blank">
+                            <span class="link-icon">🏛️</span>
+                            <span class="link-text">ରାଷ୍ଟ୍ରପତିଙ୍କ ଅଫିସ୍</span>
+                        </a>
+                        <a href="https://vicepresidentofindia.nic.in/" class="link-item" target="_blank">
+                            <span class="link-icon">👔</span>
+                            <span class="link-text">ଉପରାଷ୍ଟ୍ରପତିଙ୍କ ଅଫିସ୍</span>
+                        </a>
+                        <a href="https://sansad.in/poi" class="link-item" target="_blank">
+                            <span class="link-icon">🏢</span>
+                            <span class="link-text">ସଂସଦ</span>
+                        </a>
+                        <a href="https://igod.gov.in/ug/categories" class="link-item" target="_blank">
+                            <span class="link-icon">📋</span>
+                            <span class="link-text">କେନ୍ଦ୍ରୀୟ ବିଭାଗ</span>
+                        </a>
+                        <a href="https://www.india.gov.in/" class="link-item" target="_blank">
+                            <span class="link-icon">🌐</span>
+                            <span class="link-text">ଭାରତ ସରକାର ୱେବସାଇଟ୍</span>
+                        </a>
+                        <a href="https://services.india.gov.in/" class="link-item" target="_blank">
+                            <span class="link-icon">💻</span>
+                            <span class="link-text">ଅନ୍-ଲାଇନ୍ ସେବା</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Judiciary -->
+                <div class="subcategory-item">
+                    <div class="subcategory-header" onclick="toggleLinks('judiciary')">
+                        <span class="subcategory-icon">⚖️</span>
+                        <span class="subcategory-title">ନ୍ୟାୟପାଳିକା</span>
+                        <span class="arrow" id="arrow-judiciary">▶</span>
+                    </div>
+                    <div class="links-container" id="judiciary">
+                        <a href="https://main.sci.gov.in/" class="link-item" target="_blank">
+                            <span class="link-icon">⚖️</span>
+                            <span class="link-text">ସୁପ୍ରିମ୍ କୋର୍ଟ</span>
+                        </a>
+                        <a href="https://www.orissahighcourt.nic.in/" class="link-item" target="_blank">
+                            <span class="link-icon">🏛️</span>
+                            <span class="link-text">ଓଡିଶା ହାଇକୋର୍ଟ</span>
+                        </a>
+                        <a href="https://districts.ecourts.gov.in/odisha" class="link-item" target="_blank">
+                            <span class="link-icon">🏢</span>
+                            <span class="link-text">ଜିଲ୍ଲା କୋର୍ଟ</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Education -->
+                <div class="subcategory-item">
+                    <div class="subcategory-header" onclick="toggleLinks('education')">
+                        <span class="subcategory-icon">🎓</span>
+                        <span class="subcategory-title">ଶିକ୍ଷା ବିଭାଗ</span>
+                        <span class="arrow" id="arrow-education">▶</span>
+                    </div>
+                    <div class="links-container" id="education">
+                        <a href="https://dhe.odisha.gov.in/universities/list-of-univerisities-in-odisha" class="link-item" target="_blank">
+                            <span class="link-icon">🎓</span>
+                            <span class="link-text">ବିଶ୍ୱବିଦ୍ୟାଳୟ</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Complaints -->
+        <div class="category-card">
+            <div class="category-header" onclick="toggleCategory('complaint')">
+                <span class="category-icon">📝</span>
+                <span class="category-title">ଅଭିଯୋଗ ଓ ସମସ୍ୟା ସମାଧାନ</span>
+                <span class="arrow" id="arrow-complaint">▶</span>
+            </div>
+            <div class="subcategory-content" id="complaint">
+                
+                <!-- Government Grievance -->
+                <div class="subcategory-item">
+                    <div class="subcategory-header" onclick="toggleLinks('grievance')">
+                        <span class="subcategory-icon">🏛️</span>
+                        <span class="subcategory-title">ସରକାରୀ ଅଭିଯୋଗ</span>
+                        <span class="arrow" id="arrow-grievance">▶</span>
+                    </div>
+                    <div class="links-container" id="grievance">
+                        <a href="https://janasunani.odisha.gov.in/grievance-details/" class="link-item" target="_blank">
+                            <span class="link-icon">📢</span>
+                            <span class="link-text">ଜନଶୁଣାଣୀ - ରାଜ୍ୟ ଅଭିଯୋଗ</span>
+                        </a>
+                        <a href="https://amashasana.odisha.gov.in/website/home" class="link-item" target="_blank">
+                            <span class="link-icon">💬</span>
+                            <span class="link-text">ରାଜ୍ୟ ଶାସନ ସମ୍ବନ୍ଧରେ ମତ</span>
+                        </a>
+                        <a href="https://pgportal.gov.in/" class="link-item" target="_blank">
+                            <span class="link-icon">🇮🇳</span>
+                            <span class="link-text">CPGRAMS - କେନ୍ଦ୍ର ଅଭିଯୋଗ</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Service Complaints -->
+                <div class="subcategory-item">
+                    <div class="subcategory-header" onclick="toggleLinks('service')">
+                        <span class="subcategory-icon">📮</span>
+                        <span class="subcategory-title">ସେବା ସମ୍ବନ୍ଧୀୟ ଅଭିଯୋଗ</span>
+                        <span class="arrow" id="arrow-service">▶</span>
+                    </div>
+                    <div class="links-container" id="service">
+                        <a href="https://www.indiapost.gov.in/" class="link-item" target="_blank">
+                            <span class="link-icon">📦</span>
+                            <span class="link-text">ଡାକ ଟ୍ରାକିଂ</span>
+                        </a>
+                        <a href="https://crm.indiapost.gov.in/customer/home" class="link-item" target="_blank">
+                            <span class="link-icon">📮</span>
+                            <span class="link-text">ପୋଷ୍ଟ ଅଫିସ୍ ଅଭିଯୋଗ</span>
+                        </a>
+                        <a href="https://rbi.org.in/Scripts/Complaints.aspx" class="link-item" target="_blank">
+                            <span class="link-icon">🏦</span>
+                            <span class="link-text">ବ୍ୟାଙ୍କ ଅଭିଯୋଗ</span>
+                        </a>
+                        <a href="https://www.npci.org.in/what-we-do/upi/dispute-redressal-mechanism" class="link-item" target="_blank">
+                            <span class="link-icon">💳</span>
+                            <span class="link-text">UPI ଅଭିଯୋଗ</span>
+                        </a>
+                        <a href="https://tccms.trai.gov.in/Default.aspx" class="link-item" target="_blank">
+                            <span class="link-icon">📱</span>
+                            <span class="link-text">ଟେଲିକମ୍ ଅଭିଯୋଗ</span>
+                        </a>
+                        <a href="https://mobidyut.com/NewConnection/Login" class="link-item" target="_blank">
+                            <span class="link-icon">⚡</span>
+                            <span class="link-text">ବିଦ୍ୟୁତ୍ ଅଭିଯୋଗ - 1</span>
+                        </a>
+                        <a href="https://orierc.org/OERCOLD/ombudsman.html" class="link-item" target="_blank">
+                            <span class="link-icon">💡</span>
+                            <span class="link-text">ବିଦ୍ୟୁତ୍ ଅଭିଯୋଗ - 2</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Consumer -->
+                <div class="subcategory-item">
+                    <div class="subcategory-header" onclick="toggleLinks('consumer')">
+                        <span class="subcategory-icon">🛒</span>
+                        <span class="subcategory-title">ଗ୍ରାହକଙ୍କ ଅଭିଯୋଗ</span>
+                        <span class="arrow" id="arrow-consumer">▶</span>
+                    </div>
+                    <div class="links-container" id="consumer">
+                        <a href="https://consumerhelpline.gov.in/user/signup.php" class="link-item" target="_blank">
+                            <span class="link-icon">📞</span>
+                            <span class="link-text">ଦୋକାନ ଅଭିଯୋଗ - ପ୍ରାଥମିକ</span>
+                        </a>
+                        <a href="https://e-jagriti.gov.in/" class="link-item" target="_blank">
+                            <span class="link-icon">⚖️</span>
+                            <span class="link-text">ଦୋକାନ ଅଭିଯୋଗ - ଚୂଡାନ୍ତ</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Crime -->
+                <div class="subcategory-item">
+                    <div class="subcategory-header" onclick="toggleLinks('crime')">
+                        <span class="subcategory-icon">🚔</span>
+                        <span class="subcategory-title">ଅପରାଧ ସମ୍ବନ୍ଧୀୟ ଅଭିଯୋଗ</span>
+                        <span class="arrow" id="arrow-crime">▶</span>
+                    </div>
+                    <div class="links-container" id="crime">
+                        <a href="https://cybercrime.gov.in/Default.aspx" class="link-item" target="_blank">
+                            <span class="link-icon">💻</span>
+                            <span class="link-text">ଅନ୍-ଲାଇନ୍ ଠକାମି ବାବଦରେ ଅଭିଯୋଗ</span>
+                        </a>
+                        <a href="https://citizenportal-op.gov.in/Citizen/Login.aspx" class="link-item" target="_blank">
+                            <span class="link-icon">🚨</span>
+                            <span class="link-text">ଅନ୍ୟାନ୍ୟ ଅପରାଧ ଥାନାକୁ ଜଣାଇବା</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Corruption -->
+                <div class="subcategory-item">
+                    <div class="subcategory-header" onclick="toggleLinks('corruption')">
+                        <span class="subcategory-icon">⚠️</span>
+                        <span class="subcategory-title">ଦୁର୍ନୀତି ଅଭିଯୋଗ</span>
+                        <span class="arrow" id="arrow-corruption">▶</span>
+                    </div>
+                    <div class="links-container" id="corruption">
+                        <a href="https://vigilance.odisha.gov.in/lodge_a_complaint/" class="link-item" target="_blank">
+                            <span class="link-icon">🏛️</span>
+                            <span class="link-text">ରାଜ୍ୟ କର୍ମଚାରୀ</span>
+                        </a>
+                        <a href="https://portal.cvc.gov.in/" class="link-item" target="_blank">
+                            <span class="link-icon">🇮🇳</span>
+                            <span class="link-text">କେନ୍ଦ୍ର କର୍ମଚାରୀ</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Negligence -->
+                <div class="subcategory-item">
+                    <div class="subcategory-header" onclick="toggleLinks('negligence')">
+                        <span class="subcategory-icon">🏥</span>
+                        <span class="subcategory-title">ସେବା ଅବହେଳା</span>
+                        <span class="arrow" id="arrow-negligence">▶</span>
+                    </div>
+                    <div class="links-container" id="negligence">
+                        <a href="https://health.odisha.gov.in/health/citizen-information/telephone-directory" class="link-item" target="_blank">
+                            <span class="link-icon">🏥</span>
+                            <span class="link-text">ଚିକିତ୍ସା ଅବହେଳା</span>
+                        </a>
+                        <a href="https://studenthelplineodisha.nic.in/citizen/grievance.php?TabID=L" class="link-item" target="_blank">
+                            <span class="link-icon">🏫</span>
+                            <span class="link-text">ସ୍କୁଲ୍ ଅବହେଳା</span>
+                        </a>
+                        <a href="https://samadhaan.ugc.ac.in/Home" class="link-item" target="_blank">
+                            <span class="link-icon">🎓</span>
+                            <span class="link-text">କଲେଜ୍ ଅବହେଳା</span>
+                        </a>
+                        <a href="https://www.antiragging.in/complaint_register_form.html" class="link-item" target="_blank">
+                            <span class="link-icon">🚫</span>
+                            <span class="link-text">ରେଗିଂ ଅଭିଯୋଗ</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Newspapers -->
+        <div class="category-card">
+            <div class="category-header" onclick="toggleCategory('newspaper')">
+                <span class="category-icon">📰</span>
+                <span class="category-title">ଦୈନିକ ଖବରକାଗଜ</span>
+                <span class="arrow" id="arrow-newspaper">▶</span>
+            </div>
+            <div class="subcategory-content" id="newspaper">
+                <div class="links-container open">
+                    <a href="https://samajaepaper.in/" class="link-item" target="_blank">
+                        <span class="link-icon">📰</span>
+                        <span class="link-text">ସମାଜ</span>
+                    </a>
+                    <a href="https://dharitriepaper.in/" class="link-item" target="_blank">
+                        <span class="link-icon">📰</span>
+                        <span class="link-text">ଧରିତ୍ରୀ</span>
+                    </a>
+                    <a href="https://sambadepaper.com/" class="link-item" target="_blank">
+                        <span class="link-icon">📰</span>
+                        <span class="link-text">ସମ୍ବାଦ</span>
+                    </a>
+                    <a href="https://www.prameyaepaper.com/" class="link-item" target="_blank">
+                        <span class="link-icon">📰</span>
+                        <span class="link-text">ପ୍ରମେୟ</span>
+                    </a>
+                    <a href="https://www.theprajatantra.org/prajatantra/" class="link-item" target="_blank">
+                        <span class="link-icon">📰</span>
+                        <span class="link-text">ପ୍ରଜାତନ୍ତ୍ର</span>
+                    </a>
+                    <a href="http://nitidinepaper.com/" class="link-item" target="_blank">
+                        <span class="link-icon">📰</span>
+                        <span class="link-text">ନିତିଦିନ</span>
+                    </a>
+                    <a href="https://pragativadi.com/epaper/" class="link-item" target="_blank">
+                        <span class="link-icon">📰</span>
+                        <span class="link-text">ପ୍ରଗତିବାଦୀ</span>
+                    </a>
+                    <a href="https://www.sakalaepaper.com/" class="link-item" target="_blank">
+                        <span class="link-icon">📰</span>
+                        <span class="link-text">ସକାଳ</span>
+                    </a>
+                    <a href="https://suryaprava.co.in/" class="link-item" target="_blank">
+                        <span class="link-icon">📰</span>
+                        <span class="link-text">ସୂର୍ଯ୍ୟପ୍ରଭା</span>
+                    </a>
+                    <a href="https://dinalipiepaper.com/" class="link-item" target="_blank">
+                        <span class="link-icon">📰</span>
+                        <span class="link-text">ଦିନଲିପି</span>
+                    </a>
+                    <a href="https://sarbasadharana.com/" class="link-item" target="_blank">
+                        <span class="link-icon">📰</span>
+                        <span class="link-text">ସର୍ବସାଧାରଣ</span>
+                    </a>
+                    <a href="https://odiapua.com/" class="link-item" target="_blank">
+                        <span class="link-icon">📰</span>
+                        <span class="link-text">ଓଡିଆପୁଅ</span>
+                    </a>
+                    <a href="https://odishabhaskar.com/" class="link-item" target="_blank">
+                        <span class="link-icon">📰</span>
+                        <span class="link-text">ଓଡିଶା ଭାସ୍କର</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>💙 ଓଡିଶାର ସେବାରେ</p>
+            <p style="font-size: 12px; margin-top: 5px;">ସମସ୍ତ ସରକାରୀ ସେବା ଏକ ସ୍ଥାନରେ</p>
+            
+            <!-- Footer Links -->
+            <div class="footer-links">
+                <a href="javascript:void(0)" onclick="showModal('privacy')" class="footer-link">ଗୋପନୀୟତା ନୀତି</a>
+                <span class="footer-separator">•</span>
+                <a href="javascript:void(0)" onclick="showModal('terms')" class="footer-link">ସର୍ତ୍ତାବଳୀ</a>
+                <span class="footer-separator">•</span>
+                <a href="javascript:void(0)" onclick="showModal('disclaimer')" class="footer-link">ଦାୟିତ୍ୱ ପରିତ୍ୟାଗ</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+
+    <!-- Privacy Policy Modal -->
+    <div class="modal" id="privacyModal">
+        <div class="modal-header">
+            <h2>🔒 ଗୋପନୀୟତା ନୀତି</h2>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <div class="modal-content">
+            <h3>Privacy Policy</h3>
+            
+            <p><strong>Last Updated:</strong> February 15, 2026</p>
+            
+            <h4>1. ସୂଚନା ସଂଗ୍ରହ (Information Collection)</h4>
+            <p>ଏହି ଆପ୍ ଆମେ ନିଜେ କୌଣସି ବ୍ୟକ୍ତିଗତ ସୂଚନା ସଂଗ୍ରହ କରୁନାହୁଁ। ଆମେ ଆପଣଙ୍କର ନାମ, ଇମେଲ୍, ଫୋନ୍ ନମ୍ବର, ଠିକଣା କିମ୍ବା ଅନ୍ୟ କୌଣସି ପରିଚୟ ସୂଚନା ସଂଗ୍ରହ କରୁନାହୁଁ। ତଥାପି, ଆପଣଙ୍କ ବ୍ରାଉଜର୍ କିମ୍ବା ଇଣ୍ଟରନେଟ୍ ସେବା ପ୍ରଦାନକାରୀ ସ୍ୱୟଂଚାଳିତ ଭାବରେ ଆପଣଙ୍କ IP ଠିକଣା, ବ୍ରାଉଜର୍ ପ୍ରକାର, ଭିଜିଟ୍ ସମୟ, ଏବଂ ୱେବ୍ ହିଷ୍ଟୋରୀ ଭଳି ସୂଚନା ସଂଗ୍ରହ କରିପାରେ। ଏହି ସୂଚନା ଆମ ନିୟନ୍ତ୍ରଣରେ ନାହିଁ।</p>
+            <p><em>We ourselves do not collect any personal information. We do not collect your name, email, phone number, address, or any other identifying information. However, your browser or internet service provider may automatically collect information such as your IP address, browser type, visit time, and web browsing history. This information is not under our control.</em></p>
+            
+            <h4>2. ଡାଟା ଷ୍ଟୋରେଜ୍ ଓ ସୁରକ୍ଷା (Data Storage & Security)</h4>
+            <p>କୌଣସି ଉପଭୋକ୍ତା ଡାଟା ଆମ ସର୍ଭରରେ ସଂରକ୍ଷିତ ହୁଏ ନାହିଁ। ଏହି ଆପ୍ କେବଳ ଆପଣଙ୍କ ବ୍ରାଉଜରରେ ଚାଲେ ଏବଂ କୌଣସି ସର୍ଭର ସହିତ ଯୋଗାଯୋଗ କରେ ନାହିଁ।</p>
+            <p><em>No user data is stored on our servers. This app runs only in your browser and does not communicate with any servers.</em></p>
+            
+            <h4>3. ବ୍ରାଉଜର୍ ଓ ସିଷ୍ଟମ୍ ଡାଟା (Browser & System Data)</h4>
+            <p>ଆପଣଙ୍କ ବ୍ରାଉଜର୍, ଅପରେଟିଂ ସିଷ୍ଟମ୍, ଇଣ୍ଟରନେଟ୍ ସେବା ପ୍ରଦାନକାରୀ, ବା ମୋବାଇଲ୍ ନେଟୱାର୍କ ଆପଣଙ୍କ ୱେବ୍ ଗତିବିଧି, IP ଠିକଣା, ଲୋକେସନ୍, ଡିଭାଇସ୍ ସୂଚନା ଇତ୍ୟାଦି ସଂଗ୍ରହ ଓ ସଂରକ୍ଷଣ କରିପାରେ। ଏହା ସେମାନଙ୍କର ସ୍ଥାନୀୟ ନୀତି ଅନୁସାରେ ହୁଏ ଏବଂ ଆମ ନିୟନ୍ତ୍ରଣରେ ନାହିଁ। ଆପଣଙ୍କ ଗୋପନୀୟତା ପାଇଁ ଦୟାକରି ଆପଣଙ୍କ ବ୍ରାଉଜର୍ ସେଟିଂସ୍, ଇଣ୍ଟରନେଟ୍ ସେବା ପ୍ରଦାନକାରୀ ନୀତି, ଏବଂ ମୋବାଇଲ୍ ନେଟୱାର୍କ ନୀତି ପରୀକ୍ଷା କରନ୍ତୁ।</p>
+            <p><em>Your browser, operating system, internet service provider, or mobile network may collect and store your web activity, IP address, location, device information, etc. This happens according to their local policies and is not under our control. For your privacy, please check your browser settings, internet service provider policies, and mobile network policies.</em></p>
+            
+            <h4>4. ତୃତୀୟ ପକ୍ଷ ଲିଙ୍କ୍ (Third-Party Links)</h4>
+            
+            <h4>4. ତୃତୀୟ ପକ୍ଷ ଲିଙ୍କ୍ (Third-Party Links)</h4>
+            <p>ଏହି ଆପ୍ ସରକାରୀ ୱେବସାଇଟ୍ ଲିଙ୍କ୍ ପ୍ରଦାନ କରେ। ଆପଣ ଲିଙ୍କ୍ କ୍ଲିକ୍ କଲେ ସରକାରୀ ୱେବସାଇଟ୍ କୁ ରିଡାଇରେକ୍ଟ ହେବେ। ସେହି ୱେବସାଇଟ୍ ଗୁଡିକର ଗୋପନୀୟତା ନୀତି ପାଇଁ ଆମେ ଦାୟୀ ନୁହେଁ। ଦୟାକରି ସେହି ୱେବସାଇଟ୍ ର ଗୋପନୀୟତା ନୀତି ପଢନ୍ତୁ।</p>
+            <p><em>This app provides links to government websites. When you click a link, you will be redirected to the government website. We are not responsible for the privacy policies of those websites. Please read their privacy policies.</em></p>
+            
+            <h4>5. କୁକିଜ୍ ଓ ଟ୍ରାକିଂ (Cookies & Tracking)</h4>
+            <p>ଏହି ଆପ୍ କୁକିଜ୍, ଆନାଲିଟିକ୍ସ, କିମ୍ବା କୌଣସି ପ୍ରକାର ଟ୍ରାକିଂ ଟେକ୍ନୋଲୋଜି ବ୍ୟବହାର କରେ ନାହିଁ। ଆମେ ଆପଣଙ୍କ ଗତିବିଧି ଟ୍ରାକ୍ କରୁନାହୁଁ।</p>
+            <p><em>This app does not use cookies, analytics, or any tracking technology. We do not track your activity.</em></p>
+            
+            <h4>6. ଫୋନ୍ କଲ୍ (Phone Calls)</h4>
+            <p>ଜରୁରୀକାଳୀନ ନମ୍ବର କଲ୍ କରିବା ପାଇଁ ଆପ୍ ଆପଣଙ୍କ ଫୋନ୍ର ଡାଏଲର ବ୍ୟବହାର କରେ। ଆମେ କଲ୍ ରେକର୍ଡ କରୁନାହୁଁ କିମ୍ବା କଲ୍ ସୂଚନା ସଂଗ୍ରହ କରୁନାହୁଁ।</p>
+            <p><em>The app uses your phone's dialer to make emergency calls. We do not record calls or collect call information.</em></p>
+            
+            <h4>7. ଶିଶୁ ଗୋପନୀୟତା (Children's Privacy)</h4>
+            <p>ଏହି ଆପ୍ ସମସ୍ତ ବୟସର ଲୋକଙ୍କ ପାଇଁ ଉପଯୁକ୍ତ। ଆମେ ଜାଣି ଶିଶୁମାନଙ୍କଠାରୁ ସୂଚନା ସଂଗ୍ରହ କରୁନାହୁଁ।</p>
+            <p><em>This app is suitable for all ages. We do not knowingly collect information from children.</em></p>
+            
+            <h4>8. ପରିବର୍ତ୍ତନ (Changes to Privacy Policy)</h4>
+            <p>ଆମେ ଏହି ଗୋପନୀୟତା ନୀତିରେ ଯେକୌଣସି ସମୟରେ ପରିବର୍ତ୍ତନ କରିପାରିବା। ପରିବର୍ତ୍ତନଗୁଡିକ ତୁରନ୍ତ ଲାଗୁ ହେବ।</p>
+            <p><em>We may update this privacy policy at any time. Changes will be effective immediately.</em></p>
+            
+            <h4>9. ଯୋଗାଯୋଗ (Contact)</h4>
+            <p>ଗୋପନୀୟତା ସମ୍ବନ୍ଧରେ ପ୍ରଶ୍ନ ଥିଲେ ଆମ ସହିତ ଯୋଗାଯୋଗ କରନ୍ତୁ।</p>
+            <p><em>For privacy-related questions, please contact us.</em></p>
+        </div>
+    </div>
+
+    <!-- Terms and Conditions Modal -->
+    <div class="modal" id="termsModal">
+        <div class="modal-header">
+            <h2>📋 ସର୍ତ୍ତାବଳୀ</h2>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <div class="modal-content">
+            <h3>Terms and Conditions</h3>
+            
+            <p><strong>Last Updated:</strong> February 15, 2026</p>
+            
+            <h4>1. ସେବା ସ୍ୱୀକୃତି (Acceptance of Terms)</h4>
+            <p>ଏହି ଆପ୍ ବ୍ୟବହାର କରି ଆପଣ ଏହି ସର୍ତ୍ତାବଳୀ ସହମତ ହେଉଛନ୍ତି। ଯଦି ଆପଣ ସହମତ ନୁହଁନ୍ତି, ଦୟାକରି ଏହି ଆପ୍ ବ୍ୟବହାର କରନ୍ତୁ ନାହିଁ।</p>
+            <p><em>By using this app, you agree to these terms and conditions. If you do not agree, please do not use this app.</em></p>
+            
+            <h4>2. ସେବା ବ୍ୟବହାର (Use of Service)</h4>
+            <p>ଏହି ଆପ୍ କେବଳ ଶିକ୍ଷାମୂଳକ ଓ ସୂଚନାମୂଳକ ଉଦ୍ଦେଶ୍ୟରେ ସରକାରୀ ପୋର୍ଟାଲ୍ ଲିଙ୍କ୍ ପ୍ରଦାନ କରେ। ଏହା ଏକ ନିର୍ଦ୍ଦେଶିକା ମାତ୍ର, ସରକାରୀ ସେବା ନୁହେଁ।</p>
+            <p><em>This app provides government portal links for educational and informational purposes only. It is a directory, not a government service.</em></p>
+            
+            <h4>3. ସରକାରଙ୍କ ସହିତ ସମ୍ବନ୍ଧ (Government Affiliation)</h4>
+            <p><strong>ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ:</strong> ଏହି ଆପ୍ କୌଣସି ସରକାରୀ ସଂସ୍ଥା, ରାଜ୍ୟ ସରକାର, କେନ୍ଦ୍ର ସରକାର କିମ୍ବା କୌଣସି ସରକାରୀ ବିଭାଗ ସହିତ ସମ୍ବନ୍ଧିତ, ଅନୁମୋଦିତ, ପ୍ରାୟୋଜିତ କିମ୍ବା ସମର୍ଥିତ ନୁହେଁ। ଏହା ଏକ ସ୍ୱତନ୍ତ୍ର ଶିକ୍ଷାମୂଳକ ପ୍ରୟାସ।</p>
+            <p><em><strong>Important:</strong> This app is not affiliated with, endorsed by, sponsored by, or supported by any government agency, state government, central government, or any government department. This is an independent educational initiative.</em></p>
+            
+            <h4>4. ସୂଚନା ସଠିକତା (Information Accuracy)</h4>
+            <p>ଆମେ ସଠିକ୍ ଓ ଅଦ୍ୟତନ ସୂଚନା ପ୍ରଦାନ କରିବାକୁ ସର୍ବୋଚ୍ଚ ଚେଷ୍ଟା କରୁଛୁ, କିନ୍ତୁ ତ୍ରୁଟି, ଅସମ୍ପୂର୍ଣ୍ଣତା କିମ୍ବା ପୁରାତନ ସୂଚନା ରହିପାରେ। ଲିଙ୍କ୍, ଫୋନ୍ ନମ୍ବର ବଦଳିପାରେ।</p>
+            <p><em>We strive to provide accurate and up-to-date information, but errors, incompleteness, or outdated information may exist. Links and phone numbers may change.</em></p>
+            
+            <h4>5. ବାହ୍ୟ ଲିଙ୍କ୍ ଦାୟିତ୍ୱ (External Link Responsibility)</h4>
+            <p>ଆମେ କେବଳ ସରକାରୀ ୱେବସାଇଟ୍ ଲିଙ୍କ୍ ପ୍ରଦାନ କରୁଛୁ। ସେହି ୱେବସାଇଟ୍ର ବିଷୟବସ୍ତୁ, ଉପଲବ୍ଧତା, କାର୍ଯ୍ୟକ୍ଷମତା, ସୁରକ୍ଷା କିମ୍ବା ଗୋପନୀୟତା ପାଇଁ ଆମେ ଦାୟୀ ନୁହେଁ।</p>
+            <p><em>We only provide links to government websites. We are not responsible for their content, availability, functionality, security, or privacy.</em></p>
+            
+            <h4>6. କୌଣସି ଗ୍ୟାରେଣ୍ଟି ନାହିଁ (No Warranty)</h4>
+            <p>ଏହି ଆପ୍ "ଯେପରି ଅଛି" ଭିତ୍ତିରେ ପ୍ରଦାନ କରାଯାଏ। ଆମେ କୌଣସି ପ୍ରକାର ସ୍ପଷ୍ଟ କିମ୍ବା ଅନ୍ତର୍ନିହିତ ଗ୍ୟାରେଣ୍ଟି ପ୍ରଦାନ କରୁନାହୁଁ।</p>
+            <p><em>This app is provided "as is" without any express or implied warranties.</em></p>
+            
+            <h4>7. ଦାୟିତ୍ୱ ସୀମା (Limitation of Liability)</h4>
+            <p>ଏହି ଆପ୍ ବ୍ୟବହାରରୁ ଉତ୍ପନ୍ନ କୌଣସି ପ୍ରତ୍ୟକ୍ଷ, ପରୋକ୍ଷ, ଆକସ୍ମିକ, ବିଶେଷ କିମ୍ବା ପରିଣାମସ୍ୱରୂପ କ୍ଷତି ପାଇଁ ଆମେ ଦାୟୀ ନୁହେଁ।</p>
+            <p><em>We are not liable for any direct, indirect, incidental, special, or consequential damages arising from use of this app.</em></p>
+            
+            <h4>8. ଉପଭୋକ୍ତା ଦାୟିତ୍ୱ (User Responsibility)</h4>
+            <p>ଉପଭୋକ୍ତାମାନେ ନିଜ ବିବେକ ଏବଂ ଦାୟିତ୍ୱରେ ଏହି ସୂଚନା ବ୍ୟବହାର କରିବେ। ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ ସରକାରୀ କାର୍ଯ୍ୟ ପୂର୍ବରୁ ସରକାରୀ ୱେବସାଇଟ୍ରେ ସିଧାସଳଖ ଯାଞ୍ଚ କରନ୍ତୁ।</p>
+            <p><em>Users should use this information at their own discretion and responsibility. Verify directly on government websites before important government actions.</em></p>
+            
+            <h4>9. ସେବା ପରିବର୍ତ୍ତନ ଓ ବନ୍ଦ (Service Modification & Termination)</h4>
+            <p>ଆମେ ବିନା ପୂର୍ବ ସୂଚନାରେ ଏହି ସେବାରେ ପରିବର୍ତ୍ତନ, ସ୍ଥଗିତ କିମ୍ବା ବନ୍ଦ କରିପାରିବା।</p>
+            <p><em>We may modify, suspend, or discontinue this service without prior notice.</em></p>
+            
+            <h4>10. ବ୍ୟବହାର ନିଷେଧ (Prohibited Use)</h4>
+            <p>ଆପଣ ଏହି ଆପ୍ କୌଣସି ବେଆଇନ, କ୍ଷତିକାରକ କିମ୍ବା ଅନୈତିକ ଉଦ୍ଦେଶ୍ୟରେ ବ୍ୟବହାର କରିବେ ନାହିଁ।</p>
+            <p><em>You may not use this app for any illegal, harmful, or unethical purpose.</em></p>
+            
+            <h4>11. ବୌଦ୍ଧିକ ସମ୍ପତ୍ତି (Intellectual Property)</h4>
+            <p>ଏହି ଆପ୍ର ବିଷୟବସ୍ତୁ ଶିକ୍ଷାମୂଳକ ଉଦ୍ଦେଶ୍ୟରେ ପ୍ରଦାନ କରାଯାଇଛି। ସମସ୍ତ ସରକାରୀ ଲୋଗୋ ଓ ସାମଗ୍ରୀ ସମ୍ପୃକ୍ତ ସରକାରୀ ସଂସ୍ଥାର ସମ୍ପତ୍ତି।</p>
+            <p><em>The content of this app is provided for educational purposes. All government logos and materials are property of respective government agencies.</em></p>
+            
+            <h4>12. ଆଇନଗତ ଅଧିକାର କ୍ଷେତ୍ର (Governing Law)</h4>
+            <p>ଏହି ସର୍ତ୍ତାବଳୀ ଭାରତୀୟ ଆଇନ ଦ୍ୱାରା ଶାସିତ ହେବ।</p>
+            <p><em>These terms shall be governed by the laws of India.</em></p>
+        </div>
+    </div>
+
+    <!-- Disclaimer Modal -->
+    <div class="modal" id="disclaimerModal">
+        <div class="modal-header">
+            <h2>⚠️ ଦାୟିତ୍ୱ ପରିତ୍ୟାଗ</h2>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <div class="modal-content">
+            <h3>Disclaimer</h3>
+            
+            <p><strong>Last Updated:</strong> February 15, 2026</p>
+            
+            <p style="background: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; border-radius: 8px; margin-bottom: 20px;"><strong>⚠️ ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ ସୂଚନା:</strong> ଏହି ଆପ୍ କୌଣସି ସରକାରୀ ସଂସ୍ଥାର ଅଂଶ ନୁହେଁ। କେବଳ ଶିକ୍ଷାମୂଳକ ସୂଚନା ପ୍ରଦାନ କରେ।</p>
+            
+            <h4>1. ସାଧାରଣ ଦାୟିତ୍ୱ ପରିତ୍ୟାଗ (General Disclaimer)</h4>
+            <p>ଏହି ଆପ୍ "ଯେପରି ଅଛି" (AS IS) ଏବଂ "ଯେମିତି ଉପଲବ୍ଧ" (AS AVAILABLE) ଭିତ୍ତିରେ ପ୍ରଦାନ କରାଯାଏ। ଆମେ କୌଣସି ପ୍ରକାର ସ୍ପଷ୍ଟ, ଅନ୍ତର୍ନିହିତ, ବୈଧାନିକ କିମ୍ବା ଅନ୍ୟ କୌଣସି ଗ୍ୟାରେଣ୍ଟି ପ୍ରଦାନ କରୁନାହୁଁ।</p>
+            <p><em>This app is provided "AS IS" and "AS AVAILABLE" without any express, implied, statutory, or other warranties of any kind.</em></p>
+            
+            <h4>2. ସରକାରୀ ସମ୍ବନ୍ଧ (Government Affiliation)</h4>
+            <p><strong>ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ:</strong> ଏହି ଆପ୍ କୌଣସି ସରକାରୀ ସଂସ୍ଥା, ରାଜ୍ୟ ସରକାର, କେନ୍ଦ୍ର ସରକାର, ସରକାରୀ ବିଭାଗ, କିମ୍ବା ସରକାରୀ କର୍ମଚାରୀଙ୍କ ସହିତ କୌଣସି ପ୍ରକାରେ ସମ୍ବନ୍ଧିତ, ଅନୁମୋଦିତ, ପ୍ରାୟୋଜିତ, ସମର୍ଥିତ କିମ୍ବା ଅନୁବନ୍ଧିତ ନୁହେଁ। ଏହା ଏକ ସଂପୂର୍ଣ୍ଣ ସ୍ୱତନ୍ତ୍ର, ବେସରକାରୀ, ଅଲାଭଜନକ ଶିକ୍ଷାମୂଳକ ପ୍ରୟାସ।</p>
+            <p><em><strong>Important:</strong> This app is NOT in any way affiliated with, endorsed by, sponsored by, supported by, or connected to any government agency, state government, central government, government department, or government employee. This is a completely independent, private, non-profit educational initiative.</em></p>
+            
+            <h4>3. ସୂଚନା ସଠିକତା ଓ ସମ୍ପୂର୍ଣ୍ଣତା (Information Accuracy & Completeness)</h4>
+            <p>ଯଦିଓ ଆମେ ସଠିକ୍, ସମ୍ପୂର୍ଣ୍ଣ ଏବଂ ଅଦ୍ୟତନ ସୂଚନା ପ୍ରଦାନ କରିବାକୁ ସର୍ବୋଚ୍ଚ ଚେଷ୍ଟା କରୁଛୁ, ତଥାପି ଲିଙ୍କ୍, ଫୋନ୍ ନମ୍ବର, ଠିକଣା, କିମ୍ବା ସୂଚନାରେ ତ୍ରୁଟି, ଅସମ୍ପୂର୍ଣ୍ଣତା, ଅସଙ୍ଗତି, କିମ୍ବା ପୁରାତନ ତଥ୍ୟ ରହିପାରେ। ସରକାରୀ ନୀତି, ପ୍ରକ୍ରିୟା, ଲିଙ୍କ୍ ଏବଂ ନମ୍ବର ବଦଳିପାରେ।</p>
+            <p><em>While we strive to provide accurate, complete, and up-to-date information, errors, incompleteness, inconsistencies, or outdated data may exist in links, phone numbers, addresses, or information. Government policies, procedures, links, and numbers may change.</em></p>
+            
+            <h4>4. କୌଣସି ଦାୟିତ୍ୱ ନାହିଁ (No Liability)</h4>
+            <p>ଏହି ଆପ୍ ବ୍ୟବହାର କିମ୍ବା ବ୍ୟବହାର କରିବାରେ ଅସମର୍ଥତାରୁ ଉତ୍ପନ୍ନ କୌଣସି ପ୍ରତ୍ୟକ୍ଷ, ପରୋକ୍ଷ, ଆକସ୍ମିକ, ବିଶେଷ, ଉଦାହରଣମୂଳକ, ଦଣ୍ଡନୀୟ କିମ୍ବା ପରିଣାମସ୍ୱରୂପ କ୍ଷତି, କ୍ଷୟକ୍ଷତି, ବ୍ୟୟ, ଡାଟା ହାନି, ବ୍ୟବସାୟ କ୍ଷତି, ଲାଭ ହାନି, କିମ୍ବା କୌଣସି ପ୍ରକାର କ୍ଷତି ପାଇଁ ଆମେ କୌଣସି ପ୍ରକାରେ ଦାୟୀ ନୁହେଁ।</p>
+            <p><em>We are NOT liable in any way for any direct, indirect, incidental, special, exemplary, punitive, or consequential damages, losses, costs, data loss, business interruption, loss of profits, or any harm arising from use or inability to use this app.</em></p>
+            
+            <h4>5. ବାହ୍ୟ ୱେବସାଇଟ୍ ଦାୟିତ୍ୱ (External Website Responsibility)</h4>
+            <p>ଆମେ କେବଳ ସରକାରୀ ୱେବସାଇଟ୍ର ଲିଙ୍କ୍ ପ୍ରଦାନ କରୁଛୁ। ସେହି ୱେବସାଇଟ୍ର ବିଷୟବସ୍ତୁ, ସଠିକତା, ଉପଲବ୍ଧତା, କାର୍ଯ୍ୟକ୍ଷମତା, ସୁରକ୍ଷା, ଗୋପନୀୟତା, ବ୍ୟବସାୟ ଅଭ୍ୟାସ, କିମ୍ବା ସେବା ଗୁଣବତ୍ତା ପାଇଁ ଆମେ କୌଣସି ପ୍ରକାରେ ଦାୟୀ ନୁହେଁ।</p>
+            <p><em>We only provide links to government websites. We are NOT responsible in any way for their content, accuracy, availability, functionality, security, privacy, business practices, or quality of service.</em></p>
+            
+            <h4>6. ଶିକ୍ଷାମୂଳକ ଉଦ୍ଦେଶ୍ୟ (Educational Purpose Only)</h4>
+            <p>ଏହି ଆପ୍ କେବଳ ଓ କେବଳ ଶିକ୍ଷାମୂଳକ ଓ ସୂଚନାମୂଳକ ଉଦ୍ଦେଶ୍ୟରେ ଗ୍ରାମାଞ୍ଚଳ ଲୋକମାନଙ୍କୁ ସରକାରୀ ସେବା ଖୋଜିବାରେ ସାହାଯ୍ୟ କରିବା ପାଇଁ ସୃଷ୍ଟି କରାଯାଇଛି। ଏହା କୌଣସି ସରକାରୀ ସେବା, ପରାମର୍ଶ, କିମ୍ବା ନିଶ୍ଚିତତା ନୁହେଁ।</p>
+            <p><em>This app is created solely and exclusively for educational and informational purposes to help rural people find government services. It is NOT a government service, advice, or guarantee.</em></p>
+            
+            <h4>7. ଉପଭୋକ୍ତା ଦାୟିତ୍ୱ ଓ ସତର୍କତା (User Responsibility & Caution)</h4>
+            <p>ଉପଭୋକ୍ତାମାନେ ନିଜ ବିବେକ, ବିଚାର ଏବଂ ସମ୍ପୂର୍ଣ୍ଣ ଦାୟିତ୍ୱରେ ଏହି ସୂଚନା ବ୍ୟବହାର କରିବେ। ଯେକୌଣସି ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ ସରକାରୀ କାର୍ଯ୍ୟ କରିବା ପୂର୍ବରୁ ସିଧାସଳଖ ସରକାରୀ ୱେବସାଇଟ୍ରେ ଯାଞ୍ଚ କରନ୍ତୁ। ସନ୍ଦେହ ଥିଲେ ସ୍ଥାନୀୟ ସରକାରୀ କାର୍ଯ୍ୟାଳୟରେ ସିଧା ଯୋଗାଯୋଗ କରନ୍ତୁ।</p>
+            <p><em>Users should use this information at their own discretion, judgment, and complete responsibility. Always verify directly on government websites before any important government action. When in doubt, contact local government offices directly.</em></p>
+            
+            <h4>8. ଆଇନଗତ ବା ବୃତ୍ତିଗତ ପରାମର୍ଶ ନୁହେଁ (Not Legal or Professional Advice)</h4>
+            <p>ଏହି ଆପ୍ରେ ପ୍ରଦତ୍ତ ସୂଚନା ଆଇନଗତ, ବୃତ୍ତିଗତ, ଚିକିତ୍ସା, ଆର୍ଥିକ କିମ୍ବା କୌଣସି ପ୍ରକାର ବିଶେଷଜ୍ଞ ପରାମର୍ଶ ନୁହେଁ। ବିଶେଷଜ୍ଞ ପରାମର୍ଶ ପାଇଁ ଯୋଗ୍ୟ ବୃତ୍ତିଜୀବୀଙ୍କ ସହ ପରାମର୍ଶ କରନ୍ତୁ।</p>
+            <p><em>Information provided in this app is NOT legal, professional, medical, financial, or any kind of expert advice. Consult qualified professionals for expert advice.</em></p>
+            
+            <h4>9. ଜରୁରୀକାଳୀନ ସେବା ସୀମା (Emergency Service Limitations)</h4>
+            <p>ଯଥାର୍ଥ ଜରୁରୀକାଳୀନ ପରିସ୍ଥିତିରେ ତୁରନ୍ତ 112, 100, 108, 101 ନମ୍ବରରେ କଲ୍ କରନ୍ତୁ କିମ୍ବା ନିକଟସ୍ଥ ପୋଲିସ୍ ଷ୍ଟେସନ୍/ହସ୍ପିଟାଲ୍ କୁ ଯାଆନ୍ତୁ। ଏହି ଆପ୍ ଜରୁରୀକାଳୀନ ସେବା ପ୍ରଦାନ କରେ ନାହିଁ।</p>
+            <p><em>In genuine emergencies, call 112, 100, 108, 101 immediately or go to nearest police station/hospital. This app does NOT provide emergency services.</em></p>
+            
+            <h4>10. କ୍ଷତିପୂରଣ (Indemnification)</h4>
+            <p>ଆପଣ ଏହି ଆପ୍ ବ୍ୟବହାରରୁ ଉତ୍ପନ୍ନ କୌଣସି ଦାବୀ, କ୍ଷତି, କିମ୍ବା ଦାୟିତ୍ୱରୁ ଆମକୁ କ୍ଷତିପୂରଣ ଦେବେ ଏବଂ କ୍ଷତିମୁକ୍ତ ରଖିବେ।</p>
+            <p><em>You agree to indemnify and hold us harmless from any claims, damages, or liabilities arising from your use of this app.</em></p>
+            
+            <h4>11. ସେବା ପ୍ରାପ୍ୟତା (Service Availability)</h4>
+            <p>ଆମେ ନିରନ୍ତର, ନିରାପଦ, ତ୍ରୁଟିମୁକ୍ତ କିମ୍ବା ବାଧାହୀନ ସେବା ଗ୍ୟାରେଣ୍ଟି ଦେଉନାହୁଁ। ସେବା ଯେକୌଣସି ସମୟରେ ଅନୁପଲବ୍ଧ ହୋଇପାରେ।</p>
+            <p><em>We do NOT guarantee continuous, secure, error-free, or uninterrupted service. Service may be unavailable at any time.</em></p>
+            
+            <h4>12. ବୌଦ୍ଧିକ ସମ୍ପତ୍ତି ଦାବି ବର୍ଜନ (Intellectual Property Disclaimer)</h4>
+            <p>ସମସ୍ତ ସରକାରୀ ଲୋଗୋ, ନାମ, ଟ୍ରେଡମାର୍କ ଏବଂ ସାମଗ୍ରୀ ସମ୍ପୃକ୍ତ ସରକାରୀ ସଂସ୍ଥାର ସମ୍ପତ୍ତି। ଆମର କୌଣସି ଦାବୀ ନାହିଁ ଏବଂ କେବଳ ସୂଚନାମୂଳକ ଉଦ୍ଦେଶ୍ୟରେ ବ୍ୟବହାର କରାଯାଇଛି।</p>
+            <p><em>All government logos, names, trademarks, and materials are property of respective government agencies. We make no claims and use them for informational purposes only.</em></p>
+        </div>
+    </div>
+
+    <script>
+        // Toggle How To Use section
+        function toggleHowTo() {
+            const content = document.getElementById('howToContent');
+            const arrow = document.getElementById('arrow-howto');
+            
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                arrow.classList.remove('open');
+            } else {
+                content.classList.add('open');
+                arrow.classList.add('open');
+            }
+        }
+
+        // Toggle category
+        function toggleCategory(id) {
+            const content = document.getElementById(id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                arrow.classList.remove('open');
+            } else {
+                // Close all other categories
+                document.querySelectorAll('.subcategory-content').forEach(el => {
+                    el.classList.remove('open');
+                });
+                document.querySelectorAll('.category-header .arrow').forEach(el => {
+                    el.classList.remove('open');
+                });
+                
+                content.classList.add('open');
+                arrow.classList.add('open');
+            }
+        }
+
+        // Toggle links
+        function toggleLinks(id) {
+            const content = document.getElementById(id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                arrow.classList.remove('open');
+            } else {
+                content.classList.add('open');
+                arrow.classList.add('open');
+            }
+        }
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        
+        // Create search mappings for English to Odia
+        const searchMappings = {
+            'police': ['ପୋଲିସ୍', 'police', '100'],
+            'ambulance': ['ଆମ୍ବୁଲାନ୍ସ', 'ambulance', '108', '102'],
+            'fire': ['ଦମକଳ', 'fire', '101'],
+            'emergency': ['ଜରୁରୀ', 'emergency', '112'],
+            'hospital': ['ଚିକିତ୍ସା', 'hospital'],
+            'railway': ['ରେଳ', 'railway', 'train'],
+            'bank': ['ବ୍ୟାଙ୍କ', 'bank'],
+            'electricity': ['ବିଦ୍ୟୁତ୍', 'electricity', 'power'],
+            'complaint': ['ଅଭିଯୋଗ', 'complaint'],
+            'cm': ['ମୁଖ୍ୟମନ୍ତ୍ରୀ', 'cm', 'chief minister'],
+            'pm': ['ପ୍ରଧାନମନ୍ତ୍ରୀ', 'pm', 'prime minister'],
+            'court': ['କୋର୍ଟ', 'court'],
+            'newspaper': ['ଖବରକାଗଜ', 'newspaper', 'news'],
+            'women': ['ମହିଳା', 'women', '1091'],
+            'child': ['ଶିଶୁ', 'child', '1098'],
+            'cyber': ['ସାଇବର', 'cyber'],
+            'corruption': ['ଦୁର୍ନୀତି', 'corruption'],
+            'traffic': ['ଟ୍ରାଫିକ୍', 'traffic', '1095'],
+            'gas': ['ଗ୍ୟାସ', 'gas', '1906'],
+            'post': ['ଡାକ', 'post', 'postal'],
+            'telecom': ['ଟେଲିକମ୍', 'telecom', 'mobile'],
+            'upi': ['upi'],
+            'tourist': ['ପର୍ଯ୍ୟଟନ', 'tourist', 'tourism'],
+            'school': ['ସ୍କୁଲ୍', 'school'],
+            'college': ['କଲେଜ୍', 'college'],
+            'university': ['ବିଶ୍ୱବିଦ୍ୟାଳୟ', 'university'],
+            'ragging': ['ରେଗିଂ', 'ragging']
+        };
+        
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                // Reset all items
+                document.querySelectorAll('.link-item').forEach(item => {
+                    item.style.display = 'flex';
+                });
+                document.querySelectorAll('.subcategory-item').forEach(item => {
+                    item.style.display = 'block';
+                });
+                document.querySelectorAll('.links-container').forEach(container => {
+                    container.classList.remove('open');
+                });
+                document.querySelectorAll('.subcategory-content').forEach(container => {
+                    container.classList.remove('open');
+                });
+                return;
+            }
+            
+            // Get all search terms including mapped terms
+            let searchTerms = [searchTerm];
+            for (let key in searchMappings) {
+                if (key.includes(searchTerm) || searchTerm.includes(key)) {
+                    searchTerms = searchTerms.concat(searchMappings[key]);
+                }
+            }
+            
+            const allItems = document.querySelectorAll('.link-item');
+            let hasVisibleItems = false;
+            
+            allItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                let matches = false;
+                
+                // Check if any search term matches
+                for (let term of searchTerms) {
+                    if (text.includes(term.toLowerCase())) {
+                        matches = true;
+                        break;
+                    }
+                }
+                
+                if (matches) {
+                    item.style.display = 'flex';
+                    hasVisibleItems = true;
+                    
+                    // Show parent containers
+                    let linksContainer = item.closest('.links-container');
+                    if (linksContainer) {
+                        linksContainer.classList.add('open');
+                        linksContainer.style.display = 'block';
+                    }
+                    
+                    let subcategoryItem = item.closest('.subcategory-item');
+                    if (subcategoryItem) {
+                        subcategoryItem.style.display = 'block';
+                    }
+                    
+                    let subcategoryContent = item.closest('.subcategory-content');
+                    if (subcategoryContent) {
+                        subcategoryContent.classList.add('open');
+                    }
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Hide empty subcategory items
+            document.querySelectorAll('.subcategory-item').forEach(subcat => {
+                const visibleLinks = subcat.querySelectorAll('.link-item[style="display: flex;"]');
+                if (visibleLinks.length === 0) {
+                    subcat.style.display = 'none';
+                } else {
+                    subcat.style.display = 'block';
+                }
+            });
+        });
+
+        // Prevent default behavior for emergency calls in demo
+        document.querySelectorAll('a[href^="tel:"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Allow the call to proceed
+                console.log('Calling:', this.getAttribute('href'));
+            });
+        });
+
+        // Modal Functions
+        function showModal(type) {
+            closeModal(); // Close any open modal first
+            
+            const overlay = document.getElementById('modalOverlay');
+            overlay.classList.add('show');
+            
+            let modal;
+            if (type === 'privacy') {
+                modal = document.getElementById('privacyModal');
+            } else if (type === 'terms') {
+                modal = document.getElementById('termsModal');
+            } else if (type === 'disclaimer') {
+                modal = document.getElementById('disclaimerModal');
+            }
+            
+            if (modal) {
+                modal.classList.add('show');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            }
+        }
+
+        function closeModal() {
+            const overlay = document.getElementById('modalOverlay');
+            overlay.classList.remove('show');
+            
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.classList.remove('show');
+            });
+            
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
