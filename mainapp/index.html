@@ -841,7 +841,7 @@ function submitApplication(event) {
     if (!name || !contact) { alert('ଦୟାକରି ସମସ୍ତ ଫିଲ୍ଡ ପୂରଣ କରନ୍ତୁ'); return; }
     if (!/^[0-9]{10}$/.test(contact)) { alert('ଦୟାକରି ସଠିକ୍ 10 ଅଙ୍କ ନମ୍ବର ପ୍ରଦାନ କରନ୍ତୁ'); return; }
     const subjectName = currentSubjectInfo ? currentSubjectInfo.name : 'ବିଷୟ';
-    const message = `🎓 *Odisha e-Guru - Coaching Application*\n\nନାମ: ${name}\nଯୋଗାଯୋଗ: ${contact}\nବିଷୟ: ${subjectName}\n\nମୁଁ ଏହି ବିଷୟ ପାଇଁ କୋଚିଂ ନେବାକୁ ଇଛୁକ ।`;
+    const message = `E-Vidya Academy - Coaching Application*\n\nନାମ: ${name}\nଯୋଗାଯୋଗ: ${contact}\nବିଷୟ: ${subjectName}\n\nମୁଁ ଏହି ବିଷୟ ପାଇଁ କୋଚିଂ ନେବାକୁ ଇଛୁକ ।`;
     const whatsappURL = `https://wa.me/+916372296357?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, '_blank');
     alert('ଆପଣଙ୍କ ଆବେଦନ ପଠାଯାଇଛି!');
