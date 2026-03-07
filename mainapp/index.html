@@ -1054,14 +1054,14 @@ function showLevels() {
     const grid = document.getElementById('mainGrid');
     grid.innerHTML = '';
 
-    // First long button - above first two cards
-    const btn1 = document.createElement('a');
-    btn1.href = 'https://evidya.pages.dev/MO%20SATHI/';
-    btn1.target = '_blank';
-    btn1.rel = 'noopener noreferrer';
-    btn1.style.cssText = 'grid-column:1/-1;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;font-size:1.1em;font-weight:900;padding:18px;border-radius:14px;text-decoration:none;box-shadow:0 6px 20px rgba(102,126,234,0.4);letter-spacing:0.5px;';
-    btn1.textContent = 'ଏଠାରେ ମୋ ସାଥି ଆପ୍ କୁ ଯାଆନ୍ତୁ ।';
-    grid.appendChild(btn1);
+   // First long button - above first two cards 
+const btn1 = document.createElement('a');
+btn1.href = 'https://evidya.pages.dev/MO%20SATHI/';
+btn1.target = '_blank';
+btn1.rel = 'noopener noreferrer';
+btn1.style.cssText = 'grid-column:1/-1;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#d32f2f 0%,#8b0000 100%);color:#ffffff;font-size:1.1em;font-weight:900;padding:18px;border-radius:14px;text-decoration:none;box-shadow:0 6px 20px rgba(211,47,47,0.45);letter-spacing:0.5px;text-shadow:0 1px 2px rgba(0,0,0,0.35);';
+btn1.textContent = 'ଏଠାରେ ମୋ ସାଥି ଆପ୍ କୁ ଯାଆନ୍ତୁ ।';
+grid.appendChild(btn1);
 
     // Special Training card
     grid.appendChild(createBasicTrainingCard());
