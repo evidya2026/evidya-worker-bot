@@ -485,16 +485,16 @@ const levels = {
         icon: '🏫',
         cssClass: 'school',
         classes: {
-            'CLASS-1':  'Class 1',
-            'CLASS-2':  'Class 2',
-            'CLASS-3':  'Class 3',
-            'CLASS-4':  'Class 4',
-            'CLASS-5':  'Class 5',
-            'CLASS-6':  'Class 6',
-            'CLASS-7':  'Class 7',
-            'CLASS-8':  'Class 8',
-            'CLASS-9':  'Class 9',
-            'CLASS-10': 'Class 10'
+            'CLASS-1':  { name: 'Class 1',  url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'CLASS-2':  { name: 'Class 2',  url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'CLASS-3':  { name: 'Class 3',  url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'CLASS-4':  { name: 'Class 4',  url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'CLASS-5':  { name: 'Class 5',  url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'CLASS-6':  { name: 'Class 6',  url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'CLASS-7':  { name: 'Class 7',  url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'CLASS-8':  { name: 'Class 8',  url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'CLASS-9':  { name: 'Class 9',  url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'CLASS-10': { name: 'Class 10', url: 'https://sites.google.com/view/eguruodishastp/cc' }
         }
     },
     'PLUS2-ARTS': {
@@ -502,8 +502,8 @@ const levels = {
         icon: '🎨',
         cssClass: 'plus2-arts',
         classes: {
-            'FIRST-YEAR':  '1st Year',
-            'SECOND-YEAR': '2nd Year'
+            'FIRST-YEAR':  { name: '1st Year', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'SECOND-YEAR': { name: '2nd Year', url: 'https://sites.google.com/view/eguruodishastp/cc' }
         }
     },
     'PLUS2-COM': {
@@ -511,8 +511,8 @@ const levels = {
         icon: '💼',
         cssClass: 'plus2-com',
         classes: {
-            'FIRST-YEAR':  '1st Year',
-            'SECOND-YEAR': '2nd Year'
+            'FIRST-YEAR':  { name: '1st Year', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            'SECOND-YEAR': { name: '2nd Year', url: 'https://sites.google.com/view/eguruodishastp/cc' }
         }
     },
     'PLUS3-ARTS': {
@@ -520,20 +520,113 @@ const levels = {
         icon: '📚',
         cssClass: 'plus3-arts',
         honours: {
-            'POLITICAL-SCIENCE-HON': { name: 'Political Science Honours',    odia: 'ରାଜନୀତି ବିଜ୍ଞାନ (ଅନର୍ସ)',   semesters: 8 },
-            'HISTORY-HON':           { name: 'History Honours',               odia: 'ଇତିହାସ (ଅନର୍ସ)',              semesters: 8 },
-            'SOCIOLOGY-HON':         { name: 'Sociology Honours',             odia: 'ସମାଜ ବିଜ୍ଞାନ (ଅନର୍ସ)',       semesters: 8 },
-            'ECONOMICS-HON':         { name: 'Economics Honours',             odia: 'ଅର୍ଥନୀତି (ଅନର୍ସ)',            semesters: 8 },
-            'EDUCATION-HON':         { name: 'Education Honours',             odia: 'ଶିକ୍ଷା (ଅନର୍ସ)',              semesters: 8 },
-            'PUBLIC-ADMIN-HON':      { name: 'Public Administration Honours', odia: 'ଲୋକ ପ୍ରଶାସନ (ଅନର୍ସ)',        semesters: 8 },
-            'PSYCHOLOGY-HON':        { name: 'Psychology Honours',            odia: 'ମନୋ ବିଜ୍ଞାନ (ଅନର୍ସ)',        semesters: 8 }
+            'POLITICAL-SCIENCE-HON': {
+                name: 'Political Science Honours', odia: 'ରାଜନୀତି ବିଜ୍ଞାନ (ଅନର୍ସ)',
+                semesters: [
+                    { name: '1st Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '2nd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '3rd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '4th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '5th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '6th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '7th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '8th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+                ]
+            },
+            'HISTORY-HON': {
+                name: 'History Honours', odia: 'ଇତିହାସ (ଅନର୍ସ)',
+                semesters: [
+                    { name: '1st Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '2nd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '3rd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '4th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '5th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '6th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '7th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '8th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+                ]
+            },
+            'SOCIOLOGY-HON': {
+                name: 'Sociology Honours', odia: 'ସମାଜ ବିଜ୍ଞାନ (ଅନର୍ସ)',
+                semesters: [
+                    { name: '1st Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '2nd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '3rd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '4th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '5th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '6th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '7th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '8th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+                ]
+            },
+            'ECONOMICS-HON': {
+                name: 'Economics Honours', odia: 'ଅର୍ଥନୀତି (ଅନର୍ସ)',
+                semesters: [
+                    { name: '1st Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '2nd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '3rd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '4th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '5th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '6th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '7th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '8th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+                ]
+            },
+            'EDUCATION-HON': {
+                name: 'Education Honours', odia: 'ଶିକ୍ଷା (ଅନର୍ସ)',
+                semesters: [
+                    { name: '1st Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '2nd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '3rd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '4th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '5th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '6th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '7th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '8th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+                ]
+            },
+            'PUBLIC-ADMIN-HON': {
+                name: 'Public Administration Honours', odia: 'ଲୋକ ପ୍ରଶାସନ (ଅନର୍ସ)',
+                semesters: [
+                    { name: '1st Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '2nd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '3rd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '4th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '5th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '6th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '7th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '8th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+                ]
+            },
+            'PSYCHOLOGY-HON': {
+                name: 'Psychology Honours', odia: 'ମନୋ ବିଜ୍ଞାନ (ଅନର୍ସ)',
+                semesters: [
+                    { name: '1st Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '2nd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '3rd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '4th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '5th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '6th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '7th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+                    { name: '8th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+                ]
+            }
         }
     },
     'PLUS3-COM': {
         name: '+3 Commerce',
         icon: '📊',
         cssClass: 'plus3-com',
-        semesters: ['1st Semester','2nd Semester','3rd Semester','4th Semester','5th Semester','6th Semester','7th Semester','8th Semester']
+        semesters: [
+            { name: '1st Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            { name: '2nd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            { name: '3rd Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            { name: '4th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            { name: '5th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            { name: '6th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            { name: '7th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' },
+            { name: '8th Semester', url: 'https://sites.google.com/view/eguruodishastp/cc' }
+        ]
     }
 };
 
@@ -689,7 +782,7 @@ function showClasses(levelKey) {
     const g  = grid(); g.innerHTML = '';
 
     if (levelKey === 'PLUS3-ARTS') {
-        // Show honours list
+        // Show honours list — clicking honour goes to its semesters
         for (const hk in lv.honours) {
             const h  = lv.honours[hk];
             const card = makeClassCard(h.name, lv.name, 'honour-card', () => showSemesters(levelKey, hk));
@@ -700,17 +793,18 @@ function showClasses(levelKey) {
             g.appendChild(card);
         }
     } else if (levelKey === 'PLUS3-COM') {
-        lv.semesters.forEach((sem, i) => {
-            g.appendChild(makeClassCard(sem, lv.name, '', () => {
-                openModal(sem, lv.name, DEFAULT_URL);
+        // Each semester has its own url
+        lv.semesters.forEach(sem => {
+            g.appendChild(makeClassCard(sem.name, lv.name, '', () => {
+                openModal(sem.name, lv.name, sem.url);
             }));
         });
     } else {
-        // SCHOOL, PLUS2-ARTS, PLUS2-COM
+        // SCHOOL, PLUS2-ARTS, PLUS2-COM — each class has its own url
         for (const ck in lv.classes) {
-            const cn = lv.classes[ck];
-            g.appendChild(makeClassCard(cn, lv.name, '', () => {
-                openModal(cn, lv.name, DEFAULT_URL);
+            const cls = lv.classes[ck];
+            g.appendChild(makeClassCard(cls.name, lv.name, '', () => {
+                openModal(cls.name, lv.name, cls.url);
             }));
         }
     }
@@ -721,12 +815,12 @@ function showSemesters(levelKey, honourKey) {
     setBack(true);
     const hon = levels[levelKey].honours[honourKey];
     const g   = grid(); g.innerHTML = '';
-    for (let i = 1; i <= hon.semesters; i++) {
-        const semName = `${i}${['st','nd','rd','th','th','th','th','th'][i-1]} Semester`;
-        g.appendChild(makeClassCard(semName, hon.name, '', () => {
-            openModal(semName, hon.name + ' | ' + hon.odia, DEFAULT_URL);
+    // Each semester has its own url
+    hon.semesters.forEach(sem => {
+        g.appendChild(makeClassCard(sem.name, hon.name, '', () => {
+            openModal(sem.name, hon.name + ' | ' + hon.odia, sem.url);
         }));
-    }
+    });
 }
 
 /* ═══════════════════════════════════════════════════════════════
