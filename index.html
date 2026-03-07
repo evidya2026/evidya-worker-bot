@@ -1025,16 +1025,55 @@ function createClassCard(lk, ck) {
     c.innerHTML = `<div class="class-number">${l.name}</div><div class="class-title">${cn}</div><div class="parent-badge"></div>`;
     return c;
 }
+    
 
 // ─── View Functions ───────────────────────────────────────────────────────────
+
+    function showPlus2Options() {
+    viewMode = 'classes'; selectedLevel = 'PLUS2';
+    document.getElementById('backButton').style.display = 'inline-flex';
+    document.getElementById('backButtonText').textContent = 'ଏଠାରେ ପଛକୁ ଫେରନ୍ତୁ';
+    const grid = document.getElementById('mainGrid');
+    grid.innerHTML = '';
+    grid.appendChild(createLevelCard('PLUS2-ARTS'));
+    grid.appendChild(createLevelCard('PLUS2-COM'));
+}
+
+function showPlus3Options() {
+    viewMode = 'classes'; selectedLevel = 'PLUS3';
+    document.getElementById('backButton').style.display = 'inline-flex';
+    document.getElementById('backButtonText').textContent = 'ଏଠାରେ ପଛକୁ ଫେରନ୍ତୁ';
+    const grid = document.getElementById('mainGrid');
+    grid.innerHTML = '';
+    grid.appendChild(createLevelCard('PLUS3-ARTS'));
+    grid.appendChild(createLevelCard('PLUS3-COM'));
+}
+    
 function showLevels() {
     viewMode = 'levels'; selectedLevel = null; selectedClass = null;
     document.getElementById('backButton').style.display = 'none';
     const grid = document.getElementById('mainGrid');
     grid.innerHTML = '';
-    const order = ['PLUS2-ARTS', 'PLUS2-COM', 'PLUS3-ARTS', 'PLUS3-COM', 'SCHOOL'];
     grid.appendChild(createBasicTrainingCard());
-    for (const lk of order) grid.appendChild(createLevelCard(lk));
+
+    // +2 card
+    const plus2 = document.createElement('a');
+    plus2.href = '#';
+    plus2.className = 'level-card plus2-arts';
+    plus2.onclick = (e) => { e.preventDefault(); showPlus2Options(); };
+    plus2.innerHTML = `<div class="level-icon">📘</div><div class="level-name">+2</div><div class="level-subtitle">Arts & Commerce</div>`;
+    grid.appendChild(plus2);
+
+    // +3 card
+    const plus3 = document.createElement('a');
+    plus3.href = '#';
+    plus3.className = 'level-card plus3-arts';
+    plus3.onclick = (e) => { e.preventDefault(); showPlus3Options(); };
+    plus3.innerHTML = `<div class="level-icon">🎓</div><div class="level-name">+3</div><div class="level-subtitle">Arts & Commerce</div>`;
+    grid.appendChild(plus3);
+
+    // School card
+    grid.appendChild(createLevelCard('SCHOOL'));
 }
 
 function showClasses(lk) {
@@ -1124,6 +1163,14 @@ document.getElementById('backButton').addEventListener('click', (e) => {
     } else if (viewMode === 'subjects') {
         showClasses(selectedLevel);
     } else if (viewMode === 'classes') {
+        if (selectedLevel === 'PLUS2-ARTS' || selectedLevel === 'PLUS2-COM') {
+            showPlus2Options();
+        } else if (selectedLevel === 'PLUS3-ARTS' || selectedLevel === 'PLUS3-COM') {
+            showPlus3Options();
+        } else {
+            showLevels();
+        }
+    } else {
         showLevels();
     }
 });
