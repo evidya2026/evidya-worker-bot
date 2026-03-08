@@ -740,20 +740,14 @@ function showLevels() {
 
     g.appendChild(makeWideBtn('ଏଠାରେ ମୋ ସାଥି ଆପ୍ କୁ ଯାଆନ୍ତୁ ।', 'https://evidya.pages.dev/MO%20SATHI/', 'red'));
 
-  const special = document.createElement('a');
-special.href = 'https://special-training.pages.dev/';
-special.className = 'level-card special';
-special.innerHTML = '<div class="level-icon">🌟</div><div class="level-name">ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ</div></div>';
-g.appendChild(special);
-
-    g.appendChild(makeLevelCard('SCHOOL', 'ସ୍କୁଲ୍', '🏫', 'school', () => showClasses('SCHOOL')));
-
-    const plus2 = makeLevelCard('PLUS2', '+2', '📘', 'plus2', () => showPlus2Choice());
-    g.appendChild(plus2);
-
-    const plus3 = makeLevelCard('PLUS3', '+3', '📘', 'plus3', () => showPlus3Choice());
-    g.appendChild(plus3);
-
+ const eduBtn = document.createElement('a');
+eduBtn.href = 'https://apps-e71.pages.dev/';
+eduBtn.target = '_blank';
+eduBtn.rel = 'noopener noreferrer';
+eduBtn.className = 'btn-wide';
+eduBtn.style.cssText = 'background: linear-gradient(135deg, #1565C0 0%, #1E88E5 50%, #42A5F5 100%); color: white; box-shadow: 0 6px 24px rgba(21,101,192,0.5); border: 2px solid rgba(255,255,255,0.3); font-size: 1em; padding: 22px 18px; letter-spacing: 0.3px; text-shadow: 0 1px 3px rgba(0,0,0,0.3);';
+eduBtn.innerHTML = '📥 ଶିକ୍ଷା ସହାୟକ ସାମଗ୍ରୀ — ଏଠାରେ ଡାଉନଲୋଡ କରନ୍ତୁ ।';
+g.appendChild(eduBtn);
     g.appendChild(makeWideBtn('ଏଠାରେ ପେମେଣ୍ଟ କରନ୍ତୁ ।', 'https://evidya.pages.dev/PAYMENT/', 'gold'));
 }
 
