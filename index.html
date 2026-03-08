@@ -1,307 +1,620 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="or">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal</title>
+    <title>ଇ-ବିଦ୍ୟା ଏକାଡେମୀ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Oriya:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+        :root {
+            --bg: #f2f5f2;
+            --surface: #ffffff;
+            --green-dark: #1e5c38;
+            --green: #2e7d52;
+            --green-light: #e6f4ec;
+            --saffron: #d4680a;
+            --saffron-light: #fff3e8;
+            --arts: #1a6b8a;
+            --arts-bg: #e3f2f8;
+            --arts-border: #b0d8ee;
+            --commerce: #6a3d8a;
+            --commerce-bg: #f0e8f8;
+            --commerce-border: #c8a8e0;
+            --special1: #b5451b;
+            --special1-bg: #fff0eb;
+            --special1-border: #f0c0a8;
+            --special2: #1a6b50;
+            --special2-bg: #e6f7f0;
+            --special2-border: #a0dcc0;
+            --school: #7a6010;
+            --school-bg: #fef8e0;
+            --school-border: #e8d870;
+            --text: #1a2420;
+            --text-soft: #4a5a52;
+            --muted: #8a9a90;
+            --border: #d8e4d8;
+            --shadow: 0 2px 12px rgba(46,125,82,0.07);
         }
+
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Noto Sans Oriya', sans-serif;
+            background: var(--bg);
             min-height: 100vh;
-            padding: 15px;
-            padding-bottom: 30px;
+            color: var(--text);
         }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 25px;
-            animation: fadeIn 0.6s ease-out;
-            padding: 0 10px;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .header h1 {
-            font-size: 24px;
-            margin-bottom: 8px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            line-height: 1.3;
-        }
-
-        .header p {
-            font-size: 15px;
-            opacity: 0.95;
-            line-height: 1.4;
-        }
-
-        .classes-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .class-card {
-            background: white;
-            border-radius: 12px;
-            padding: 18px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            animation: slideUp 0.5s ease-out;
-            animation-fill-mode: both;
-            min-height: 90px;
+        /* ━━━━━━ HEADER ━━━━━━ */
+        .top-bar {
+            background: linear-gradient(140deg, #1a5234 0%, #2e7d52 55%, #3a9467 100%);
+            padding: 28px 20px 44px;
             position: relative;
             overflow: hidden;
         }
+        .top-bar::before {
+            content:''; position:absolute; top:-60px; right:-60px;
+            width:220px; height:220px; border-radius:50%;
+            background:rgba(255,255,255,0.06);
+        }
+        .top-bar::after {
+            content:''; position:absolute; bottom:-40px; left:-25px;
+            width:150px; height:150px; border-radius:50%;
+            background:rgba(255,255,255,0.04);
+        }
+        .top-bar-inner { position:relative; z-index:1; max-width:500px; margin:0 auto; }
 
-        .class-card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 4px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .academy-badge {
+            display:inline-flex; align-items:center; gap:6px;
+            background:rgba(255,255,255,0.14);
+            border:1px solid rgba(255,255,255,0.22);
+            border-radius:100px; padding:4px 13px;
+            font-size:11px; color:rgba(255,255,255,0.88);
+            margin-bottom:14px;
+            animation: fadeUp 0.5s ease both;
+        }
+        .academy-name {
+            font-size:30px; font-weight:700; color:#fff;
+            line-height:1.2; margin-bottom:7px;
+            animation: fadeUp 0.5s ease 0.08s both;
+        }
+        .academy-name span { color:#ffd970; }
+        .academy-sub {
+            font-size:13.5px; color:rgba(255,255,255,0.76);
+            line-height:1.6;
+            animation: fadeUp 0.5s ease 0.16s both;
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+        .wave { display:block; width:100%; line-height:0; margin-top:-1px; }
+        .wave svg { display:block; width:100%; }
+
+        /* ━━━━━━ MAIN ━━━━━━ */
+        .main { max-width:500px; margin:0 auto; padding:14px 15px 60px; }
+
+        /* ━━━━━━ INFO STRIP ━━━━━━ */
+        .info-strip {
+            display:grid; grid-template-columns:repeat(3,1fr);
+            gap:8px; margin-bottom:22px;
+            animation: fadeUp 0.5s ease 0.22s both;
+        }
+        .info-tile {
+            background:var(--surface); border:1.5px solid var(--border);
+            border-radius:12px; padding:11px 8px;
+            text-align:center; box-shadow:var(--shadow);
+        }
+        .info-val { font-size:21px; font-weight:700; color:var(--green); line-height:1; }
+        .info-lbl { font-size:11px; color:var(--muted); margin-top:4px; line-height:1.3; }
+
+        /* ━━━━━━ SECTION BLOCK ━━━━━━ */
+        .section-block {
+            margin-bottom:26px;
+            animation: fadeUp 0.5s ease both;
         }
 
-        .class-card:nth-child(1) { animation-delay: 0.05s; }
-        .class-card:nth-child(2) { animation-delay: 0.1s; }
-        .class-card:nth-child(3) { animation-delay: 0.15s; }
-        .class-card:nth-child(4) { animation-delay: 0.2s; }
-        .class-card:nth-child(5) { animation-delay: 0.25s; }
-        .class-card:nth-child(6) { animation-delay: 0.3s; }
-        .class-card:nth-child(7) { animation-delay: 0.35s; }
-        .class-card:nth-child(8) { animation-delay: 0.4s; }
-        .class-card:nth-child(9) { animation-delay: 0.45s; }
+        .section-head {
+            display:flex; align-items:center; gap:10px;
+            margin-bottom:11px;
+        }
+        .section-head-icon {
+            width:40px; height:40px; border-radius:11px;
+            display:flex; align-items:center; justify-content:center;
+            font-size:19px; flex-shrink:0;
+        }
+        .section-head-title { font-size:19px; font-weight:700; }
+        .section-head-line { flex:1; height:1.5px; border-radius:2px; }
 
-        .class-card:active {
-            transform: scale(0.98);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        /* color themes */
+        .theme-special1 .section-head-icon  { background:var(--special1-bg); }
+        .theme-special1 .section-head-title { color:var(--special1); }
+        .theme-special1 .section-head-line  { background:linear-gradient(90deg,var(--special1-border),transparent); }
+
+        .theme-special2 .section-head-icon  { background:var(--special2-bg); }
+        .theme-special2 .section-head-title { color:var(--special2); }
+        .theme-special2 .section-head-line  { background:linear-gradient(90deg,var(--special2-border),transparent); }
+
+        .theme-arts .section-head-icon  { background:var(--arts-bg); }
+        .theme-arts .section-head-title { color:var(--arts); }
+        .theme-arts .section-head-line  { background:linear-gradient(90deg,var(--arts-border),transparent); }
+
+        .theme-commerce .section-head-icon  { background:var(--commerce-bg); }
+        .theme-commerce .section-head-title { color:var(--commerce); }
+        .theme-commerce .section-head-line  { background:linear-gradient(90deg,var(--commerce-border),transparent); }
+
+        .theme-school .section-head-icon  { background:var(--school-bg); }
+        .theme-school .section-head-title { color:var(--school); }
+        .theme-school .section-head-line  { background:linear-gradient(90deg,var(--school-border),transparent); }
+
+        /* ━━━━━━ LEVEL LABEL ━━━━━━ */
+        .level-label {
+            font-size:11px; font-weight:600; letter-spacing:0.07em;
+            text-transform:uppercase; color:var(--muted);
+            margin:13px 0 8px 2px;
+            display:flex; align-items:center; gap:8px;
+        }
+        .level-label::after { content:''; flex:1; height:1px; background:var(--border); }
+        .level-label.active-arts     { color:var(--arts); }
+        .level-label.active-commerce { color:var(--commerce); }
+        .level-label.active-special1 { color:var(--special1); }
+        .level-label.active-special2 { color:var(--special2); }
+        .level-label.active-school   { color:var(--school); }
+
+        /* ━━━━━━ CARD GRID (school uses 2-col) ━━━━━━ */
+        .cards-list { display:flex; flex-direction:column; gap:9px; }
+        .cards-grid {
+            display:grid; grid-template-columns:1fr 1fr;
+            gap:9px;
         }
 
-        .class-icon {
-            font-size: 40px;
-            flex-shrink: 0;
-            width: 55px;
-            height: 55px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            border-radius: 12px;
+        /* ━━━━━━ ACTIVE CARD ━━━━━━ */
+        .card {
+            display:flex; align-items:center; gap:12px;
+            background:var(--surface);
+            border-radius:13px; padding:14px 12px;
+            text-decoration:none; color:var(--text);
+            border:1.5px solid var(--border);
+            box-shadow:var(--shadow);
+            position:relative; overflow:hidden;
+            transition:transform 0.17s ease, box-shadow 0.17s ease, border-color 0.17s ease;
+        }
+        .card::before {
+            content:''; position:absolute;
+            left:0; top:50%; transform:translateY(-50%);
+            width:4px; height:52%; border-radius:0 4px 4px 0;
+        }
+        .card-special1::before { background:linear-gradient(180deg,#b5451b,#e87040); }
+        .card-special2::before { background:linear-gradient(180deg,#1a6b50,#40b880); }
+        .card-arts::before     { background:linear-gradient(180deg,#1a6b8a,#4ab0d0); }
+        .card-commerce::before { background:linear-gradient(180deg,#6a3d8a,#a060c8); }
+        .card-school::before   { background:linear-gradient(180deg,#7a6010,#c0a030); }
+
+        @media (hover:hover) {
+            .card:hover { transform:translateY(-2px); box-shadow:0 6px 22px rgba(0,0,0,0.1); }
+            .card-special1:hover { border-color:var(--special1-border); }
+            .card-special2:hover { border-color:var(--special2-border); }
+            .card-arts:hover     { border-color:var(--arts-border); }
+            .card-commerce:hover { border-color:var(--commerce-border); }
+            .card-school:hover   { border-color:var(--school-border); }
+        }
+        .card:active { transform:scale(0.97); }
+
+        .card-num {
+            width:46px; height:46px; border-radius:11px;
+            display:flex; align-items:center; justify-content:center;
+            font-size:19px; font-weight:700; flex-shrink:0;
+        }
+        .card-special1 .card-num { background:var(--special1-bg); color:var(--special1); }
+        .card-special2 .card-num { background:var(--special2-bg); color:var(--special2); }
+        .card-arts .card-num     { background:var(--arts-bg);     color:var(--arts);     }
+        .card-commerce .card-num { background:var(--commerce-bg); color:var(--commerce); }
+        .card-school .card-num   { background:var(--school-bg);   color:var(--school);   }
+
+        .card-body { flex:1; display:flex; flex-direction:column; gap:2px; min-width:0; }
+        .card-tag  { font-size:10px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; }
+        .card-special1 .card-tag { color:#e08060; }
+        .card-special2 .card-tag { color:#40b880; }
+        .card-arts .card-tag     { color:#4ab0d0; }
+        .card-commerce .card-tag { color:#a060c8; }
+        .card-school .card-tag   { color:#c0a030; }
+
+        .card-title { font-size:15px; font-weight:700; color:var(--text); line-height:1.3; }
+        .card-desc  { font-size:11.5px; color:var(--muted); line-height:1.4; margin-top:2px; }
+
+        .card-arrow {
+            width:30px; height:30px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center; flex-shrink:0;
+        }
+        .card-special1 .card-arrow { background:var(--special1-bg); }
+        .card-special2 .card-arrow { background:var(--special2-bg); }
+        .card-arts .card-arrow     { background:var(--arts-bg); }
+        .card-commerce .card-arrow { background:var(--commerce-bg); }
+        .card-school .card-arrow   { background:var(--school-bg); }
+        .card-arrow svg { width:13px; height:13px; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+        .card-special1 .card-arrow svg { stroke:var(--special1); }
+        .card-special2 .card-arrow svg { stroke:var(--special2); }
+        .card-arts .card-arrow svg     { stroke:var(--arts); }
+        .card-commerce .card-arrow svg { stroke:var(--commerce); }
+        .card-school .card-arrow svg   { stroke:var(--school); }
+
+        /* ━━━━━━ GRID CARD (compact, for school) ━━━━━━ */
+        .grid-card {
+            display:flex; flex-direction:column; align-items:center;
+            justify-content:center; gap:7px;
+            background:var(--surface);
+            border-radius:13px; padding:16px 10px;
+            text-decoration:none; color:var(--text);
+            border:1.5px solid var(--border);
+            box-shadow:var(--shadow);
+            position:relative; overflow:hidden;
+            transition:transform 0.17s ease, box-shadow 0.17s ease, border-color 0.17s ease;
+            text-align:center;
+        }
+        .grid-card::after {
+            content:''; position:absolute;
+            top:0; left:0; right:0; height:3px;
+            border-radius:12px 12px 0 0;
+        }
+        .grid-school::after { background:linear-gradient(90deg,#7a6010,#c0a030); }
+
+        @media (hover:hover) {
+            .grid-card:hover { transform:translateY(-2px); box-shadow:0 6px 22px rgba(0,0,0,0.1); }
+            .grid-school:hover { border-color:var(--school-border); }
+        }
+        .grid-card:active { transform:scale(0.96); }
+
+        .grid-num {
+            width:44px; height:44px; border-radius:12px;
+            display:flex; align-items:center; justify-content:center;
+            font-size:18px; font-weight:700;
+        }
+        .grid-school .grid-num { background:var(--school-bg); color:var(--school); }
+
+        .grid-label { font-size:13px; font-weight:700; color:var(--text); line-height:1.3; }
+        .grid-sub   { font-size:10.5px; color:var(--muted); }
+
+        /* ━━━━━━ DIVIDER ━━━━━━ */
+        .divider {
+            height:1px; background:var(--border);
+            margin:8px 0 20px; border-radius:2px;
         }
 
-        .class-info {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .class-title {
-            font-size: 18px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .class-description {
-            color: #666;
-            font-size: 13px;
-            line-height: 1.4;
-        }
-
-        .class-arrow {
-            font-size: 20px;
-            color: #667eea;
-            flex-shrink: 0;
-        }
-
+        /* ━━━━━━ FOOTER ━━━━━━ */
         .footer {
-            text-align: center;
-            color: white;
-            margin-top: 30px;
-            opacity: 0.9;
-            font-size: 13px;
-            padding: 0 20px;
-            line-height: 1.5;
+            text-align:center; padding-top:10px;
+            animation: fadeUp 0.5s ease 0.6s both;
+        }
+        .footer-line {
+            width:40px; height:3px;
+            background:linear-gradient(90deg,var(--green),var(--saffron));
+            border-radius:10px; margin:0 auto 10px;
+        }
+        .footer-name { font-size:13px; font-weight:600; color:var(--text-soft); }
+        .footer-copy { font-size:11px; color:var(--muted); margin-top:3px; }
+
+        @keyframes fadeUp {
+            from { opacity:0; transform:translateY(16px); }
+            to   { opacity:1; transform:translateY(0); }
         }
 
-        /* Touch feedback */
-        @media (hover: hover) {
-            .class-card:hover {
-                transform: translateX(5px);
-                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-            }
-        }
+        /* animation delays for sections */
+        .section-block:nth-child(1) { animation-delay:0.28s; }
+        .section-block:nth-child(2) { animation-delay:0.34s; }
+        .section-block:nth-child(3) { animation-delay:0.40s; }
+        .section-block:nth-child(4) { animation-delay:0.46s; }
+        .section-block:nth-child(5) { animation-delay:0.50s; }
 
-        /* Small mobile screens */
-        @media (max-width: 400px) {
-            body {
-                padding: 12px;
-            }
-
-            .header h1 {
-                font-size: 22px;
-            }
-
-            .header p {
-                font-size: 14px;
-            }
-
-            .class-card {
-                padding: 15px;
-                min-height: 80px;
-            }
-
-            .class-icon {
-                font-size: 35px;
-                width: 50px;
-                height: 50px;
-            }
-
-            .class-title {
-                font-size: 17px;
-            }
-
-            .class-description {
-                font-size: 12px;
-            }
-        }
-
-        /* Landscape mode optimization */
-        @media (max-height: 600px) and (orientation: landscape) {
-            body {
-                padding: 10px;
-            }
-
-            .header {
-                margin-bottom: 15px;
-            }
-
-            .header h1 {
-                font-size: 20px;
-                margin-bottom: 5px;
-            }
-
-            .header p {
-                font-size: 13px;
-            }
-
-            .classes-grid {
-                gap: 10px;
-            }
-
-            .class-card {
-                min-height: 70px;
-                padding: 12px;
-            }
-        }
-
-        /* Safe area support for notched devices */
-        @supports (padding: max(0px)) {
-            body {
-                padding-left: max(15px, env(safe-area-inset-left));
+        @supports (padding:max(0px)) {
+            .main {
+                padding-left:  max(15px, env(safe-area-inset-left));
                 padding-right: max(15px, env(safe-area-inset-right));
-                padding-bottom: max(30px, env(safe-area-inset-bottom));
+                padding-bottom:max(60px, env(safe-area-inset-bottom));
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>E-VIDYA ACADEMY</h1>
-            <p>A Private Initiative</p>
+
+<!-- ━━━━━━━━━━ HEADER ━━━━━━━━━━ -->
+<div class="top-bar">
+    <div class="top-bar-inner">
+        <div class="academy-badge">🎓 ଏକ ବ୍ୟକ୍ତିଗତ ଉଦ୍ୟୋଗ</div>
+        <div class="academy-name">ଇ-<span>ବିଦ୍ୟା</span> ଏକାଡେମୀ</div>
+        <div class="academy-sub">ଆପଣଙ୍କ ଧାରା ଓ ଶ୍ରେଣୀ ବାଛନ୍ତୁ ଏବଂ ଶିକ୍ଷା ଆରମ୍ଭ କରନ୍ତୁ।</div>
+    </div>
+</div>
+<div class="wave">
+    <svg viewBox="0 0 500 30" preserveAspectRatio="none" height="30" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,20 C125,35 375,5 500,20 L500,0 L0,0 Z" fill="#2e7d52"/>
+    </svg>
+</div>
+
+<div class="main">
+
+    <!-- ━━━━━━ INFO STRIP ━━━━━━ -->
+    <div class="info-strip">
+        <div class="info-tile">
+            <div class="info-val">୨</div>
+            <div class="info-lbl">ସ୍ୱତନ୍ତ୍ର ଆପ୍</div>
         </div>
-
-        <a href="./PAYMENT/index.html" class="class-card">
-                <div class="class-icon">✏️</div>
-                <div class="class-info">
-                    <div class="class-title">PAYMENT</div>
-                </div>
-                <div class="class-arrow">›</div>
-            </a>
-
-            <a href="./MO SATHI/index.html" class="class-card">
-                <div class="class-icon">✏️</div>
-                <div class="class-info">
-                    <div class="class-title">MO SATHI</div>
-                </div>
-                <div class="class-arrow">›</div>
-            </a>
-
-
-           <a href="./mainapp/index.html" class="class-card">
-                <div class="class-icon">✏️</div>
-                <div class="class-info">
-                    <div class="class-title">mainapp</div>
-                </div>
-                <div class="class-arrow">›</div>
-            </a>
-
-        <a href="./CONTACT US/index.html" class="class-card">
-                <div class="class-icon">✏️</div>
-                <div class="class-info">
-                    <div class="class-title">CONTACT US</div>
-                </div>
-                <div class="class-arrow">›</div>
-            </a>
-
-        <a href="./CON/index.html" class="class-card">
-                <div class="class-icon">✏️</div>
-                <div class="class-info">
-                    <div class="class-title">CON</div>
-                </div>
-                <div class="class-arrow">›</div>
-            </a>
-        
+        <div class="info-tile">
+            <div class="info-val">୨୪</div>
+            <div class="info-lbl">ଶ୍ରେଣୀ ପ୍ରସ୍ତୁତ</div>
         </div>
-
-        <div class="footer">
-            <p>© 2026 E-Vidya Academy<br>All Rights Reserved</p>
+        <div class="info-tile">
+            <div class="info-val">∞</div>
+            <div class="info-lbl">ଅଧ୍ୟୟନ ସାମଗ୍ରୀ</div>
         </div>
     </div>
+
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!--  1. ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ              -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <div class="section-block theme-special1">
+        <div class="section-head">
+            <div class="section-head-icon">🌟</div>
+            <div class="section-head-title">ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ</div>
+            <div class="section-head-line"></div>
+        </div>
+        <div class="cards-list">
+            <a href="./special-training/index.html" class="card card-special1">
+                <div class="card-num">🌟</div>
+                <div class="card-body">
+                    <div class="card-tag">ବିଶେଷ ପ୍ରଶିକ୍ଷଣ</div>
+                    <div class="card-title">ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ</div>
+                    <div class="card-desc">ଶିକ୍ଷାର୍ଥୀଙ୍କ ସର୍ବାଙ୍ଗୀନ ବିକାଶ ପାଇଁ</div>
+                </div>
+                <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+            </a>
+        </div>
+    </div>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!--  2. ମୋ ସାଥି ଆପ୍                   -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <div class="section-block theme-special2">
+        <div class="section-head">
+            <div class="section-head-icon">🤝</div>
+            <div class="section-head-title">ମୋ ସାଥି ଆପ୍</div>
+            <div class="section-head-line"></div>
+        </div>
+        <div class="cards-list">
+            <a href="./mo-sathi/index.html" class="card card-special2">
+                <div class="card-num">🤝</div>
+                <div class="card-body">
+                    <div class="card-tag">ମାର୍ଗଦର୍ଶନ</div>
+                    <div class="card-title">ମୋ ସାଥି ଆପ୍</div>
+                    <div class="card-desc">ଆପଣଙ୍କ ବ୍ୟକ୍ତିଗତ ମାର୍ଗଦର୍ଶକ</div>
+                </div>
+                <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+            </a>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!--  3. +2 – ARTS                     -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <div class="section-block theme-arts">
+        <div class="section-head">
+            <div class="section-head-icon">🎨</div>
+            <div class="section-head-title">କଳା ବିଭାଗ</div>
+            <div class="section-head-line"></div>
+        </div>
+
+        <!-- +2 active -->
+        <div class="level-label active-arts">+୨ ଶ୍ରେଣୀ</div>
+        <div class="cards-list">
+            <a href="./+2 1st Year - Arts/index.html" class="card card-arts">
+                <div class="card-num">୧</div>
+                <div class="card-body">
+                    <div class="card-tag">ପ୍ରଥମ ବର୍ଷ</div>
+                    <div class="card-title">+୨ ପ୍ରଥମ ବର୍ଷ — କଳା</div>
+                    <div class="card-desc">ମାନବ ବିଜ୍ଞାନ · ଭାଷା · ସାମାଜିକ ଅଧ୍ୟୟନ</div>
+                </div>
+                <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+            </a>
+            <a href="./+2 2nd Year - Arts/index.html" class="card card-arts">
+                <div class="card-num">୨</div>
+                <div class="card-body">
+                    <div class="card-tag">ଦ୍ୱିତୀୟ ବର୍ଷ</div>
+                    <div class="card-title">+୨ ଦ୍ୱିତୀୟ ବର୍ଷ — କଳା</div>
+                    <div class="card-desc">ମାନବ ବିଜ୍ଞାନ · ଭାଷା · ସାମାଜିକ ଅଧ୍ୟୟନ</div>
+                </div>
+                <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+            </a>
+        </div>
+
+
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!--  4. +2 – COMMERCE                 -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <div class="section-block theme-commerce">
+        <div class="section-head">
+            <div class="section-head-icon">📊</div>
+            <div class="section-head-title">ବାଣିଜ୍ୟ ବିଭାଗ</div>
+            <div class="section-head-line"></div>
+        </div>
+
+        <!-- +2 active -->
+        <div class="level-label active-commerce">+୨ ଶ୍ରେଣୀ</div>
+        <div class="cards-list">
+            <a href="./+2 1st Year - Commerce/index.html" class="card card-commerce">
+                <div class="card-num">୧</div>
+                <div class="card-body">
+                    <div class="card-tag">ପ୍ରଥମ ବର୍ଷ</div>
+                    <div class="card-title">+୨ ପ୍ରଥମ ବର୍ଷ — ବାଣିଜ୍ୟ</div>
+                    <div class="card-desc">ହିସାବ · ବ୍ୟବସାୟ · ଅର୍ଥନୀତି</div>
+                </div>
+                <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+            </a>
+            <a href="./+2 2nd Year - Commerce/index.html" class="card card-commerce">
+                <div class="card-num">୨</div>
+                <div class="card-body">
+                    <div class="card-tag">ଦ୍ୱିତୀୟ ବର୍ଷ</div>
+                    <div class="card-title">+୨ ଦ୍ୱିତୀୟ ବର୍ଷ — ବାଣିଜ୍ୟ</div>
+                    <div class="card-desc">ହିସାବ · ବ୍ୟବସାୟ · ଅର୍ଥନୀତି</div>
+                </div>
+                <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+            </a>
+        </div>
+
+        <!-- +3 Commerce active -->
+        <div class="level-label active-commerce">+୩ ସେମିଷ୍ଟାର</div>
+        <div class="cards-list">
+            <a href="./+3 Sem-1 - Commerce/index.html" class="card card-commerce">
+                <div class="card-num">୧</div>
+                <div class="card-body">
+                    <div class="card-tag">ସେମିଷ୍ଟାର ୧</div>
+                    <div class="card-title">+୩ ସେମ-୧ — ବାଣିଜ୍ୟ</div>
+                    <div class="card-desc">ପ୍ରଥମ ସେମିଷ୍ଟାର ପାଠ୍ୟକ୍ରମ</div>
+                </div>
+                <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+            </a>
+            <a href="./+3 Sem-2 - Commerce/index.html" class="card card-commerce">
+                <div class="card-num">୨</div>
+                <div class="card-body">
+                    <div class="card-tag">ସେମିଷ୍ଟାର ୨</div>
+                    <div class="card-title">+୩ ସେମ-୨ — ବାଣିଜ୍ୟ</div>
+                    <div class="card-desc">ଦ୍ୱିତୀୟ ସେମିଷ୍ଟାର ପାଠ୍ୟକ୍ରମ</div>
+                </div>
+                <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+            </a>
+            <a href="./+3 Sem-3 - Commerce/index.html" class="card card-commerce">
+                <div class="card-num">୩</div>
+                <div class="card-body">
+                    <div class="card-tag">ସେମିଷ୍ଟାର ୩</div>
+                    <div class="card-title">+୩ ସେମ-୩ — ବାଣିଜ୍ୟ</div>
+                    <div class="card-desc">ତୃତୀୟ ସେମିଷ୍ଟାର ପାଠ୍ୟକ୍ରମ</div>
+                </div>
+                <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+            </a>
+            <a href="./+3 Sem-4 - Commerce/index.html" class="card card-commerce">
+                <div class="card-num">୪</div>
+                <div class="card-body">
+                    <div class="card-tag">ସେମିଷ୍ଟାର ୪</div>
+                    <div class="card-title">+୩ ସେମ-୪ — ବାଣିଜ୍ୟ</div>
+                    <div class="card-desc">ଚତୁର୍ଥ ସେମିଷ୍ଟାର ପାଠ୍ୟକ୍ରମ</div>
+                </div>
+                <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+            </a>
+            <a href="./+3 Sem-5 - Commerce/index.html" class="card card-commerce">
+                <div class="card-num">୫</div>
+                <div class="card-body">
+                    <div class="card-tag">ସେମିଷ୍ଟାର ୫</div>
+                    <div class="card-title">+୩ ସେମ-୫ — ବାଣିଜ୍ୟ</div>
+                    <div class="card-desc">ପଞ୍ଚମ ସେମିଷ୍ଟାର ପାଠ୍ୟକ୍ରମ</div>
+                </div>
+                <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+            </a>
+            <a href="./+3 Sem-6 - Commerce/index.html" class="card card-commerce">
+                <div class="card-num">୬</div>
+                <div class="card-body">
+                    <div class="card-tag">ସେମିଷ୍ଟାର ୬</div>
+                    <div class="card-title">+୩ ସେମ-୬ — ବାଣିଜ୍ୟ</div>
+                    <div class="card-desc">ଷଷ୍ଠ ସେମିଷ୍ଟାର ପାଠ୍ୟକ୍ରମ</div>
+                </div>
+                <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+            </a>
+            <a href="./+3 Sem-7 - Commerce/index.html" class="card card-commerce">
+                <div class="card-num">୭</div>
+                <div class="card-body">
+                    <div class="card-tag">ସେମିଷ୍ଟାର ୭</div>
+                    <div class="card-title">+୩ ସେମ-୭ — ବାଣିଜ୍ୟ</div>
+                    <div class="card-desc">ସପ୍ତମ ସେମିଷ୍ଟାର ପାଠ୍ୟକ୍ରମ</div>
+                </div>
+                <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+            </a>
+            <a href="./+3 Sem-8 - Commerce/index.html" class="card card-commerce">
+                <div class="card-num">୮</div>
+                <div class="card-body">
+                    <div class="card-tag">ସେମିଷ୍ଟାର ୮</div>
+                    <div class="card-title">+୩ ସେମ-୮ — ବାଣିଜ୍ୟ</div>
+                    <div class="card-desc">ଅଷ୍ଟମ ସେମିଷ୍ଟାର ପାଠ୍ୟକ୍ରମ</div>
+                </div>
+                <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+            </a>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <!--  5. SCHOOL Class 1–10             -->
+    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    <div class="section-block theme-school">
+        <div class="section-head">
+            <div class="section-head-icon">🏫</div>
+            <div class="section-head-title">ବିଦ୍ୟାଳୟ ବିଭାଗ</div>
+            <div class="section-head-line"></div>
+        </div>
+
+        <div class="level-label active-school">ଶ୍ରେଣୀ ୧ ରୁ ୧୦</div>
+        <div class="cards-grid">
+            <a href="./school/class-1/index.html" class="grid-card grid-school">
+                <div class="grid-num">୧</div>
+                <div class="grid-label">ଶ୍ରେଣୀ ୧</div>
+                <div class="grid-sub">ପ୍ରଥମ ଶ୍ରେଣୀ</div>
+            </a>
+            <a href="./school/class-2/index.html" class="grid-card grid-school">
+                <div class="grid-num">୨</div>
+                <div class="grid-label">ଶ୍ରେଣୀ ୨</div>
+                <div class="grid-sub">ଦ୍ୱିତୀୟ ଶ୍ରେଣୀ</div>
+            </a>
+            <a href="./school/class-3/index.html" class="grid-card grid-school">
+                <div class="grid-num">୩</div>
+                <div class="grid-label">ଶ୍ରେଣୀ ୩</div>
+                <div class="grid-sub">ତୃତୀୟ ଶ୍ରେଣୀ</div>
+            </a>
+            <a href="./school/class-4/index.html" class="grid-card grid-school">
+                <div class="grid-num">୪</div>
+                <div class="grid-label">ଶ୍ରେଣୀ ୪</div>
+                <div class="grid-sub">ଚତୁର୍ଥ ଶ୍ରେଣୀ</div>
+            </a>
+            <a href="./school/class-5/index.html" class="grid-card grid-school">
+                <div class="grid-num">୫</div>
+                <div class="grid-label">ଶ୍ରେଣୀ ୫</div>
+                <div class="grid-sub">ପଞ୍ଚମ ଶ୍ରେଣୀ</div>
+            </a>
+            <a href="./school/class-6/index.html" class="grid-card grid-school">
+                <div class="grid-num">୬</div>
+                <div class="grid-label">ଶ୍ରେଣୀ ୬</div>
+                <div class="grid-sub">ଷଷ୍ଠ ଶ୍ରେଣୀ</div>
+            </a>
+            <a href="./school/class-7/index.html" class="grid-card grid-school">
+                <div class="grid-num">୭</div>
+                <div class="grid-label">ଶ୍ରେଣୀ ୭</div>
+                <div class="grid-sub">ସପ୍ତମ ଶ୍ରେଣୀ</div>
+            </a>
+            <a href="./school/class-8/index.html" class="grid-card grid-school">
+                <div class="grid-num">୮</div>
+                <div class="grid-label">ଶ୍ରେଣୀ ୮</div>
+                <div class="grid-sub">ଅଷ୍ଟମ ଶ୍ରେଣୀ</div>
+            </a>
+            <a href="./school/class-9/index.html" class="grid-card grid-school">
+                <div class="grid-num">୯</div>
+                <div class="grid-label">ଶ୍ରେଣୀ ୯</div>
+                <div class="grid-sub">ନବମ ଶ୍ରେଣୀ</div>
+            </a>
+            <a href="./school/class-10/index.html" class="grid-card grid-school">
+                <div class="grid-num">୧୦</div>
+                <div class="grid-label">ଶ୍ରେଣୀ ୧୦</div>
+                <div class="grid-sub">ଦଶମ ଶ୍ରେଣୀ</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- ━━━━━━ FOOTER ━━━━━━ -->
+    <div class="footer">
+        <div class="footer-line"></div>
+        <div class="footer-name">ଇ-ବିଦ୍ୟା ଏକାଡେମୀ</div>
+        <div class="footer-copy">© ୨୦୨୬ · ସର୍ବସ୍ୱତ୍ୱ ସଂରକ୍ଷିତ</div>
+    </div>
+
+</div><!-- /main -->
 </body>
 </html>
