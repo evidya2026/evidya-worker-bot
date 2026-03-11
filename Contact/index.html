@@ -6,11 +6,10 @@
   <title>Contact Us — E-Vidya Academy</title>
   <link rel="stylesheet" href="../css/style.css" />
   <style>
-    /* ── CONTACT PAGE SPECIFIC ── */
     .contact-hero-strip {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.25rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
       margin-bottom: 2rem;
     }
 
@@ -19,7 +18,7 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 1.75rem 1.5rem;
+      padding: 2rem 1.5rem;
       text-align: center;
       transition: transform 0.2s, box-shadow 0.2s;
     }
@@ -29,180 +28,100 @@
       box-shadow: 0 8px 32px rgba(26,79,138,0.13);
     }
 
-    .info-tile .tile-icon {
-      font-size: 2.2rem;
-      margin-bottom: 0.75rem;
-    }
+    .info-tile .tile-icon { font-size: 2.5rem; margin-bottom: 0.9rem; }
 
     .info-tile h3 {
       font-family: 'Tiro Devanagari Sanskrit', serif;
       color: var(--primary);
-      font-size: 1rem;
-      margin-bottom: 0.4rem;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
     }
 
-    .info-tile p, .info-tile a {
-      font-size: 0.92rem;
+    .info-tile p {
+      font-size: 0.93rem;
       color: var(--muted);
-      text-decoration: none;
-      line-height: 1.6;
+      line-height: 1.7;
+      margin: 0;
     }
 
-    .info-tile a:hover { color: var(--primary); text-decoration: underline; }
-
-    /* ── FORM ── */
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.25rem;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
-    .form-group.full { grid-column: 1 / -1; }
-
-    .form-group label {
-      font-size: 0.85rem;
+    .info-tile a {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-size: 1rem;
       font-weight: 600;
-      color: var(--text);
-      letter-spacing: 0.02em;
+      color: var(--primary);
+      text-decoration: none;
+      word-break: break-all;
     }
 
-    .form-group label span {
-      color: #e74c3c;
-      margin-left: 2px;
-    }
+    .info-tile a:hover { text-decoration: underline; }
 
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      padding: 0.7rem 1rem;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.95rem;
-      color: var(--text);
-      background: var(--white);
-      transition: border-color 0.2s, box-shadow 0.2s;
-      outline: none;
-      width: 100%;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(26,79,138,0.1);
-    }
-
-    .form-group textarea { resize: vertical; min-height: 130px; }
-
-    .form-group select { cursor: pointer; }
-
-    .submit-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
+    .info-tile .action-btn {
+      display: inline-block;
+      margin-top: 1rem;
       background: var(--primary);
       color: var(--white);
-      border: none;
-      border-radius: 8px;
-      padding: 0.85rem 2.25rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 1rem;
+      padding: 0.55rem 1.4rem;
+      border-radius: 7px;
+      font-size: 0.88rem;
       font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.15s;
-      margin-top: 0.5rem;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
     }
 
-    .submit-btn:hover {
+    .info-tile .action-btn:hover {
       background: #163f6e;
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(26,79,138,0.25);
+      text-decoration: none;
     }
 
-    /* ── SUCCESS MESSAGE ── */
-    .success-msg {
-      display: none;
-      background: #e8f5e9;
-      border: 1.5px solid #66bb6a;
-      border-radius: var(--radius);
-      padding: 1rem 1.25rem;
-      color: #2e7d32;
-      font-weight: 500;
-      margin-top: 1rem;
-      text-align: center;
-    }
-
-    /* ── MAP PLACEHOLDER ── */
     .map-box {
       background: #e8f1fb;
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      overflow: hidden;
-      height: 260px;
+      height: 280px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.6rem;
       color: var(--primary);
       font-size: 0.95rem;
     }
 
-    .map-box .map-icon { font-size: 2.5rem; }
-    .map-box strong { font-size: 1rem; }
+    .map-box .map-icon { font-size: 2.8rem; }
+    .map-box strong { font-size: 1.05rem; }
+    .map-box span { color: var(--muted); font-size: 0.88rem; }
     .map-box a {
-      font-size: 0.85rem;
-      color: var(--primary);
+      margin-top: 0.5rem;
+      font-size: 0.88rem;
+      color: var(--white);
       font-weight: 600;
+      background: var(--primary);
+      padding: 0.5rem 1.2rem;
+      border-radius: 7px;
+      text-decoration: none;
+      transition: background 0.2s;
     }
+    .map-box a:hover { background: #163f6e; }
 
-    /* ── HOURS TABLE ── */
-    .hours-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.92rem;
-    }
-
+    .hours-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
     .hours-table tr { border-bottom: 1px solid var(--border); }
     .hours-table tr:last-child { border-bottom: none; }
+    .hours-table td { padding: 0.65rem 0.5rem; text-align: left; }
+    .hours-table td:first-child { font-weight: 600; color: var(--primary); width: 50%; }
 
-    .hours-table td {
-      padding: 0.6rem 0.5rem;
-      text-align: left;
+    .badge-open { display: inline-block; background: #e8f5e9; color: #2e7d32; font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.65rem; border-radius: 20px; }
+    .badge-closed { display: inline-block; background: #fce4e4; color: #c62828; font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.65rem; border-radius: 20px; }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.75rem;
     }
 
-    .hours-table td:first-child { font-weight: 600; color: var(--primary); width: 55%; }
-
-    .badge-open {
-      display: inline-block;
-      background: #e8f5e9;
-      color: #2e7d32;
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-    }
-
-    .badge-closed {
-      display: inline-block;
-      background: #fce4e4;
-      color: #c62828;
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-    }
-
-    @media (max-width: 600px) {
-      .form-grid { grid-template-columns: 1fr; }
-      .form-group.full { grid-column: 1; }
+    @media (max-width: 750px) {
+      .two-col { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -229,176 +148,105 @@
 
 <!-- ── HERO ── -->
 <div class="page-hero">
-  <span class="badge">We're Here to Help</span>
+  <span class="badge">Get In Touch</span>
   <h1>Contact Us</h1>
-  <p>Have a question, feedback, or need help with your learning? Reach out to us — we'd love to hear from you.</p>
+  <p>We are here to help. Reach out to us anytime through phone, email, or visit us at our address.</p>
 </div>
 
 <!-- ── MAIN CONTENT ── -->
 <div class="container wide">
 
-  <!-- Contact Info Tiles -->
+  <!-- 3 Contact Tiles -->
   <div class="contact-hero-strip">
+
     <div class="info-tile">
       <div class="tile-icon">📍</div>
       <h3>Our Address</h3>
       <p>Harasinghpur, Pirahat,<br />Bhadrak, Odisha</p>
+      <a href="https://maps.google.com/?q=Pirahat,Bhadrak,Odisha" target="_blank" rel="noopener" class="action-btn">
+        Open in Maps
+      </a>
     </div>
+
     <div class="info-tile">
       <div class="tile-icon">📞</div>
       <h3>Phone Number</h3>
-      <a href="tel:+916372296357">+91-6372296357</a><br />
-      <p style="font-size:0.8rem; margin-top:0.3rem;">Mon–Sat, 9 AM – 6 PM</p>
+      <p>Monday – Saturday<br />9:00 AM to 6:00 PM IST</p>
+      <a href="tel:+916372296357">+91-6372296357</a>
+      <br />
+      <a href="tel:+916372296357" class="action-btn">📲 Call Now</a>
     </div>
+
     <div class="info-tile">
       <div class="tile-icon">✉️</div>
       <h3>Email Address</h3>
-      <a href="javascript:void(0)" onclick="var e='evidya2026'+'@'+'gmail.com';this.href='mailto:'+e;this.textContent=e;this.onclick=null;" style="color:var(--primary);font-weight:500;">click to reveal email</a><br />
-      <p style="font-size:0.8rem; margin-top:0.3rem;">Reply within 24–48 hours</p>
+      <p>We reply within<br />24–48 hours</p>
+      <a href="javascript:void(0)"
+         id="emailReveal"
+         onclick="this.textContent='evidya2026@gmail.com'; this.href='mailto:evidya2026@gmail.com'; this.onclick=null;"
+         style="font-size:0.95rem;">
+        👆 Tap to show email
+      </a>
+      <br />
+      <a href="javascript:void(0)"
+         onclick="window.location='mai'+'lto:evid'+'ya2026@gma'+'il.com';"
+         class="action-btn">
+        ✉️ Send Email
+      </a>
     </div>
-    <div class="info-tile">
-      <div class="tile-icon">🕐</div>
-      <h3>Support Hours</h3>
-      <p>Monday – Saturday<br />9:00 AM to 6:00 PM IST</p>
-    </div>
+
   </div>
 
-  <!-- Two column layout: Form + Sidebar -->
-  <div style="display:grid; grid-template-columns: 1fr 340px; gap:1.75rem; align-items:start;">
+  <!-- Map + Schedule -->
+  <div class="two-col">
 
-    <!-- Contact Form -->
     <div class="card">
-      <h2><span class="icon">📝</span> Send Us a Message</h2>
-      <p style="color:var(--muted); font-size:0.9rem; margin-bottom:1.5rem;">
-        Fill in the form below and we will get back to you as soon as possible.
-      </p>
-
-      <form id="contactForm" onsubmit="handleSubmit(event)">
-        <div class="form-grid">
-
-          <div class="form-group">
-            <label>Full Name <span>*</span></label>
-            <input type="text" id="name" placeholder="Your full name" required />
-          </div>
-
-          <div class="form-group">
-            <label>Phone Number <span>*</span></label>
-            <input type="tel" id="phone" placeholder="+91 XXXXX XXXXX" required />
-          </div>
-
-          <div class="form-group full">
-            <label>Email Address <span>*</span></label>
-            <input type="email" id="email" placeholder="yourname@example.com" required />
-          </div>
-
-          <div class="form-group full">
-            <label>Subject / Reason for Contact <span>*</span></label>
-            <select id="subject" required>
-              <option value="" disabled selected>Select a topic…</option>
-              <option>Enquiry about Villager Training (Mon/Wed/Fri)</option>
-              <option>Enquiry about Digital Classes (Tue/Thu/Sat)</option>
-              <option>Fee / Payment Related</option>
-              <option>Technical Issue with Website</option>
-              <option>Account / Login Problem</option>
-              <option>Privacy or Data Concern</option>
-              <option>Feedback or Suggestion</option>
-              <option>Other</option>
-            </select>
-          </div>
-
-          <div class="form-group full">
-            <label>Your Message <span>*</span></label>
-            <textarea id="message" placeholder="Please describe your query or concern in detail…" required></textarea>
-          </div>
-
-          <div class="form-group full">
-            <label style="display:flex; align-items:flex-start; gap:0.5rem; font-weight:400; cursor:pointer;">
-              <input type="checkbox" required style="width:auto; margin-top:3px;" />
-              <span style="font-size:0.88rem;">
-                I have read and agree to the
-                <a href="../Privacy/" style="color:var(--primary);">Privacy Policy</a> and
-                <a href="../Terms/" style="color:var(--primary);">Terms &amp; Conditions</a>
-                of E-Vidya Academy.
-              </span>
-            </label>
-          </div>
-
-        </div>
-
-        <button type="submit" class="submit-btn">
-          📨 Send Message
-        </button>
-
-        <div class="success-msg" id="successMsg">
-          ✅ Thank you! Your message has been sent. We will get back to you within 24–48 hours.
-        </div>
-      </form>
+      <h2><span class="icon">🗺️</span> Find Us</h2>
+      <div class="map-box">
+        <div class="map-icon">📍</div>
+        <strong>Harasinghpur, Pirahat</strong>
+        <span>Bhadrak, Odisha</span>
+        <a href="https://maps.google.com/?q=Pirahat,Bhadrak,Odisha" target="_blank" rel="noopener">
+          Open in Google Maps →
+        </a>
+      </div>
     </div>
 
-    <!-- Sidebar -->
-    <div>
-
-      <!-- Map -->
-      <div class="card" style="padding:1.5rem;">
-        <h2><span class="icon">🗺️</span> Find Us</h2>
-        <div class="map-box">
-          <div class="map-icon">📍</div>
-          <strong>Harasinghpur, Pirahat</strong>
-          <span style="color:var(--muted); font-size:0.85rem;">Bhadrak, Odisha</span>
-          <a href="https://maps.google.com/?q=Pirahat,Bhadrak,Odisha" target="_blank" rel="noopener">
-            Open in Google Maps →
-          </a>
-        </div>
-      </div>
-
-      <!-- Session Schedule -->
-      <div class="card" style="padding:1.5rem;">
-        <h2><span class="icon">📅</span> Session Schedule</h2>
-        <table class="hours-table">
-          <tr>
-            <td>Monday</td>
-            <td><span class="badge-open">Villager Training</span></td>
-          </tr>
-          <tr>
-            <td>Tuesday</td>
-            <td><span class="badge-open">Digital Classes</span></td>
-          </tr>
-          <tr>
-            <td>Wednesday</td>
-            <td><span class="badge-open">Villager Training</span></td>
-          </tr>
-          <tr>
-            <td>Thursday</td>
-            <td><span class="badge-open">Digital Classes</span></td>
-          </tr>
-          <tr>
-            <td>Friday</td>
-            <td><span class="badge-open">Villager Training</span></td>
-          </tr>
-          <tr>
-            <td>Saturday</td>
-            <td><span class="badge-open">Digital Classes</span></td>
-          </tr>
-          <tr>
-            <td>Sunday</td>
-            <td><span class="badge-closed">No Classes</span></td>
-          </tr>
-        </table>
-      </div>
-
-      <!-- Quick Links -->
-      <div class="card" style="padding:1.5rem;">
-        <h2><span class="icon">🔗</span> Quick Links</h2>
-        <div style="display:flex; flex-direction:column; gap:0.5rem; margin-top:0.25rem;">
-          <a href="../About/" style="color:var(--primary); font-size:0.92rem; text-decoration:none; padding:0.4rem 0; border-bottom:1px solid var(--border);">🏫 About E-Vidya Academy</a>
-          <a href="../Terms/" style="color:var(--primary); font-size:0.92rem; text-decoration:none; padding:0.4rem 0; border-bottom:1px solid var(--border);">📋 Terms &amp; Conditions</a>
-          <a href="../Disclaimer/" style="color:var(--primary); font-size:0.92rem; text-decoration:none; padding:0.4rem 0; border-bottom:1px solid var(--border);">⚠️ Disclaimer</a>
-          <a href="../Privacy/" style="color:var(--primary); font-size:0.92rem; text-decoration:none; padding:0.4rem 0;">🔒 Privacy Policy</a>
-        </div>
-      </div>
-
+    <div class="card">
+      <h2><span class="icon">📅</span> Session Schedule</h2>
+      <table class="hours-table">
+        <tr><td>Monday</td><td><span class="badge-open">Villager Training</span></td></tr>
+        <tr><td>Tuesday</td><td><span class="badge-open">Digital Classes</span></td></tr>
+        <tr><td>Wednesday</td><td><span class="badge-open">Villager Training</span></td></tr>
+        <tr><td>Thursday</td><td><span class="badge-open">Digital Classes</span></td></tr>
+        <tr><td>Friday</td><td><span class="badge-open">Villager Training</span></td></tr>
+        <tr><td>Saturday</td><td><span class="badge-open">Digital Classes</span></td></tr>
+        <tr><td>Sunday</td><td><span class="badge-closed">No Sessions</span></td></tr>
+      </table>
     </div>
-  </div><!-- /grid -->
+
+  </div>
+
+  <!-- How to Reach Us -->
+  <div class="card" style="margin-top: 0.5rem;">
+    <h2><span class="icon">💬</span> How to Reach Us</h2>
+    <p>
+      For any queries related to our training sessions, digital classes, fees, or any other
+      matter, you are welcome to contact us directly by phone or email during our support hours.
+    </p>
+    <p>
+      <strong>For Villager Training enquiries</strong> (English, Legal Awareness, Mind Power
+      Development) — sessions run every Monday, Wednesday, and Friday.
+    </p>
+    <p>
+      <strong>For Digital Class enquiries</strong> (School &amp; College student support) —
+      sessions run every Tuesday, Thursday, and Saturday.
+    </p>
+    <div class="highlight-box">
+      📞 Fastest response: <strong>Call us at +91-6372296357</strong> during support hours
+      (Mon–Sat, 9 AM – 6 PM IST).
+    </div>
+  </div>
 
 </div><!-- /container -->
 
@@ -418,12 +266,6 @@
   </p>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  document.getElementById('yr').textContent = new Date().getFullYear();
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    const btn = document.querySelector('.submit-btn');
-    btn.textContent = '⏳ Sending…';
-    btn.disabled = true;
-    setTimeout(() =
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+</body>
+</html>
