@@ -1,307 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 15px;
-            padding-bottom: 30px;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 25px;
-            animation: fadeIn 0.6s ease-out;
-            padding: 0 10px;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .header h1 {
-            font-size: 24px;
-            margin-bottom: 8px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            line-height: 1.3;
-        }
-
-        .header p {
-            font-size: 15px;
-            opacity: 0.95;
-            line-height: 1.4;
-        }
-
-        .classes-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .class-card {
-            background: white;
-            border-radius: 12px;
-            padding: 18px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            animation: slideUp 0.5s ease-out;
-            animation-fill-mode: both;
-            min-height: 90px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .class-card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 4px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .class-card:nth-child(1) { animation-delay: 0.05s; }
-        .class-card:nth-child(2) { animation-delay: 0.1s; }
-        .class-card:nth-child(3) { animation-delay: 0.15s; }
-        .class-card:nth-child(4) { animation-delay: 0.2s; }
-        .class-card:nth-child(5) { animation-delay: 0.25s; }
-        .class-card:nth-child(6) { animation-delay: 0.3s; }
-        .class-card:nth-child(7) { animation-delay: 0.35s; }
-        .class-card:nth-child(8) { animation-delay: 0.4s; }
-        .class-card:nth-child(9) { animation-delay: 0.45s; }
-
-        .class-card:active {
-            transform: scale(0.98);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .class-icon {
-            font-size: 40px;
-            flex-shrink: 0;
-            width: 55px;
-            height: 55px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            border-radius: 12px;
-        }
-
-        .class-info {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .class-title {
-            font-size: 18px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .class-description {
-            color: #666;
-            font-size: 13px;
-            line-height: 1.4;
-        }
-
-        .class-arrow {
-            font-size: 20px;
-            color: #667eea;
-            flex-shrink: 0;
-        }
-
-        .footer {
-            text-align: center;
-            color: white;
-            margin-top: 30px;
-            opacity: 0.9;
-            font-size: 13px;
-            padding: 0 20px;
-            line-height: 1.5;
-        }
-
-        /* Touch feedback */
-        @media (hover: hover) {
-            .class-card:hover {
-                transform: translateX(5px);
-                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-            }
-        }
-
-        /* Small mobile screens */
-        @media (max-width: 400px) {
-            body {
-                padding: 12px;
-            }
-
-            .header h1 {
-                font-size: 22px;
-            }
-
-            .header p {
-                font-size: 14px;
-            }
-
-            .class-card {
-                padding: 15px;
-                min-height: 80px;
-            }
-
-            .class-icon {
-                font-size: 35px;
-                width: 50px;
-                height: 50px;
-            }
-
-            .class-title {
-                font-size: 17px;
-            }
-
-            .class-description {
-                font-size: 12px;
-            }
-        }
-
-        /* Landscape mode optimization */
-        @media (max-height: 600px) and (orientation: landscape) {
-            body {
-                padding: 10px;
-            }
-
-            .header {
-                margin-bottom: 15px;
-            }
-
-            .header h1 {
-                font-size: 20px;
-                margin-bottom: 5px;
-            }
-
-            .header p {
-                font-size: 13px;
-            }
-
-            .classes-grid {
-                gap: 10px;
-            }
-
-            .class-card {
-                min-height: 70px;
-                padding: 12px;
-            }
-        }
-
-        /* Safe area support for notched devices */
-        @supports (padding: max(0px)) {
-            body {
-                padding-left: max(15px, env(safe-area-inset-left));
-                padding-right: max(15px, env(safe-area-inset-right));
-                padding-bottom: max(30px, env(safe-area-inset-bottom));
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-Vidya Academy — Knowledge · Empowerment · Growth</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .hero-home {
+      background: linear-gradient(135deg, #0d1b2a 0%, #1a4f8a 60%, #1b6ca8 100%);
+      color: #fff;
+      text-align: center;
+      padding: 5rem 2rem 4.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-home::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-home .hero-logo { font-size: 3.5rem; margin-bottom: 1rem; position: relative; }
+    .hero-home h1 {
+      font-family: 'Tiro Devanagari Sanskrit', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+    .hero-home .sub {
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      opacity: 0.75;
+      max-width: 580px;
+      margin: 0 auto 2rem;
+      position: relative;
+    }
+    .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; }
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+    .btn-primary { background: #f4a61c; color: #0d1b2a; }
+    .btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.5); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin: 2.5rem 0;
+    }
+    .service-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem 1.75rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .service-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(26,79,138,0.14); }
+    .service-card .sc-icon { font-size: 2.2rem; margin-bottom: 0.8rem; }
+    .service-card h3 {
+      font-family: 'Tiro Devanagari Sanskrit', serif;
+      color: var(--primary);
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    .service-card p { font-size: 0.92rem; color: var(--muted); line-height: 1.65; }
+    .service-card .days {
+      display: inline-block;
+      margin-top: 0.75rem;
+      background: #e8f1fb;
+      color: var(--primary);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.3rem 0.75rem;
+      border-radius: 20px;
+    }
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .ql-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      font-weight: 500;
+      font-size: 0.92rem;
+    }
+    .ql-item:hover { border-color: var(--primary); box-shadow: 0 4px 16px rgba(26,79,138,0.1); color: var(--primary); }
+    .ql-item .ql-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .section-title { font-family: 'Tiro Devanagari Sanskrit', serif; color: var(--primary); font-size: 1.6rem; margin-bottom: 0.4rem; }
+    .section-desc { color: var(--muted); margin-bottom: 0; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>E-VIDYA ACADEMY</h1>
-            <p>A Private Initiative</p>
-        </div>
 
-        <a href="./PAYMENT/index.html" class="class-card">
-                <div class="class-icon">✏️</div>
-                <div class="class-info">
-                    <div class="class-title">PAYMENT</div>
-                </div>
-                <div class="class-arrow">›</div>
-            </a>
-
-            <a href="./MO SATHI/index.html" class="class-card">
-                <div class="class-icon">✏️</div>
-                <div class="class-info">
-                    <div class="class-title">MO SATHI</div>
-                </div>
-                <div class="class-arrow">›</div>
-            </a>
-
-
-           <a href="./mainapp/index.html" class="class-card">
-                <div class="class-icon">✏️</div>
-                <div class="class-info">
-                    <div class="class-title">mainapp</div>
-                </div>
-                <div class="class-arrow">›</div>
-            </a>
-
-        <a href="./CONTACT US/index.html" class="class-card">
-                <div class="class-icon">✏️</div>
-                <div class="class-info">
-                    <div class="class-title">CONTACT US</div>
-                </div>
-                <div class="class-arrow">›</div>
-            </a>
-
-        <a href="./CON/index.html" class="class-card">
-                <div class="class-icon">✏️</div>
-                <div class="class-info">
-                    <div class="class-title">CON</div>
-                </div>
-                <div class="class-arrow">›</div>
-            </a>
-        
-        </div>
-
-        <div class="footer">
-            <p>© 2026 E-Vidya Academy<br>All Rights Reserved</p>
-        </div>
+<nav>
+  <a href="index.html" class="nav-brand">
+    <div class="nav-logo-icon">📚</div>
+    <div>
+      <div class="nav-brand-name">E-Vidya Academy</div>
+      <div class="nav-brand-tagline">Knowledge · Empowerment · Growth</div>
     </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="About/">About</a></li>
+    <li><a href="Terms/">Terms</a></li>
+    <li><a href="Disclaimer/">Disclaimer</a></li>
+    <li><a href="Privacy/">Privacy</a></li>
+  </ul>
+</nav>
+
+<div class="hero-home">
+  <div class="hero-logo">📚</div>
+  <h1>E-Vidya Academy</h1>
+  <p class="sub">
+    Empowering the people of Odisha through accessible, high-quality online education —
+    English communication, legal awareness, mind power development, and digital learning
+    for school &amp; college students.
+  </p>
+  <div class="hero-cta">
+    <a href="About/" class="btn btn-primary">Learn More</a>
+    <a href="About/#contact" class="btn btn-outline">Contact Us</a>
+  </div>
+</div>
+
+<div class="container wide">
+
+  <div style="margin-bottom:0.5rem;">
+    <p class="section-label">What We Offer</p>
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-desc">Designed for rural and semi-urban communities across Odisha.</p>
+  </div>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="sc-icon">🗣️</div>
+      <h3>English Communication</h3>
+      <p>Spoken and written English training to help our learners communicate with confidence in everyday and professional settings.</p>
+      <span class="days">Mon · Wed · Fri</span>
+    </div>
+    <div class="service-card">
+      <div class="sc-icon">⚖️</div>
+      <h3>Legal Awareness</h3>
+      <p>General legal literacy sessions for awareness purposes — understanding rights, basic laws, and how the legal system works.</p>
+      <span class="days">Mon · Wed · Fri</span>
+    </div>
+    <div class="service-card">
+      <div class="sc-icon">🧠</div>
+      <h3>Mind Power Development</h3>
+      <p>Personality development and mind power sessions to build confidence, focus, and a growth mindset for everyday life.</p>
+      <span class="days">Mon · Wed · Fri</span>
+    </div>
+    <div class="service-card">
+      <div class="sc-icon">🎒</div>
+      <h3>Digital Classes for Students</h3>
+      <p>Pre-recorded academic support classes to help parents assist in the educational journey of their school and college children.</p>
+      <span class="days">Tue · Thu · Sat</span>
+    </div>
+  </div>
+
+  <div style="margin-top:3rem; margin-bottom:0.5rem;">
+    <p class="section-label">Site Policies</p>
+    <h2 class="section-title">Legal &amp; Policy Documents</h2>
+    <p class="section-desc">Everything you need to know about using E-Vidya Academy.</p>
+  </div>
+
+  <div class="quick-links">
+    <a href="About/" class="ql-item"><span class="ql-icon">🏫</span> About Us</a>
+    <a href="Terms/" class="ql-item"><span class="ql-icon">📋</span> Terms &amp; Conditions</a>
+    <a href="Disclaimer/" class="ql-item"><span class="ql-icon">⚠️</span> Disclaimer</a>
+    <a href="Privacy/" class="ql-item"><span class="ql-icon">🔒</span> Privacy Policy</a>
+  </div>
+
+  <div class="card" style="margin-top:3rem;" id="contact">
+    <h2><span class="icon">📬</span> Get in Touch</h2>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <span class="ci-icon">📍</span>
+        <div><strong>Address</strong>Harasinghpur, Pirahat, Bhadrak, Odisha</div>
+      </div>
+      <div class="contact-item">
+        <span class="ci-icon">📞</span>
+        <div><strong>Phone</strong><a href="tel:+91XXXXXXXXXX">+91-XXXXXXXXXX</a></div>
+      </div>
+      <div class="contact-item">
+        <span class="ci-icon">✉️</span>
+        <div><strong>Email</strong><a href="mailto:info@evidyaacademy.in">info@evidyaacademy.in</a></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-links">
+    <a href="About/">About Us</a>
+    <a href="Terms/">Terms &amp; Conditions</a>
+    <a href="Disclaimer/">Disclaimer</a>
+    <a href="Privacy/">Privacy Policy</a>
+  </div>
+  <p>
+    <strong>E-Vidya Academy</strong><br />
+    Harasinghpur, Pirahat, Bhadrak, Odisha<br />
+    &copy; <span id="yr"></span> E-Vidya Academy. All rights reserved.
+  </p>
+</footer>
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
 </body>
 </html>
