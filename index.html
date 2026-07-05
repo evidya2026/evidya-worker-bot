@@ -4,16 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ଇ-ବିଦ୍ୟା ଏକାଡେମୀ</title>
-  <link rel="manifest" href="./manifest.json">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="E-Vidya Academy">
-<meta name="theme-color" content="#07111f">
-<link rel="apple-touch-icon" href="./icon-192.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Oriya:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
 <style>
 :root {
   --navy:    #07111f;
@@ -422,33 +413,6 @@ footer { background:var(--navy); border-radius:20px; padding:26px 20px 22px; mar
 </head>
 <body>
 
-  <div class="pwa-overlay" id="pwaModal">
-  <div class="pwa-box">
-    <div class="pwa-icon">📲</div>
-    <h2 class="pwa-title">Install App</h2>
-    <p class="pwa-sub">Install this app on your device for quick and easy access anytime!</p>
-    <button class="pwa-install" onclick="doInstall()">⬇️ Install Now</button>
-    <button class="pwa-dismiss" onclick="dismissPwa()">Not Now</button>
-  </div>
-</div>
-
-<div class="pwa-overlay" id="iosModal">
-  <div class="pwa-box">
-    <div class="pwa-icon">📱</div>
-    <h2 class="pwa-title">Install App</h2>
-    <p class="pwa-sub">Add E-Vidya Academy to your Home Screen for quick access — just like a real app!</p>
-    <div class="ios-steps">
-      <div class="ios-step"><span class="ios-step-num">1</span><span>Tap the <b>Share</b> button <span class="ios-step-icon">⬆️</span> below</span></div>
-      <div class="ios-step"><span class="ios-step-num">2</span><span>Scroll down the menu</span></div>
-      <div class="ios-step"><span class="ios-step-num">3</span><span>Tap <b>"Add to Home Screen"</b></span></div>
-      <div class="ios-step"><span class="ios-step-num">4</span><span>Tap <b>"Add"</b> — Done! 🎉</span></div>
-    </div>
-    <button class="pwa-dismiss" onclick="dismissIos()">Got it</button>
-  </div>
-</div>
-
-<button id="pwaBtn" onclick="doInstall()">⬇️ Install App</button>
-<button id="iosInstallBtn" onclick="showIosModal()">📱 Install App</button>
 
 <nav class="top-nav">
   <a href="index.html" class="active">🏠 ମୂଳପୃଷ୍ଠା</a>
@@ -1009,62 +973,7 @@ function loadYT() {
 // Inject video blocks into static modals
 initStaticModalVideos();
 
-  // ── PWA — Android / Chrome ──
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById('pwaBtn').style.display = 'block';
- document.getElementById('pwaModal').classList.add('active');
-});
-function doInstall() {
-  dismissPwa();
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(r => {
-      if (r.outcome === 'accepted') document.getElementById('pwaBtn').style.display = 'none';
-      deferredPrompt = null;
-    });
-  }
-}
-function dismissPwa() {
-  document.getElementById('pwaModal').classList.remove('active');
-}
-window.addEventListener('appinstalled', () => {
-  document.getElementById('pwaBtn').style.display = 'none';
-  dismissPwa();
-  deferredPrompt = null;
-});
 
-// ── PWA — iOS ──
-function isIos() {
-  return /iphone|ipad|ipod/i.test(window.navigator.userAgent);
-}
-function isInStandaloneMode() {
-  return ('standalone' in window.navigator) && (window.navigator.standalone);
-}
-function showIosModal() {
-  document.getElementById('iosModal').classList.add('active');
-}
-function dismissIos() {
-  document.getElementById('iosModal').classList.remove('active');
-  try { localStorage.setItem('iosInstallDismissed', '1'); } catch (e) {}
-}
-if (isIos() && !isInStandaloneMode()) {
-  let alreadyDismissed = false;
-  try { alreadyDismissed = localStorage.getItem('iosInstallDismissed') === '1'; } catch (e) {}
-  document.getElementById('iosInstallBtn').style.display = 'block';
- if (!alreadyDismissed) showIosModal();
-}
-
-// ── Service Worker ──
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(r => console.log('SW registered:', r.scope))
-      .catch(e => console.log('SW error:', e));
-  });
-}
 </script>
 </body>
 </html>
