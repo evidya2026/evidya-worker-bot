@@ -1010,7 +1010,7 @@ window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   deferredPrompt = e;
   document.getElementById('pwaBtn').style.display = 'block';
-  setTimeout(() => document.getElementById('pwaModal').classList.add('active'), 2500);
+ document.getElementById('pwaModal').classList.add('active');
 });
 function doInstall() {
   dismissPwa();
