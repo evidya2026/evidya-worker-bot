@@ -155,10 +155,11 @@ nav {
   font-weight: 700;
   flex-shrink: 0;
 }
+.container p,
 .card p {
   margin-bottom: 10px;
   color: #333;
-  text-align: justify;
+  text-align: justify !important;
   text-justify: inter-word;
 }
 .card ul { margin: 8px 0 8px 20px; color: #333; }
