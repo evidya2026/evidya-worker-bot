@@ -107,6 +107,8 @@ nav {
   max-width: 640px;
   color: rgba(255,255,255,0.85);
   font-size: 1em;
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 /* ── Container ── */
@@ -153,7 +155,12 @@ nav {
   font-weight: 700;
   flex-shrink: 0;
 }
-.card p { margin-bottom: 10px; color: #333; }
+.card p {
+  margin-bottom: 10px;
+  color: #333;
+  text-align: justify;
+  text-justify: inter-word;
+}
 .card ul { margin: 8px 0 8px 20px; color: #333; }
 .card li { margin-bottom: 6px; }
 
