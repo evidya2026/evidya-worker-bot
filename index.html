@@ -51,11 +51,16 @@ body::after {
 /* ── TOP NAV (links to existing site pages) ── */
 .top-nav {
   position:relative; z-index:2;
-  display:flex; align-items:center; justify-content:center;
-  flex-wrap:wrap; gap:4px 2px;
+  display:flex; align-items:center;
+  gap:4px 2px;
   padding:14px 10px;
   max-width:640px; margin:0 auto;
+  overflow-x:auto;
+  white-space:nowrap;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
 }
+.top-nav::-webkit-scrollbar { display:none; }
 .top-nav a {
   color:rgba(255,255,255,0.78);
   text-decoration:none;
