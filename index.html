@@ -1049,7 +1049,7 @@ if (isIos() && !isInStandaloneMode()) {
   let alreadyDismissed = false;
   try { alreadyDismissed = localStorage.getItem('iosInstallDismissed') === '1'; } catch (e) {}
   document.getElementById('iosInstallBtn').style.display = 'block';
-  if (!alreadyDismissed) setTimeout(showIosModal, 2500);
+ if (!alreadyDismissed) showIosModal();
 }
 
 // ── Service Worker ──
