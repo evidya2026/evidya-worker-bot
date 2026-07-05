@@ -1,7 +1,5 @@
-const CACHE_NAME = 'evidya-home-cache-v2';
+const CACHE_NAME = 'evidya-home-cache-v3';
 const urlsToCache = [
-  './',
-  './index.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png'
@@ -21,24 +19,15 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('fetch', event => {
+  // Let the browser handle page navigation normally (avoids redirect issues)
+  if (event.request.mode === 'navigate') {
+    return;
+  }
+
   event.respondWith(
-    (async () => {
-      try {
-        // Rebuild the request forcing redirect: 'follow' to avoid
-        // "redirected response used for request whose redirect mode is not follow"
-        const req = new Request(event.request.url, {
-          method: event.request.method,
-          headers: event.request.headers,
-          mode: event.request.mode === 'navigate' ? 'same-origin' : event.request.mode,
-          credentials: event.request.credentials,
-          redirect: 'follow'
-        });
-        return await fetch(req);
-      } catch (err) {
-        const cached = await caches.match(event.request);
-        return cached || Response.error();
-      }
-    })()
+    caches.match(event.request).then(cached => {
+      return cached || fetch(event.request).catch(() => cached);
+    })
   );
 });
 
