@@ -6,27 +6,27 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://evidya.de/about.html</loc>
+    <loc>https://evidya.de/About/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://evidya.de/contact.html</loc>
+    <loc>https://evidya.de/Contact/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://evidya.de/terms.html</loc>
+    <loc>https://evidya.de/Terms/</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://evidya.de/disclaimer.html</loc>
+    <loc>https://evidya.de/Disclaimer/</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://evidya.de/privacy.html</loc>
+    <loc>https://evidya.de/Privacy/</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
