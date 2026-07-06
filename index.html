@@ -879,10 +879,9 @@ ARTS.forEach(a => {
   });
 });
 
-// ── Legal Awareness subjects (each with its own correct external URL) ──
-const LAW_ICONS = ['📜','📋','🛡️','⚖️','📚','🏛️','🔒'];
-const LAW_NAMES = ['Constitutional Law','CPC','BNSS','BNS','BSA','GRCO (Civil)','GRCO (Criminal)'];
-const LAW_ODIA  = ['ସାମ୍ବିଧାନିକ ଆଇନ','Civil Procedure Code','Nagarik Suraksha Sanhita','Bharatiya Nyaya Sanhita','Bharatiya Sakshya Adhiniyam','Odisha HC — Civil','Odisha HC — Criminal'];
+const LAW_ICONS = ['📜','📋','🛡️','⚖️','📚','🏛️','🔒','📋'];
+const LAW_NAMES = ['Constitutional Law','CPC','BNSS','BNS','BSA','GRCO (Civil)','GRCO (Criminal)','Family Law'];
+const LAW_ODIA  = ['ସାମ୍ବିଧାନିକ ଆଇନ','Civil Procedure Code','Nagarik Suraksha Sanhita','Bharatiya Nyaya Sanhita','Bharatiya Sakshya Adhiniyam','Odisha HC — Civil','Odisha HC — Criminal','The Hindu Marriage Act, 1955 & DV Act, 2005'];
 const LAW_HREFS = [
   'https://law-constitutional.pages.dev/',
   'https://law-cpc.pages.dev/',
@@ -891,6 +890,7 @@ const LAW_HREFS = [
   'https://law-bsa.pages.dev/',
   'https://law-grco-civil.pages.dev/',
   'https://law-grco-criminal.pages.dev/',
+  'https://law-fl.pages.dev/',
 ];
 const LAW_COLS = [
   'linear-gradient(135deg,#7b1a0a,#b22222)',
@@ -900,9 +900,10 @@ const LAW_COLS = [
   'linear-gradient(135deg,#7f1d1d,#b91c1c)',
   'linear-gradient(135deg,#1e3a8a,#2563eb)',
   'linear-gradient(135deg,#065f46,#059669)',
+  'linear-gradient(135deg,#3b0764,#6d28d9)',
 ];
 
-[1,2,3,4,5,6,7].forEach(i => {
+[1,2,3,4,5,6,7,8].forEach(i => {   // ← now goes to 8
   DYNA.push({
     id:`modal-law${i}`,
     icon: LAW_ICONS[i-1],
