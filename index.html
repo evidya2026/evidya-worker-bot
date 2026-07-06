@@ -647,15 +647,17 @@ footer { background:var(--navy); border-radius:20px; padding:26px 20px 22px; mar
     </div>
   </div>
 
-  <!-- 7. Legal Awareness -->
+ <!-- 7. Legal Awareness -->
   <div class="sec t-legal">
-    <div class="grid1">
-      <a href="https://law-ag7.pages.dev/" class="lv-card lv-legal" data-modal="modal-legal">
-        <div class="lv-icon">⚖️</div>
-        <div class="lv-name">Legal Awareness</div>
-        <div class="lv-sub">ଆଇନ ସଚେତନତା ପ୍ରଶିକ୍ଷଣ</div>
-        <div class="lv-bar"></div>
-      </a>
+    <div class="sub-lbl">Legal Awareness — ଆଇନ ସଚେତନତା</div>
+    <div class="grid2">
+      <a href="./legal-constitutional/index.html" class="lv-card lv-sem1" data-modal="modal-legal1"><div class="lv-icon">📜</div><div class="lv-name">Constitutional Law</div><div class="lv-sub">ସାମ୍ବିଧାନିକ ଆଇନ</div><div class="lv-bar"></div></a>
+      <a href="./legal-cpc/index.html" class="lv-card lv-sem2" data-modal="modal-legal2"><div class="lv-icon">📋</div><div class="lv-name">CPC</div><div class="lv-sub">Civil Procedure Code</div><div class="lv-bar"></div></a>
+      <a href="./legal-bnss/index.html" class="lv-card lv-sem3" data-modal="modal-legal3"><div class="lv-icon">🛡️</div><div class="lv-name">BNSS</div><div class="lv-sub">Nagarik Suraksha Sanhita</div><div class="lv-bar"></div></a>
+      <a href="./legal-bns/index.html" class="lv-card lv-sem4" data-modal="modal-legal4"><div class="lv-icon">⚖️</div><div class="lv-name">BNS</div><div class="lv-sub">Bharatiya Nyaya Sanhita</div><div class="lv-bar"></div></a>
+      <a href="./legal-bsa/index.html" class="lv-card lv-sem1" data-modal="modal-legal5"><div class="lv-icon">📚</div><div class="lv-name">BSA</div><div class="lv-sub">Bharatiya Sakshya Adhiniyam</div><div class="lv-bar"></div></a>
+      <a href="./legal-grco-civil/index.html" class="lv-card lv-sem2" data-modal="modal-legal6"><div class="lv-icon">🏛️</div><div class="lv-name">GRCO (Civil)</div><div class="lv-sub">Odisha HC — Civil</div><div class="lv-bar"></div></a>
+      <a href="./legal-grco-criminal/index.html" class="lv-card lv-sem3" data-modal="modal-legal7"><div class="lv-icon">🔒</div><div class="lv-name">GRCO (Criminal)</div><div class="lv-sub">Odisha HC — Criminal</div><div class="lv-bar"></div></a>
     </div>
   </div>
 
@@ -709,27 +711,7 @@ footer { background:var(--navy); border-radius:20px; padding:26px 20px 22px; mar
   </div>
 </div>
 
-<div class="modal-overlay" id="modal-legal">
-  <div class="modal-box" data-video-id="">
-    <div class="modal-pill"></div>
-    <div class="modal-icon">⚖️</div>
-    <div class="modal-title">Legal Awareness</div>
-    <div class="modal-subtitle">ଆଇନ ସଚେତନତା ପ୍ରଶିକ୍ଷଣ — ଉପଲବ୍ଧ ଆଇନ ତାଲିକା:</div>
-    <div class="modal-notice">
-      <div class="modal-notice-title">⚖️ Core Laws &amp; Codes:</div>
-      <ul class="modal-list">
-        <li>Constitutional Law — ସଂବିଧାନ ଆଇନ</li>
-        <li>CPC — Civil Procedure Code</li>
-        <li>BNSS — Bharatiya Nagarik Suraksha Sanhita</li>
-        <li>BNS — Bharatiya Nyaya Sanhita</li>
-        <li>BSA — Bharatiya Sakshya Adhiniyam</li>
-      </ul>
-    </div>
-    <div class="modal-btn-row">
-      <button class="modal-btn-cancel" onclick="closeModal('modal-legal')">ବାତିଲ</button>
-      <a href="https://law-ag7.pages.dev/" class="modal-btn-go" style="background:linear-gradient(135deg,#7f1d1d,#b91c1c);">ଆଗକୁ ଯାଆନ୍ତୁ →</a>
-    </div>
-  </div>
+
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -896,6 +878,30 @@ ARTS.forEach(a => {
   });
 });
 
+
+// Legal Awareness subjects
+const LEGAL = [
+  {key:'legal1', icon:'📜', name:'Constitutional Law', odia:'ସାମ୍ବିଧାନିକ ଆଇନ',            href:'./legal-constitutional/index.html'},
+  {key:'legal2', icon:'📋', name:'CPC',                 odia:'Civil Procedure Code',        href:'./legal-cpc/index.html'},
+  {key:'legal3', icon:'🛡️', name:'BNSS',                odia:'Bharatiya Nagarik Suraksha Sanhita', href:'./legal-bnss/index.html'},
+  {key:'legal4', icon:'⚖️', name:'BNS',                 odia:'Bharatiya Nyaya Sanhita',     href:'./legal-bns/index.html'},
+  {key:'legal5', icon:'📚', name:'BSA',                 odia:'Bharatiya Sakshya Adhiniyam',  href:'./legal-bsa/index.html'},
+  {key:'legal6', icon:'🏛️', name:'GRCO (Civil)',        odia:'Odisha HC — Civil',           href:'./legal-grco-civil/index.html'},
+  {key:'legal7', icon:'🔒', name:'GRCO (Criminal)',     odia:'Odisha HC — Criminal',        href:'./legal-grco-criminal/index.html'},
+];
+LEGAL.forEach((l,i) => {
+  DYNA.push({
+    id:`modal-${l.key}`,
+    icon:l.icon,
+    title:l.name,
+    sub:l.odia,
+    note:`ଏହି ଆପ୍ ${l.name} ବିଷୟରେ ସମସ୍ତ ପାଠ୍ୟକ୍ରମ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।`,
+    col: COLS[i % 4],
+    href: l.href
+  });
+});
+
+  
 // ── School Classes 1–10 (each with its own correct external URL) ──
 const SC_ICONS = ['🔢','✏️','📖','📝','🔬','🌍','📐','🧪','📚','🎓'];
 const SC_ODIA  = ['ପ୍ରଥମ','ଦ୍ୱିତୀୟ','ତୃତୀୟ','ଚତୁର୍ଥ','ପଞ୍ଚମ','ଷଷ୍ଠ','ସପ୍ତମ','ଅଷ୍ଟମ','ନବମ','ଦଶମ'];
@@ -935,6 +941,9 @@ const SC_COLS = [
     href: SC_HREFS[c-1]
   });
 });
+
+
+  
 
 // ── Generate all dynamic modals ─────────────────────────────
 DYNA.forEach(d => {
