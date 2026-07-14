@@ -409,6 +409,28 @@ footer { background:var(--navy); border-radius:20px; padding:26px 20px 22px; mar
   border-radius: 25px; font-size: 15px; font-weight: 700; cursor: pointer;
   box-shadow: 0 6px 20px rgba(200,150,42,0.5); z-index: 9999; white-space: nowrap;
 }
+
+  /* ── FAQ SECTION ── */
+.faq-highlight {
+  border: 2.5px solid var(--gold);
+  background: linear-gradient(135deg,#fffbea 0%,#fff 60%);
+  animation: faqPulse 2.4s ease-in-out infinite;
+}
+@keyframes faqPulse {
+  0%,100% { box-shadow: 0 6px 24px rgba(200,150,42,0.22); }
+  50%     { box-shadow: 0 10px 40px rgba(200,150,42,0.5); }
+}
+.faq-badge {
+  display:inline-block; background:linear-gradient(135deg,#c8962a,#e4b84a);
+  color:#07111f; font-size:11px; font-weight:800; letter-spacing:0.05em;
+  padding:4px 10px; border-radius:20px; margin-bottom:8px;
+}
+.acc-faq { background: linear-gradient(135deg,#b8791f,#d9a63c); }
+.faq-answer {
+  font-size: clamp(13px,3.6vw,14.5px);
+  line-height: 1.65; color: var(--text);
+  padding: 2px 2px 10px; font-weight: 500;
+}
 </style>
 </head>
 <body>
@@ -442,6 +464,157 @@ footer { background:var(--navy); border-radius:20px; padding:26px 20px 22px; mar
   </div>
   <p class="choose-heading">🌹 <span> ଦୟାକରି ଆପଣଙ୍କ କ୍ଲାସ୍ ବାଛି କ୍ଲାସ୍-ରୁମ୍ ରେ ପ୍ରବେଶ କରନ୍ତୁ । </span> 🌹</p>
 </header>
+
+<!-- 0. FAQ - Frequently Asked Questions -->
+  <div class="sec faq-highlight">
+    <div class="sec-hd">
+      <div class="sec-ico" style="background:#fff3d6;">❓</div>
+      <div>
+        <span class="faq-badge">ସାହାଯ୍ୟ · HELP</span>
+        <div class="sec-title">ପ୍ରାୟତଃ ପଚରାଯାଉଥିବା ପ୍ରଶ୍ନ (FAQ)</div>
+      </div>
+    </div>
+
+    <div class="accordion" id="faqAccordion">
+
+      <div class="acc-item" id="faq1">
+        <div class="acc-trigger acc-faq" onclick="toggleAcc('faq1')">
+          <div class="acc-ico">📱</div>
+          <div class="acc-label"><div class="acc-name">ଡିଜିଟାଲ୍ ବୁକ୍ କେମିତି ଖୋଲିବି?</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="acc-body"><p class="faq-answer">Google ସର୍ଚ୍ଚ ବାର୍‌ରେ evidya.de ଟାଇପ୍ କରନ୍ତୁ, ଅଥବା Play Store ରୁ "ODIA SAHAYAK" ଆପ୍ ଡାଉନଲୋଡ୍ କରି "Sikhya Sahayak" ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ ।</p></div>
+      </div>
+
+      <div class="acc-item" id="faq2">
+        <div class="acc-trigger acc-faq" onclick="toggleAcc('faq2')">
+          <div class="acc-ico">🏫</div>
+          <div class="acc-label"><div class="acc-name">ମୋ ପିଲାଙ୍କ ପାଇଁ କେଉଁ ବୁକ୍ ମିଳିବ?</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="acc-body"><p class="faq-answer">Class-1 ରୁ Class-10, +2, +3, ଏବଂ ଆଇନ ସଚେତନତା ପାଇଁ ଅଲଗା ଅଲଗା ବୁକ୍ ଅଛି । ଉପରକୁ ସ୍କ୍ରୋଲ୍ କରି ଆପଣଙ୍କ Class ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ ।</p></div>
+      </div>
+
+      <div class="acc-item" id="faq3">
+        <div class="acc-trigger acc-faq" onclick="toggleAcc('faq3')">
+          <div class="acc-ico">📲</div>
+          <div class="acc-label"><div class="acc-name">ଆପ୍ ଇନଷ୍ଟଲ୍ କରିବା ଦରକାର କି?</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="acc-body"><p class="faq-answer">ହଁ, "Install Now" ବଟନ୍‌ ଦବାନ୍ତୁ । ଆଇକନ୍‌ ହୋମ୍ ସ୍କ୍ରିନ୍‌ରେ ସେଭ୍ ହେବ, ପରେ ସିଧା ସେଥିରେ କ୍ଲିକ୍ କରି ଖୋଲିପାରିବେ ।</p></div>
+      </div>
+
+      <div class="acc-item" id="faq4">
+        <div class="acc-trigger acc-faq" onclick="toggleAcc('faq4')">
+          <div class="acc-ico">🎫</div>
+          <div class="acc-label"><div class="acc-name">ରୋଲ୍ ନମ୍ବର କ'ଣ ଏବଂ କେମିତି ପାଇବି?</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="acc-body"><p class="faq-answer">ପ୍ରଥମ ଥର ପାଇଁ ଲାଲ୍ ବଟନ୍‌ରେ କ୍ଲିକ୍ କରି ପିଲାର ନାମ ଓ ମୋବାଇଲ୍ ନମ୍ବର ଦେଇ "Register Now" ଦବାନ୍ତୁ । ଏକ ରୋଲ୍ ନମ୍ବର ମିଳିବ, ଏହାକୁ ସାଇତି ରଖନ୍ତୁ ।</p></div>
+      </div>
+
+      <div class="acc-item" id="faq5">
+        <div class="acc-trigger acc-faq" onclick="toggleAcc('faq5')">
+          <div class="acc-ico">⚠️</div>
+          <div class="acc-label"><div class="acc-name">ରୋଲ୍ ନମ୍ବର ଭୁଲିଗଲେ କ'ଣ କରିବି?</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="acc-body"><p class="faq-answer">ପୁଣି ନାମ ଓ ନମ୍ବର ଦେଇ ପୁନଃ-ପଞ୍ଜୀକରଣ କରନ୍ତୁ, ନୂଆ ରୋଲ୍ ନମ୍ବର ମିଳିବ । ଏହାପାଇଁ ରୋଲ୍ ନମ୍ବରକୁ କାଗଜରେ ଲେଖି ସାଇତି ରଖିବା ଭଲ ।</p></div>
+      </div>
+
+      <div class="acc-item" id="faq6">
+        <div class="acc-trigger acc-faq" onclick="toggleAcc('faq6')">
+          <div class="acc-ico">🔑</div>
+          <div class="acc-label"><div class="acc-name">ପ୍ରତିଥର ପାଠ ପଢ଼ିବାକୁ କ'ଣ କରିବି?</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="acc-body"><p class="faq-answer">ଉପର କାର୍ଡ଼ରେ କ୍ଲିକ୍ କରନ୍ତୁ, ରୋଲ୍ ନମ୍ବର ଲେଖନ୍ତୁ, ଛୋଟ ବକ୍ସରେ ଟିକ୍ ଦିଅନ୍ତୁ, ତଳେ ଥିବା ଲମ୍ବା ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ ।</p></div>
+      </div>
+
+      <div class="acc-item" id="faq7">
+        <div class="acc-trigger acc-faq" onclick="toggleAcc('faq7')">
+          <div class="acc-ico">📚</div>
+          <div class="acc-label"><div class="acc-name">ଏଥିରେ ପାଠ ପଢ଼ିବାର କେଉଁ ସୁବିଧା ଅଛି?</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="acc-body"><p class="faq-answer">ଚିତ୍ର-ନୋଟ୍, ପାଠ୍ୟ-ନୋଟ୍, ବ୍ଲାକବୋର୍ଡ଼ ପଢ଼ା, ଅଡିଓ ଲେକ୍ଚର୍, ଭିଡିଓ, ନୂତନ ଶବ୍ଦ, ମନ-ଚିତ୍ର (flowchart), ଏବଂ ଚାଟ୍ କରି ପଢ଼ିବା — ଏହି ୮ଟି ସୁବିଧା ମିଳିବ ।</p></div>
+      </div>
+
+      <div class="acc-item" id="faq8">
+        <div class="acc-trigger acc-faq" onclick="toggleAcc('faq8')">
+          <div class="acc-ico">🔢</div>
+          <div class="acc-label"><div class="acc-name">Class-1, Class-2 ଭିତରେ ପାର୍ଥକ୍ୟ କ'ଣ?</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="acc-body"><p class="faq-answer">ବିଷମ ସଂଖ୍ୟା (1,3,5...) ପାଠ ପଢ଼ିବା ପାଇଁ, ସମ ସଂଖ୍ୟା (2,4,6...) ସେହି ପାଠର ପ୍ରଶ୍ନ ଅଭ୍ୟାସ ପାଇଁ ।</p></div>
+      </div>
+
+      <div class="acc-item" id="faq9">
+        <div class="acc-trigger acc-faq" onclick="toggleAcc('faq9')">
+          <div class="acc-ico">✅</div>
+          <div class="acc-label"><div class="acc-name">ପ୍ରଶ୍ନ ଅଭ୍ୟାସ କେମିତି କରିବି?</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="acc-body"><p class="faq-answer">MCQ, ସତ୍ୟ/ମିଥ୍ୟା, ଶୂନ୍ୟସ୍ଥାନ ପୂରଣ ଆଦି ଉତ୍ତର ଦେଇ "ଉତ୍ତର ଦାଖଲ କରନ୍ତୁ" ବଟନ୍‌ ଦବାନ୍ତୁ । ମାର୍କ ନୀଳ ବାର୍‌ରେ ଦେଖାଯିବ ।</p></div>
+      </div>
+
+      <div class="acc-item" id="faq10">
+        <div class="acc-trigger acc-faq" onclick="toggleAcc('faq10')">
+          <div class="acc-ico">🏆</div>
+          <div class="acc-label"><div class="acc-name">ସାର୍ଟିଫିକେଟ୍ କେମିତି ପାଇବି?</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="acc-body"><p class="faq-answer">ସବୁ ପ୍ରଶ୍ନ ଶେଷ କଲାପରେ "ସାର୍ଟିଫିକେଟ୍" ବଟନ୍‌ ଦବାନ୍ତୁ । PDF ଡାଉନଲୋଡ୍ କିମ୍ବା WhatsApp ରେ ମାତାପିତାଙ୍କୁ ପଠାଇପାରିବେ ।</p></div>
+      </div>
+
+      <div class="acc-item" id="faq11">
+        <div class="acc-trigger acc-faq" onclick="toggleAcc('faq11')">
+          <div class="acc-ico">🔊</div>
+          <div class="acc-label"><div class="acc-name">ଅଡିଓ/ଭିଡିଓ ଚାଲୁନାହିଁ, କ'ଣ କରିବି?</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="acc-body"><p class="faq-answer">ପ୍ଲେୟାର୍‌ର ବଟନ୍‌ ବ୍ୟବହାର କରନ୍ତୁ । ପୁଣି ସେହି ବଟନ୍‌ ଦବାଇଲେ ବନ୍ଦ ହେବ । ଭିଡିଓ ବଡ଼ କରି ଦେଖିବାକୁ ମୋବାଇଲ୍‌କୁ ଘୁରାନ୍ତୁ ।</p></div>
+      </div>
+
+      <div class="acc-item" id="faq12">
+        <div class="acc-trigger acc-faq" onclick="toggleAcc('faq12')">
+          <div class="acc-ico">✕</div>
+          <div class="acc-label"><div class="acc-name">ସ୍କ୍ରିନ୍ କେମିତି ବନ୍ଦ କରିବି?</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="acc-body"><p class="faq-answer">ଉପର ଡାହାଣ କୋଣରେ ଥିବା ✕ ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ ।</p></div>
+      </div>
+
+      <div class="acc-item" id="faq13">
+        <div class="acc-trigger acc-faq" onclick="toggleAcc('faq13')">
+          <div class="acc-ico">📶</div>
+          <div class="acc-label"><div class="acc-name">ଇଣ୍ଟରନେଟ୍ ଦରକାର କି?</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="acc-body"><p class="faq-answer">ହଁ, ପାଠ, ଅଡିଓ, ଭିଡିଓ ଦେଖିବାକୁ WiFi କିମ୍ବା ମୋବାଇଲ୍ ଡାଟା ଆବଶ୍ୟକ ।</p></div>
+      </div>
+
+      <div class="acc-item" id="faq14">
+        <div class="acc-trigger acc-faq" onclick="toggleAcc('faq14')">
+          <div class="acc-ico">📕</div>
+          <div class="acc-label"><div class="acc-name">ଏହା ମୂଳ ପାଠ୍ୟପୁସ୍ତକର ବଦଳ କି?</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="acc-body"><p class="faq-answer">ନା, ଏହା ସହାୟକ ସାମଗ୍ରୀ ମାତ୍ର । ପିଲାଙ୍କ ପାଖରେ ମୂଳ ପାଠ୍ୟପୁସ୍ତକ ରହିବା ଆବଶ୍ୟକ ।</p></div>
+      </div>
+
+      <div class="acc-item" id="faq15">
+        <div class="acc-trigger acc-faq" onclick="toggleAcc('faq15')">
+          <div class="acc-ico">☎️</div>
+          <div class="acc-label"><div class="acc-name">ସାହାଯ୍ୟ ପାଇଁ କାହାକୁ ଯୋଗାଯୋଗ କରିବି?</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="acc-body"><p class="faq-answer">Contact: 6372296357 / 8457059917 । ଠିକଣା: ପାଳିଆ, ଭଦ୍ରକ, ଓଡ଼ିଶା । ଆପ୍ ମଧ୍ୟରେ WhatsApp ଚାଟ୍ ବଟନ୍‌ ମଧ୍ୟ ଅଛି ।</p></div>
+      </div>
+
+    </div>
+  </div>
+  
 
 <div class="sections">
 
