@@ -385,15 +385,38 @@ footer { background:var(--navy); border-radius:20px; padding:26px 20px 22px; mar
   object-fit: cover;
 }
 .faq-audio-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 9px 16px; border-radius: 50px;
-  border: 1.5px solid var(--gold);
-  background: rgba(200,150,42,0.08);
-  color: #9a6a10; font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 50px;
+  border: none;
+  background: linear-gradient(135deg, #c8962a, #e4b84a);
+  color: #fff;
+  font-weight: 800;
   font-family: 'Noto Sans Oriya', sans-serif;
-  font-size: 13px; cursor: pointer;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(200,150,42,0.5);
 }
-.faq-audio-btn.playing { background: rgba(200,150,42,0.22); }
+.faq-audio-btn.playing {
+  background: linear-gradient(135deg,#9a6a10,#c8962a);
+}
+
+.faq-audio-btn-inline {
+  display: block;
+  width: fit-content;
+  margin: 10px 0 2px 0;
+  animation: audioPulse 2s ease-in-out infinite;
+}
+.faq-audio-btn-inline.playing {
+  animation: none;
+}
+
+@keyframes audioPulse {
+  0%, 100% { box-shadow: 0 4px 14px rgba(200,150,42,0.5); transform: scale(1); }
+  50%      { box-shadow: 0 4px 22px rgba(200,150,42,0.85); transform: scale(1.04); }
+}
 
   .acc-faq .acc-name {
   text-align: justify;
@@ -420,16 +443,7 @@ html, body {
   max-width: 100%;
 }
 
-/* ── INLINE FAQ AUDIO BUTTON (sits at end of question heading) ── */
-.faq-audio-btn-inline {
-  pointer-events: auto;
-  display: inline-flex;
-  vertical-align: middle;
-  margin-left: 8px;
-  padding: 3px 10px;
-  font-size: 11px;
-  gap: 5px;
-}
+
 </style>
 </head>
 <body>
