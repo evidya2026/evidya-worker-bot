@@ -388,25 +388,26 @@ footer { background:var(--navy); border-radius:20px; padding:26px 20px 22px; mar
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 18px;
+  padding: 12px 20px;
   border-radius: 50px;
   border: none;
-  background: linear-gradient(135deg, #c8962a, #e4b84a);
-  color: #fff;
-  font-weight: 800;
+  background: #ffffff;
+  color: #9a4d0a;
+  font-weight: 900;
   font-family: 'Noto Sans Oriya', sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(200,150,42,0.5);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
 }
 .faq-audio-btn.playing {
-  background: linear-gradient(135deg,#9a6a10,#c8962a);
+  background: #fff4de;
+  color: #7a3a06;
 }
 
 .faq-audio-btn-inline {
   display: block;
   width: fit-content;
-  margin: 10px 0 2px 0;
+  margin: 12px 0 4px 0;
   animation: audioPulse 2s ease-in-out infinite;
 }
 .faq-audio-btn-inline.playing {
@@ -414,10 +415,9 @@ footer { background:var(--navy); border-radius:20px; padding:26px 20px 22px; mar
 }
 
 @keyframes audioPulse {
-  0%, 100% { box-shadow: 0 4px 14px rgba(200,150,42,0.5); transform: scale(1); }
-  50%      { box-shadow: 0 4px 22px rgba(200,150,42,0.85); transform: scale(1.04); }
+  0%, 100% { box-shadow: 0 4px 14px rgba(0,0,0,0.35); transform: scale(1); }
+  50%      { box-shadow: 0 4px 22px rgba(0,0,0,0.55); transform: scale(1.05); }
 }
-
   .acc-faq .acc-name {
   text-align: justify;
   text-justify: inter-word;
