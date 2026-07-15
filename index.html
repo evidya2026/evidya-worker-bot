@@ -398,7 +398,23 @@ footer { background:var(--navy); border-radius:20px; padding:26px 20px 22px; mar
   text-justify: inter-word;
 }
 
-
+/* ── SAFETY PATCH: stops modal box from shifting sideways on mobile ── */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden !important;
+}
+.modal-box {
+  overflow-x: hidden;
+}
+.acc-name, .faq-answer, .modal-title, .modal-subtitle,
+.modal-list li, .sub-lbl, .lv-name, .lv-sub,
+.acc-odia, .acc-eyebrow, .modal-notice-title {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.faq-screenshot {
+  max-width: 100%;
+}
 </style>
 </head>
 <body>
