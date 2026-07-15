@@ -385,29 +385,32 @@ footer { background:var(--navy); border-radius:20px; padding:26px 20px 22px; mar
   object-fit: cover;
 }
 .faq-audio-btn {
-  display: inline-flex;
+  display: inline-flex !important;
   align-items: center;
   gap: 8px;
-  padding: 12px 20px;
+  padding: 14px 22px !important;
   border-radius: 50px;
   border: none;
-  background: #ffffff;
-  color: #9a4d0a;
-  font-weight: 900;
-  font-family: 'Noto Sans Oriya', sans-serif;
-  font-size: 15px;
+  background: #ffffff !important;
+  color: #9a4d0a !important;
+  font-weight: 900 !important;
+  font-family: 'Noto Sans Oriya', sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.2;
   cursor: pointer;
   box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+  pointer-events: auto !important;
+  white-space: nowrap;
 }
 .faq-audio-btn.playing {
-  background: #7b1a0a;
-  color: #ffffff;
+  background: #7b1a0a !important;
+  color: #ffffff !important;
 }
 
 .faq-audio-btn-inline {
-  display: block;
+  display: flex !important;
   width: fit-content;
-  margin: 12px 0 4px 0;
+  margin: 14px 0 6px 0 !important;
   animation: audioPulse 2s ease-in-out infinite;
 }
 .faq-audio-btn-inline.playing {
