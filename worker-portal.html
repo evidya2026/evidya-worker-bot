@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Vidya Content Task</title>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<style>
+body{font-family:sans-serif;background:#f0f4f8;padding:16px;max-width:480px;margin:0 auto;}
+.box{background:#fff;border-radius:14px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.1);margin-bottom:14px;}
+input,textarea{width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;margin-bottom:10px;}
+textarea{min-height:200px;}
+button{width:100%;padding:13px;background:#667eea;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;}
+.job{border:1.5px solid #e0e0e0;border-radius:10px;padding:14px;margin-bottom:10px;cursor:pointer;}
+.job:hover{border-color:#667eea;}
+</style></head><body>
+
+<div class="box" id="loginBox">
+  <h3>Enter your Worker Code</h3>
+  <input id="workerCode" placeholder="e.g. WRK4X9K2">
+  <button onclick="login()">Continue</button>
+  <div id="loginError" style="color:red;font-size:13px;"></div>
+</div>
+
+<div id="jobsBox" style="display:none;"></div>
+<div class="box" id="taskBox" style="display:none;">
+  <h3 id="taskTitle"></h3>
+  <p id="taskPrompt" style="font-size:13px;color:#555;"></p>
+  <textarea id="taskContent" placeholder="Paste the AI-generated content here..."></textarea>
+  <button onclick="submitTask()">Submit</button>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyA3-rvQJ1g9K-1l8-_PXX8IffG8W4qU7AE",
+  authDomain: "evidya-academy.firebaseapp.com",
+  projectId: "evidya-academy",
+  storageBucket: "evidya-academy.firebasestorage.app",
+  messagingSenderId: "86172698431",
+  appId: "1:86172698431:web:eb3bd5b2887cda88eb358a"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+let currentWorker = null, currentJobId = null;
+
+async function login() {
+  const code = document.getElementById('workerCode').value.trim().toUpperCase();
+  const doc = await db.collection('workers').doc(code).get();
+  if (!doc.exists || doc.data().status === 'BLOCKED') {
+    document.getElementById('loginError').textContent = 'Invalid or blocked code.';
+    return;
+  }
+  currentWorker = code;
+  document.getElementById('loginBox').style.display = 'none';
+  document.getElementById('jobsBox').style.display = 'block';
+  loadJobs();
+}
+
+async function loadJobs() {
+  const snap = await db.collection('jobs')
+    .where('assignedWorker', '==', currentWorker)
+    .where('status', 'in', ['open', 'rejected']).get();
+  const wrap = document.getElementById('jobsBox');
+  if (snap.empty) { wrap.innerHTML = '<div class="box">No tasks assigned right now.</div>'; return; }
+  wrap.innerHTML = '<h3>Your Tasks</h3>' + snap.docs.map(d =>
+    `<div class="job" onclick="openTask('${d.id}','${(d.data().title||'').replace(/'/g,"\\'")}','${(d.data().promptText||'').replace(/'/g,"\\'")}')">${d.data().title}</div>`
+  ).join('');
+}
+
+function openTask(id, title, prompt) {
+  currentJobId = id;
+  document.getElementById('taskTitle').textContent = title;
+  document.getElementById('taskPrompt').textContent = prompt;
+  document.getElementById('taskContent').value = '';
+  document.getElementById('taskBox').style.display = 'block';
+  document.getElementById('taskBox').scrollIntoView({behavior:'smooth'});
+}
+
+async function submitTask() {
+  const text = document.getElementById('taskContent').value.trim();
+  if (!text) { alert('Please paste the content first.'); return; }
+  await db.collection('jobs').doc(currentJobId).update({
+    status: 'submitted', submittedText: text, submittedAt: new Date().toISOString()
+  });
+  alert('Submitted! Thank you.');
+  document.getElementById('taskBox').style.display = 'none';
+  loadJobs();
+}
+</script>
+</body></html>
