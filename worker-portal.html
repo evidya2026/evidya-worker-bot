@@ -23,7 +23,8 @@ button{width:100%;padding:13px;background:#667eea;color:#fff;border:none;border-
 <div id="jobsBox" style="display:none;"></div>
 <div class="box" id="taskBox" style="display:none;">
   <h3 id="taskTitle"></h3>
-  <p id="taskPrompt" style="font-size:13px;color:#555;"></p>
+  <p id="taskPrompt" style="font-size:13px;color:#555;white-space:pre-wrap;word-break:break-word;"></p>
+  <button id="copyPromptBtn" onclick="copyPrompt()" style="background:#059669;margin-bottom:14px;">📋 Copy Prompt</button>
   <textarea id="taskContent" placeholder="Paste the AI-generated content here..."></textarea>
   <button onclick="submitTask()">Submit</button>
 </div>
@@ -80,8 +81,35 @@ function openTask(id) {
   document.getElementById('taskTitle').textContent = j.workerLabel || 'Task';
   document.getElementById('taskPrompt').textContent = j.promptText || '';
   document.getElementById('taskContent').value = '';
+  document.getElementById('copyPromptBtn').textContent = '📋 Copy Prompt';
   document.getElementById('taskBox').style.display = 'block';
   document.getElementById('taskBox').scrollIntoView({behavior:'smooth'});
+}
+
+async function copyPrompt() {
+  const j = jobsCache[currentJobId];
+  const text = j ? (j.promptText || '') : '';
+  const btn = document.getElementById('copyPromptBtn');
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      // Fallback for older/some mobile browsers
+      const temp = document.createElement('textarea');
+      temp.value = text;
+      temp.style.position = 'fixed';
+      temp.style.left = '-9999px';
+      document.body.appendChild(temp);
+      temp.focus();
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+    }
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => { btn.textContent = '📋 Copy Prompt'; }, 2000);
+  } catch (err) {
+    alert('Could not copy automatically. Please select and copy the text manually.');
+  }
 }
   
 async function submitTask() {
