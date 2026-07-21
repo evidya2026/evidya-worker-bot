@@ -64,10 +64,10 @@ async function loadJobs() {
   if (snap.empty) { wrap.innerHTML = '<div class="box">No tasks assigned right now.</div>'; return; }
   jobsCache = {};
   let html = '<h3>Your Tasks</h3>';
-  snap.docs.forEach(d => {
+snap.docs.forEach(d => {
     jobsCache[d.id] = d.data();
-    html += `<div class="job" data-job-id="${d.id}">${d.data().title}</div>`;
-  });
+    html += `<div class="job" data-job-id="${d.id}">${d.data().workerLabel || 'Task'}</div>`;
+});
   wrap.innerHTML = html;
   document.querySelectorAll('.job').forEach(el => {
     el.addEventListener('click', () => openTask(el.getAttribute('data-job-id')));
@@ -77,7 +77,7 @@ async function loadJobs() {
 function openTask(id) {
   currentJobId = id;
   const j = jobsCache[id];
-  document.getElementById('taskTitle').textContent = j.title;
+  document.getElementById('taskTitle').textContent = j.workerLabel || 'Task';
   document.getElementById('taskPrompt').textContent = j.promptText || '';
   document.getElementById('taskContent').value = '';
   document.getElementById('taskBox').style.display = 'block';
