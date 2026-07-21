@@ -54,26 +54,36 @@ async function login() {
   loadJobs();
 }
 
+let jobsCache = {};
+
 async function loadJobs() {
   const snap = await db.collection('jobs')
     .where('assignedWorker', '==', currentWorker)
     .where('status', 'in', ['open', 'rejected']).get();
   const wrap = document.getElementById('jobsBox');
   if (snap.empty) { wrap.innerHTML = '<div class="box">No tasks assigned right now.</div>'; return; }
-  wrap.innerHTML = '<h3>Your Tasks</h3>' + snap.docs.map(d =>
-    `<div class="job" onclick="openTask('${d.id}','${(d.data().title||'').replace(/'/g,"\\'")}','${(d.data().promptText||'').replace(/'/g,"\\'")}')">${d.data().title}</div>`
-  ).join('');
+  jobsCache = {};
+  let html = '<h3>Your Tasks</h3>';
+  snap.docs.forEach(d => {
+    jobsCache[d.id] = d.data();
+    html += `<div class="job" data-job-id="${d.id}">${d.data().title}</div>`;
+  });
+  wrap.innerHTML = html;
+  document.querySelectorAll('.job').forEach(el => {
+    el.addEventListener('click', () => openTask(el.getAttribute('data-job-id')));
+  });
 }
 
-function openTask(id, title, prompt) {
+function openTask(id) {
   currentJobId = id;
-  document.getElementById('taskTitle').textContent = title;
-  document.getElementById('taskPrompt').textContent = prompt;
+  const j = jobsCache[id];
+  document.getElementById('taskTitle').textContent = j.title;
+  document.getElementById('taskPrompt').textContent = j.promptText || '';
   document.getElementById('taskContent').value = '';
   document.getElementById('taskBox').style.display = 'block';
   document.getElementById('taskBox').scrollIntoView({behavior:'smooth'});
 }
-
+  
 async function submitTask() {
   const text = document.getElementById('taskContent').value.trim();
   if (!text) { alert('Please paste the content first.'); return; }
