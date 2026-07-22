@@ -25,6 +25,7 @@ button{width:100%;padding:13px;background:#667eea;color:#fff;border:none;border-
   <h3 id="taskTitle"></h3>
   <p id="taskInstructions" style="font-size:14px;color:#333;font-weight:600;white-space:pre-wrap;word-break:break-word;margin-bottom:12px;"></p>
   <button id="copyPromptBtn" onclick="copyPrompt()" style="background:#059669;margin-bottom:14px;">📋 Copy Prompt for AI</button>
+  <a id="compressLinkBtn" href="#" target="_blank" style="display:none;text-align:center;background:#d97706;color:white;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;margin-bottom:14px;">🗜️ Open Compression Tool</a>
 
   <textarea id="taskContent" placeholder="Paste the AI-generated content here..."></textarea>
   <button id="submitTextBtn" onclick="submitTask()">Submit</button>
@@ -91,14 +92,11 @@ snap.docs.forEach(d => {
 function openTask(id) {
   currentJobId = id;
   const j = jobsCache[id];
- document.getElementById('taskTitle').textContent = j.workerLabel || 'Task';
-document.getElementById('taskInstructions').textContent = j.workerInstructions || 'Copy the prompt, paste it into ChatGPT or Claude, then paste the AI\'s response below.';
-  document.getElementById('taskContent').value = '';
-  document.getElementById('videoIdInput').value = '';
-  document.getElementById('mediaFileInput').value = '';
-  document.getElementById('uploadStatus').textContent = '';
+  document.getElementById('taskTitle').textContent = j.workerLabel || 'Task';
+  document.getElementById('taskInstructions').textContent = j.workerInstructions || 'Copy the prompt, paste it into ChatGPT or Claude, then paste the AI\'s response below.';
   document.getElementById('taskBox').style.display = 'block';
   document.getElementById('taskBox').scrollIntoView({behavior:'smooth'});
+
   const isMedia = j.jobKind === 'media';
   const isFileUpload = isMedia && (j.mediaType === 'audio' || j.mediaType === 'pdf' || j.mediaType === 'infographic');
   const isVideo = isMedia && j.mediaType === 'video';
@@ -110,6 +108,21 @@ document.getElementById('taskInstructions').textContent = j.workerInstructions |
 
   if (isFileUpload) {
     document.getElementById('mediaFileNameHint').textContent = 'This file will be saved as: ' + j.r2Key;
+  }
+
+  // Show correct compression site link
+  const compressLinks = {
+    audio: 'https://audio.pi7.org/compress-audio',
+    video: 'https://clideo.com/compress-video',
+    pdf: 'https://smallpdf.com/compress-pdf',
+    infographic: 'https://smallpdf.com/compress-pdf'
+  };
+  const linkBtn = document.getElementById('compressLinkBtn');
+  if (isMedia && compressLinks[j.mediaType]) {
+    linkBtn.href = compressLinks[j.mediaType];
+    linkBtn.style.display = 'inline-block';
+  } else {
+    linkBtn.style.display = 'none';
   }
 }
 
