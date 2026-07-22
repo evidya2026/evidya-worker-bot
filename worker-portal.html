@@ -73,7 +73,8 @@ let jobsCache = {};
 async function loadJobs() {
   const snap = await db.collection('jobs')
     .where('assignedWorker', '==', currentWorker)
-    .where('status', 'in', ['open', 'rejected']).get();
+    .where('status', 'in', ['open', 'rejected'])
+    .orderBy('createdAt', 'asc').get();
   const wrap = document.getElementById('jobsBox');
   if (snap.empty) { wrap.innerHTML = '<div class="box">No tasks assigned right now.</div>'; return; }
   jobsCache = {};
@@ -93,9 +94,12 @@ function openTask(id) {
   const j = jobsCache[id];
  document.getElementById('taskTitle').textContent = j.workerLabel || 'Task';
 document.getElementById('taskInstructions').textContent = j.workerInstructions || 'Copy the prompt, paste it into ChatGPT or Claude, then paste the AI\'s response below.';
+  document.getElementById('taskContent').value = '';
+  document.getElementById('videoIdInput').value = '';
+  document.getElementById('mediaFileInput').value = '';
+  document.getElementById('uploadStatus').textContent = '';
   document.getElementById('taskBox').style.display = 'block';
   document.getElementById('taskBox').scrollIntoView({behavior:'smooth'});
-
   const isMedia = j.jobKind === 'media';
   const isFileUpload = isMedia && (j.mediaType === 'audio' || j.mediaType === 'pdf' || j.mediaType === 'infographic');
   const isVideo = isMedia && j.mediaType === 'video';
