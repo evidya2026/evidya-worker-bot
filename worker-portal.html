@@ -163,7 +163,7 @@ async function submitTask() {
   loadJobs();
 }
 
-  async function uploadMediaFile() {
+async function uploadMediaFile() {
   const fileInput = document.getElementById('mediaFileInput');
   const statusEl = document.getElementById('uploadStatus');
   const j = jobsCache[currentJobId];
@@ -176,7 +176,13 @@ async function submitTask() {
     formData.append('file', file);
     formData.append('key', j.r2Key);
     const res = await fetch('/api/upload', { method: 'POST', body: formData });
-    const result = await res.json();
+    const rawText = await res.text();
+    let result;
+    try {
+      result = JSON.parse(rawText);
+    } catch (parseErr) {
+      throw new Error(`Server returned status ${res.status} with no valid response (endpoint may be missing on this domain). Raw: "${rawText.slice(0,150)}"`);
+    }
     if (!result.success) throw new Error(result.error || 'Upload failed');
 
     await db.collection('jobs').doc(currentJobId).update({
