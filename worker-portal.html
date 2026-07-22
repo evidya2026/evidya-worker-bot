@@ -23,8 +23,8 @@ button{width:100%;padding:13px;background:#667eea;color:#fff;border:none;border-
 <div id="jobsBox" style="display:none;"></div>
 <div class="box" id="taskBox" style="display:none;">
   <h3 id="taskTitle"></h3>
-  <p id="taskPrompt" style="font-size:13px;color:#555;white-space:pre-wrap;word-break:break-word;"></p>
-  <button id="copyPromptBtn" onclick="copyPrompt()" style="background:#059669;margin-bottom:14px;">📋 Copy Prompt</button>
+  <p id="taskInstructions" style="font-size:14px;color:#333;font-weight:600;white-space:pre-wrap;word-break:break-word;margin-bottom:12px;"></p>
+  <button id="copyPromptBtn" onclick="copyPrompt()" style="background:#059669;margin-bottom:14px;">📋 Copy Prompt for AI</button>
 
   <textarea id="taskContent" placeholder="Paste the AI-generated content here..."></textarea>
   <button id="submitTextBtn" onclick="submitTask()">Submit</button>
@@ -91,8 +91,8 @@ snap.docs.forEach(d => {
 function openTask(id) {
   currentJobId = id;
   const j = jobsCache[id];
-  document.getElementById('taskTitle').textContent = j.workerLabel || 'Task';
-  document.getElementById('taskPrompt').textContent = j.promptText || '';
+ document.getElementById('taskTitle').textContent = j.workerLabel || 'Task';
+document.getElementById('taskInstructions').textContent = j.workerInstructions || 'Copy the prompt, paste it into ChatGPT or Claude, then paste the AI\'s response below.';
   document.getElementById('taskBox').style.display = 'block';
   document.getElementById('taskBox').scrollIntoView({behavior:'smooth'});
 
