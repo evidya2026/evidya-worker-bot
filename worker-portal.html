@@ -25,8 +25,21 @@ button{width:100%;padding:13px;background:#667eea;color:#fff;border:none;border-
   <h3 id="taskTitle"></h3>
   <p id="taskPrompt" style="font-size:13px;color:#555;white-space:pre-wrap;word-break:break-word;"></p>
   <button id="copyPromptBtn" onclick="copyPrompt()" style="background:#059669;margin-bottom:14px;">📋 Copy Prompt</button>
+
   <textarea id="taskContent" placeholder="Paste the AI-generated content here..."></textarea>
-  <button onclick="submitTask()">Submit</button>
+  <button id="submitTextBtn" onclick="submitTask()">Submit</button>
+
+  <div id="mediaFileSection" style="display:none;">
+    <p id="mediaFileNameHint" style="font-size:12px;color:#666;margin-bottom:8px;"></p>
+    <input type="file" id="mediaFileInput" style="margin-bottom:10px;">
+    <button onclick="uploadMediaFile()">⬆️ Upload File</button>
+    <p id="uploadStatus" style="font-size:12px;margin-top:8px;"></p>
+  </div>
+
+  <div id="mediaVideoSection" style="display:none;">
+    <input id="videoIdInput" placeholder="Paste YouTube Video ID (e.g. qU8IfegijAo)" style="margin-bottom:10px;">
+    <button onclick="submitVideoId()">Submit Video ID</button>
+  </div>
 </div>
 
 <script>
@@ -80,10 +93,21 @@ function openTask(id) {
   const j = jobsCache[id];
   document.getElementById('taskTitle').textContent = j.workerLabel || 'Task';
   document.getElementById('taskPrompt').textContent = j.promptText || '';
-  document.getElementById('taskContent').value = '';
-  document.getElementById('copyPromptBtn').textContent = '📋 Copy Prompt';
   document.getElementById('taskBox').style.display = 'block';
   document.getElementById('taskBox').scrollIntoView({behavior:'smooth'});
+
+  const isMedia = j.jobKind === 'media';
+  const isFileUpload = isMedia && (j.mediaType === 'audio' || j.mediaType === 'pdf' || j.mediaType === 'infographic');
+  const isVideo = isMedia && j.mediaType === 'video';
+
+  document.getElementById('taskContent').style.display = isMedia ? 'none' : 'block';
+  document.getElementById('mediaFileSection').style.display = isFileUpload ? 'block' : 'none';
+  document.getElementById('mediaVideoSection').style.display = isVideo ? 'block' : 'none';
+  document.getElementById('submitTextBtn').style.display = isMedia ? 'none' : 'block';
+
+  if (isFileUpload) {
+    document.getElementById('mediaFileNameHint').textContent = 'This file will be saved as: ' + j.r2Key;
+  }
 }
 
 async function copyPrompt() {
@@ -119,6 +143,43 @@ async function submitTask() {
     status: 'submitted', submittedText: text, submittedAt: new Date().toISOString()
   });
   alert('Submitted! Thank you.');
+  document.getElementById('taskBox').style.display = 'none';
+  loadJobs();
+}
+
+  async function uploadMediaFile() {
+  const fileInput = document.getElementById('mediaFileInput');
+  const statusEl = document.getElementById('uploadStatus');
+  const j = jobsCache[currentJobId];
+  if (!fileInput.files.length) { statusEl.textContent = 'Please choose a file first.'; return; }
+
+  const file = fileInput.files[0];
+  statusEl.textContent = 'Uploading...';
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('key', j.r2Key);
+    const res = await fetch('/api/upload', { method: 'POST', body: formData });
+    const result = await res.json();
+    if (!result.success) throw new Error(result.error || 'Upload failed');
+
+    await db.collection('jobs').doc(currentJobId).update({
+      status: 'submitted', submittedAt: new Date().toISOString()
+    });
+    statusEl.textContent = '✅ Uploaded successfully!';
+    setTimeout(() => { document.getElementById('taskBox').style.display = 'none'; loadJobs(); }, 1200);
+  } catch (err) {
+    statusEl.textContent = '❌ Upload failed: ' + err.message;
+  }
+}
+
+async function submitVideoId() {
+  const videoId = document.getElementById('videoIdInput').value.trim();
+  if (!videoId) { alert('Please paste the YouTube video ID.'); return; }
+  await db.collection('jobs').doc(currentJobId).update({
+    status: 'submitted', submittedText: videoId, submittedAt: new Date().toISOString()
+  });
+  alert('Submitted!');
   document.getElementById('taskBox').style.display = 'none';
   loadJobs();
 }
