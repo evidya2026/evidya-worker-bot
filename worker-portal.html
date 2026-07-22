@@ -73,8 +73,7 @@ let jobsCache = {};
 async function loadJobs() {
   const snap = await db.collection('jobs')
     .where('assignedWorker', '==', currentWorker)
-    .where('status', 'in', ['open', 'rejected'])
-    .orderBy('createdAt', 'asc').get();
+    .where('status', 'in', ['open', 'rejected']).get();
   const wrap = document.getElementById('jobsBox');
   if (snap.empty) { wrap.innerHTML = '<div class="box">No tasks assigned right now.</div>'; return; }
   jobsCache = {};
