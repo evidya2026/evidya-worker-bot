@@ -73,22 +73,53 @@ async function login() {
 
 let jobsCache = {};
 
+let currentWorkerJobFilter = 'all';
+
+function workerJobCategory(j) {
+  if (j.jobCategory) return j.jobCategory;
+  return j.jobKind === 'media' ? 'upload' : 'publish';
+}
+
 async function loadJobs() {
   const snap = await db.collection('jobs')
     .where('assignedWorker', '==', currentWorker)
     .where('status', 'in', ['open', 'rejected']).get();
-  const wrap = document.getElementById('jobsBox');
-  if (snap.empty) { wrap.innerHTML = '<div class="box">No tasks assigned right now.</div>'; return; }
   jobsCache = {};
+  snap.docs.forEach(d => { jobsCache[d.id] = d.data(); });
+  renderJobTabs();
+}
+
+function renderJobTabs() {
+  const wrap = document.getElementById('jobsBox');
+  const allIds = Object.keys(jobsCache);
+  if (allIds.length === 0) { wrap.innerHTML = '<div class="box">No tasks assigned right now.</div>'; return; }
+
+  const filteredIds = allIds.filter(id => currentWorkerJobFilter === 'all' || workerJobCategory(jobsCache[id]) === currentWorkerJobFilter);
+
   let html = '<h3>Your Tasks</h3>';
-snap.docs.forEach(d => {
-    jobsCache[d.id] = d.data();
-    html += `<div class="job" data-job-id="${d.id}">${d.data().workerLabel || 'Task'}</div>`;
-});
+  html += `<div style="display:flex;gap:8px;margin-bottom:12px;">
+    <button style="flex:1;background:${currentWorkerJobFilter==='all'?'#667eea':'#999'};" onclick="setWorkerJobFilter('all')">All</button>
+    <button style="flex:1;background:${currentWorkerJobFilter==='upload'?'#667eea':'#999'};" onclick="setWorkerJobFilter('upload')">📤 Upload Jobs</button>
+    <button style="flex:1;background:${currentWorkerJobFilter==='publish'?'#667eea':'#999'};" onclick="setWorkerJobFilter('publish')">📝 Publish Jobs</button>
+  </div>`;
+
+  if (filteredIds.length === 0) {
+    html += '<div class="box">No tasks in this category right now.</div>';
+  } else {
+    filteredIds.forEach(id => {
+      html += `<div class="job" data-job-id="${id}">${jobsCache[id].workerLabel || 'Task'}</div>`;
+    });
+  }
+
   wrap.innerHTML = html;
   document.querySelectorAll('.job').forEach(el => {
     el.addEventListener('click', () => openTask(el.getAttribute('data-job-id')));
   });
+}
+
+function setWorkerJobFilter(f) {
+  currentWorkerJobFilter = f;
+  renderJobTabs();
 }
 
 function openTask(id) {
