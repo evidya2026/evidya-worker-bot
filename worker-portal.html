@@ -305,6 +305,7 @@ async function downloadMyPerformancePDF() {
 let jobsCache = {};
 
 let currentWorkerJobFilter = 'all';
+let expandedWorkerBatch = null;
 
 function workerJobCategory(j) {
   if (j.jobCategory) return j.jobCategory;
@@ -317,6 +318,11 @@ async function loadJobs() {
     .where('status', 'in', ['open', 'rejected']).get();
   jobsCache = {};
   snap.docs.forEach(d => { jobsCache[d.id] = d.data(); });
+  renderJobTabs();
+}
+
+function toggleWorkerBatchExpand(batchKey) {
+  expandedWorkerBatch = (expandedWorkerBatch === batchKey) ? null : batchKey;
   renderJobTabs();
 }
 
@@ -337,14 +343,30 @@ function renderJobTabs() {
   if (filteredIds.length === 0) {
     html += '<div class="box">No tasks in this category right now.</div>';
   } else {
+    const groups = {};
+    const order = [];
     filteredIds.forEach(id => {
-      html += `<div class="job" data-job-id="${id}">${jobsCache[id].workerLabel || 'Task'}</div>`;
+      const j = jobsCache[id];
+      const key = j.batchId || id;
+      if (!groups[key]) { groups[key] = { label: j.batchLabel || (j.workerLabel || 'Task'), ids: [] }; order.push(key); }
+      groups[key].ids.push(id);
+    });
+
+    order.forEach(key => {
+      const g = groups[key];
+      const isOpen = expandedWorkerBatch === key;
+      html += `<div class="job" onclick="toggleWorkerBatchExpand('${key}')">📦 ${g.label} (${g.ids.length} task${g.ids.length > 1 ? 's' : ''}) ${isOpen ? '▲' : '▼'}</div>`;
+      if (isOpen) {
+        g.ids.forEach(id => {
+          html += `<div class="job" style="margin-left:16px;background:#f2f2f2;" data-job-id="${id}">${jobsCache[id].workerLabel || 'Task'}</div>`;
+        });
+      }
     });
   }
 
   wrap.innerHTML = html;
-  document.querySelectorAll('.job').forEach(el => {
-    el.addEventListener('click', () => openTask(el.getAttribute('data-job-id')));
+  document.querySelectorAll('.job[data-job-id]').forEach(el => {
+    el.addEventListener('click', (e) => { e.stopPropagation(); openTask(el.getAttribute('data-job-id')); });
   });
 }
 
