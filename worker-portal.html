@@ -83,16 +83,17 @@ async function login() {
   loadJobs();
 }
 
-function getYesterdayRange() {
+function getDayRange(daysAgo) {
   const now = new Date();
   const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const startOfYesterday = new Date(startOfToday);
-  startOfYesterday.setDate(startOfYesterday.getDate() - 1);
-  return { start: startOfYesterday.toISOString(), end: startOfToday.toISOString() };
+  const start = new Date(startOfToday);
+  start.setDate(start.getDate() - daysAgo);
+  const end = new Date(start);
+  end.setDate(end.getDate() + 1);
+  return { start: start.toISOString(), end: end.toISOString() };
 }
 
-async function showWelcomeAndYesterday() {
-  const range = getYesterdayRange();
+async function fetchCountsForRange(range) {
   const counts = { submitted: 0, published: 0, rejected: 0 };
   try {
     const snap = await db.collection('jobHistory')
@@ -102,8 +103,27 @@ async function showWelcomeAndYesterday() {
       .get();
     snap.forEach(d => { const h = d.data(); counts[h.eventType] = (counts[h.eventType] || 0) + 1; });
   } catch (err) {
-    console.error('Yesterday report fetch failed (may need a Firestore index — check console for a link):', err);
+    console.error('Report fetch failed (may need a Firestore index — check console for a link):', err);
   }
+  return counts;
+}
+
+function renderStatRow(label, counts) {
+  return `
+    <div style="margin-top:10px;">
+      <div style="font-size:12px;color:#666;">${label}</div>
+      <div style="display:flex;justify-content:center;gap:18px;margin-top:6px;">
+        <div><div style="font-size:20px;font-weight:900;color:#059669;">${counts.submitted}</div><div style="font-size:10px;color:#666;">Submitted</div></div>
+        <div><div style="font-size:20px;font-weight:900;color:#2563eb;">${counts.published}</div><div style="font-size:10px;color:#666;">Approved</div></div>
+        <div><div style="font-size:20px;font-weight:900;color:#dc2626;">${counts.rejected}</div><div style="font-size:10px;color:#666;">Rejected</div></div>
+      </div>
+    </div>`;
+}
+
+async function showWelcomeAndYesterday() {
+  const todayCounts = await fetchCountsForRange(getDayRange(0));
+  const yesterdayCounts = await fetchCountsForRange(getDayRange(1));
+
   let name = currentWorker;
   try {
     const wdoc = await db.collection('workers').doc(currentWorker).get();
@@ -114,15 +134,10 @@ async function showWelcomeAndYesterday() {
     <div class="box" style="text-align:center;">
       <img src="https://raw.githubusercontent.com/happysangitanms/assets/main/LOGO.png" style="width:56px;margin-bottom:8px;">
       <div style="font-size:17px;font-weight:800;color:#4c1d95;">Welcome, ${name}! 👋</div>
-      <div style="font-size:12px;color:#666;margin-top:6px;">Yesterday's Performance</div>
-      <div style="display:flex;justify-content:center;gap:18px;margin-top:10px;">
-        <div><div style="font-size:20px;font-weight:900;color:#059669;">${counts.submitted}</div><div style="font-size:10px;color:#666;">Submitted</div></div>
-        <div><div style="font-size:20px;font-weight:900;color:#2563eb;">${counts.published}</div><div style="font-size:10px;color:#666;">Approved</div></div>
-        <div><div style="font-size:20px;font-weight:900;color:#dc2626;">${counts.rejected}</div><div style="font-size:10px;color:#666;">Rejected</div></div>
-      </div>
+      ${renderStatRow("Today's Performance", todayCounts)}
+      ${renderStatRow("Yesterday's Performance", yesterdayCounts)}
     </div>`;
 }
-
 function switchMainTab(tab) {
   document.getElementById('jobsBox').style.display = tab === 'tasks' ? 'block' : 'none';
   document.getElementById('perfReportBox').style.display = tab === 'perf' ? 'block' : 'none';
@@ -135,54 +150,121 @@ async function loadMyPerformance() {
   const wrap = document.getElementById('perfReportBox');
   wrap.innerHTML = '<div class="box">Loading...</div>';
   try {
-    const jobsSnap = await db.collection('jobs').where('assignedWorker', '==', currentWorker).get();
-    const jobs = jobsSnap.docs.map(d => d.data());
-    const counts = { open: 0, submitted: 0, published: 0, rejected: 0 };
-    jobs.forEach(j => { counts[j.status] = (counts[j.status] || 0) + 1; });
-    const total = jobs.length;
-    const approvalRate = total ? Math.round((counts.published / total) * 100) : 0;
-
     const histSnap = await db.collection('jobHistory').where('worker', '==', currentWorker).orderBy('timestamp', 'asc').get();
-    const historyByJob = {};
-    histSnap.forEach(d => {
-      const h = d.data();
-      if (!historyByJob[h.jobId]) historyByJob[h.jobId] = { label: h.jobLabel, events: [] };
-      historyByJob[h.jobId].events.push(h);
-    });
-    window.myPerfData = { counts, total, approvalRate, historyByJob };
-
-    let historyHtml = '<h4 style="margin-top:14px;">📅 Date-wise History</h4>';
-    const ids = Object.keys(historyByJob);
-    if (ids.length === 0) {
-      historyHtml += '<p style="font-size:12px;color:#666;">No history yet.</p>';
-    } else {
-      ids.forEach(jid => {
-        const jh = historyByJob[jid];
-        historyHtml += `<div style="background:#f7f7f7;border-radius:8px;padding:8px;margin-bottom:8px;"><b style="font-size:12.5px;">${jh.label}</b>`;
-        jh.events.forEach(ev => {
-          const label = ev.eventType === 'rejected' ? 'Rejected' : ev.eventType === 'submitted' ? 'Resubmitted' : 'Final Approved';
-          historyHtml += `<div style="font-size:11px;color:#333;">- ${label} — ${new Date(ev.timestamp).toLocaleString('en-IN')}${ev.note ? ' — Reason: ' + ev.note : ''}</div>`;
-        });
-        historyHtml += '</div>';
-      });
-    }
+    window.myPerfAllEvents = histSnap.docs.map(d => d.data());
 
     wrap.innerHTML = `<div class="box">
-      <div style="display:flex;justify-content:space-around;text-align:center;margin-bottom:10px;">
-        <div><div style="font-size:20px;font-weight:900;">${total}</div><div style="font-size:10px;">Total</div></div>
-        <div><div style="font-size:20px;font-weight:900;color:#059669;">${counts.published}</div><div style="font-size:10px;">Published</div></div>
-        <div><div style="font-size:20px;font-weight:900;color:#dc2626;">${counts.rejected}</div><div style="font-size:10px;">Rejected</div></div>
-        <div><div style="font-size:20px;font-weight:900;color:#2563eb;">${approvalRate}%</div><div style="font-size:10px;">Approval</div></div>
+      <div style="margin-bottom:10px;">
+        <select id="perfRangeSelect" onchange="onPerfRangeChange()" style="width:100%;padding:10px;border-radius:8px;border:2px solid #e0e0e0;font-size:14px;">
+          <option value="today">Today</option>
+          <option value="yesterday">Yesterday</option>
+          <option value="week">This Week</option>
+          <option value="month">This Month</option>
+          <option value="custom">Custom Range</option>
+          <option value="till" selected>Till Date (All Time)</option>
+        </select>
       </div>
-      ${historyHtml}
-      <button onclick="downloadMyPerformancePDF()" style="background:#4c1d95;">⬇️ Download My Performance PDF</button>
+      <div id="perfCustomDates" style="display:none;gap:8px;margin-bottom:10px;">
+        <input type="date" id="perfCustomStart" style="width:48%;padding:10px;display:inline-block;margin-right:4%;">
+        <input type="date" id="perfCustomEnd" style="width:48%;padding:10px;display:inline-block;">
+        <button onclick="applyPerfRangeFilter()" style="margin-top:8px;">Apply Custom Range</button>
+      </div>
+      <div id="perfResultsWrap"></div>
     </div>`;
+    applyPerfRangeFilter();
   } catch (err) {
     console.error(err);
     wrap.innerHTML = '<div class="box" style="color:red;font-size:12px;">Failed to load. (May need a Firestore index — check browser console for a setup link.)</div>';
   }
 }
 
+function onPerfRangeChange() {
+  const val = document.getElementById('perfRangeSelect').value;
+  document.getElementById('perfCustomDates').style.display = val === 'custom' ? 'block' : 'none';
+  if (val !== 'custom') applyPerfRangeFilter();
+}
+
+function getPresetRange(preset) {
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if (preset === 'today') {
+    const end = new Date(startOfToday); end.setDate(end.getDate() + 1);
+    return { start: startOfToday, end: end };
+  }
+  if (preset === 'yesterday') {
+    const start = new Date(startOfToday); start.setDate(start.getDate() - 1);
+    return { start: start, end: startOfToday };
+  }
+  if (preset === 'week') {
+    const start = new Date(startOfToday); start.setDate(start.getDate() - 6);
+    const end = new Date(startOfToday); end.setDate(end.getDate() + 1);
+    return { start: start, end: end };
+  }
+  if (preset === 'month') {
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    const end = new Date(startOfToday); end.setDate(end.getDate() + 1);
+    return { start: start, end: end };
+  }
+  return null; // 'till' = no filter
+}
+
+function applyPerfRangeFilter() {
+  const preset = document.getElementById('perfRangeSelect').value;
+  let range = null;
+  if (preset === 'custom') {
+    const s = document.getElementById('perfCustomStart').value;
+    const e = document.getElementById('perfCustomEnd').value;
+    if (!s || !e) { document.getElementById('perfResultsWrap').innerHTML = '<p style="font-size:12px;color:#666;">Pick both start and end dates.</p>'; return; }
+    const start = new Date(s);
+    const end = new Date(e); end.setDate(end.getDate() + 1); // include the whole end day
+    range = { start, end };
+  } else {
+    range = getPresetRange(preset);
+  }
+
+  const allEvents = window.myPerfAllEvents || [];
+  const filtered = range ? allEvents.filter(ev => {
+    const t = new Date(ev.timestamp);
+    return t >= range.start && t < range.end;
+  }) : allEvents;
+
+  const counts = { submitted: 0, published: 0, rejected: 0 };
+  const historyByJob = {};
+  filtered.forEach(h => {
+    counts[h.eventType] = (counts[h.eventType] || 0) + 1;
+    if (!historyByJob[h.jobId]) historyByJob[h.jobId] = { label: h.jobLabel, events: [] };
+    historyByJob[h.jobId].events.push(h);
+  });
+  const decided = counts.published + counts.rejected;
+  const approvalRate = decided ? Math.round((counts.published / decided) * 100) : 0;
+  window.myPerfData = { counts, approvalRate, historyByJob };
+
+  let historyHtml = '<h4 style="margin-top:14px;">📅 Date-wise History</h4>';
+  const ids = Object.keys(historyByJob);
+  if (ids.length === 0) {
+    historyHtml += '<p style="font-size:12px;color:#666;">No history in this period.</p>';
+  } else {
+    ids.forEach(jid => {
+      const jh = historyByJob[jid];
+      historyHtml += `<div style="background:#f7f7f7;border-radius:8px;padding:8px;margin-bottom:8px;"><b style="font-size:12.5px;">${jh.label}</b>`;
+      jh.events.forEach(ev => {
+        const label = ev.eventType === 'rejected' ? 'Rejected' : ev.eventType === 'submitted' ? 'Resubmitted' : 'Final Approved';
+        historyHtml += `<div style="font-size:11px;color:#333;">- ${label} — ${new Date(ev.timestamp).toLocaleString('en-IN')}${ev.note ? ' — Reason: ' + ev.note : ''}</div>`;
+      });
+      historyHtml += '</div>';
+    });
+  }
+
+  document.getElementById('perfResultsWrap').innerHTML = `
+    <div style="display:flex;justify-content:space-around;text-align:center;margin:10px 0;">
+      <div><div style="font-size:20px;font-weight:900;color:#059669;">${counts.submitted}</div><div style="font-size:10px;">Submitted</div></div>
+      <div><div style="font-size:20px;font-weight:900;color:#2563eb;">${counts.published}</div><div style="font-size:10px;">Published</div></div>
+      <div><div style="font-size:20px;font-weight:900;color:#dc2626;">${counts.rejected}</div><div style="font-size:10px;">Rejected</div></div>
+      <div><div style="font-size:20px;font-weight:900;color:#7c3aed;">${approvalRate}%</div><div style="font-size:10px;">Approval</div></div>
+    </div>
+    ${historyHtml}
+    <button onclick="downloadMyPerformancePDF()" style="background:#4c1d95;">⬇️ Download My Performance PDF</button>`;
+}
 async function downloadMyPerformancePDF() {
   const a = window.myPerfData;
   if (!a) return;
@@ -202,7 +284,7 @@ async function downloadMyPerformancePDF() {
       <img src="https://raw.githubusercontent.com/happysangitanms/assets/main/LOGO.png" style="width:56px;">
       <div><div style="font-size:19px;font-weight:900;">E-Vidya Academy</div><div style="font-size:11px;">My Performance Report — ${currentWorker}</div></div>
     </div>
-    <div style="font-size:13px;">Total Jobs: <b>${a.total}</b> | Published: <b>${a.counts.published}</b> | Rejected: <b>${a.counts.rejected}</b> | Approval Rate: <b>${a.approvalRate}%</b></div>
+   <div style="font-size:13px;">Submitted: <b>${a.counts.submitted}</b> | Published: <b>${a.counts.published}</b> | Rejected: <b>${a.counts.rejected}</b> | Approval Rate: <b>${a.approvalRate}%</b></div>
     ${historyHtml}`;
   document.body.appendChild(container);
   try {
