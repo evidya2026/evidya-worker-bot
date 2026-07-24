@@ -24,7 +24,9 @@ button{width:100%;padding:13px;background:#667eea;color:#fff;border:none;border-
 <div class="box" id="taskBox" style="display:none;">
   <h3 id="taskTitle"></h3>
   <p id="taskInstructions" style="font-size:14px;color:#333;font-weight:600;white-space:pre-wrap;word-break:break-word;margin-bottom:12px;"></p>
-  <button id="copyPromptBtn" onclick="copyPrompt()" style="background:#059669;margin-bottom:14px;">📋 Copy Prompt for AI</button>
+  <button id="copyPromptBtn" onclick="copyPrompt()" style="background:#059669;margin-bottom:10px;">📋 Copy Prompt for AI</button>
+  <button id="copyNotebookBtn" onclick="copyNotebookPrompt()" style="display:none;background:#0d9488;margin-bottom:10px;">📓 Copy NotebookLM Prompt</button>
+  <a id="openNotebookLmBtn" href="https://notebooklm.google.com/" target="_blank" style="display:none;text-align:center;background:#4c1d95;color:white;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;margin-bottom:10px;">🔗 Open NotebookLM</a>
   <a id="compressLinkBtn" href="#" target="_blank" style="display:none;text-align:center;background:#d97706;color:white;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;margin-bottom:14px;">🗜️ Open Compression Tool</a>
 
   <textarea id="taskContent" placeholder="Paste the AI-generated content here..."></textarea>
@@ -91,6 +93,7 @@ snap.docs.forEach(d => {
 
 function openTask(id) {
   currentJobId = id;
+  document.getElementById('taskContent').value = ''; // always start blank — never show leftover text from a previous job
   const j = jobsCache[id];
   document.getElementById('taskTitle').textContent = j.workerLabel || 'Task';
   document.getElementById('taskInstructions').textContent = j.workerInstructions || 'Copy the prompt, paste it into ChatGPT or Claude, then paste the AI\'s response below.';
@@ -100,11 +103,14 @@ function openTask(id) {
   const isMedia = j.jobKind === 'media';
   const isFileUpload = isMedia && (j.mediaType === 'audio' || j.mediaType === 'pdf' || j.mediaType === 'infographic');
   const isVideo = isMedia && j.mediaType === 'video';
+  const isNotebookMedia = isMedia && (j.mediaType === 'audio' || j.mediaType === 'video' || j.mediaType === 'pdf');
 
   document.getElementById('taskContent').style.display = isMedia ? 'none' : 'block';
   document.getElementById('mediaFileSection').style.display = isFileUpload ? 'block' : 'none';
   document.getElementById('mediaVideoSection').style.display = isVideo ? 'block' : 'none';
   document.getElementById('submitTextBtn').style.display = isMedia ? 'none' : 'block';
+  document.getElementById('copyNotebookBtn').style.display = isNotebookMedia ? 'block' : 'none';
+  document.getElementById('openNotebookLmBtn').style.display = isNotebookMedia ? 'block' : 'none';
 
   if (isFileUpload) {
     document.getElementById('mediaFileNameHint').textContent = 'This file will be saved as: ' + j.r2Key;
@@ -126,27 +132,45 @@ function openTask(id) {
   }
 }
 
+async function copyTextToClipboard(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    await navigator.clipboard.writeText(text);
+  } else {
+    // Fallback for older/some mobile browsers
+    const temp = document.createElement('textarea');
+    temp.value = text;
+    temp.style.position = 'fixed';
+    temp.style.left = '-9999px';
+    document.body.appendChild(temp);
+    temp.focus();
+    temp.select();
+    document.execCommand('copy');
+    document.body.removeChild(temp);
+  }
+}
+
 async function copyPrompt() {
   const j = jobsCache[currentJobId];
   const text = j ? (j.promptText || '') : '';
   const btn = document.getElementById('copyPromptBtn');
   try {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      await navigator.clipboard.writeText(text);
-    } else {
-      // Fallback for older/some mobile browsers
-      const temp = document.createElement('textarea');
-      temp.value = text;
-      temp.style.position = 'fixed';
-      temp.style.left = '-9999px';
-      document.body.appendChild(temp);
-      temp.focus();
-      temp.select();
-      document.execCommand('copy');
-      document.body.removeChild(temp);
-    }
+    await copyTextToClipboard(text);
     btn.textContent = '✅ Copied!';
-    setTimeout(() => { btn.textContent = '📋 Copy Prompt'; }, 2000);
+    setTimeout(() => { btn.textContent = '📋 Copy Prompt for AI'; }, 2000);
+  } catch (err) {
+    alert('Could not copy automatically. Please select and copy the text manually.');
+  }
+}
+
+async function copyNotebookPrompt() {
+  const j = jobsCache[currentJobId];
+  // Same prompt text as the text-copy button — kept invisible to the worker, exactly like Copy Prompt does.
+  const text = j ? (j.promptText || '') : '';
+  const btn = document.getElementById('copyNotebookBtn');
+  try {
+    await copyTextToClipboard(text);
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => { btn.textContent = '📓 Copy NotebookLM Prompt'; }, 2000);
   } catch (err) {
     alert('Could not copy automatically. Please select and copy the text manually.');
   }
