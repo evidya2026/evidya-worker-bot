@@ -3,6 +3,8 @@
 <title>E-Vidya Content Task</title>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 body{font-family:sans-serif;background:#f0f4f8;padding:16px;max-width:480px;margin:0 auto;}
 .box{background:#fff;border-radius:14px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.1);margin-bottom:14px;}
@@ -20,7 +22,15 @@ button{width:100%;padding:13px;background:#667eea;color:#fff;border:none;border-
   <div id="loginError" style="color:red;font-size:13px;"></div>
 </div>
 
+<div id="welcomeBox"></div>
+<div class="box" id="mainTabsBox" style="display:none;">
+  <div style="display:flex;gap:8px;">
+    <button id="tabTasksBtn" onclick="switchMainTab('tasks')" style="flex:1;background:#667eea;">📋 My Tasks</button>
+    <button id="tabPerfBtn" onclick="switchMainTab('perf')" style="flex:1;background:#999;">📊 Performance Report</button>
+  </div>
+</div>
 <div id="jobsBox" style="display:none;"></div>
+<div id="perfReportBox" style="display:none;"></div>
 <div class="box" id="taskBox" style="display:none;">
   <h3 id="taskTitle"></h3>
   <p id="taskInstructions" style="font-size:14px;color:#333;font-weight:600;white-space:pre-wrap;word-break:break-word;margin-bottom:12px;"></p>
@@ -40,7 +50,7 @@ button{width:100%;padding:13px;background:#667eea;color:#fff;border:none;border-
   </div>
 
   <div id="mediaVideoSection" style="display:none;">
-    <input id="videoIdInput" placeholder="Paste YouTube Video ID (e.g. qU8IfegijAo)" style="margin-bottom:10px;">
+   <input id="videoIdInput" placeholder="Paste the full YouTube video link here" style="margin-bottom:10px;">
     <button onclick="submitVideoId()">Submit Video ID</button>
   </div>
 </div>
@@ -65,10 +75,149 @@ async function login() {
     document.getElementById('loginError').textContent = 'Invalid or blocked code.';
     return;
   }
-  currentWorker = code;
+ currentWorker = code;
   document.getElementById('loginBox').style.display = 'none';
+  document.getElementById('mainTabsBox').style.display = 'block';
   document.getElementById('jobsBox').style.display = 'block';
+  showWelcomeAndYesterday();
   loadJobs();
+}
+
+function getYesterdayRange() {
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const startOfYesterday = new Date(startOfToday);
+  startOfYesterday.setDate(startOfYesterday.getDate() - 1);
+  return { start: startOfYesterday.toISOString(), end: startOfToday.toISOString() };
+}
+
+async function showWelcomeAndYesterday() {
+  const range = getYesterdayRange();
+  const counts = { submitted: 0, published: 0, rejected: 0 };
+  try {
+    const snap = await db.collection('jobHistory')
+      .where('worker', '==', currentWorker)
+      .where('timestamp', '>=', range.start)
+      .where('timestamp', '<', range.end)
+      .get();
+    snap.forEach(d => { const h = d.data(); counts[h.eventType] = (counts[h.eventType] || 0) + 1; });
+  } catch (err) {
+    console.error('Yesterday report fetch failed (may need a Firestore index — check console for a link):', err);
+  }
+  let name = currentWorker;
+  try {
+    const wdoc = await db.collection('workers').doc(currentWorker).get();
+    if (wdoc.exists && wdoc.data().name) name = wdoc.data().name;
+  } catch (err) {}
+
+  document.getElementById('welcomeBox').innerHTML = `
+    <div class="box" style="text-align:center;">
+      <img src="https://raw.githubusercontent.com/happysangitanms/assets/main/LOGO.png" style="width:56px;margin-bottom:8px;">
+      <div style="font-size:17px;font-weight:800;color:#4c1d95;">Welcome, ${name}! 👋</div>
+      <div style="font-size:12px;color:#666;margin-top:6px;">Yesterday's Performance</div>
+      <div style="display:flex;justify-content:center;gap:18px;margin-top:10px;">
+        <div><div style="font-size:20px;font-weight:900;color:#059669;">${counts.submitted}</div><div style="font-size:10px;color:#666;">Submitted</div></div>
+        <div><div style="font-size:20px;font-weight:900;color:#2563eb;">${counts.published}</div><div style="font-size:10px;color:#666;">Approved</div></div>
+        <div><div style="font-size:20px;font-weight:900;color:#dc2626;">${counts.rejected}</div><div style="font-size:10px;color:#666;">Rejected</div></div>
+      </div>
+    </div>`;
+}
+
+function switchMainTab(tab) {
+  document.getElementById('jobsBox').style.display = tab === 'tasks' ? 'block' : 'none';
+  document.getElementById('perfReportBox').style.display = tab === 'perf' ? 'block' : 'none';
+  document.getElementById('tabTasksBtn').style.background = tab === 'tasks' ? '#667eea' : '#999';
+  document.getElementById('tabPerfBtn').style.background = tab === 'perf' ? '#667eea' : '#999';
+  if (tab === 'perf') loadMyPerformance();
+}
+
+async function loadMyPerformance() {
+  const wrap = document.getElementById('perfReportBox');
+  wrap.innerHTML = '<div class="box">Loading...</div>';
+  try {
+    const jobsSnap = await db.collection('jobs').where('assignedWorker', '==', currentWorker).get();
+    const jobs = jobsSnap.docs.map(d => d.data());
+    const counts = { open: 0, submitted: 0, published: 0, rejected: 0 };
+    jobs.forEach(j => { counts[j.status] = (counts[j.status] || 0) + 1; });
+    const total = jobs.length;
+    const approvalRate = total ? Math.round((counts.published / total) * 100) : 0;
+
+    const histSnap = await db.collection('jobHistory').where('worker', '==', currentWorker).orderBy('timestamp', 'asc').get();
+    const historyByJob = {};
+    histSnap.forEach(d => {
+      const h = d.data();
+      if (!historyByJob[h.jobId]) historyByJob[h.jobId] = { label: h.jobLabel, events: [] };
+      historyByJob[h.jobId].events.push(h);
+    });
+    window.myPerfData = { counts, total, approvalRate, historyByJob };
+
+    let historyHtml = '<h4 style="margin-top:14px;">📅 Date-wise History</h4>';
+    const ids = Object.keys(historyByJob);
+    if (ids.length === 0) {
+      historyHtml += '<p style="font-size:12px;color:#666;">No history yet.</p>';
+    } else {
+      ids.forEach(jid => {
+        const jh = historyByJob[jid];
+        historyHtml += `<div style="background:#f7f7f7;border-radius:8px;padding:8px;margin-bottom:8px;"><b style="font-size:12.5px;">${jh.label}</b>`;
+        jh.events.forEach(ev => {
+          const label = ev.eventType === 'rejected' ? 'Rejected' : ev.eventType === 'submitted' ? 'Resubmitted' : 'Final Approved';
+          historyHtml += `<div style="font-size:11px;color:#333;">- ${label} — ${new Date(ev.timestamp).toLocaleString('en-IN')}${ev.note ? ' — Reason: ' + ev.note : ''}</div>`;
+        });
+        historyHtml += '</div>';
+      });
+    }
+
+    wrap.innerHTML = `<div class="box">
+      <div style="display:flex;justify-content:space-around;text-align:center;margin-bottom:10px;">
+        <div><div style="font-size:20px;font-weight:900;">${total}</div><div style="font-size:10px;">Total</div></div>
+        <div><div style="font-size:20px;font-weight:900;color:#059669;">${counts.published}</div><div style="font-size:10px;">Published</div></div>
+        <div><div style="font-size:20px;font-weight:900;color:#dc2626;">${counts.rejected}</div><div style="font-size:10px;">Rejected</div></div>
+        <div><div style="font-size:20px;font-weight:900;color:#2563eb;">${approvalRate}%</div><div style="font-size:10px;">Approval</div></div>
+      </div>
+      ${historyHtml}
+      <button onclick="downloadMyPerformancePDF()" style="background:#4c1d95;">⬇️ Download My Performance PDF</button>
+    </div>`;
+  } catch (err) {
+    console.error(err);
+    wrap.innerHTML = '<div class="box" style="color:red;font-size:12px;">Failed to load. (May need a Firestore index — check browser console for a setup link.)</div>';
+  }
+}
+
+async function downloadMyPerformancePDF() {
+  const a = window.myPerfData;
+  if (!a) return;
+  const container = document.createElement('div');
+  container.style.cssText = 'position:fixed;left:-9999px;top:0;width:600px;background:#fff;padding:30px;font-family:sans-serif;color:#000;';
+  let historyHtml = '';
+  Object.keys(a.historyByJob).forEach(jid => {
+    const jh = a.historyByJob[jid];
+    historyHtml += `<div style="margin-top:8px;font-size:12px;font-weight:700;">${jh.label}</div>`;
+    jh.events.forEach(ev => {
+      const label = ev.eventType === 'rejected' ? 'Rejected' : ev.eventType === 'submitted' ? 'Resubmitted' : 'Final Approved & Published';
+      historyHtml += `<div style="font-size:10.5px;padding-left:10px;">- ${label} — ${new Date(ev.timestamp).toLocaleString('en-IN')}${ev.note ? ' — Reason: ' + ev.note : ''}</div>`;
+    });
+  });
+  container.innerHTML = `
+    <div style="display:flex;align-items:center;gap:14px;border-bottom:3px solid #4c1d95;padding-bottom:12px;margin-bottom:16px;">
+      <img src="https://raw.githubusercontent.com/happysangitanms/assets/main/LOGO.png" style="width:56px;">
+      <div><div style="font-size:19px;font-weight:900;">E-Vidya Academy</div><div style="font-size:11px;">My Performance Report — ${currentWorker}</div></div>
+    </div>
+    <div style="font-size:13px;">Total Jobs: <b>${a.total}</b> | Published: <b>${a.counts.published}</b> | Rejected: <b>${a.counts.rejected}</b> | Approval Rate: <b>${a.approvalRate}%</b></div>
+    ${historyHtml}`;
+  document.body.appendChild(container);
+  try {
+    const canvas = await html2canvas(container, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+    const imgData = canvas.toDataURL('image/png');
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const w = pdf.internal.pageSize.getWidth();
+    pdf.addImage(imgData, 'PNG', 0, 0, w, (canvas.height * w) / canvas.width);
+    pdf.save('My_Performance_' + currentWorker + '.pdf');
+  } catch (err) {
+    alert('Failed to generate PDF.');
+  } finally {
+    document.body.removeChild(container);
+  }
 }
 
 let jobsCache = {};
@@ -134,7 +283,15 @@ function openTask(id) {
   const isMedia = j.jobKind === 'media';
   const isFileUpload = isMedia && (j.mediaType === 'audio' || j.mediaType === 'pdf' || j.mediaType === 'infographic');
   const isVideo = isMedia && j.mediaType === 'video';
-  const isNotebookMedia = isMedia && (j.mediaType === 'audio' || j.mediaType === 'video' || j.mediaType === 'pdf');
+const isNotebookMedia = isMedia && (j.mediaType === 'audio' || j.mediaType === 'video' || j.mediaType === 'pdf');
+
+  const copyBtnEl = document.getElementById('copyPromptBtn');
+  if (isMedia) {
+    copyBtnEl.textContent = '📄 Source Text';
+  } else {
+    copyBtnEl.textContent = '📋 Copy Prompt for AI';
+  }
+  document.getElementById('copyNotebookBtn').textContent = '🤖 Prompt Text';
 
   document.getElementById('taskContent').style.display = isMedia ? 'none' : 'block';
   document.getElementById('mediaFileSection').style.display = isFileUpload ? 'block' : 'none';
@@ -182,12 +339,14 @@ async function copyTextToClipboard(text) {
 
 async function copyPrompt() {
   const j = jobsCache[currentJobId];
-  const text = j ? (j.promptText || '') : '';
+  const isMedia = j && j.jobKind === 'media';
+  const text = j ? (isMedia ? (j.sourceText || j.promptText || '') : (j.promptText || '')) : '';
+  const restoreLabel = isMedia ? '📄 Source Text' : '📋 Copy Prompt for AI';
   const btn = document.getElementById('copyPromptBtn');
   try {
     await copyTextToClipboard(text);
     btn.textContent = '✅ Copied!';
-    setTimeout(() => { btn.textContent = '📋 Copy Prompt for AI'; }, 2000);
+    setTimeout(() => { btn.textContent = restoreLabel; }, 2000);
   } catch (err) {
     alert('Could not copy automatically. Please select and copy the text manually.');
   }
@@ -195,13 +354,12 @@ async function copyPrompt() {
 
 async function copyNotebookPrompt() {
   const j = jobsCache[currentJobId];
-  // Same prompt text as the text-copy button — kept invisible to the worker, exactly like Copy Prompt does.
-  const text = j ? (j.promptText || '') : '';
+  const text = j ? (j.promptOnly || '') : '';
   const btn = document.getElementById('copyNotebookBtn');
   try {
     await copyTextToClipboard(text);
     btn.textContent = '✅ Copied!';
-    setTimeout(() => { btn.textContent = '📓 Copy NotebookLM Prompt'; }, 2000);
+    setTimeout(() => { btn.textContent = '🤖 Prompt Text'; }, 2000);
   } catch (err) {
     alert('Could not copy automatically. Please select and copy the text manually.');
   }
@@ -269,9 +427,17 @@ await db.collection('jobs').doc(currentJobId).update({
   }
 }
 
+function extractYouTubeId(input) {
+  input = input.trim();
+  if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input; // already a bare ID
+  const match = input.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : input;
+}
+
 async function submitVideoId() {
-  const videoId = document.getElementById('videoIdInput').value.trim();
-  if (!videoId) { alert('Please paste the YouTube video ID.'); return; }
+  const raw = document.getElementById('videoIdInput').value.trim();
+  if (!raw) { alert('Please paste the YouTube video link.'); return; }
+  const videoId = extractYouTubeId(raw);
   await db.collection('jobs').doc(currentJobId).update({
     status: 'submitted', submittedText: videoId, submittedAt: new Date().toISOString()
   });
