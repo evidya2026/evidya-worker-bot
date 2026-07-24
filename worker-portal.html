@@ -68,6 +68,9 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 let currentWorker = null, currentJobId = null;
 
+  const appCheck = firebase.appCheck();
+appCheck.activate('6LeJgWMtAAAAAOeGJV17W9m1RIoBpixRTMPAKYou', true);
+
 async function login() {
   const code = document.getElementById('workerCode').value.trim().toUpperCase();
   const doc = await db.collection('workers').doc(code).get();
