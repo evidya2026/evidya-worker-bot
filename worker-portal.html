@@ -207,12 +207,30 @@ async function copyNotebookPrompt() {
   }
 }
   
+async function logJobEvent(jobId, eventType, note) {
+  try {
+    const j = jobsCache[jobId] || {};
+    await db.collection('jobHistory').add({
+      jobId: jobId,
+      jobLabel: j.workerLabel || j.title || jobId,
+      jobTitle: j.title || '',
+      worker: currentWorker,
+      eventType: eventType,
+      note: note || '',
+      timestamp: new Date().toISOString()
+    });
+  } catch (err) {
+    console.error('logJobEvent failed (non-fatal):', err);
+  }
+}
+
 async function submitTask() {
   const text = document.getElementById('taskContent').value.trim();
   if (!text) { alert('Please paste the content first.'); return; }
   await db.collection('jobs').doc(currentJobId).update({
     status: 'submitted', submittedText: text, submittedAt: new Date().toISOString()
   });
+  await logJobEvent(currentJobId, 'submitted', '');
   alert('Submitted! Thank you.');
   document.getElementById('taskBox').style.display = 'none';
   loadJobs();
@@ -240,9 +258,10 @@ async function uploadMediaFile() {
     }
     if (!result.success) throw new Error(result.error || 'Upload failed');
 
-    await db.collection('jobs').doc(currentJobId).update({
+await db.collection('jobs').doc(currentJobId).update({
       status: 'submitted', submittedAt: new Date().toISOString()
     });
+    await logJobEvent(currentJobId, 'submitted', '');
     statusEl.textContent = '✅ Uploaded successfully!';
     setTimeout(() => { document.getElementById('taskBox').style.display = 'none'; loadJobs(); }, 1200);
   } catch (err) {
@@ -256,6 +275,7 @@ async function submitVideoId() {
   await db.collection('jobs').doc(currentJobId).update({
     status: 'submitted', submittedText: videoId, submittedAt: new Date().toISOString()
   });
+  await logJobEvent(currentJobId, 'submitted', '');
   alert('Submitted!');
   document.getElementById('taskBox').style.display = 'none';
   loadJobs();
