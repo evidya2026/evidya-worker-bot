@@ -394,7 +394,7 @@ function openTask(id) {
   const isMedia = j.jobKind === 'media';
   const isFileUpload = isMedia && (j.mediaType === 'audio' || j.mediaType === 'pdf' || j.mediaType === 'infographic');
   const isVideo = isMedia && j.mediaType === 'video';
-const isNotebookMedia = isMedia && (j.mediaType === 'audio' || j.mediaType === 'video' || j.mediaType === 'pdf');
+const isNotebookMedia = isMedia && (j.mediaType === 'audio' || j.mediaType === 'video' || j.mediaType === 'pdf' || j.mediaType === 'infographic');
 
   const copyBtnEl = document.getElementById('copyPromptBtn');
   if (isMedia) {
