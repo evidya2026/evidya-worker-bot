@@ -410,8 +410,15 @@ const isNotebookMedia = isMedia && (j.mediaType === 'audio' || j.mediaType === '
   document.getElementById('submitTextBtn').style.display = isMedia ? 'none' : 'block';
   document.getElementById('copyNotebookBtn').style.display = isNotebookMedia ? 'block' : 'none';
  document.getElementById('openNotebookLmBtn').style.display = isNotebookMedia ? 'block' : 'none';
-  document.getElementById('openChatGptBtn').style.display = !isMedia ? 'block' : 'none';
-  document.getElementById('openClaudeBtn').style.display = !isMedia ? 'block' : 'none';
+const taskPathParts = (j.targetPath || '').split('/');
+  const taskFileName = taskPathParts[taskPathParts.length - 1] || '';
+  const taskClassFolder = taskPathParts[1] || '';
+  const taskLessonMatch = taskClassFolder.match(/CLASS-(\d+)/);
+  const taskLessonNum = taskLessonMatch ? parseInt(taskLessonMatch[1], 10) : null;
+  const taskIsOddLesson = taskLessonNum !== null && taskLessonNum % 2 !== 0;
+  const useClaudeForThis = !isMedia && (taskFileName === 'mermaid.js' || (taskFileName === 'topicsdata.js' && taskIsOddLesson));
+  document.getElementById('openChatGptBtn').style.display = (!isMedia && !useClaudeForThis) ? 'block' : 'none';
+  document.getElementById('openClaudeBtn').style.display = useClaudeForThis ? 'block' : 'none';
 
   if (isFileUpload) {
     document.getElementById('mediaFileNameHint').textContent = 'This file will be saved as: ' + j.r2Key;
