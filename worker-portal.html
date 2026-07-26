@@ -570,12 +570,11 @@ ${topics}
 }
 
 function formatMermaid(data) {
-  const items = data.map(g => '    ' + J(g)).join(',\n\n');
-  return [
-${items}
-  ];
-}
-
+     const items = data.map(g => '    ' + J(g)).join(',\n\n');
+     return `[
+   ${items}
+     ]`;
+   }
 
   
 function validateBeforeSubmit(rawText, targetPath) {
