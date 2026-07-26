@@ -42,7 +42,7 @@ button{width:100%;padding:13px;background:#667eea;color:#fff;border:none;border-
 <a id="openClaudeBtn" href="https://claude.ai/new" target="_blank" style="display:none;text-align:center;background:#d97757;color:white;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;margin-bottom:10px;">✨ Open Claude</a>
   <a id="compressLinkBtn" href="#" target="_blank" style="display:none;text-align:center;background:#d97706;color:white;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;margin-bottom:14px;">🗜️ Open Compression Tool</a>
 
-  <textarea id="taskContent" placeholder="Paste the AI-generated content here..."></textarea>
+ <textarea id="taskContent" placeholder="Paste the AI-generated content here..." oninput="saveDraftNow()"></textarea>
   <button id="submitTextBtn" onclick="submitTask()">Submit</button>
 
   <div id="mediaFileSection" style="display:none;">
@@ -623,6 +623,39 @@ function validateBeforeSubmit(rawText, targetPath) {
 
 let jobsCache = {};
 
+function getJobTypeLabel(j) {
+  if (!j) return '';
+  if (j.jobKind === 'rewrite') return 'REWRITE';
+  if (j.jobKind === 'media') return (j.mediaType || 'MEDIA').toUpperCase();
+  if (j.targetPath) {
+    const parts = j.targetPath.split('/');
+    const fileName = parts[parts.length - 1] || '';
+    return fileName.replace(/\.[a-zA-Z0-9]+$/, '').toUpperCase();
+  }
+  return '';
+}
+
+function saveDraftNow() {
+  if (!currentJobId) return;
+  try {
+    const text = document.getElementById('taskContent').value;
+    if (text) localStorage.setItem('draft_' + currentJobId, text);
+    else localStorage.removeItem('draft_' + currentJobId);
+  } catch(e) {}
+}
+
+function markJobInProgress(jobId) {
+  try { localStorage.setItem('inprogress_' + jobId, '1'); } catch(e) {}
+  renderJobTabs();
+}
+
+function clearJobInProgress(jobId) {
+  try {
+    localStorage.removeItem('inprogress_' + jobId);
+    localStorage.removeItem('draft_' + jobId);
+  } catch(e) {}
+}
+
 let currentWorkerJobFilter = 'all';
 let expandedWorkerBatch = null;
 
@@ -677,8 +710,12 @@ function renderJobTabs() {
       const isOpen = expandedWorkerBatch === key;
       html += `<div class="job" onclick="toggleWorkerBatchExpand('${key}')">📦 ${g.label} (${g.ids.length} task${g.ids.length > 1 ? 's' : ''}) ${isOpen ? '▲' : '▼'}</div>`;
       if (isOpen) {
-        g.ids.forEach(id => {
-          html += `<div class="job" style="margin-left:16px;background:#f2f2f2;" data-job-id="${id}">${jobsCache[id].workerLabel || 'Task'}</div>`;
+       g.ids.forEach(id => {
+          const jj = jobsCache[id];
+          const label = (jj.workerLabel || 'Task') + (getJobTypeLabel(jj) ? '(' + getJobTypeLabel(jj) + ')' : '');
+          let inProg = false;
+          try { inProg = localStorage.getItem('inprogress_' + id) === '1'; } catch(e) {}
+          html += `<div class="job" style="margin-left:16px;background:#f2f2f2;" data-job-id="${id}">${inProg ? '⏳ ' : ''}${label}</div>`;
         });
       }
     });
@@ -697,9 +734,12 @@ function setWorkerJobFilter(f) {
 
 function openTask(id) {
   currentJobId = id;
-  document.getElementById('taskContent').value = ''; // always start blank — never show leftover text from a previous job
+  let savedDraft = '';
+  try { savedDraft = localStorage.getItem('draft_' + id) || ''; } catch(e) {}
+  document.getElementById('taskContent').value = savedDraft;
+  markJobInProgress(id);
   const j = jobsCache[id];
-  document.getElementById('taskTitle').textContent = j.workerLabel || 'Task';
+  document.getElementById('taskTitle').textContent = (j.workerLabel || 'Task') + (getJobTypeLabel(j) ? '(' + getJobTypeLabel(j) + ')' : '');
   document.getElementById('taskInstructions').textContent = j.workerInstructions || 'Copy the prompt, paste it into ChatGPT or Claude, then paste the AI\'s response below.';
   document.getElementById('taskBox').style.display = 'block';
   document.getElementById('taskBox').scrollIntoView({behavior:'smooth'});
@@ -827,7 +867,8 @@ async function submitTask() {
   await db.collection('jobs').doc(currentJobId).update({
     status: 'submitted', submittedText: check.finalText, submittedAt: new Date().toISOString()
   });
-  await logJobEvent(currentJobId, 'submitted', '');
+ await logJobEvent(currentJobId, 'submitted', '');
+  clearJobInProgress(currentJobId);
   alert('Submitted! Thank you.');
   document.getElementById('taskBox').style.display = 'none';
   loadJobs();
@@ -859,6 +900,7 @@ await db.collection('jobs').doc(currentJobId).update({
       status: 'submitted', submittedAt: new Date().toISOString()
     });
     await logJobEvent(currentJobId, 'submitted', '');
+    clearJobInProgress(currentJobId);
     statusEl.textContent = '✅ Uploaded successfully!';
     setTimeout(() => { document.getElementById('taskBox').style.display = 'none'; loadJobs(); }, 1200);
   } catch (err) {
@@ -881,6 +923,7 @@ async function submitVideoId() {
     status: 'submitted', submittedText: videoId, submittedAt: new Date().toISOString()
   });
   await logJobEvent(currentJobId, 'submitted', '');
+  clearJobInProgress(currentJobId);
   alert('Submitted!');
   document.getElementById('taskBox').style.display = 'none';
   loadJobs();
