@@ -856,6 +856,7 @@ async function logJobEvent(jobId, eventType, note) {
 }
 
 async function submitTask() {
+     console.log('RUNNING FIXED VERSION', new Date().toISOString());
   const text = document.getElementById('taskContent').value.trim();
   if (!text) { alert('Please paste the content first.'); return; }
 
