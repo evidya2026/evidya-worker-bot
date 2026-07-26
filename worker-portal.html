@@ -382,7 +382,7 @@ const FILE_SCHEMAS = {
 
 function cleanPastedContent(raw) {
   let text = raw.replace(/^\uFEFF/, '').replace(/[\u200B-\u200D]/g, '');       // invisible junk
-  text = text.replace(/^```[a-zA-Z]*\s*/m, '').replace(/```\s*$/m, '');       // markdown fences
+  text = text.replace(/```[a-zA-Z]*\n?/g, '').replace(/```/g, '');            // <<< CHANGED: strip ALL code-fence markers, anywhere in the text
   const firstMarker = text.search(/const\s+\w+\s*=|^\s*[\{\[]/m);
   if (firstMarker > 0) text = text.slice(firstMarker);                        // strip AI chit-chat before the code
   text = text.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"'); // smart quotes -> straight
