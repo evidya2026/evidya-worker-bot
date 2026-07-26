@@ -40,9 +40,6 @@ Respond ONLY with strict JSON, nothing else, in this exact shape:
     );
 
 const data = await geminiRes.json();
-    if (!data.candidates) {
-      throw new Error("Gemini raw reply: " + JSON.stringify(data));
-    }
     const raw = data.candidates[0].content.parts[0].text;
     const verdict = JSON.parse(raw);
 
