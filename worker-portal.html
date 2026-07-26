@@ -868,6 +868,19 @@ async function submitTask() {
     status: 'submitted', submittedText: check.finalText, submittedAt: new Date().toISOString()
   });
  await logJobEvent(currentJobId, 'submitted', '');
+  fetch('/api/verify-content', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      fileType: (j.targetPath || '').split('/').pop(),
+      sourceText: j.promptText ? j.promptText.split('THE TEXT:').pop() : '',
+      submittedText: check.finalText
+    })
+  }).then(r => r.json()).then(v => {
+    db.collection('jobs').doc(currentJobId).update({
+      aiCheck: { verdict: v.verdict, issues: v.issues || [], confidence: v.confidence, checkedAt: new Date().toISOString() }
+    });
+  }).catch(() => {});
   clearJobInProgress(currentJobId);
   alert('Submitted! Thank you.');
   document.getElementById('taskBox').style.display = 'none';
