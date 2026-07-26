@@ -580,10 +580,11 @@ function formatMermaid(data) {
 function validateBeforeSubmit(rawText, targetPath) {
   const fileName = (targetPath || '').split('/').pop();
   const schema = FILE_SCHEMAS[fileName];
-  if (!schema) return { ok: true, finalText: rawText };
+  const cleanedOriginal = cleanPastedContent(rawText);   // ✅ always clean first
+  if (!schema) return { ok: true, finalText: cleanedOriginal };
 
-  let cleanedOriginal = cleanPastedContent(rawText);
   let objText = extractObjectLiteral(cleanedOriginal);
+
 
   let result = tryParse(objText);
   let repaired = false;
