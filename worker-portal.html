@@ -382,10 +382,16 @@ const FILE_SCHEMAS = {
 
 function cleanPastedContent(raw) {
   let text = raw.replace(/^\uFEFF/, '').replace(/[\u200B-\u200D]/g, '');       // invisible junk
-  text = text.replace(/```[a-zA-Z]*\n?/g, '').replace(/```/g, '');            // <<< CHANGED: strip ALL code-fence markers, anywhere in the text
+  text = text.replace(/```[a-zA-Z]*\n?/g, '').replace(/```/g, '');            // strip code-fence markers
   const firstMarker = text.search(/const\s+\w+\s*=|^\s*[\{\[]/m);
   if (firstMarker > 0) text = text.slice(firstMarker);                        // strip AI chit-chat before the code
-  text = text.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"'); // smart quotes -> straight
+
+  // Only normalize curly quotes when they're being used as the STRING DELIMITER
+  // itself (right after : , [ ( and right before , } ] )) — never when they're
+  // literal punctuation sitting inside an already straight-quoted string.
+  text = text.replace(/([:\[,(]\s*)[\u2018\u2019]([^\u2018\u2019]*)[\u2018\u2019](\s*[,}\]\)])/g, "$1'$2'$3");
+  text = text.replace(/([:\[,(]\s*)[\u201C\u201D]([^\u201C\u201D]*)[\u201C\u201D](\s*[,}\]\)])/g, '$1"$2"$3');
+
   return text.trim();
 }
 
@@ -394,6 +400,7 @@ function extractObjectLiteral(text) {
   return (m ? m[1] : text).replace(/;\s*$/, '').trim();
 }
 
+  
 function tryParse(objText) {
   try { return { ok: true, value: new Function('return (' + objText + ')')() }; }
   catch (err) { return { ok: false, error: err.message }; }
@@ -585,6 +592,47 @@ ${items}
 }
 
   
+// Escapes literal double-quote characters that appear INSIDE a string's
+// content (i.e. not acting as the real opening/closing delimiter).
+// Handles cases like: "ଏହାକୁ "ଆର୍ଥିକ ପୁନର୍ଗଠନ" ଯୋଜନା କୁହାଯାଏ"
+// Works for any file — topicsdata.js, fillblanks.js, truefalse.js, mcq.js, etc.
+function escapeStrayInnerQuotes(text) {
+  let result = '';
+  let i = 0;
+  while (i < text.length) {
+    const ch = text[i];
+    if (ch === '"') {
+      let j = i + 1;
+      let buf = '';
+      let closed = false;
+      while (j < text.length) {
+        const c = text[j];
+        if (c === '\\') { buf += c + (text[j + 1] || ''); j += 2; continue; }
+        if (c === '"') {
+          const rest = text.slice(j + 1);
+          if (/^\s*[,}\]\)]/.test(rest) || /^\s*$/.test(rest)) {
+            closed = true;
+            j++;
+            break;
+          } else {
+            buf += '\\"';      // stray quote inside the content — escape it
+            j++;
+            continue;
+          }
+        }
+        buf += c;
+        j++;
+      }
+      result += '"' + buf + (closed ? '"' : '');
+      i = j;
+    } else {
+      result += ch;
+      i++;
+    }
+  }
+  return result;
+}
+
 function validateBeforeSubmit(rawText, targetPath) {
   const fileName = (targetPath || '').split('/').pop();
   const schema = FILE_SCHEMAS[fileName];
@@ -593,14 +641,29 @@ function validateBeforeSubmit(rawText, targetPath) {
 
   let objText = extractObjectLiteral(cleanedOriginal);
 
-
   let result = tryParse(objText);
   let repaired = false;
 
+  // Pass 1: structural repair (unbalanced brackets, trailing commas)
   if (!result.ok) {
     const fixed = attemptStructuralRepair(objText);
     const retry = tryParse(fixed);
     if (retry.ok) { result = retry; repaired = true; }
+  }
+
+  // Pass 2: stray unescaped inner quotes (e.g. “...”, "...", embedded mid-string)
+  if (!result.ok) {
+    const quoteFixed = escapeStrayInnerQuotes(objText);
+    const retry2 = tryParse(quoteFixed);
+    if (retry2.ok) {
+      result = retry2;
+      repaired = true;
+    } else {
+      // Pass 3: stray quotes AND structural issues together
+      const both = attemptStructuralRepair(quoteFixed);
+      const retry3 = tryParse(both);
+      if (retry3.ok) { result = retry3; repaired = true; }
+    }
   }
 
   if (!result.ok) {
