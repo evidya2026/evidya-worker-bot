@@ -46,11 +46,11 @@ const data = await geminiRes.json();
     return new Response(JSON.stringify({ success: true, ...verdict }), {
       headers: { 'Content-Type': 'application/json' }
     });
- } catch (err) {
+} catch (err) {
     return new Response(JSON.stringify({
       success: true,
       verdict: "FAIL",
-      issues: ["DEBUG ERROR: " + err.message],
+      issues: ["AI check could not run — please review this manually."],
       confidence: "low"
     }), { headers: { 'Content-Type': 'application/json' } });
   }
