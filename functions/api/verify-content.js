@@ -46,11 +46,11 @@ Respond ONLY with strict JSON, nothing else, in this exact shape:
     return new Response(JSON.stringify({ success: true, ...verdict }), {
       headers: { 'Content-Type': 'application/json' }
     });
-  } catch (err) {
+ } catch (err) {
     return new Response(JSON.stringify({
       success: true,
       verdict: "FAIL",
-      issues: ["AI check could not run — please review this manually."],
+      issues: ["DEBUG ERROR: " + err.message],
       confidence: "low"
     }), { headers: { 'Content-Type': 'application/json' } });
   }
