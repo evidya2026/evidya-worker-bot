@@ -14,6 +14,19 @@ textarea{min-height:200px;}
 button{width:100%;padding:13px;background:#667eea;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;}
 .job{border:1.5px solid #e0e0e0;border-radius:10px;padding:14px;margin-bottom:10px;cursor:pointer;}
 .job:hover{border-color:#667eea;}
+
+  /* Button press feedback */
+button { transition: transform .12s ease, opacity .12s ease; }
+button:active { transform: scale(0.96); }
+button:disabled { opacity: .65; cursor: not-allowed; transform: none; }
+
+.btn-spinner {
+    display: inline-block; width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff;
+    border-radius: 50%; animation: btnspin .6s linear infinite;
+    margin-right: 8px; vertical-align: middle;
+}
+@keyframes btnspin { to { transform: rotate(360deg); } }
 </style></head><body>
 
 <div class="box" id="loginBox">
