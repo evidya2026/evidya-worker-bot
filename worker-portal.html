@@ -571,9 +571,9 @@ ${topics}
 
 function formatMermaid(data) {
   const items = data.map(g => '    ' + J(g)).join(',\n\n');
-  return `[
+  return [
 ${items}
-  ]`;
+  ];
 }
 
 
