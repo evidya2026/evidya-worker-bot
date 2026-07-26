@@ -308,6 +308,83 @@ async function downloadMyPerformancePDF() {
   }
 }
 
+  // ============================================
+// CONTENT VALIDATOR — catches & repairs common AI-paste mistakes
+// ============================================
+const FILE_SCHEMAS = {
+  'mcq.js':        { check: o => Array.isArray(o.questions) && o.questions.every(q => q.question && Array.isArray(q.options) && q.options.length >= 2 && typeof q.correct === 'number') },
+  'truefalse.js':  { check: o => Array.isArray(o.questions) && o.questions.every(q => q.question && typeof q.correct === 'boolean') },
+  'fillblanks.js': { check: o => Array.isArray(o.questions) && o.questions.every(q => q.question && q.answer) },
+  'matching.js':   { check: o => Array.isArray(o.pairs) && o.pairs.every(p => p.left && p.right) },
+  'arrange.js':    { check: o => Array.isArray(o.questions) && o.questions.every(q => Array.isArray(q.words) && q.correct) },
+  'stq.js':        { check: o => Array.isArray(o.questions) && o.questions.every(q => q.question && q.answer) },
+  'summary.js':    { check: o => o.introduction && Array.isArray(o.sentences) && o.conclusion },
+  'questions.js':  { check: o => Array.isArray(o) && o.every(q => q.question && Array.isArray(q.points)) },
+  'topicsdata.js': { check: o => Array.isArray(o) && o.every(t => t.heading && Array.isArray(t.questions)) },
+  'worddata.js':   { check: o => Array.isArray(o.words) && o.words.every(w => w.word && w.odia) },
+  'mermaid.js':    { check: o => Array.isArray(o) && o.every(g => typeof g === 'string') }
+};
+
+function cleanPastedContent(raw) {
+  let text = raw.replace(/^\uFEFF/, '').replace(/[\u200B-\u200D]/g, '');       // invisible junk
+  text = text.replace(/^```[a-zA-Z]*\s*/m, '').replace(/```\s*$/m, '');       // markdown fences
+  const firstMarker = text.search(/const\s+\w+\s*=|^\s*[\{\[]/m);
+  if (firstMarker > 0) text = text.slice(firstMarker);                        // strip AI chit-chat before the code
+  text = text.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"'); // smart quotes -> straight
+  return text.trim();
+}
+
+function extractObjectLiteral(text) {
+  const m = text.match(/const\s+\w+\s*=\s*([\s\S]*?);?\s*$/);
+  return (m ? m[1] : text).replace(/;\s*$/, '').trim();
+}
+
+function tryParse(objText) {
+  try { return { ok: true, value: new Function('return (' + objText + ')')() }; }
+  catch (err) { return { ok: false, error: err.message }; }
+}
+
+function attemptStructuralRepair(objText) {
+  let text = objText.replace(/,(\s*[\}\]])/g, '$1'); // stray trailing commas
+  const closers = { '{': '}', '[': ']' };
+  const stack = [];
+  let inString = false, quoteChar = '';
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inString) { if (c === '\\') { i++; continue; } if (c === quoteChar) inString = false; continue; }
+    if (c === '"' || c === "'" || c === '`') { inString = true; quoteChar = c; continue; }
+    if (closers[c]) stack.push(closers[c]);
+    else if ((c === '}' || c === ']') && stack[stack.length - 1] === c) stack.pop();
+  }
+  while (stack.length) text += stack.pop();   // re-attach any missing closing brackets
+  return text;
+}
+
+function validateBeforeSubmit(rawText, targetPath) {
+  const fileName = (targetPath || '').split('/').pop();
+  const schema = FILE_SCHEMAS[fileName];
+  if (!schema) return { ok: true, finalText: rawText };
+
+  let objText = extractObjectLiteral(cleanPastedContent(rawText));
+  let result = tryParse(objText);
+  let repaired = false;
+
+  if (!result.ok) {
+    const fixed = attemptStructuralRepair(objText);
+    const retry = tryParse(fixed);
+    if (retry.ok) { result = retry; repaired = true; }
+  }
+
+  if (!result.ok) {
+    return { ok: false, message: '❌ This isn\u2019t valid code:\n\n' + result.error +
+      '\n\nPlease go back to the AI, copy its ENTIRE reply again, and make sure nothing is typed before or after it (no "Here is the code:", no ``` marks).' };
+  }
+  if (!schema.check(result.value)) {
+    return { ok: false, message: '⚠️ This is valid code, but it\u2019s missing something this task needs (e.g. question/options/answer fields). Double-check the AI\u2019s answer actually matches this task\u2019s format, then re-submit.' };
+  }
+  return { ok: true, finalText: JSON.stringify(result.value, null, 2), repaired };
+}
+
 let jobsCache = {};
 
 let currentWorkerJobFilter = 'all';
@@ -505,8 +582,14 @@ async function logJobEvent(jobId, eventType, note) {
 async function submitTask() {
   const text = document.getElementById('taskContent').value.trim();
   if (!text) { alert('Please paste the content first.'); return; }
+
+  const j = jobsCache[currentJobId];
+  const check = validateBeforeSubmit(text, j.targetPath);
+  if (!check.ok) { alert(check.message); return; }
+  if (check.repaired && !confirm('We auto-fixed a small formatting issue in what you pasted. Submit the corrected version?')) return;
+
   await db.collection('jobs').doc(currentJobId).update({
-    status: 'submitted', submittedText: text, submittedAt: new Date().toISOString()
+    status: 'submitted', submittedText: check.finalText, submittedAt: new Date().toISOString()
   });
   await logJobEvent(currentJobId, 'submitted', '');
   alert('Submitted! Thank you.');
