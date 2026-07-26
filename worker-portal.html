@@ -415,12 +415,177 @@ function attemptStructuralRepair(objText) {
   return text;
 }
 
+
+function J(v) { return JSON.stringify(v); }
+
+function formatWordData(data) {
+  const words = data.words.map(w => `        {
+            word: ${J(w.word)},
+            odia: ${J(w.odia)},
+            emoji: ${J(w.emoji)},
+            odiaUse: ${J(w.odiaUse)},
+            audio: { intro: ${J(w.audio.intro)}, encourage: ${J(w.audio.encourage)}, praise: ${J(w.audio.praise)} }
+        }`).join(',\n');
+  return `{
+    currentWord: ${data.currentWord},
+    words: [
+${words}
+    ]
+}`;
+}
+
+function formatTrueFalse(data) {
+  const qs = data.questions.map((q, i) => `        {
+            question: ${J(q.question)},
+            correct: ${q.correct}
+        }`).join(',\n');
+  return `{
+    questions: [
+${qs}
+    ]
+}`;
+}
+
+function formatSummary(data) {
+  const sentences = data.sentences.map(s => `        {
+            heading: ${J(s.heading)},
+            text: ${J(s.text)}
+        }`).join(',\n');
+  return `{
+    introduction: ${J(data.introduction)},
+    sentences: [
+${sentences}
+    ],
+    conclusion: ${J(data.conclusion)}
+}`;
+}
+
+function formatStq(data) {
+  const qs = data.questions.map((q, i) => `        {
+            question: ${J(q.question)},
+            answer: ${J(q.answer)}
+        }`).join(',\n');
+  return `{
+    questions: [
+${qs}
+    ]
+}`;
+}
+
+function formatQuestions(data) {
+  const items = data.map(q => {
+    const points = q.points.map(p => `${J(p)}`).join(',\n');
+    return `{
+audio: ${J(q.audio)},
+question: ${J(q.question)},
+introduction: ${J(q.introduction)},
+points: [
+${points}
+],
+conclusion: ${J(q.conclusion)}
+}`;
+  }).join(',\n');
+  return `[
+${items}
+]`;
+}
+
+function formatMcq(data) {
+  const qs = data.questions.map((q, i) => {
+    const opts = q.options.map(o => `                ${J(o)}`).join(',\n');
+    return `        {
+            question: ${J(q.question)},
+            options: [
+${opts}
+            ],
+            correct: ${q.correct}
+        }`;
+  }).join(',\n');
+  return `{
+    questions: [
+${qs}
+    ]
+}`;
+}
+
+function formatMatching(data) {
+  const pairs = data.pairs.map(p => `        { left: ${J(p.left)}, right: ${J(p.right)} }`).join(',\n');
+  return `{
+    pairs: [
+${pairs}
+    ]
+}`;
+}
+
+function formatFillBlanks(data) {
+  const qs = data.questions.map((q, i) => `        {
+            question: ${J(q.question)},
+            answer: ${J(q.answer)}
+        }`).join(',\n');
+  return `{
+    questions: [
+${qs}
+    ]
+}`;
+}
+
+function formatArrange(data) {
+  const qs = data.questions.map(q => {
+    const words = q.words.map(w => J(w)).join(', ');
+    return `        {
+            words: [${words}],
+            correct: ${J(q.correct)}
+        }`;
+  }).join(',\n');
+  return `{
+    questions: [
+${qs}
+    ]
+}`;
+}
+
+function formatTopicsData(data) {
+  const topics = data.map(t => {
+    const audioPoints = t.audioPoints.map(ap => `{
+text:${J(ap.text)},
+audio:${J(ap.audio)}}`).join(',\n');
+    const questions = t.questions.map(q => J(q)).join(',\n\n');
+    return `{
+heading: ${J(t.heading)},
+
+audioPoints: [${audioPoints}],
+
+questions:[
+
+${questions}
+
+]
+}`;
+  }).join(',\n\n');
+  return `[
+
+${topics}
+
+]`;
+}
+
+function formatMermaid(data) {
+  const items = data.map(g => '    ' + J(g)).join(',\n\n');
+  return `[
+${items}
+  ]`;
+}
+
+
+  
 function validateBeforeSubmit(rawText, targetPath) {
   const fileName = (targetPath || '').split('/').pop();
   const schema = FILE_SCHEMAS[fileName];
   if (!schema) return { ok: true, finalText: rawText };
 
-  let objText = extractObjectLiteral(cleanPastedContent(rawText));
+  let cleanedOriginal = cleanPastedContent(rawText);
+  let objText = extractObjectLiteral(cleanedOriginal);
+
   let result = tryParse(objText);
   let repaired = false;
 
@@ -437,7 +602,23 @@ function validateBeforeSubmit(rawText, targetPath) {
   if (!schema.check(result.value)) {
     return { ok: false, message: '⚠️ This is valid code, but it\u2019s missing something this task needs (e.g. question/options/answer fields). Double-check the AI\u2019s answer actually matches this task\u2019s format, then re-submit.' };
   }
-  return { ok: true, finalText: JSON.stringify(result.value, null, 2), repaired };
+
+  const formatters = {
+    'worddata.js': formatWordData,
+    'truefalse.js': formatTrueFalse,
+    'summary.js': formatSummary,
+    'stq.js': formatStq,
+    'questions.js': formatQuestions,
+    'mcq.js': formatMcq,
+    'matching.js': formatMatching,
+    'fillblanks.js': formatFillBlanks,
+    'arrange.js': formatArrange,
+    'topicsdata.js': formatTopicsData,
+    'mermaid.js': formatMermaid
+  };
+  const formatFn = formatters[fileName];
+  const formatted = formatFn ? formatFn(result.value) : objText.trim();
+  return { ok: true, finalText: formatted, repaired };
 }
 
 let jobsCache = {};
