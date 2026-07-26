@@ -308,21 +308,76 @@ async function downloadMyPerformancePDF() {
   }
 }
 
-  // ============================================
-// CONTENT VALIDATOR — catches & repairs common AI-paste mistakes
-// ============================================
+function isNonEmptyStr(v) { return typeof v === 'string' && v.length > 0; }
+
 const FILE_SCHEMAS = {
-  'mcq.js':        { check: o => Array.isArray(o.questions) && o.questions.every(q => q.question && Array.isArray(q.options) && q.options.length >= 2 && typeof q.correct === 'number') },
-  'truefalse.js':  { check: o => Array.isArray(o.questions) && o.questions.every(q => q.question && typeof q.correct === 'boolean') },
-  'fillblanks.js': { check: o => Array.isArray(o.questions) && o.questions.every(q => q.question && q.answer) },
-  'matching.js':   { check: o => Array.isArray(o.pairs) && o.pairs.every(p => p.left && p.right) },
-  'arrange.js':    { check: o => Array.isArray(o.questions) && o.questions.every(q => Array.isArray(q.words) && q.correct) },
-  'stq.js':        { check: o => Array.isArray(o.questions) && o.questions.every(q => q.question && q.answer) },
-  'summary.js':    { check: o => o.introduction && Array.isArray(o.sentences) && o.conclusion },
-  'questions.js':  { check: o => Array.isArray(o) && o.every(q => q.question && Array.isArray(q.points)) },
-  'topicsdata.js': { check: o => Array.isArray(o) && o.every(t => t.heading && Array.isArray(t.questions)) },
-  'worddata.js':   { check: o => Array.isArray(o.words) && o.words.every(w => w.word && w.odia) },
-  'mermaid.js':    { check: o => Array.isArray(o) && o.every(g => typeof g === 'string') }
+  'worddata.js': { check: o =>
+    typeof o.currentWord === 'number' &&
+    Array.isArray(o.words) && o.words.length > 0 &&
+    o.words.every(w =>
+      isNonEmptyStr(w.word) && isNonEmptyStr(w.odia) && isNonEmptyStr(w.emoji) && isNonEmptyStr(w.odiaUse) &&
+      w.audio && isNonEmptyStr(w.audio.intro) && isNonEmptyStr(w.audio.encourage) && isNonEmptyStr(w.audio.praise) &&
+      Object.keys(w).length === 5 && Object.keys(w.audio).length === 3
+    )
+  },
+  'truefalse.js': { check: o =>
+    Array.isArray(o.questions) && o.questions.length > 0 &&
+    o.questions.every(q => isNonEmptyStr(q.question) && typeof q.correct === 'boolean' && Object.keys(q).length === 2)
+  },
+  'summary.js': { check: o =>
+    isNonEmptyStr(o.introduction) && isNonEmptyStr(o.conclusion) &&
+    Array.isArray(o.sentences) && o.sentences.length > 0 &&
+    o.sentences.every(s => isNonEmptyStr(s.heading) && isNonEmptyStr(s.text) && Object.keys(s).length === 2) &&
+    Object.keys(o).length === 3
+  },
+  'stq.js': { check: o =>
+    Array.isArray(o.questions) && o.questions.length > 0 &&
+    o.questions.every(q => isNonEmptyStr(q.question) && isNonEmptyStr(q.answer) && Object.keys(q).length === 2)
+  },
+  'questions.js': { check: o =>
+    Array.isArray(o) && o.length > 0 &&
+    o.every(q =>
+      typeof q.audio === 'string' && isNonEmptyStr(q.question) && isNonEmptyStr(q.introduction) &&
+      Array.isArray(q.points) && q.points.length > 0 && q.points.every(isNonEmptyStr) &&
+      isNonEmptyStr(q.conclusion) && Object.keys(q).length === 5
+    )
+  },
+  'mcq.js': { check: o =>
+    Array.isArray(o.questions) && o.questions.length > 0 &&
+    o.questions.every(q =>
+      isNonEmptyStr(q.question) && Array.isArray(q.options) && q.options.length === 4 &&
+      q.options.every(isNonEmptyStr) && typeof q.correct === 'number' &&
+      q.correct >= 0 && q.correct <= 3 && Object.keys(q).length === 3
+    )
+  },
+  'matching.js': { check: o =>
+    Array.isArray(o.pairs) && o.pairs.length > 0 &&
+    o.pairs.every(p => isNonEmptyStr(p.left) && isNonEmptyStr(p.right) && Object.keys(p).length === 2) &&
+    Object.keys(o).length === 1
+  },
+  'fillblanks.js': { check: o =>
+    Array.isArray(o.questions) && o.questions.length > 0 &&
+    o.questions.every(q => isNonEmptyStr(q.question) && isNonEmptyStr(q.answer) && Object.keys(q).length === 2)
+  },
+  'arrange.js': { check: o =>
+    Array.isArray(o.questions) && o.questions.length > 0 &&
+    o.questions.every(q =>
+      Array.isArray(q.words) && q.words.length > 0 && q.words.every(isNonEmptyStr) &&
+      isNonEmptyStr(q.correct) && Object.keys(q).length === 2
+    )
+  },
+  'topicsdata.js': { check: o =>
+    Array.isArray(o) && o.length > 0 &&
+    o.every(t =>
+      isNonEmptyStr(t.heading) &&
+      Array.isArray(t.audioPoints) && t.audioPoints.length > 0 &&
+      t.audioPoints.every(ap => isNonEmptyStr(ap.text) && isNonEmptyStr(ap.audio)) &&
+      Array.isArray(t.questions) && t.questions.length > 0 && t.questions.every(isNonEmptyStr)
+    )
+  },
+  'mermaid.js': { check: o =>
+    Array.isArray(o) && o.length > 0 && o.every(isNonEmptyStr)
+  }
 };
 
 function cleanPastedContent(raw) {
