@@ -1,762 +1,1109 @@
 <!DOCTYPE html>
 <html lang="or">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ଯୋଗାଯୋଗ</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #8b5cf6;
-            --success: #10b981;
-            --whatsapp: #25D366;
-            --info: #3b82f6;
-            --dark: #1e293b;
-            --light: #f8fafc;
-            --border: #e2e8f0;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: var(--light);
-            color: var(--dark);
-            overflow-x: hidden;
-            padding-bottom: 80px;
-        }
-        
-        /* Top Navigation Bar */
-        .top-nav {
-            position: sticky;
-            top: 0;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            z-index: 100;
-            padding: 0;
-        }
-        
-        .nav-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .back-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95em;
-            padding: 8px 16px;
-            border-radius: 20px;
-            transition: all 0.3s;
-        }
-        
-        .back-btn:active {
-            background: #f1f5f9;
-            transform: scale(0.95);
-        }
-        
-        .back-btn svg {
-            width: 20px;
-            height: 20px;
-        }
-        
-        .nav-title {
-            font-size: 1.1em;
-            font-weight: 700;
-            color: var(--dark);
-        }
-        
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            padding: 40px 20px 60px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            opacity: 1;
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        
-        .hero-icon {
-            width: 80px;
-            height: 80px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 40px;
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .hero h1 {
-            color: white;
-            font-size: 1.8em;
-            font-weight: 800;
-            margin-bottom: 10px;
-            line-height: 1.2;
-        }
-        
-        .hero p {
-            color: rgba(255, 255, 255, 0.95);
-            font-size: 1em;
-            line-height: 1.6;
-        }
-        
-        /* Main Container */
-        .container {
-            max-width: 600px;
-            margin: -30px auto 0;
-            padding: 0 20px;
-            position: relative;
-            z-index: 10;
-        }
-        
-        /* Contact Cards - Main */
-        .contact-section {
-            margin-bottom: 25px;
-        }
-        
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            padding: 0 5px;
-        }
-        
-        .section-header h2 {
-            font-size: 1.2em;
-            font-weight: 700;
-            color: var(--dark);
-        }
-        
-        .section-header span {
-            font-size: 1.5em;
-        }
-        
-        .contact-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            text-decoration: none;
-            display: block;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .contact-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--primary);
-            transition: all 0.3s;
-        }
-        
-        .contact-card.phone::before { background: var(--success); }
-        .contact-card.whatsapp::before { background: var(--whatsapp); }
-        .contact-card.email::before { background: var(--info); }
-        
-        .contact-card:active {
-            transform: scale(0.98);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .card-top {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .card-icon {
-            width: 55px;
-            height: 55px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            flex-shrink: 0;
-        }
-        
-        .contact-card.phone .card-icon {
-            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
-        }
-        
-        .contact-card.whatsapp .card-icon {
-            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
-        }
-        
-        .contact-card.email .card-icon {
-            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-        }
-        
-        .card-info {
-            flex: 1;
-        }
-        
-        .card-title {
-            font-size: 1.2em;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 5px;
-        }
-        
-        .card-detail {
-            font-size: 0.95em;
-            color: #64748b;
-            font-weight: 500;
-            direction: ltr;
-        }
-        
-        .card-action {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.9em;
-            transition: all 0.3s;
-            width: 100%;
-            justify-content: center;
-        }
-        
-        .contact-card.phone .card-action {
-            background: linear-gradient(135deg, var(--success), #059669);
-            color: white;
-        }
-        
-        .contact-card.whatsapp .card-action {
-            background: linear-gradient(135deg, var(--whatsapp), #128C7E);
-            color: white;
-        }
-        
-        .contact-card.email .card-action {
-            background: linear-gradient(135deg, var(--info), #2563eb);
-            color: white;
-        }
-        
-        /* Quick Actions Grid */
-        .quick-actions {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            margin-bottom: 25px;
-        }
-        
-        .quick-actions h3 {
-            font-size: 1.1em;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .quick-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-        
-        .quick-btn {
-            background: #f8fafc;
-            border: 2px solid var(--border);
-            border-radius: 15px;
-            padding: 15px 12px;
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            text-align: center;
-            transition: all 0.3s;
-            min-height: 100px;
-            justify-content: center;
-        }
-        
-        .quick-btn:active {
-            background: #f1f5f9;
-            transform: scale(0.97);
-            border-color: var(--primary);
-        }
-        
-        .quick-btn-icon {
-            font-size: 2em;
-        }
-        
-        .quick-btn-text {
-            font-size: 0.85em;
-            font-weight: 600;
-            color: var(--dark);
-            line-height: 1.3;
-        }
-        
-        /* Info Cards */
-        .info-cards {
-            display: grid;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        
-        .info-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-        
-        .info-card h3 {
-            font-size: 1.1em;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .hours-table {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .hours-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px;
-            background: #f8fafc;
-            border-radius: 10px;
-        }
-        
-        .hours-label {
-            font-weight: 600;
-            color: var(--dark);
-            font-size: 0.9em;
-        }
-        
-        .hours-value {
-            color: #64748b;
-            font-size: 0.85em;
-            font-weight: 500;
-        }
-        
-        .hours-row.highlight {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border: 1px solid #fbbf24;
-        }
-        
-        .hours-row.highlight .hours-label {
-            color: #92400e;
-        }
-        
-        .address-text {
-            color: #64748b;
-            line-height: 1.8;
-            font-size: 0.95em;
-        }
-        
-        .address-text p {
-            margin-bottom: 8px;
-        }
-        
-        .address-name {
-            color: var(--dark);
-            font-weight: 700;
-            font-size: 1.05em;
-            margin-bottom: 10px;
-            display: block;
-        }
-        
-        /* Bottom Info Banner */
-        .info-banner {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border: 2px solid #fbbf24;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        
-        .info-banner p {
-            color: #92400e;
-            font-weight: 600;
-            font-size: 0.9em;
-            line-height: 1.6;
-        }
-        
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: #94a3b8;
-            font-size: 0.85em;
-        }
-        
-        .footer p {
-            margin-bottom: 5px;
-            line-height: 1.6;
-        }
-        
-        .footer strong {
-            color: var(--dark);
-        }
-        
-        /* Floating WhatsApp Button */
-        .floating-wa {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--whatsapp), #128C7E);
-            border-radius: 50%;
-            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            font-size: 32px;
-            z-index: 999;
-            transition: all 0.3s;
-            animation: pulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
-            }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6);
-            }
-        }
-        
-        .floating-wa:active {
-            transform: scale(0.9);
-        }
-        
-        /* Badge */
-        .badge {
-            display: inline-block;
-            background: #fef3c7;
-            color: #92400e;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75em;
-            font-weight: 700;
-            margin-left: 8px;
-        }
-        
-        /* Animations */
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .contact-card,
-        .quick-actions,
-        .info-card,
-        .info-banner {
-            animation: slideUp 0.5s ease-out backwards;
-        }
-        
-        .contact-card:nth-child(1) { animation-delay: 0.1s; }
-        .contact-card:nth-child(2) { animation-delay: 0.2s; }
-        .contact-card:nth-child(3) { animation-delay: 0.3s; }
-        .quick-actions { animation-delay: 0.4s; }
-        .info-card:nth-child(1) { animation-delay: 0.5s; }
-        .info-card:nth-child(2) { animation-delay: 0.6s; }
-        .info-banner { animation-delay: 0.7s; }
-        
-        /* Responsive */
-        @media (max-width: 400px) {
-            .hero h1 {
-                font-size: 1.5em;
-            }
-            
-            .card-title {
-                font-size: 1.1em;
-            }
-            
-            .quick-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .quick-btn {
-                flex-direction: row;
-                justify-content: flex-start;
-                min-height: auto;
-                padding: 15px;
-            }
-            
-            .quick-btn-text {
-                text-align: left;
-            }
-        }
-        
-        @media (min-width: 600px) {
-            .info-cards {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ଯୋଗାଯୋଗ - E-Vidya Academy</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --secondary: #8b5cf6;
+    --success: #10b981;
+    --whatsapp: #25D366;
+    --info: #3b82f6;
+    --dark: #1e293b;
+    --light: #f8fafc;
+    --border: #e2e8f0;
+
+    --dial-bg:#1b1e23;
+    --dial-panel:#24282f;
+    --key-bg:#2f343c;
+    --key-bg-active:#3a4048;
+    --accent-green:#31c48d;
+    --accent-red:#e5484d;
+    --text-light:#f4f6f8;
+    --text-dim:#9aa3ad;
+    --accent-amber:#f2b84b;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    overflow-x: hidden;
+    padding-bottom: 80px;
+}
+
+/* ============================================================
+   TOP NAV / HERO / CONTACT PAGE (original design, unchanged)
+   ============================================================ */
+.top-nav {
+    position: sticky;
+    top: 0;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    z-index: 100;
+    padding: 0;
+}
+
+.nav-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95em;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.3s;
+}
+
+.back-btn:active {
+    background: #f1f5f9;
+    transform: scale(0.95);
+}
+
+.back-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.nav-title {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    padding: 40px 20px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.hero-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 40px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.hero h1 {
+    color: white;
+    font-size: 1.8em;
+    font-weight: 800;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.hero p {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 1em;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 600px;
+    margin: -30px auto 0;
+    padding: 0 20px;
+    position: relative;
+    z-index: 10;
+}
+
+.contact-section { margin-bottom: 25px; }
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 0 5px;
+}
+
+.section-header h2 {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.section-header span { font-size: 1.5em; }
+
+.contact-card {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    border: none;
+    width: 100%;
+    text-align: inherit;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.contact-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--primary);
+    transition: all 0.3s;
+}
+
+.contact-card.phone::before { background: var(--success); }
+.contact-card.whatsapp::before { background: var(--whatsapp); }
+.contact-card.email::before { background: var(--info); }
+
+.contact-card:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.card-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+}
+
+.contact-card.phone .card-icon { background: linear-gradient(135deg, #d1fae5, #a7f3d0); }
+.contact-card.whatsapp .card-icon { background: linear-gradient(135deg, #dcfce7, #bbf7d0); }
+.contact-card.email .card-icon { background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
+
+.card-info { flex: 1; }
+
+.card-title {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 5px;
+}
+
+.card-detail {
+    font-size: 0.95em;
+    color: #64748b;
+    font-weight: 500;
+    direction: ltr;
+}
+
+.card-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.9em;
+    transition: all 0.3s;
+    width: 100%;
+    justify-content: center;
+}
+
+.contact-card.phone .card-action { background: linear-gradient(135deg, var(--success), #059669); color: white; }
+.contact-card.whatsapp .card-action { background: linear-gradient(135deg, var(--whatsapp), #128C7E); color: white; }
+.contact-card.email .card-action { background: linear-gradient(135deg, var(--info), #2563eb); color: white; }
+
+.quick-actions {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    margin-bottom: 25px;
+}
+
+.quick-actions h3 {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.quick-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.quick-btn {
+    background: #f8fafc;
+    border: 2px solid var(--border);
+    border-radius: 15px;
+    padding: 15px 12px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+    transition: all 0.3s;
+    min-height: 100px;
+    justify-content: center;
+}
+
+.quick-btn:active {
+    background: #f1f5f9;
+    transform: scale(0.97);
+    border-color: var(--primary);
+}
+
+.quick-btn-icon { font-size: 2em; }
+
+.quick-btn-text {
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--dark);
+    line-height: 1.3;
+}
+
+.info-cards {
+    display: grid;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.info-card {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.info-card h3 {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.hours-table {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.hours-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 10px;
+}
+
+.hours-label { font-weight: 600; color: var(--dark); font-size: 0.9em; }
+.hours-value { color: #64748b; font-size: 0.85em; font-weight: 500; }
+
+.hours-row.highlight {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border: 1px solid #fbbf24;
+}
+
+.hours-row.highlight .hours-label { color: #92400e; }
+
+.address-text { color: #64748b; line-height: 1.8; font-size: 0.95em; }
+.address-text p { margin-bottom: 8px; }
+
+.address-name {
+    color: var(--dark);
+    font-weight: 700;
+    font-size: 1.05em;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.info-banner {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border: 2px solid #fbbf24;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.info-banner p { color: #92400e; font-weight: 600; font-size: 0.9em; line-height: 1.6; }
+
+.footer { text-align: center; padding: 20px; color: #94a3b8; font-size: 0.85em; }
+.footer p { margin-bottom: 5px; line-height: 1.6; }
+.footer strong { color: var(--dark); }
+
+.floating-wa {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--whatsapp), #128C7E);
+    border-radius: 50%;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 32px;
+    z-index: 999;
+    transition: all 0.3s;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); }
+    50% { transform: scale(1.05); box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6); }
+}
+
+.floating-wa:active { transform: scale(0.9); }
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.contact-card, .quick-actions, .info-card, .info-banner {
+    animation: slideUp 0.5s ease-out backwards;
+}
+
+.contact-card:nth-child(1) { animation-delay: 0.1s; }
+.contact-card:nth-child(2) { animation-delay: 0.2s; }
+.contact-card:nth-child(3) { animation-delay: 0.3s; }
+.quick-actions { animation-delay: 0.4s; }
+.info-card:nth-child(1) { animation-delay: 0.5s; }
+.info-card:nth-child(2) { animation-delay: 0.6s; }
+.info-banner { animation-delay: 0.7s; }
+
+@media (max-width: 400px) {
+    .hero h1 { font-size: 1.5em; }
+    .card-title { font-size: 1.1em; }
+    .quick-grid { grid-template-columns: 1fr; }
+    .quick-btn { flex-direction: row; justify-content: flex-start; min-height: auto; padding: 15px; }
+    .quick-btn-text { text-align: left; }
+}
+
+@media (min-width: 600px) {
+    .info-cards { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ============================================================
+   IVR DIALER OVERLAY
+   ============================================================ */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,12,15,0.72);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 20px;
+    animation: fadeInOverlay 0.25s ease-out;
+}
+.overlay.active { display: flex; }
+
+@keyframes fadeInOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.phone {
+    width: 320px;
+    max-width: 100%;
+    background: var(--dial-bg);
+    border-radius: 36px;
+    padding: 22px 18px 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04);
+    position: relative;
+    animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.85) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.phone-notch {
+    width: 60px;
+    height: 5px;
+    background: #444a53;
+    border-radius: 10px;
+    margin: 0 auto 14px;
+}
+
+.biz-logo {
+    display: block;
+    width: calc(100% + 36px);
+    margin: -22px -18px 18px;
+    max-height: 110px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 36px 36px 0 0;
+}
+
+.call-status-label {
+    text-align: center;
+    color: var(--text-light);
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 2px;
+}
+
+.call-timer {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 15px;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+}
+
+.live-call-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    margin: 0 auto 14px;
+    display: none;
+    animation: pulseDot 1.2s infinite ease-in-out;
+}
+.live-call-dot.show { display: block; }
+@keyframes pulseDot {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.4); }
+}
+
+.speaking-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 14px;
+    height: 16px;
+}
+.speaking-indicator span {
+    width: 4px;
+    background: var(--accent-green);
+    border-radius: 2px;
+    animation: bounce 1s infinite ease-in-out;
+    opacity: 0.3;
+}
+.speaking-indicator.on span { opacity: 1; }
+.speaking-indicator span:nth-child(1){animation-delay:0s;}
+.speaking-indicator span:nth-child(2){animation-delay:0.15s;}
+.speaking-indicator span:nth-child(3){animation-delay:0.3s;}
+.speaking-indicator span:nth-child(4){animation-delay:0.45s;}
+@keyframes bounce {
+    0%,100%{height:4px;}
+    50%{height:16px;}
+}
+
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.key {
+    background: var(--key-bg);
+    color: var(--text-light);
+    border: none;
+    border-radius: 16px;
+    padding: 14px 0;
+    font-size: 22px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.1;
+    user-select: none;
+    transition: background .1s ease, transform .1s ease;
+}
+.key:active { background: var(--key-bg-active); transform: scale(0.95); }
+.key .letters {
+    font-size: 9px;
+    color: var(--text-dim);
+    font-weight: 400;
+    margin-top: 2px;
+    letter-spacing: 1px;
+}
+
+.call-actions {
+    display: flex;
+    justify-content: center;
+    gap: 26px;
+}
+.round-btn {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+.round-btn:active { transform: scale(0.9); }
+.round-btn.end { background: var(--accent-red); }
+.round-btn.mute { background: var(--key-bg); color: var(--text-light); }
+.round-btn svg { width: 24px; height: 24px; fill: #fff; }
+.round-btn.mute svg { fill: var(--text-light); }
+.round-btn.mute.active { background: var(--accent-amber); }
+
+.live-call-banner {
+    text-align: center;
+    color: var(--accent-green);
+    font-size: 13px;
+    margin-bottom: 10px;
+    display: none;
+}
+.live-call-banner.show { display: block; }
+</style>
 </head>
 <body>
-    <!-- Top Navigation -->
-    <nav class="top-nav">
-        <div class="nav-content">
-            <a href="https://evidya.de/" class="back-btn">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                </svg>
-                
-            </a>
-            <div class="nav-title">ଯୋଗାଯୋଗ</div>
-            <div style="width: 80px;"></div>
+
+<!-- ============ CONTACT PAGE ============ -->
+<nav class="top-nav">
+    <div class="nav-content">
+        <a href="https://evidya.de/" class="back-btn">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+        </a>
+        <div class="nav-title">ଯୋଗାଯୋଗ</div>
+        <div style="width: 80px;"></div>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-icon">💬</div>
+        <h1>ଆମ ସହିତ କଥା ହୁଅନ୍ତୁ । </h1>
+        <p>ଆମେ ଆପଣଙ୍କର ସମସ୍ତ ପ୍ରଶ୍ନର ଉତ୍ତର ଦେବାକୁ ପ୍ରସ୍ତୁତ । </p>
+    </div>
+</section>
+
+<div class="container">
+    <section class="contact-section">
+        <div class="section-header">
+            <span>📞</span>
+            <h2>ଯୋଗାଯୋଗ ପଦ୍ଧତି</h2>
         </div>
-    </nav>
-    
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-icon">💬</div>
-            <h1>ଆମ ସହିତ କଥା ହୁଅନ୍ତୁ । </h1>
-            <p>ଆମେ ଆପଣଙ୍କର ସମସ୍ତ ପ୍ରଶ୍ନର ଉତ୍ତର ଦେବାକୁ ପ୍ରସ୍ତୁତ । </p>
+
+        <!-- Phone Card -> now opens the IVR dialer instead of dialing directly -->
+        <button type="button" class="contact-card phone" id="openIvrBtn">
+            <div class="card-top">
+                <div class="card-icon">📱</div>
+                <div class="card-info">
+                    <div class="card-title">ଫୋନ୍ କଲ୍</div>
+                    
+                </div>
+            </div>
+            <div class="card-action">
+                <span>📞</span>
+                <span>ବର୍ତ୍ତମାନ କଲ୍ କରନ୍ତୁ</span>
+            </div>
+        </button>
+
+        <a href="https://wa.me/916372296357?text=ନମସ୍କାର%20!%20ମୋେର%20ସାହାଯ୍ୟ%20ଦରକାର" class="contact-card whatsapp">
+            <div class="card-top">
+                <div class="card-icon">💬</div>
+                <div class="card-info">
+                    <div class="card-title">ହ୍ୱାଟସ୍‌ଆପ୍</div>
+                    <div class="card-detail">6372296357</div>
+                </div>
+            </div>
+            <div class="card-action">
+                <span>💬</span>
+                <span>ଚାଟ୍ ଆରମ୍ଭ କରନ୍ତୁ</span>
+            </div>
+        </a>
+
+        <a href="mailto:odishaeguru@gmail.com?subject=ସହାୟତା%20ଅନୁରୋଧ&body=ନମସ୍କାର,%0D%0A%0D%0Aମୋତେ%20ସାହାଯ୍ୟ%20ଦରକାର" class="contact-card email">
+            <div class="card-top">
+                <div class="card-icon">📧</div>
+                <div class="card-info">
+                    <div class="card-title">ଇମେଲ୍</div>
+                    <div class="card-detail">evidya2026@gmail.com</div>
+                </div>
+            </div>
+            <div class="card-action">
+                <span>✉️</span>
+                <span>ଇମେଲ୍ ପଠାନ୍ତୁ</span>
+            </div>
+        </a>
+    </section>
+
+    <section class="quick-actions">
+        <h3><span>⚡</span><span>ତ୍ୱରିତ ସନ୍ଦେଶ</span></h3>
+        <div class="quick-grid">
+            <a href="https://wa.me/916372296357?text=ମୁଁ%20କୋଚିଂ%20ପାଇଁ%20ଆବେଦନ%20କରିବାକୁ%20ଚାହୁଁଛି" class="quick-btn">
+                <div class="quick-btn-icon">📝</div>
+                <div class="quick-btn-text">ଆବେଦନ କରିବା</div>
+            </a>
+            <a href="https://wa.me/916372296357?text=କୋର୍ସ%20ଫି%20ଏବଂ%20ପେମେଣ୍ଟ%20କଣ?" class="quick-btn">
+                <div class="quick-btn-icon">💰</div>
+                <div class="quick-btn-text">ମୂଲ୍ୟ ପଚାରିବା</div>
+            </a>
+            <a href="https://wa.me/916372296357?text=ଅଧ୍ୟୟନ%20ସାମଗ୍ରୀ%20ସହାୟତା" class="quick-btn">
+                <div class="quick-btn-icon">📚</div>
+                <div class="quick-btn-text">ଅଧ୍ୟୟନ ସହାୟତା</div>
+            </a>
+            <a href="https://wa.me/916372296357?text=ଟେକ୍ନିକାଲ୍%20ସମସ୍ୟା" class="quick-btn">
+                <div class="quick-btn-icon">⚙️</div>
+                <div class="quick-btn-text">ଟେକ୍ନିକାଲ୍ ସହାୟତା</div>
+            </a>
         </div>
     </section>
-    
-    <!-- Main Container -->
-    <div class="container">
-        <!-- Contact Methods -->
-        <section class="contact-section">
-            <div class="section-header">
-                <span>📞</span>
-                <h2>ଯୋଗାଯୋଗ ପଦ୍ଧତି</h2>
-            </div>
-            
-            <!-- Phone Card -->
-            <a href="tel:+916372296357" class="contact-card phone">
-                <div class="card-top">
-                    <div class="card-icon">📱</div>
-                    <div class="card-info">
-                        <div class="card-title">ଫୋନ୍ କଲ୍</div>
-                        <div class="card-detail">6372296357</div>
-                    </div>
+
+    <div class="info-cards">
+        <div class="info-card">
+            <h3><span>🕐</span><span>କାର୍ଯ୍ୟାଳୟ ସମୟ</span></h3>
+            <div class="hours-table">
+                <div class="hours-row">
+                    <span class="hours-label">ସୋମ - ଶୁକ୍ର</span>
+                    <span class="hours-value">ସକାଳ ୯:୦୦ - ରାତି ୮:୦୦</span>
                 </div>
-                <div class="card-action">
-                    <span>📞</span>
-                    <span>ବର୍ତ୍ତମାନ କଲ୍ କରନ୍ତୁ</span>
+                <div class="hours-row">
+                    <span class="hours-label">ଶନି/ରବି</span>
+                    <span class="hours-value">ବନ୍ଦ</span>
                 </div>
-            </a>
-            
-            <!-- WhatsApp Card -->
-            <a href="https://wa.me/916372296357?text=ନମସ୍କାର%20!%20ମୋେର%20ସାହାଯ୍ୟ%20ଦରକାର" class="contact-card whatsapp">
-                <div class="card-top">
-                    <div class="card-icon">💬</div>
-                    <div class="card-info">
-                        <div class="card-title">ହ୍ୱାଟସ୍‌ଆପ୍</div>
-                        <div class="card-detail">6372296357</div>
-                    </div>
-                </div>
-                <div class="card-action">
-                    <span>💬</span>
-                    <span>ଚାଟ୍ ଆରମ୍ଭ କରନ୍ତୁ</span>
-                </div>
-            </a>
-            
-            <!-- Email Card -->
-            <a href="mailto:odishaeguru@gmail.com?subject=ସହାୟତା%20ଅନୁରୋଧ&body=ନମସ୍କାର,%0D%0A%0D%0Aମୋତେ%20ସାହାଯ୍ୟ%20ଦରକାର" class="contact-card email">
-                <div class="card-top">
-                    <div class="card-icon">📧</div>
-                    <div class="card-info">
-                        <div class="card-title">ଇମେଲ୍</div>
-                        <div class="card-detail">evidya2026@gmail.com</div>
-                    </div>
-                </div>
-                <div class="card-action">
-                    <span>✉️</span>
-                    <span>ଇମେଲ୍ ପଠାନ୍ତୁ</span>
-                </div>
-            </a>
-        </section>
-        
-        <!-- Quick Actions -->
-        <section class="quick-actions">
-            <h3>
-                <span>⚡</span>
-                <span>ତ୍ୱରିତ ସନ୍ଦେଶ</span>
-            </h3>
-            <div class="quick-grid">
-                <a href="https://wa.me/916372296357?text=ମୁଁ%20କୋଚିଂ%20ପାଇଁ%20ଆବେଦନ%20କରିବାକୁ%20ଚାହୁଁଛି" class="quick-btn">
-                    <div class="quick-btn-icon">📝</div>
-                    <div class="quick-btn-text">ଆବେଦନ କରିବା</div>
-                </a>
-                
-                <a href="https://wa.me/916372296357?text=କୋର୍ସ%20ଫି%20ଏବଂ%20ପେମେଣ୍ଟ%20କଣ?" class="quick-btn">
-                    <div class="quick-btn-icon">💰</div>
-                    <div class="quick-btn-text">ମୂଲ୍ୟ ପଚାରିବା</div>
-                </a>
-                
-                <a href="https://wa.me/916372296357?text=ଅଧ୍ୟୟନ%20ସାମଗ୍ରୀ%20ସହାୟତା" class="quick-btn">
-                    <div class="quick-btn-icon">📚</div>
-                    <div class="quick-btn-text">ଅଧ୍ୟୟନ ସହାୟତା</div>
-                </a>
-                
-                <a href="https://wa.me/916372296357?text=ଟେକ୍ନିକାଲ୍%20ସମସ୍ୟା" class="quick-btn">
-                    <div class="quick-btn-icon">⚙️</div>
-                    <div class="quick-btn-text">ଟେକ୍ନିକାଲ୍ ସହାୟତା</div>
-                </a>
-            </div>
-        </section>
-        
-        <!-- Info Cards -->
-        <div class="info-cards">
-            <!-- Office Hours -->
-            <div class="info-card">
-                <h3>
-                    <span>🕐</span>
-                    <span>କାର୍ଯ୍ୟାଳୟ ସମୟ</span>
-                </h3>
-                <div class="hours-table">
-                    <div class="hours-row">
-                        <span class="hours-label">ସୋମ - ଶୁକ୍ର</span>
-                        <span class="hours-value">ସକାଳ ୯:୦୦ - ରାତି ୮:୦୦</span>
-                    </div>
-                    <div class="hours-row">
-                        <span class="hours-label">ଶନି/ରବି</span>
-                        <span class="hours-value">ବନ୍ଦ</span>
-                    </div>
-                    <div class="hours-row highlight">
-                        <span class="hours-label">ଛୁଟିଦିନ</span>
-                        <span class="hours-value">କେବଳ WhatsApp</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Address -->
-            <div class="info-card">
-                <h3>
-                    <span>📍</span>
-                    <span>ଆମର ଠିକଣା</span>
-                </h3>
-                <div class="address-text">
-                    <span class="address-name">ଇ-ବିଦ୍ୟା ଏକାଡେମି</span>
-                    <p>ପାଳିଆ, ଭଦ୍ରକ, ଓଡିଶା</p>
-                    <p style="margin-top: 12px; color: #94a3b8; font-size: 0.85em;">
-                        ଆମେ ଆପଣଙ୍କୁ ସର୍ବୋତ୍ତମ ଶିକ୍ଷା ସେବା ପ୍ରଦାନ କରିବାକୁ ପ୍ରସ୍ତୁତ । 
-                    </p>
+                <div class="hours-row highlight">
+                    <span class="hours-label">ଛୁଟିଦିନ</span>
+                    <span class="hours-value">କେବଳ WhatsApp</span>
                 </div>
             </div>
         </div>
-        
-        <!-- Info Banner -->
-        <div class="info-banner">
-            <p>
-                <strong>ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ:</strong> ଏହା ଏକ ସ୍ୱତନ୍ତ୍ର ବ୍ୟକ୍ତିଗତ ଶିକ୍ଷା ମଞ୍ଚ ଅଟେ । ଏହା ସରକାରଙ୍କ ସହିତ ସମ୍ବନ୍ଧିତ ନୁହେଁ । 
-            </p>
+
+        <div class="info-card">
+            <h3><span>📍</span><span>ଆମର ଠିକଣା</span></h3>
+            <div class="address-text">
+                <span class="address-name">ଇ-ବିଦ୍ୟା ଏକାଡେମି</span>
+                <p>ପାଳିଆ, ଭଦ୍ରକ, ଓଡିଶା</p>
+                <p style="margin-top: 12px; color: #94a3b8; font-size: 0.85em;">
+                    ଆମେ ଆପଣଙ୍କୁ ସର୍ବୋତ୍ତମ ଶିକ୍ଷା ସେବା ପ୍ରଦାନ କରିବାକୁ ପ୍ରସ୍ତୁତ ।
+                </p>
+            </div>
         </div>
-        
-        <!-- Footer -->
-        <footer class="footer">
-            <p><strong>ଇ-ବିଦ୍ୟା ଏକାଡେମି</strong></p>
-            <p>ବ୍ୟକ୍ତିଗତ ଶିକ୍ଷା ସେବା</p>
-            <p style="margin-top: 10px;">© ୨୦୨୬ ସର୍ବସ୍ୱତ୍ତ୍ୱ ସଂରକ୍ଷିତ</p>
-        </footer>
     </div>
-    
-    <!-- Floating WhatsApp -->
-    <a href="https://wa.me/6372296357?text=ନମସ୍କାର!" class="floating-wa">
-        💬
-    </a>
-    
-    <script>
-        // Smooth entrance animations on load
-        document.addEventListener('DOMContentLoaded', () => {
-            const cards = document.querySelectorAll('.contact-card, .quick-actions, .info-card');
-            cards.forEach((card, index) => {
-                setTimeout(() => {
-                    card.style.opacity = '1';
-                }, index * 100);
-            });
+
+    <div class="info-banner">
+        <p><strong>ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ:</strong> ଏହା ଏକ ସ୍ୱତନ୍ତ୍ର ବ୍ୟକ୍ତିଗତ ଶିକ୍ଷା ମଞ୍ଚ ଅଟେ । ଏହା ସରକାରଙ୍କ ସହିତ ସମ୍ବନ୍ଧିତ ନୁହେଁ ।</p>
+    </div>
+
+    <footer class="footer">
+        <p><strong>ଇ-ବିଦ୍ୟା ଏକାଡେମି</strong></p>
+        <p>ବ୍ୟକ୍ତିଗତ ଶିକ୍ଷା ସେବା</p>
+        <p style="margin-top: 10px;">© ୨୦୨୬ ସର୍ବସ୍ୱତ୍ତ୍ୱ ସଂରକ୍ଷିତ</p>
+    </footer>
+</div>
+
+<a href="https://wa.me/916372296357?text=ନମସ୍କାର!" class="floating-wa">💬</a>
+
+<!-- ============ IVR DIALER OVERLAY ============ -->
+<div class="overlay" id="ivrOverlay">
+    <div class="phone">
+        <img class="biz-logo" id="bizLogo" src="data:image/png;base64,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" alt="E-Vidya Academy">
+        <div class="phone-notch"></div>
+
+        <div class="call-status-label" id="callStatusLabel">ସଂଯୋଗ ହେଉଛି...</div>
+        <div class="call-timer" id="callTimer">00:00</div>
+
+        <div class="live-call-dot" id="liveCallDot"></div>
+
+        <div class="speaking-indicator" id="speakingIndicator">
+            <span></span><span></span><span></span><span></span>
+        </div>
+
+        <div class="keypad" id="keypad">
+            <button class="key" data-key="1">1</button>
+            <button class="key" data-key="2">2<span class="letters">ABC</span></button>
+            <button class="key" data-key="3">3<span class="letters">DEF</span></button>
+            <button class="key" data-key="4">4<span class="letters">GHI</span></button>
+            <button class="key" data-key="5">5<span class="letters">JKL</span></button>
+            <button class="key" data-key="6">6<span class="letters">MNO</span></button>
+            <button class="key" data-key="7">7<span class="letters">PQRS</span></button>
+            <button class="key" data-key="8">8<span class="letters">TUV</span></button>
+            <button class="key" data-key="9">9<span class="letters">WXYZ</span></button>
+            <button class="key" data-key="*">*</button>
+            <button class="key" data-key="0">0</button>
+            <button class="key" data-key="#">#</button>
+        </div>
+
+        <div class="call-actions">
+            <button class="round-btn mute" id="muteBtn" title="Mute">
+                <svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 003-3V5a3 3 0 00-6 0v6a3 3 0 003 3zm5-3a5 5 0 01-10 0H5a7 7 0 006 6.92V21h2v-3.08A7 7 0 0019 11h-2z"/></svg>
+            </button>
+            <button class="round-btn end" id="endBtn" title="End call">
+                <svg viewBox="0 0 24 24"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1a1 1 0 01-.68.95 9.9 9.9 0 00-2.32 1.2 1 1 0 01-1.32-.09l-1.9-1.9a1 1 0 01.02-1.45C4.29 8.79 8 7 12 7s7.71 1.79 10.8 4.53a1 1 0 01.02 1.45l-1.9 1.9a1 1 0 01-1.32.09 9.9 9.9 0 00-2.32-1.2 1 1 0 01-.68-.95v-3.1A15.6 15.6 0 0012 9z"/></svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+/* =========================================================================
+   IVR CONFIGURATION
+   - EXECUTIVE_PHONE_NUMBER: real number dialed after pressing 9
+   - Each menu node: text (spoken via TTS) + optional audio (real mp3 path)
+   ========================================================================= */
+
+const EXECUTIVE_PHONE_NUMBER = "+916372296357";
+
+const IVR_MENU = {
+    welcome: {
+        text: "ଇ-ବିଦ୍ୟା ଏକାଡେମିକୁ କଲ୍ କରିଥିବାରୁ ଧନ୍ୟବାଦ। ଆମର କୋର୍ସ ସୂଚନା ପାଇଁ ଏକ ଦବାନ୍ତୁ। ଆବେଦନ ଏବଂ ନାମ ଲେଖା ପାଇଁ ଦୁଇ ଦବାନ୍ତୁ। ଫି ଏବଂ ପେମେଣ୍ଟ ପାଇଁ ତିନି ଦବାନ୍ତୁ। ଅଧ୍ୟୟନ ସାମଗ୍ରୀ ପାଇଁ ଚାରି ଦବାନ୍ତୁ। ଟେକ୍ନିକାଲ୍ ସହାୟତା ପାଇଁ ପାଞ୍ଚ ଦବାନ୍ତୁ। କ୍ଲାସ୍ ସମୟସୂଚୀ ପାଇଁ ଛଅ ଦବାନ୍ତୁ। ପରୀକ୍ଷା ଓ ପ୍ରମାଣପତ୍ର ପାଇଁ ସାତ ଦବାନ୍ତୁ। ମତାମତ କିମ୍ବା ଅନ୍ୟ ପ୍ରଶ୍ନ ପାଇଁ ଆଠ ଦବାନ୍ତୁ। ଏହି ମେନୁ ପୁଣି ଥରେ ଶୁଣିବାକୁ ଶୂନ୍ୟ ଦବାନ୍ତୁ। ଏକଜେକ୍ୟୁଟିଭଙ୍କ ସହିତ କଥାବାର୍ତ୍ତା କରିବାକୁ ନଅ ଦବାନ୍ତୁ।",
+        audio: "",
+        options: {
+            "1": "course_info",
+            "2": "admission",
+            "3": "fees",
+            "4": "study_material",
+            "5": "tech_support",
+            "6": "schedule",
+            "7": "exam_cert",
+            "8": "feedback",
+            "0": "REPEAT",
+            "9": "EXECUTIVE"
+        }
+    },
+    course_info: {
+        text: "ଆମେ ନବମ ଓ ଦଶମ ଶ୍ରେଣୀ ପାଇଁ ଓଡ଼ିଆ ମାଧ୍ୟମ କୋର୍ସ ପ୍ରଦାନ କରୁ। ଅଧିକ ସୂଚନା ପାଇଁ ଏକଜେକ୍ୟୁଟିଭଙ୍କ ସହିତ କଥାବାର୍ତ୍ତା କରିବାକୁ ନଅ ଦବାନ୍ତୁ। ପୁଣି ଶୁଣିବାକୁ ଶୂନ୍ୟ ଦବାନ୍ତୁ। ମୁଖ୍ୟ ମେନୁକୁ ଫେରିବାକୁ ତାରକା ଦବାନ୍ତୁ।",
+        audio: "",
+        options: { "0": "REPEAT", "*": "BACK", "9": "EXECUTIVE" }
+    },
+    admission: {
+        text: "ଆବେଦନ ଏବଂ ନାମ ଲେଖା ପାଇଁ ଆମର ୱେବସାଇଟ୍ କିମ୍ବା ହ୍ୱାଟସ୍‌ଆପ୍ ମାଧ୍ୟମରେ ଯୋଗାଯୋଗ କରନ୍ତୁ। ସାହାଯ୍ୟ ପାଇଁ ଏକଜେକ୍ୟୁଟିଭଙ୍କ ସହିତ କଥାବାର୍ତ୍ତା କରିବାକୁ ନଅ ଦବାନ୍ତୁ। ପୁଣି ଶୁଣିବାକୁ ଶୂନ୍ୟ ଦବାନ୍ତୁ। ମୁଖ୍ୟ ମେନୁକୁ ଫେରିବାକୁ ତାରକା ଦବାନ୍ତୁ।",
+        audio: "",
+        options: { "0": "REPEAT", "*": "BACK", "9": "EXECUTIVE" }
+    },
+    fees: {
+        text: "କୋର୍ସ ଫି ଏବଂ ପେମେଣ୍ଟ ବିଷୟରେ ଜାଣିବା ପାଇଁ ଏକଜେକ୍ୟୁଟିଭଙ୍କ ସହିତ କଥାବାର୍ତ୍ତା କରିବାକୁ ନଅ ଦବାନ୍ତୁ। ପୁଣି ଶୁଣିବାକୁ ଶୂନ୍ୟ ଦବାନ୍ତୁ। ମୁଖ୍ୟ ମେନୁକୁ ଫେରିବାକୁ ତାରକା ଦବାନ୍ତୁ।",
+        audio: "",
+        options: { "0": "REPEAT", "*": "BACK", "9": "EXECUTIVE" }
+    },
+    study_material: {
+        text: "ଅଧ୍ୟୟନ ସାମଗ୍ରୀ ଆମର ୱେବସାଇଟ୍‌ରେ ଉପଲବ୍ଧ ଅଛି। ସହାୟତା ପାଇଁ ଏକଜେକ୍ୟୁଟିଭଙ୍କ ସହିତ କଥାବାର୍ତ୍ତା କରିବାକୁ ନଅ ଦବାନ୍ତୁ। ପୁଣି ଶୁଣିବାକୁ ଶୂନ୍ୟ ଦବାନ୍ତୁ। ମୁଖ୍ୟ ମେନୁକୁ ଫେରିବାକୁ ତାରକା ଦବାନ୍ତୁ।",
+        audio: "",
+        options: { "0": "REPEAT", "*": "BACK", "9": "EXECUTIVE" }
+    },
+    tech_support: {
+        text: "ଟେକ୍ନିକାଲ୍ ସମସ୍ୟା ପାଇଁ ଏକଜେକ୍ୟୁଟିଭଙ୍କ ସହିତ କଥାବାର୍ତ୍ତା କରିବାକୁ ନଅ ଦବାନ୍ତୁ। ପୁଣି ଶୁଣିବାକୁ ଶୂନ୍ୟ ଦବାନ୍ତୁ। ମୁଖ୍ୟ ମେନୁକୁ ଫେରିବାକୁ ତାରକା ଦବାନ୍ତୁ।",
+        audio: "",
+        options: { "0": "REPEAT", "*": "BACK", "9": "EXECUTIVE" }
+    },
+    schedule: {
+        text: "କ୍ଲାସ୍ ସମୟସୂଚୀ ପାଇଁ ଏକଜେକ୍ୟୁଟିଭଙ୍କ ସହିତ କଥାବାର୍ତ୍ତା କରିବାକୁ ନଅ ଦବାନ୍ତୁ। ପୁଣି ଶୁଣିବାକୁ ଶୂନ୍ୟ ଦବାନ୍ତୁ। ମୁଖ୍ୟ ମେନୁକୁ ଫେରିବାକୁ ତାରକା ଦବାନ୍ତୁ।",
+        audio: "",
+        options: { "0": "REPEAT", "*": "BACK", "9": "EXECUTIVE" }
+    },
+    exam_cert: {
+        text: "ପରୀକ୍ଷା ଏବଂ ପ୍ରମାଣପତ୍ର ବିଷୟରେ ଜାଣିବା ପାଇଁ ଏକଜେକ୍ୟୁଟିଭଙ୍କ ସହିତ କଥାବାର୍ତ୍ତା କରିବାକୁ ନଅ ଦବାନ୍ତୁ। ପୁଣି ଶୁଣିବାକୁ ଶୂନ୍ୟ ଦବାନ୍ତୁ। ମୁଖ୍ୟ ମେନୁକୁ ଫେରିବାକୁ ତାରକା ଦବାନ୍ତୁ।",
+        audio: "",
+        options: { "0": "REPEAT", "*": "BACK", "9": "EXECUTIVE" }
+    },
+    feedback: {
+        text: "ମତାମତ କିମ୍ବା ଅନ୍ୟ ପ୍ରଶ୍ନ ପାଇଁ ଏକଜେକ୍ୟୁଟିଭଙ୍କ ସହିତ କଥାବାର୍ତ୍ତା କରିବାକୁ ନଅ ଦବାନ୍ତୁ। ପୁଣି ଶୁଣିବାକୁ ଶୂନ୍ୟ ଦବାନ୍ତୁ। ମୁଖ୍ୟ ମେନୁକୁ ଫେରିବାକୁ ତାରକା ଦବାନ୍ତୁ।",
+        audio: "",
+        options: { "0": "REPEAT", "*": "BACK", "9": "EXECUTIVE" }
+    }
+};
+
+/* ---------------------------- Runtime state ---------------------------- */
+const overlay = document.getElementById('ivrOverlay');
+const openBtn = document.getElementById('openIvrBtn');
+const endBtn = document.getElementById('endBtn');
+const muteBtn = document.getElementById('muteBtn');
+const callTimerEl = document.getElementById('callTimer');
+const callStatusLabel = document.getElementById('callStatusLabel');
+const speakingIndicator = document.getElementById('speakingIndicator');
+const liveCallDot = document.getElementById('liveCallDot');
+const keypad = document.getElementById('keypad');
+
+let currentNodeId = null;
+let history = [];
+let muted = false;
+let timerInterval = null;
+let secondsElapsed = 0;
+let currentAudio = null;
+let ivrStarted = false;
+
+function formatTime(s){
+    const m = String(Math.floor(s/60)).padStart(2,'0');
+    const sec = String(s%60).padStart(2,'0');
+    return m+":"+sec;
+}
+
+function startTimer(){
+    secondsElapsed = 0;
+    callTimerEl.textContent = "00:00";
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        secondsElapsed++;
+        callTimerEl.textContent = formatTime(secondsElapsed);
+    }, 1000);
+}
+function stopTimer(){
+    clearInterval(timerInterval);
+}
+
+function speak(text){
+    window.speechSynthesis.cancel();
+    if(currentAudio){ currentAudio.pause(); currentAudio = null; }
+    if(muted) return;
+
+    speakingIndicator.classList.add('on');
+    const utter = new SpeechSynthesisUtterance(text);
+    const voices = window.speechSynthesis.getVoices();
+    const odiaVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('or'));
+    if(odiaVoice) utter.voice = odiaVoice;
+    utter.lang = odiaVoice ? odiaVoice.lang : 'hi-IN';
+    utter.rate = 0.95;
+    utter.onend = () => speakingIndicator.classList.remove('on');
+    utter.onerror = () => speakingIndicator.classList.remove('on');
+    window.speechSynthesis.speak(utter);
+}
+
+function playAudioFile(path){
+    speakingIndicator.classList.add('on');
+    currentAudio = new Audio(path);
+    if(muted){ currentAudio.muted = true; }
+    currentAudio.addEventListener('ended', () => speakingIndicator.classList.remove('on'));
+    currentAudio.addEventListener('error', () => speakingIndicator.classList.remove('on'));
+    currentAudio.play().catch(()=>{ speakingIndicator.classList.remove('on'); });
+}
+
+function playPrompt(node){
+    if(node.audio && node.audio.trim() !== ""){
+        playAudioFile(node.audio);
+    } else {
+        speak(node.text);
+    }
+}
+
+function goToNode(nodeId, pushHistory){
+    if(pushHistory && currentNodeId) history.push(currentNodeId);
+    currentNodeId = nodeId;
+    const node = IVR_MENU[nodeId];
+    playPrompt(node);
+}
+
+function handleKey(key){
+    const node = IVR_MENU[currentNodeId];
+    if(!node) return;
+    const target = node.options ? node.options[key] : undefined;
+
+    if(!target){
+        speak("ଦୟାକରି ସଠିକ୍ ବଟନ୍ ଦବାନ୍ତୁ।");
+        return;
+    }
+    if(target === "REPEAT"){
+        playPrompt(node);
+        return;
+    }
+    if(target === "BACK"){
+        const prev = history.pop();
+        if(prev){
+            currentNodeId = prev;
+            playPrompt(IVR_MENU[prev]);
+        }
+        return;
+    }
+    if(target === "EXECUTIVE"){
+        placeRealExecutiveCall();
+        return;
+    }
+    if(target === "END"){
+        closeIvr();
+        return;
+    }
+    goToNode(target, true);
+}
+
+const EXECUTIVE_HANDOFF_AUDIO = "";
+const EXECUTIVE_HANDOFF_TEXT = "ଦୟାକରି ଅପେକ୍ଷା କରନ୍ତୁ, ଆପଣଙ୍କୁ ଏକ ଏକଜେକ୍ୟୁଟିଭଙ୍କ ସହିତ ସଂଯୋଗ କରାଯାଉଛି।";
+
+function dialExecutiveNow(){
+    window.location.href = "tel:" + EXECUTIVE_PHONE_NUMBER;
+}
+
+function placeRealExecutiveCall(){
+    callStatusLabel.textContent = "ସଂଯୋଗ କରାଯାଉଛି...";
+    liveCallDot.classList.add('show');
+    keypad.style.opacity = "0.4";
+    keypad.style.pointerEvents = "none";
+    endBtn.style.opacity = "0.4";
+    endBtn.style.pointerEvents = "none";
+
+    if(EXECUTIVE_HANDOFF_AUDIO && EXECUTIVE_HANDOFF_AUDIO.trim() !== ""){
+        window.speechSynthesis.cancel();
+        speakingIndicator.classList.add('on');
+        currentAudio = new Audio(EXECUTIVE_HANDOFF_AUDIO);
+        if(muted) currentAudio.muted = true;
+        currentAudio.addEventListener('ended', () => {
+            speakingIndicator.classList.remove('on');
+            dialExecutiveNow();
         });
-        
-        // Haptic feedback simulation for mobile
-        const buttons = document.querySelectorAll('a');
-        buttons.forEach(button => {
-            button.addEventListener('touchstart', () => {
-                if (navigator.vibrate) {
-                    navigator.vibrate(10);
-                }
-            });
+        currentAudio.addEventListener('error', () => {
+            speakingIndicator.classList.remove('on');
+            speakThenDial();
         });
-        
-        // Track interactions
-        document.querySelectorAll('.contact-card, .quick-btn').forEach(element => {
-            element.addEventListener('click', function(e) {
-                const type = this.classList.contains('phone') ? 'Phone' :
-                            this.classList.contains('whatsapp') ? 'WhatsApp' :
-                            this.classList.contains('email') ? 'Email' :
-                            'Quick Action';
-                console.log(`Contact via: ${type}`);
-            });
-        });
-    </script>
+        currentAudio.play().catch(() => speakThenDial());
+    } else {
+        speakThenDial();
+    }
+}
+
+function speakThenDial(){
+    window.speechSynthesis.cancel();
+    if(muted){
+        dialExecutiveNow();
+        return;
+    }
+    speakingIndicator.classList.add('on');
+    const utter = new SpeechSynthesisUtterance(EXECUTIVE_HANDOFF_TEXT);
+    const voices = window.speechSynthesis.getVoices();
+    const odiaVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('or'));
+    if(odiaVoice) utter.voice = odiaVoice;
+    utter.lang = odiaVoice ? odiaVoice.lang : 'hi-IN';
+    utter.rate = 0.95;
+    utter.onend = () => {
+        speakingIndicator.classList.remove('on');
+        dialExecutiveNow();
+    };
+    utter.onerror = () => {
+        speakingIndicator.classList.remove('on');
+        dialExecutiveNow();
+    };
+    window.speechSynthesis.speak(utter);
+}
+
+function resetDialerUI(){
+    liveCallDot.classList.remove('show');
+    keypad.style.opacity = "1";
+    keypad.style.pointerEvents = "auto";
+    endBtn.style.opacity = "1";
+    endBtn.style.pointerEvents = "auto";
+    callStatusLabel.textContent = "ସଂଯୋଗ ହେଉଛି...";
+    muted = false;
+    muteBtn.classList.remove('active');
+    history = [];
+    currentNodeId = null;
+}
+
+function openIvr(){
+    resetDialerUI();
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    ivrStarted = false;
+    startTimer();
+    setTimeout(() => {
+        callStatusLabel.textContent = "ସଂଯୋଗ ହେଲା";
+        ivrStarted = true;
+        goToNode('welcome', false);
+    }, 800);
+}
+
+function closeIvr(){
+    window.speechSynthesis.cancel();
+    if(currentAudio) currentAudio.pause();
+    stopTimer();
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+    resetDialerUI();
+}
+
+openBtn.addEventListener('click', openIvr);
+endBtn.addEventListener('click', closeIvr);
+
+muteBtn.addEventListener('click', () => {
+    muted = !muted;
+    muteBtn.classList.toggle('active', muted);
+    if(muted){
+        window.speechSynthesis.cancel();
+        if(currentAudio) currentAudio.pause();
+        speakingIndicator.classList.remove('on');
+    }
+});
+
+document.querySelectorAll('.key').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-key');
+        handleKey(key);
+    });
+});
+
+overlay.addEventListener('click', (e) => {
+    if(e.target === overlay) closeIvr();
+});
+
+window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+</script>
 </body>
 </html>
