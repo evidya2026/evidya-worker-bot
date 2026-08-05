@@ -99,6 +99,14 @@ header {
   text-shadow:0 3px 16px rgba(0,0,0,0.5);
   margin-bottom:14px; line-height:1.2;
 }
+.academy-tagline {
+  font-size: clamp(0.85em, 3.6vw, 1em);
+  color: rgba(255,255,255,0.72);
+  font-weight:600;
+  letter-spacing:0.02em;
+  margin-bottom:6px;
+  line-height:1.5;
+}
 .website-btn {
   display:inline-flex; align-items:center; gap:8px;
   padding:11px 26px;
@@ -194,6 +202,9 @@ header {
 .t-legal .sec-eyebrow{color:#991b1b;}
 .t-legal .sub-lbl    {color:#991b1b;}
 .t-school .sub-lbl   {color:#065f46;}
+.t-sci .sec-ico       {background:#ecfdf5;}
+.t-sci .sec-eyebrow   {color:#065f46;}
+.t-sci .sub-lbl       {color:#065f46;}
 
 .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 .grid1 { display:flex; flex-direction:column; gap:10px; }
@@ -228,6 +239,8 @@ header {
 .lv-arts2{background:linear-gradient(145deg,#1e40af,#3b82f6);box-shadow:0 7px 24px rgba(30,64,175,0.36);}
 .lv-com1 {background:linear-gradient(145deg,#3b0764,#6d28d9);box-shadow:0 7px 24px rgba(59,7,100,0.38);}
 .lv-com2 {background:linear-gradient(145deg,#4c1d95,#7c3aed);box-shadow:0 7px 24px rgba(76,29,149,0.36);}
+.lv-sci1 {background:linear-gradient(145deg,#065f46,#059669);box-shadow:0 7px 24px rgba(6,95,70,0.38);}
+.lv-sci2 {background:linear-gradient(145deg,#047857,#10b981);box-shadow:0 7px 24px rgba(4,120,87,0.36);}
 .lv-sem1 {background:linear-gradient(145deg,#1e3a8a,#2563eb);box-shadow:0 6px 20px rgba(30,58,138,0.36);}
 .lv-sem2 {background:linear-gradient(145deg,#0369a1,#0ea5e9);box-shadow:0 6px 20px rgba(3,105,161,0.36);}
 .lv-sem3 {background:linear-gradient(145deg,#065f46,#059669);box-shadow:0 6px 20px rgba(6,95,70,0.36);}
@@ -334,7 +347,7 @@ header {
 .modal-notice { background:#f7f9fc; border:1.5px solid var(--border); border-radius:14px; padding:14px 16px; margin-bottom:18px; }
 .modal-notice-title { font-size:clamp(11px,3vw,13px); font-weight:700; letter-spacing:0.07em; text-transform:uppercase; color:var(--slate); margin-bottom:10px; }
 .modal-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:7px; }
-.modal-list li { font-size:clamp(13px,3.8vw,15px); color:var(--text); font-weight:500; display:flex; align-items:flex-start; gap:9px; line-height:1.45; }
+.modal-list li { font-size:clamp(13px,3.8vw,15px); color:var(--text); font-weight:500; display:flex; align-items:flex-start; gap:9px; line-height:1.45; text-align:justify; text-justify:inter-word; }
 .modal-list li::before { content:'✦'; font-size:9px; color:var(--gold); flex-shrink:0; margin-top:5px; }
 .modal-divider { height:1px; background:var(--border); margin:12px 0; }
 .modal-list-heading { font-size:clamp(11px,3vw,13px); font-weight:700; color:var(--slate); margin:10px 0 6px; text-transform:uppercase; letter-spacing:0.07em; }
@@ -347,6 +360,7 @@ header {
 footer { background:var(--navy); border-radius:20px; padding:26px 20px 22px; margin-top:18px; border:1px solid rgba(200,150,42,0.18); box-shadow:0 8px 32px rgba(7,17,31,0.3); text-align:center; animation:fadeUp 0.5s ease 0.5s both; }
 .footer-brand h3 { font-family:'Playfair Display',serif; font-size:clamp(1em,4.5vw,1.2em); color:var(--gold-lt); font-weight:700; margin-bottom:6px; }
 .footer-brand p { font-size:clamp(0.72em,2.5vw,0.78em); color:rgba(255,255,255,0.45); line-height:1.5; }
+.footer-disclaimer { font-size:clamp(0.68em,2.4vw,0.74em); color:rgba(255,255,255,0.38); line-height:1.6; margin-top:6px; }
 .footer-div { height:1px; background:rgba(200,150,42,0.14); margin:16px 0; }
 .footer-link { display:inline-flex; align-items:center; gap:6px; color:var(--gold-lt); font-size:clamp(0.78em,3vw,0.85em); font-weight:600; text-decoration:none; opacity:0.85; margin-bottom:12px; }
 .footer-link span { text-decoration:underline; text-underline-offset:3px; }
@@ -472,6 +486,7 @@ html, body {
     <img src="https://raw.githubusercontent.com/happysangitanms/assets/main/LOGO.png" alt="E-Vidya Academy Logo">
   </div>
   <h1 class="academy-name">ଇ-ବିଦ୍ୟା ଏକାଡେମୀ</h1>
+  <div class="academy-tagline">ପିଲାମାନଙ୍କ ଅଭିଭାବକଙ୍କ ପାଇଁ ଡିଜିଟାଲ୍ ଶିକ୍ଷା ସହାୟତା — ଘରେ ପାଠପଢ଼ାରେ ସାହାଯ୍ୟ</div>
 </header>
 
 <!-- ── HOME: 3 entry cards ── -->
@@ -499,8 +514,9 @@ html, body {
 
 <footer>
   <div class="footer-brand">
-    <h3>🌹 ଇ-ବିଦ୍ୟା ଏକାଡେମୀ 🌹</h3>
-    <p>Private initiative · Providing Supplementary Digital Classes</p>
+    <h3>🌹 E-Vidya Academy 🌹</h3>
+    <p>Private initiative · Supplementary Digital Classes for Parents &amp; Students</p>
+    <p class="footer-disclaimer">This app is designed to help parents support their child's or ward's studies at home. Decisions about downloading or using the app should be made by a parent or a parent-like adult. It is not affiliated with any government board or education department. Content is prepared with AI assistance — please cross-check with the original textbook for best results.</p>
   </div>
   <div class="footer-div"></div>
 <div class="footer-pages">
@@ -516,7 +532,7 @@ html, body {
   <a href="https://evidya.pages.dev/worker-portal" target="_blank" rel="noopener noreferrer">Worker Log-in</a>
   </div>
 
-  <div class="footer-copy">© ୨୦୨୬ ଇ-ବିଦ୍ୟା ଏକାଡେମୀ · ସର୍ବସ୍ୱତ୍ୱ ସଂରକ୍ଷିତ</div>
+  <div class="footer-copy">© 2026 E-Vidya Academy · All Rights Reserved</div>
 </footer>
 
 </div><!-- /page -->
@@ -530,7 +546,7 @@ html, body {
     <div class="modal-pill"></div>
     <div class="modal-icon">❓</div>
     <div class="modal-title">ଡିଜିଟାଲ୍ ବୁକ୍ କ'ଣ ?</div>
-    <div class="modal-subtitle">ମୌଳିକ ସୂଚନା</div>
+    <div class="modal-subtitle">ମୌଳିକ ସୂଚନା · ଅଭିଭାବକଙ୍କ ପାଇଁ</div>
     <div class="accordion">
 
       <div class="acc-item" id="wi1">
@@ -560,6 +576,15 @@ html, body {
         <div class="acc-body"><p class="faq-answer">ଏହା ମୂଳ ପାଠ୍ୟପୁସ୍ତକର ବଦଳ ନୁହେଁ, ଅର୍ଥାତ୍ ଏହା ମୂଳ ପାଠ୍ୟପୁସ୍ତକ ପ୍ରଦାନ କରେନାହିଁ । ପିଲାଙ୍କ ପାଖରେ ମୂଳ ପାଠ୍ୟପୁସ୍ତକ ରହିବା ଆବଶ୍ୟକ, ଏବଂ ଇଣ୍ଟରନେଟ୍ ବିନା ଏହା ବ୍ୟବହାର କରାଯାଇପାରିବ ନାହିଁ ।</p></div>
       </div>
 
+      <div class="acc-item" id="wi4">
+        <div class="acc-trigger acc-faq" onclick="toggleAcc('wi4')">
+          <div class="acc-ico">👪</div>
+          <div class="acc-label"><div class="acc-name">ଏହି ଆପ୍ କାହା ପାଇଁ ତିଆରି ହୋଇଛି ?</div></div>
+          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="acc-body"><p class="faq-answer">ଏହି ଆପ୍ ମୁଖ୍ୟତଃ ଅଭିଭାବକଙ୍କ ପାଇଁ ତିଆରି ହୋଇଛି, ଯାହା ଦ୍ଵାରା ସେମାନେ ନିଜ ପିଲାର ଘର ପାଠପଢ଼ାରେ ସହଜରେ ସାହାଯ୍ୟ କରିପାରିବେ । ଆପ୍ ବ୍ୟବହାର, ଡାଉନଲୋଡ୍ ଏବଂ ପଞ୍ଜୀକରଣ ସମ୍ବନ୍ଧୀୟ ସମସ୍ତ ନିଷ୍ପତ୍ତି ଏକ ଅଭିଭାବକ କିମ୍ବା ଅଭିଭାବକ-ସମାନ ପ୍ରାପ୍ତବୟସ୍କ ବ୍ୟକ୍ତି ଦ୍ଵାରା ନିଆଯିବା ଉଚିତ୍ । ଏହା କୌଣସି ସରକାରୀ ବୋର୍ଡ କିମ୍ବା ଶିକ୍ଷା ବିଭାଗ ଦ୍ଵାରା ପ୍ରକାଶିତ କିମ୍ବା ସ୍ୱୀକୃତିପ୍ରାପ୍ତ ନୁହେଁ — ଏହା ଏକ ପ୍ରାଇଭେଟ୍ ସହାୟକ ପଦକ୍ଷେପ ମାତ୍ର ।</p></div>
+      </div>
+
     </div>
     <div class="modal-btn-row">
       <button class="modal-btn-cancel" onclick="closeModal('modal-what-is')">ବାତିଲ</button>
@@ -576,7 +601,7 @@ html, body {
     <div class="modal-pill"></div>
     <div class="modal-icon">📖</div>
     <div class="modal-title">ଡିଜିଟାଲ୍ ବୁକ୍ କିପରି ବ୍ୟବହାର କରାଯାଏ ?</div>
-    <div class="modal-subtitle">ପ୍ରତ୍ୟେକ ପଦକ୍ଷେପ ସ୍କ୍ରିନସଟ୍ ଓ ଅଡିଓ ସହିତ</div>
+    <div class="modal-subtitle">ପ୍ରତ୍ୟେକ ପଦକ୍ଷେପ ସ୍କ୍ରିନସଟ୍ ଓ ଅଡିଓ ସହିତ · ଅଭିଭାବକଙ୍କ ପାଇଁ ଗାଇଡ୍</div>
  <div class="accordion">
 
       <div class="acc-item" id="hu1">
@@ -594,7 +619,7 @@ html, body {
       <div class="acc-item" id="hu2">
         <div class="acc-trigger acc-faq" onclick="toggleAcc('hu2')">
           <div class="acc-ico">📋</div>
-          <div class="acc-label"><div class="acc-name">STEP 2: ଏବେ ଆପଣ "ସମସ୍ତ ଡିଜିଟାଲ୍ ବୁକ୍" ଲେଖାଥିବା ଲାଲ୍ ବଟନ୍ ଉପରେ କ୍ଲିକ୍ କରନ୍ତୁ ଏବଂ ଆପଣଙ୍କ କ୍ଲାସ୍ ବାଛନ୍ତୁ । ଅଧିକ ଜାଣିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ । <button class="faq-audio-btn faq-audio-btn-inline" onclick="event.stopPropagation(); toggleFaqAudio(this,'https://audio.evidya.de/STEP-2.m4a')">🔊 ଶୁଣନ୍ତୁ</button></div></div>
+          <div class="acc-label"><div class="acc-name">STEP 2: ଏବେ ଆପଣ "ସମସ୍ତ ଡିଜିଟାଲ୍ ବୁକ୍" ଲେଖାଥିବା ଲାଲ୍ ବଟନ୍ ଉପରେ କ୍ଲିକ୍ କରନ୍ତୁ ଏବଂ ଆପଣଙ୍କ ପିଲାର କ୍ଲାସ୍ ବାଛନ୍ତୁ । ଅଧିକ ଜାଣିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ । <button class="faq-audio-btn faq-audio-btn-inline" onclick="event.stopPropagation(); toggleFaqAudio(this,'https://audio.evidya.de/STEP-2.m4a')">🔊 ଶୁଣନ୍ତୁ</button></div></div>
           <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
         </div>
         <div class="acc-body">
@@ -608,11 +633,11 @@ html, body {
       <div class="acc-item" id="hu3">
         <div class="acc-trigger acc-faq" onclick="toggleAcc('hu3')">
           <div class="acc-ico">⬇️</div>
-          <div class="acc-label"><div class="acc-name">STEP-3: ବର୍ତ୍ତମାନ ଆପଣଙ୍କ କ୍ଲାସ୍ ଉପରେ କ୍ଲିକ୍ କରି ଆଗକୁ ବଢନ୍ତୁ ଏବଂ ଆପଣଙ୍କ କ୍ଲାସ୍ ଆପ୍ କୁ ଇନ୍ସଟଲ୍ କରନ୍ତୁ । ଅଧିକ ଜାଣିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ । <button class="faq-audio-btn faq-audio-btn-inline" onclick="event.stopPropagation(); toggleFaqAudio(this,'https://audio.evidya.de/STEP-3.m4a')">🔊 ଶୁଣନ୍ତୁ</button></div></div>
+          <div class="acc-label"><div class="acc-name">STEP-3: ବର୍ତ୍ତମାନ ଆପଣଙ୍କ ପିଲାର କ୍ଲାସ୍ ଉପରେ କ୍ଲିକ୍ କରି ଆଗକୁ ବଢନ୍ତୁ ଏବଂ ସେହି କ୍ଲାସ୍ ଆପ୍ କୁ ଇନ୍ସଟଲ୍ କରନ୍ତୁ । ଅଧିକ ଜାଣିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ । <button class="faq-audio-btn faq-audio-btn-inline" onclick="event.stopPropagation(); toggleFaqAudio(this,'https://audio.evidya.de/STEP-3.m4a')">🔊 ଶୁଣନ୍ତୁ</button></div></div>
           <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
         </div>
         <div class="acc-body">
-          <p class="faq-answer"> ଆପଣଙ୍କ କ୍ଲାସ୍ ବଟନ୍ ରେ କ୍ଲିକ୍ କରିବା ପରେ "ଆଗକୁ ଯାଆନ୍ତୁ" ଲେଖା ଥିବା ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ । ଆପଣ ଏକ ସ୍ୱାଗତ ସ୍କ୍ରିନ୍ ପାଇବେ । ଏହି ସ୍ଵାଗତ ସ୍କ୍ରୀନ୍ ରେ ମଧ୍ୟ ଆଗକୁ ଯିବା ପାଇଁ ଏକ ବଟନ୍ ରହିଛି । ଏହି ବଟନ୍ ରେ କ୍ଲିକ୍ କରନ୍ତୁ । ତାପରେ "Install Now" ବଟନ୍‌ ଥିବା ଏକ ସ୍କ୍ରିନ୍‌ ଆସିବ । ସେହି ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ । ନୋଟିଫିକେସନ୍ ପ୍ୟାନେଲ୍‌ରେ ଆପ୍ ଇନଷ୍ଟଲ୍ ହେଉଥିବାର ଦେଖାଯିବ । କିଛି ସେକେଣ୍ଡ ଭିତରେ ଶ୍ରେଣୀର ଆପ୍ ମୋବାଇଲ୍‌ର ହୋମ୍ ସ୍କ୍ରିନ୍‌ରେ ଇନଷ୍ଟଲ୍ ହୋଇଯିବ । ଭବିଷ୍ୟତରେ ଆପ୍ ବ୍ୟବହାର କରିବାକୁ ହେଲେ କେବଳ ଏହି ଆପ୍ ଆଇକନ୍‌ରେ କ୍ଲିକ୍ କରିବେ ।</p>
+          <p class="faq-answer"> ଆପଣଙ୍କ ପିଲାର କ୍ଲାସ୍ ବଟନ୍ ରେ କ୍ଲିକ୍ କରିବା ପରେ "ଆଗକୁ ଯାଆନ୍ତୁ" ଲେଖା ଥିବା ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ । ଆପଣ ଏକ ସ୍ୱାଗତ ସ୍କ୍ରିନ୍ ପାଇବେ । ଏହି ସ୍ଵାଗତ ସ୍କ୍ରୀନ୍ ରେ ମଧ୍ୟ ଆଗକୁ ଯିବା ପାଇଁ ଏକ ବଟନ୍ ରହିଛି । ଏହି ବଟନ୍ ରେ କ୍ଲିକ୍ କରନ୍ତୁ । ତାପରେ "Install Now" ବଟନ୍‌ ଥିବା ଏକ ସ୍କ୍ରିନ୍‌ ଆସିବ । ସେହି ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ । ନୋଟିଫିକେସନ୍ ପ୍ୟାନେଲ୍‌ରେ ଆପ୍ ଇନଷ୍ଟଲ୍ ହେଉଥିବାର ଦେଖାଯିବ । କିଛି ସେକେଣ୍ଡ ଭିତରେ ଶ୍ରେଣୀର ଆପ୍ ମୋବାଇଲ୍‌ର ହୋମ୍ ସ୍କ୍ରିନ୍‌ରେ ଇନଷ୍ଟଲ୍ ହୋଇଯିବ । ଭବିଷ୍ୟତରେ ଆପ୍ ବ୍ୟବହାର କରିବାକୁ ହେଲେ କେବଳ ଏହି ଆପ୍ ଆଇକନ୍‌ରେ କ୍ଲିକ୍ କରିବେ ।</p>
           <img class="faq-screenshot" src="https://audio.evidya.de/5.gif" alt="Step 3 — welcome + install prompt" onerror="this.style.display='none'">
           <img class="faq-screenshot" src="https://audio.evidya.de/6.gif" alt="Step 3 — installing" onerror="this.style.display='none'">
           <img class="faq-screenshot" src="https://audio.evidya.de/7.gif" alt="Step 3 — app icon on home screen" onerror="this.style.display='none'">
@@ -624,11 +649,11 @@ html, body {
       <div class="acc-item" id="hu4">
         <div class="acc-trigger acc-faq" onclick="toggleAcc('hu4')">
           <div class="acc-ico">📚</div>
-          <div class="acc-label"><div class="acc-name">STEP-4 : ଏବେ ଆପଣ ପଢିବାକୁ ଚାହୁଁଥିବା ବିଷୟ (Subject) ବାଛନ୍ତୁ , ତାହା ପରେ କ୍ଲାସ୍ ବାଛନ୍ତୁ । ଅଧିକ ଜାଣିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ । <button class="faq-audio-btn faq-audio-btn-inline" onclick="event.stopPropagation(); toggleFaqAudio(this,'https://audio.evidya.de/STEP-4.m4a')">🔊 ଶୁଣନ୍ତୁ</button></div></div>
+          <div class="acc-label"><div class="acc-name">STEP-4 : ଏବେ ଆପଣଙ୍କ ପିଲା ପଢିବାକୁ ଚାହୁଁଥିବା ବିଷୟ (Subject) ବାଛନ୍ତୁ , ତାହା ପରେ କ୍ଲାସ୍ ବାଛନ୍ତୁ । ଅଧିକ ଜାଣିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ । <button class="faq-audio-btn faq-audio-btn-inline" onclick="event.stopPropagation(); toggleFaqAudio(this,'https://audio.evidya.de/STEP-4.m4a')">🔊 ଶୁଣନ୍ତୁ</button></div></div>
           <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
         </div>
         <div class="acc-body">
-          <p class="faq-answer">ପ୍ରଥମେ ମୋବାଇଲ୍‌ ହୋମ୍ ସ୍କ୍ରିନ୍‌ରେ ଥିବା ଆପ୍ ଆଇକନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ । ସ୍ଵାଗତ ସ୍କ୍ରୀନ୍ ରେ ଆଗକୁ ଯିବା ବଟନ ରେ କ୍ଲିକ୍ କରି ଆଗକୁ ବଢନ୍ତୁ । ଆପଣଙ୍କ ଶ୍ରେଣୀର ସମସ୍ତ ବିଷୟ (Subject)ର ବଟନ୍ ଗୁଡିକ ଦେଖାଯିବ । ଯେଉଁ ବିଷୟ ପଢ଼ିବାକୁ ଚାହୁଁଛନ୍ତି, ସେହି ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ । ତାହା ପରେ ସେହି ବିଷୟର Class ବଟନ୍‌ ଗୁଡିକ ଦେଖାଯିବ । </p>
+          <p class="faq-answer">ପ୍ରଥମେ ମୋବାଇଲ୍‌ ହୋମ୍ ସ୍କ୍ରିନ୍‌ରେ ଥିବା ଆପ୍ ଆଇକନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ । ସ୍ଵାଗତ ସ୍କ୍ରୀନ୍ ରେ ଆଗକୁ ଯିବା ବଟନ ରେ କ୍ଲିକ୍ କରି ଆଗକୁ ବଢନ୍ତୁ । ପିଲାର ଶ୍ରେଣୀର ସମସ୍ତ ବିଷୟ (Subject)ର ବଟନ୍ ଗୁଡିକ ଦେଖାଯିବ । ଯେଉଁ ବିଷୟ ପଢ଼ିବାକୁ ଚାହୁଁଛନ୍ତି, ସେହି ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ । ତାହା ପରେ ସେହି ବିଷୟର Class ବଟନ୍‌ ଗୁଡିକ ଦେଖାଯିବ । </p>
           <img class="faq-screenshot" src="https://audio.evidya.de/10.gif" alt="Step 4 — welcome + install prompt" onerror="this.style.display='none'">
           <img class="faq-screenshot" src="https://audio.evidya.de/11.gif" alt="Step 4 — installing" onerror="this.style.display='none'">
         </div>
@@ -662,11 +687,11 @@ html, body {
       <div class="acc-item" id="hu7">
         <div class="acc-trigger acc-faq" onclick="toggleAcc('hu7')">
           <div class="acc-ico">🎫</div>
-          <div class="acc-label"><div class="acc-name">STEP-7 : ଆପଣ ନୂତନ ବ୍ୟବହାରକାରୀ ହୋଇଥିଲେ, ପ୍ରଥମେ ଲାଲ୍ ବଟନ୍ ରେ କ୍ଲିକ୍ କରି ନିଜ ନାମ ଏବଂ ମୋବାଇଲ ନମ୍ବର ପଞ୍ଜୀକରଣ କରନ୍ତୁ ଏବଂ ସେହି ସ୍କ୍ରୀନ୍ ରେ ଆପଣଙ୍କ ରୋଲ୍ ନମ୍ବର ସଂଗ୍ରହ କରନ୍ତୁ । ଅଧିକ ଜାଣିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ । <button class="faq-audio-btn faq-audio-btn-inline" onclick="event.stopPropagation(); toggleFaqAudio(this,'https://audio.evidya.de/STEP-7.m4a')">🔊 ଶୁଣନ୍ତୁ</button></div></div>
+          <div class="acc-label"><div class="acc-name">STEP-7 : ଆପଣ ନୂତନ ବ୍ୟବହାରକାରୀ ହୋଇଥିଲେ, ଅଭିଭାବକ ଭାବରେ ପ୍ରଥମେ ଲାଲ୍ ବଟନ୍ ରେ କ୍ଲିକ୍ କରି ନିଜ ନାମ ଏବଂ ମୋବାଇଲ ନମ୍ବର ପଞ୍ଜୀକରଣ କରନ୍ତୁ ଏବଂ ସେହି ସ୍କ୍ରୀନ୍ ରେ ପିଲାର ରୋଲ୍ ନମ୍ବର ସଂଗ୍ରହ କରନ୍ତୁ । ଅଧିକ ଜାଣିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ । <button class="faq-audio-btn faq-audio-btn-inline" onclick="event.stopPropagation(); toggleFaqAudio(this,'https://audio.evidya.de/STEP-7.m4a')">🔊 ଶୁଣନ୍ତୁ</button></div></div>
           <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
         </div>
         <div class="acc-body">
-          <p class="faq-answer">ଯଦି ଆପଣ ପ୍ରଥମ ଥର ଆପ୍ ବ୍ୟବହାର କରୁଛନ୍ତି, ତେବେ ଏବେ ଆପଣ "ରୋଲ୍ ନମ୍ବର ଜାଣିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ" ଲେଖା ଥିବା ଲାଲ୍ ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ । ଦିଆଯାଇଥିବା ସ୍ଥାନରେ ଆପଣଙ୍କ ନାମ ଓ ମୋବାଇଲ୍ ନମ୍ବର ଲେଖି "Register Now" ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ । ଯଥାଶୀଘ୍ର ସେହି ସ୍କ୍ରୀନ୍ ରେ ଆପଣ ଏକ ରୋଲ୍ ନମ୍ବର ପାଇବେ — ଏହାକୁ ମନେ ରଖନ୍ତୁ ବା ଲେଖି ସାଇତି ରଖନ୍ତୁ, ଏବଂ ପୁଣି କ୍ଲାସ୍-ରୁମ୍ ର ପ୍ରବେଶ ସ୍କ୍ରିନ୍‌କୁ ଫେରି ଆସନ୍ତୁ ।</p>
+          <p class="faq-answer">ଯଦି ଆପଣ ପ୍ରଥମ ଥର ଆପ୍ ବ୍ୟବହାର କରୁଛନ୍ତି, ତେବେ ଏବେ ଆପଣ (ଅଭିଭାବକ) "ରୋଲ୍ ନମ୍ବର ଜାଣିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ" ଲେଖା ଥିବା ଲାଲ୍ ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ । ଦିଆଯାଇଥିବା ସ୍ଥାନରେ ନିଜ ନାମ ଓ ମୋବାଇଲ୍ ନମ୍ବର ଲେଖି "Register Now" ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ । ଯଥାଶୀଘ୍ର ସେହି ସ୍କ୍ରୀନ୍ ରେ ପିଲା ପାଇଁ ଏକ ରୋଲ୍ ନମ୍ବର ପାଇବେ — ଏହାକୁ ମନେ ରଖନ୍ତୁ ବା ଲେଖି ସାଇତି ରଖନ୍ତୁ, ଏବଂ ପୁଣି କ୍ଲାସ୍-ରୁମ୍ ର ପ୍ରବେଶ ସ୍କ୍ରିନ୍‌କୁ ଫେରି ଆସନ୍ତୁ ।</p>
           <img class="faq-screenshot" src="https://audio.evidya.de/14.gif" alt="Step 7 — registration form" onerror="this.style.display='none'">
           <img class="faq-screenshot" src="https://audio.evidya.de/15.gif" alt="Step 7 — roll number generated" onerror="this.style.display='none'">
           <img class="faq-screenshot" src="https://audio.evidya.de/16.gif" alt="Step 7 — roll number generated" onerror="this.style.display='none'">
@@ -792,7 +817,7 @@ html, body {
           <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
         </div>
         <div class="acc-body">
-          <p class="faq-answer">Class-1 ପଢ଼ିସାରିବା ପରେ, ଏବେ ଆପଣ ପୁଣି ମେନୁ ସ୍କ୍ରିନ୍‌କୁ ଫେରନ୍ତୁ ଓ Class-2 ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ । ତାପରେ ଉପରେ ଥିବା ଆୟତାକାର କାର୍ଡ‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ, ପୂର୍ବ ପରି ରୋଲ୍ ନମ୍ବର ଲେଖନ୍ତୁ, ଚେକ୍‌ବକ୍ସ ଟିକ୍ କରନ୍ତୁ ଏବଂ ତଳେ ଥିବା ଲମ୍ବା ବଟନ୍‌ରେ କ୍ଲିକ୍ କରି ପୁଣି କ୍ଲସ୍-ରୁମ୍ ଭିତରେ ପ୍ରବେଶ କରନ୍ତୁ । ଏହି କ୍ଲସ୍-ରୁମ୍ ଭିତରେ ଆପଣ 8 ଟି ପ୍ରଶ୍ନ ବଟନ୍ ପାଇବେ । ଏହି ବଟନ୍ ଗୁଡିକ ଉପରେ ପ୍ରଥମେ କ୍ଲିକ୍ କଲେ ପ୍ରଶ୍ନଗୁଡିକ ସ୍କ୍ରୀନ୍ କୁ ଆସିଯିବ । ଏହାପରେ ସମସ୍ତ ପ୍ରଶ୍ନଗୁଡିକର ଉତ୍ତର ଦେଇ ଶେଷରେ ଥିବା "ଉତ୍ତର ଦାଖଲ କରନ୍ତୁ" ବଟନ୍ ରେ କ୍ଲିକ୍ କଲେ, ସେହି ପ୍ରଶ୍ନ ବିଭାଗରେ ଆପଣଙ୍କର କେଉଁ ଉତ୍ତର ଠିକ୍ ହେଲା ଏବଂ କେଉଁ ଉତ୍ତର ଭୁଲ ହେଲା ତାହା ଜାଣିପାରିବେ । ଆପଣଙ୍କର ସମୁଦାଯ ମାର୍କ୍ ମଧ୍ୟ ଏକ ନୀଳ ବଟନ୍ ରେ ଦେଖାଇବ । </p>
+          <p class="faq-answer">Class-1 ପଢ଼ିସାରିବା ପରେ, ଏବେ ଆପଣ ପୁଣି ମେନୁ ସ୍କ୍ରିନ୍‌କୁ ଫେରନ୍ତୁ ଓ Class-2 ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ । ତାପରେ ଉପରେ ଥିବା ଆୟତାକାର କାର୍ଡ‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ, ପୂର୍ବ ପରି ରୋଲ୍ ନମ୍ବର ଲେଖନ୍ତୁ, ଚେକ୍‌ବକ୍ସ ଟିକ୍ କରନ୍ତୁ ଏବଂ ତଳେ ଥିବା ଲମ୍ବା ବଟନ୍‌ରେ କ୍ଲିକ୍ କରି ପୁଣି କ୍ଲସ୍-ରୁମ୍ ଭିତରେ ପ୍ରବେଶ କରନ୍ତୁ । ଏହି କ୍ଲସ୍-ରୁମ୍ ଭିତରେ ଆପଣ 8 ଟି ପ୍ରଶ୍ନ ବଟନ୍ ପାଇବେ । ଏହି ବଟନ୍ ଗୁଡିକ ଉପରେ ପ୍ରଥମେ କ୍ଲିକ୍ କଲେ ପ୍ରଶ୍ନଗୁଡିକ ସ୍କ୍ରୀନ୍ କୁ ଆସିଯିବ । ଏହାପରେ ସମସ୍ତ ପ୍ରଶ୍ନଗୁଡିକର ଉତ୍ତର ଦେଇ ଶେଷରେ ଥିବା "ଉତ୍ତର ଦାଖଲ କରନ୍ତୁ" ବଟନ୍ ରେ କ୍ଲିକ୍ କଲେ, ସେହି ପ୍ରଶ୍ନ ବିଭାଗରେ ପିଲାର କେଉଁ ଉତ୍ତର ଠିକ୍ ହେଲା ଏବଂ କେଉଁ ଉତ୍ତର ଭୁଲ ହେଲା ତାହା ଜାଣିପାରିବେ । ସମୁଦାୟ ମାର୍କ୍ ମଧ୍ୟ ଏକ ନୀଳ ବଟନ୍ ରେ ଦେଖାଇବ । </p>
           <img class="faq-screenshot" src="https://audio.evidya.de/30.jpeg" alt="Step 9 — back to menu for class 2" onerror="this.style.display='none'">
           <img class="faq-screenshot" src="https://audio.evidya.de/31.jpeg" alt="Step 9 — back to menu for class 2" onerror="this.style.display='none'">
           <img class="faq-screenshot" src="https://audio.evidya.de/32.jpeg" alt="Step 9 — back to menu for class 2" onerror="this.style.display='none'">
@@ -802,22 +827,22 @@ html, body {
       <div class="acc-item" id="hu18">
         <div class="acc-trigger acc-faq" onclick="toggleAcc('hu18')">
           <div class="acc-ico">🏆</div>
-          <div class="acc-label"><div class="acc-name">STEP-10: ସମସ୍ତ ପ୍ରଶ୍ନୋତ୍ତର ଅଭ୍ୟାସ ସାରିବା ପରେ ସାର୍ଟିଫିକେଟ୍ ବଟନ୍ ରେ କ୍ଲିକ୍ କରି ସାର୍ଟିଫିକେଟ୍ ବାହାର କରନ୍ତୁ । ଅଧିକ ଜାଣିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ । <button class="faq-audio-btn faq-audio-btn-inline" onclick="event.stopPropagation(); toggleFaqAudio(this,'https://audio.evidya.de/B-10.m4a')">🔊 ଶୁଣନ୍ତୁ</button></div></div>
+          <div class="acc-label"><div class="acc-name">STEP-10: ସମସ୍ତ ପ୍ରଶ୍ନୋତ୍ତର ଅଭ୍ୟାସ ସାରିବା ପରେ ମାର୍କ୍-ସିଟ୍ ବଟନ୍ ରେ କ୍ଲିକ୍ କରି ପିଲାର ମାର୍କ୍-ସିଟ୍ ବାହାର କରନ୍ତୁ । ଅଧିକ ଜାଣିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ । <button class="faq-audio-btn faq-audio-btn-inline" onclick="event.stopPropagation(); toggleFaqAudio(this,'https://audio.evidya.de/B-10.m4a')">🔊 ଶୁଣନ୍ତୁ</button></div></div>
           <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
         </div>
         <div class="acc-body">
-          <p class="faq-answer">Class-2 ରେ ଆପଣ ୮ ପ୍ରକାର ପ୍ରଶ୍ନ ବଟନ୍ ପାଇବେ (ବିକଳ୍ପଯୁକ୍ତ, ସତ୍ୟ/ମିଥ୍ୟା, ଶୂନ୍ୟସ୍ଥାନ ପୂରଣ, ଶବ୍ଦ ମେଳ, ଶବ୍ଦ ସଜାଇବା, ଅତି ସଂକ୍ଷିପ୍ତ, ଦୀର୍ଘ ଓ ସଂକ୍ଷିପ୍ତ ଉତ୍ତରମୂଳକ) । ଏଥିମଧ୍ୟରୁ ଏହି 5 ପ୍ରକାରର (ବିକଳ୍ପଯୁକ୍ତ, ସତ୍ୟ/ମିଥ୍ୟା, ଶୂନ୍ୟସ୍ଥାନ ପୂରଣ, ଶବ୍ଦ ମେଳ, ଶବ୍ଦ ସଜାଇବା) ପ୍ରଶ୍ନଗୁଡିକ ପରୀକ୍ଷା ଆକାରରେ ମିଳିଥାଏ । ଉତ୍ତର ଦେଇସାରିବା ପରେ "ଉତ୍ତର ଦାଖଲ କରନ୍ତୁ" ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ — ମାର୍କ "ଆପଣଙ୍କ ସମୁଦାୟ ମାର୍କ" ବାରରେ ଦେଖାଯିବ । ସମସ୍ତ ପ୍ରଶ୍ନ ଅଭ୍ୟାସ ସାରିଲା ପରେ "ସାର୍ଟିଫିକେଟ୍" ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ — ଏଠାରେ ଆପଣଙ୍କ ସଂପୂର୍ଣ୍ଣ ମାର୍କ୍-ସିଟ୍ ମିଳିଯିବ । ଇ-ବିଦ୍ୟା ଏକାଡେମିକୁ ଏହି ମାର୍କ୍-ସିଟ୍ ସେୟାର୍ କରିବା ପାଇଁ ସାର୍ଟିଫିକେଟ୍ ର ତଳ ଅଂଶରେ ଥିବା whatsapp ସେୟାର୍ର ବଟନ୍ ରେ କ୍ଲିକ୍ କରନ୍ତୁ । ଏହାକୁ ବନ୍ଦ କରିବାକୁ ତଳେ ଥିବା "ବନ୍ଦ କରନ୍ତୁ" ବଟନ୍ କିମ୍ବା ଉପର-ଡାହାଣ କୋଣର ✕ ବଟନ୍‌ ରେ କ୍ଲିକ୍ କରନ୍ତୁ ।</p>
+          <p class="faq-answer">Class-2 ରେ ଆପଣ ୮ ପ୍ରକାର ପ୍ରଶ୍ନ ବଟନ୍ ପାଇବେ (ବିକଳ୍ପଯୁକ୍ତ, ସତ୍ୟ/ମିଥ୍ୟା, ଶୂନ୍ୟସ୍ଥାନ ପୂରଣ, ଶବ୍ଦ ମେଳ, ଶବ୍ଦ ସଜାଇବା, ଅତି ସଂକ୍ଷିପ୍ତ, ଦୀର୍ଘ ଓ ସଂକ୍ଷିପ୍ତ ଉତ୍ତରମୂଳକ) । ଏଥିମଧ୍ୟରୁ ଏହି 5 ପ୍ରକାରର (ବିକଳ୍ପଯୁକ୍ତ, ସତ୍ୟ/ମିଥ୍ୟା, ଶୂନ୍ୟସ୍ଥାନ ପୂରଣ, ଶବ୍ଦ ମେଳ, ଶବ୍ଦ ସଜାଇବା) ପ୍ରଶ୍ନଗୁଡିକ ଅଭ୍ୟାସ ଆକାରରେ ମିଳିଥାଏ । ଉତ୍ତର ଦେଇସାରିବା ପରେ "ଉତ୍ତର ଦାଖଲ କରନ୍ତୁ" ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ — ମାର୍କ "ପିଲାର ସମୁଦାୟ ମାର୍କ" ବାରରେ ଦେଖାଯିବ । ସମସ୍ତ ପ୍ରଶ୍ନ ଅଭ୍ୟାସ ସାରିଲା ପରେ "ମାର୍କ୍-ସିଟ୍" ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ — ଏଠାରେ ପିଲାର ଅଭ୍ୟାସ ଫଳାଫଳର ସାରାଂଶ ମିଳିଯିବ । ଏହା କୌଣସି ସରକାରୀ ବୋର୍ଡ କିମ୍ବା ପାଠଶାଳା ଦ୍ଵାରା ଜାରି ହୋଇଥିବା ସାର୍ଟିଫିକେଟ୍ ନୁହେଁ — ଏହା କେବଳ ଘର ଅଭ୍ୟାସର ବ୍ୟକ୍ତିଗତ ପ୍ରଗତି ସାରାଂଶ ମାତ୍ର, ଅଭିଭାବକଙ୍କ ପାଇଁ । ଏହାକୁ whatsapp ମାଧ୍ୟମରେ ସେୟାର୍ କରିବାକୁ ମାର୍କ୍-ସିଟ୍ ର ତଳ ଅଂଶରେ ଥିବା ସେୟାର୍ ବଟନ୍ ରେ କ୍ଲିକ୍ କରନ୍ତୁ । ଏହାକୁ ବନ୍ଦ କରିବାକୁ ତଳେ ଥିବା "ବନ୍ଦ କରନ୍ତୁ" ବଟନ୍ କିମ୍ବା ଉପର-ଡାହାଣ କୋଣର ✕ ବଟନ୍‌ ରେ କ୍ଲିକ୍ କରନ୍ତୁ ।</p>
           <img class="faq-screenshot" src="https://audio.evidya.de/33.jpeg" alt="Step 10 — 8 practice question buttons" onerror="this.style.display='none'">
-          <img class="faq-screenshot" src="https://audio.evidya.de/34.gif" alt="Step 10 — certificate & marksheet" onerror="this.style.display='none'">
-          <img class="faq-screenshot" src="https://audio.evidya.de/35.jpeg" alt="Step 10 — certificate & marksheet" onerror="this.style.display='none'">
-          <img class="faq-screenshot" src="https://audio.evidya.de/36.jpeg" alt="Step 10 — certificate & marksheet" onerror="this.style.display='none'">
-          <img class="faq-screenshot" src="https://audio.evidya.de/37.jpeg" alt="Step 10 — certificate & marksheet" onerror="this.style.display='none'">
-          <img class="faq-screenshot" src="https://audio.evidya.de/38.jpeg" alt="Step 10 — certificate & marksheet" onerror="this.style.display='none'">
-          <img class="faq-screenshot" src="https://audio.evidya.de/39.jpeg" alt="Step 10 — certificate & marksheet" onerror="this.style.display='none'">
-          <img class="faq-screenshot" src="https://audio.evidya.de/40.jpeg" alt="Step 10 — certificate & marksheet" onerror="this.style.display='none'">
-          <img class="faq-screenshot" src="https://audio.evidya.de/41.jpeg" alt="Step 10 — certificate & marksheet" onerror="this.style.display='none'">
-          <img class="faq-screenshot" src="https://audio.evidya.de/42.jpeg" alt="Step 10 — certificate & marksheet" onerror="this.style.display='none'">
-          <img class="faq-screenshot" src="https://audio.evidya.de/43.jpeg" alt="Step 10 — certificate & marksheet" onerror="this.style.display='none'">
+          <img class="faq-screenshot" src="https://audio.evidya.de/34.gif" alt="Step 10 — marksheet summary" onerror="this.style.display='none'">
+          <img class="faq-screenshot" src="https://audio.evidya.de/35.jpeg" alt="Step 10 — marksheet summary" onerror="this.style.display='none'">
+          <img class="faq-screenshot" src="https://audio.evidya.de/36.jpeg" alt="Step 10 — marksheet summary" onerror="this.style.display='none'">
+          <img class="faq-screenshot" src="https://audio.evidya.de/37.jpeg" alt="Step 10 — marksheet summary" onerror="this.style.display='none'">
+          <img class="faq-screenshot" src="https://audio.evidya.de/38.jpeg" alt="Step 10 — marksheet summary" onerror="this.style.display='none'">
+          <img class="faq-screenshot" src="https://audio.evidya.de/39.jpeg" alt="Step 10 — marksheet summary" onerror="this.style.display='none'">
+          <img class="faq-screenshot" src="https://audio.evidya.de/40.jpeg" alt="Step 10 — marksheet summary" onerror="this.style.display='none'">
+          <img class="faq-screenshot" src="https://audio.evidya.de/41.jpeg" alt="Step 10 — marksheet summary" onerror="this.style.display='none'">
+          <img class="faq-screenshot" src="https://audio.evidya.de/42.jpeg" alt="Step 10 — marksheet summary" onerror="this.style.display='none'">
+          <img class="faq-screenshot" src="https://audio.evidya.de/43.jpeg" alt="Step 10 — marksheet summary" onerror="this.style.display='none'">
         </div>
       </div>
 
@@ -852,21 +877,21 @@ html, body {
     <div class="modal-pill"></div>
     <div class="modal-icon">📚</div>
     <div class="modal-title">ସମସ୍ତ ଡିଜିଟାଲ୍ ବୁକ୍</div>
-    <div class="modal-subtitle">ଆପଣଙ୍କ ଶ୍ରେଣୀ ଅନୁଯାୟୀ ଡିଜିଟାଲ୍ ବୁକ୍ ବାଛନ୍ତୁ</div>
+    <div class="modal-subtitle">ପିଲାର ଶ୍ରେଣୀ ଅନୁଯାୟୀ ଡିଜିଟାଲ୍ ବୁକ୍ ବାଛନ୍ତୁ — ଅଭିଭାବକଙ୍କ ପାଇଁ</div>
     <div class="grid2">
       <div class="lv-card lv-sc1" data-modal="modal-school-list">
         <div class="lv-icon">🏫</div>
-        <div class="lv-name">ସ୍କୁଲ୍ ଶିକ୍ଷାର୍ଥୀ ଙ୍କ ପାଇଁ ଡିଜିଟାଲ ବୁକ୍</div>
+        <div class="lv-name">ସ୍କୁଲ୍ ଶିକ୍ଷାର୍ଥୀଙ୍କ ପାଇଁ ଡିଜିଟାଲ ବୁକ୍</div>
         <div class="lv-bar"></div>
       </div>
       <div class="lv-card lv-arts1" data-modal="modal-plus2-list">
         <div class="lv-icon">📘</div>
-        <div class="lv-name">+2 ଶିକ୍ଷାର୍ଥୀ ଙ୍କ ପାଇଁ ଡିଜିଟାଲ ବୁକ୍</div>
+        <div class="lv-name">+2 ଶିକ୍ଷାର୍ଥୀଙ୍କ ପାଇଁ ଡିଜିଟାଲ ବୁକ୍</div>
         <div class="lv-bar"></div>
       </div>
       <div class="lv-card lv-com1" data-modal="modal-plus3-list">
         <div class="lv-icon">🎓</div>
-        <div class="lv-name">+3 ଶିକ୍ଷାର୍ଥୀ ଙ୍କ ପାଇଁ ଡିଜିଟାଲ ବୁକ୍</div>
+        <div class="lv-name">+3 ଶିକ୍ଷାର୍ଥୀଙ୍କ ପାଇଁ ଡିଜିଟାଲ ବୁକ୍</div>
         <div class="lv-bar"></div>
       </div>
       <div class="lv-card lv-legal" data-modal="modal-legal-list">
@@ -896,8 +921,8 @@ html, body {
     <button class="modal-close-btn" onclick="closeModalFromButton(this)">✕</button>
     <div class="modal-pill"></div>
     <div class="modal-icon">🏫</div>
-    <div class="modal-title">ସ୍କୁଲ୍ ଶିକ୍ଷାର୍ଥୀ ଙ୍କ ପାଇଁ ଡିଜିଟାଲ ବୁକ୍</div>
-    <div class="modal-subtitle">Class 1 to 10 — ପ୍ରଥମ ରୁ ଦଶମ ଶ୍ରେଣୀ</div>
+    <div class="modal-title">ସ୍କୁଲ୍ ଶିକ୍ଷାର୍ଥୀଙ୍କ ପାଇଁ ଡିଜିଟାଲ ବୁକ୍</div>
+    <div class="modal-subtitle">Class 1 to 10 — ପିଲାର ଶ୍ରେଣୀ ବାଛନ୍ତୁ (ଅଭିଭାବକଙ୍କ ପାଇଁ)</div>
     <div class="grid2">
       <a href="https://school-class-1.pages.dev/"  class="lv-card lv-sc1"  data-modal="modal-sc1"><div class="lv-icon">🔢</div><div class="lv-name">Class 1</div><div class="lv-sub">ପ୍ରଥମ ଶ୍ରେଣୀ</div><div class="lv-bar"></div></a>
       <a href="https://school-class-2.pages.dev/"  class="lv-card lv-sc2"  data-modal="modal-sc2"><div class="lv-icon">✏️</div><div class="lv-name">Class 2</div><div class="lv-sub">ଦ୍ୱିତୀୟ ଶ୍ରେଣୀ</div><div class="lv-bar"></div></a>
@@ -924,8 +949,8 @@ html, body {
     <button class="modal-close-btn" onclick="closeModalFromButton(this)">✕</button>
     <div class="modal-pill"></div>
     <div class="modal-icon">📘</div>
-    <div class="modal-title">+2 ଶିକ୍ଷାର୍ଥୀ ଙ୍କ ପାଇଁ ଡିଜିଟାଲ ବୁକ୍</div>
-    <div class="modal-subtitle">+2 Arts &amp; Commerce</div>
+    <div class="modal-title">+2 ଶିକ୍ଷାର୍ଥୀଙ୍କ ପାଇଁ ଡିଜିଟାଲ ବୁକ୍</div>
+    <div class="modal-subtitle">+2 Arts, Commerce &amp; Science · ଅଭିଭାବକଙ୍କ ପାଇଁ</div>
 
     <div class="t-arts">
       <div class="sub-lbl">+୨ ଶ୍ରେଣୀ — କଳା</div>
@@ -943,6 +968,14 @@ html, body {
       </div>
     </div>
 
+    <div class="t-sci">
+      <div class="sub-lbl">+୨ ଶ୍ରେଣୀ — ବିଜ୍ଞାନ</div>
+      <div class="grid2">
+        <a href="./p2-science-1/index.html" class="lv-card lv-sci1" data-modal="modal-p2s1"><div class="lv-icon">🔬</div><div class="lv-name">+୨ ପ୍ରଥମ ବର୍ଷ</div><div class="lv-sub">ବିଜ୍ଞାନ ବିଭାଗ</div><div class="lv-bar"></div></a>
+        <a href="./p2-science-2/index.html" class="lv-card lv-sci2" data-modal="modal-p2s2"><div class="lv-icon">🧪</div><div class="lv-name">+୨ ଦ୍ୱିତୀୟ ବର୍ଷ</div><div class="lv-sub">ବିଜ୍ଞାନ ବିଭାଗ</div><div class="lv-bar"></div></a>
+      </div>
+    </div>
+
     <div class="modal-btn-row">
       <button class="modal-btn-cancel" onclick="closeModal('modal-plus2-list')">ବାତିଲ</button>
     </div>
@@ -957,8 +990,8 @@ html, body {
     <button class="modal-close-btn" onclick="closeModalFromButton(this)">✕</button>
     <div class="modal-pill"></div>
     <div class="modal-icon">🎓</div>
-    <div class="modal-title">+3 ଶିକ୍ଷାର୍ଥୀ ଙ୍କ ପାଇଁ ଡିଜିଟାଲ ବୁକ୍</div>
-    <div class="modal-subtitle">+3 Commerce &amp; Arts Honours</div>
+    <div class="modal-title">+3 ଶିକ୍ଷାର୍ଥୀଙ୍କ ପାଇଁ ଡିଜିଟାଲ ବୁକ୍</div>
+    <div class="modal-subtitle">+3 Commerce, Arts &amp; Science Honours · ଅଭିଭାବକଙ୍କ ପାଇଁ</div>
 
     <div class="t-com">
       <div class="sub-lbl">+3 Semesters — Commerce</div>
@@ -1113,6 +1146,145 @@ html, body {
       </div>
     </div>
 
+    <div class="t-sci">
+      <div class="sub-lbl">+3 Science Honours Subjects</div>
+      <div class="accordion">
+
+        <div class="acc-item" id="acc-physics">
+          <div class="acc-trigger acc-polsci" onclick="toggleAcc('acc-physics')">
+            <div class="acc-ico">⚛️</div>
+            <div class="acc-label">
+              <div class="acc-eyebrow">+3 Honours · 8 Semesters</div>
+              <div class="acc-name">Physics</div>
+              <div class="acc-odia">ପଦାର୍ଥ ବିଜ୍ଞାନ (ଅନର୍ସ)</div>
+            </div>
+            <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+          </div>
+          <div class="acc-body"><div class="grid2">
+            <a href="./p3-science-physics-sem1/index.html" class="lv-card lv-sem1" data-modal="modal-phy1"><div class="lv-icon">📘</div><div class="lv-name">Sem-1</div><div class="lv-sub">Physics</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-physics-sem2/index.html" class="lv-card lv-sem2" data-modal="modal-phy2"><div class="lv-icon">📗</div><div class="lv-name">Sem-2</div><div class="lv-sub">Physics</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-physics-sem3/index.html" class="lv-card lv-sem3" data-modal="modal-phy3"><div class="lv-icon">📙</div><div class="lv-name">Sem-3</div><div class="lv-sub">Physics</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-physics-sem4/index.html" class="lv-card lv-sem4" data-modal="modal-phy4"><div class="lv-icon">📕</div><div class="lv-name">Sem-4</div><div class="lv-sub">Physics</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-physics-sem5/index.html" class="lv-card lv-sem1" data-modal="modal-phy5"><div class="lv-icon">📓</div><div class="lv-name">Sem-5</div><div class="lv-sub">Physics</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-physics-sem6/index.html" class="lv-card lv-sem2" data-modal="modal-phy6"><div class="lv-icon">📔</div><div class="lv-name">Sem-6</div><div class="lv-sub">Physics</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-physics-sem7/index.html" class="lv-card lv-sem3" data-modal="modal-phy7"><div class="lv-icon">📒</div><div class="lv-name">Sem-7</div><div class="lv-sub">Physics</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-physics-sem8/index.html" class="lv-card lv-sem4" data-modal="modal-phy8"><div class="lv-icon">🎓</div><div class="lv-name">Sem-8</div><div class="lv-sub">Physics</div><div class="lv-bar"></div></a>
+          </div></div>
+        </div>
+
+        <div class="acc-item" id="acc-chemistry">
+          <div class="acc-trigger acc-history" onclick="toggleAcc('acc-chemistry')">
+            <div class="acc-ico">🧪</div>
+            <div class="acc-label">
+              <div class="acc-eyebrow">+3 Honours · 8 Semesters</div>
+              <div class="acc-name">Chemistry</div>
+              <div class="acc-odia">ରସାୟନ ବିଜ୍ଞାନ (ଅନର୍ସ)</div>
+            </div>
+            <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+          </div>
+          <div class="acc-body"><div class="grid2">
+            <a href="./p3-science-chemistry-sem1/index.html" class="lv-card lv-sem1" data-modal="modal-che1"><div class="lv-icon">📘</div><div class="lv-name">Sem-1</div><div class="lv-sub">Chemistry</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-chemistry-sem2/index.html" class="lv-card lv-sem2" data-modal="modal-che2"><div class="lv-icon">📗</div><div class="lv-name">Sem-2</div><div class="lv-sub">Chemistry</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-chemistry-sem3/index.html" class="lv-card lv-sem3" data-modal="modal-che3"><div class="lv-icon">📙</div><div class="lv-name">Sem-3</div><div class="lv-sub">Chemistry</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-chemistry-sem4/index.html" class="lv-card lv-sem4" data-modal="modal-che4"><div class="lv-icon">📕</div><div class="lv-name">Sem-4</div><div class="lv-sub">Chemistry</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-chemistry-sem5/index.html" class="lv-card lv-sem1" data-modal="modal-che5"><div class="lv-icon">📓</div><div class="lv-name">Sem-5</div><div class="lv-sub">Chemistry</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-chemistry-sem6/index.html" class="lv-card lv-sem2" data-modal="modal-che6"><div class="lv-icon">📔</div><div class="lv-name">Sem-6</div><div class="lv-sub">Chemistry</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-chemistry-sem7/index.html" class="lv-card lv-sem3" data-modal="modal-che7"><div class="lv-icon">📒</div><div class="lv-name">Sem-7</div><div class="lv-sub">Chemistry</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-chemistry-sem8/index.html" class="lv-card lv-sem4" data-modal="modal-che8"><div class="lv-icon">🎓</div><div class="lv-name">Sem-8</div><div class="lv-sub">Chemistry</div><div class="lv-bar"></div></a>
+          </div></div>
+        </div>
+
+        <div class="acc-item" id="acc-maths">
+          <div class="acc-trigger acc-educ" onclick="toggleAcc('acc-maths')">
+            <div class="acc-ico">📐</div>
+            <div class="acc-label">
+              <div class="acc-eyebrow">+3 Honours · 8 Semesters</div>
+              <div class="acc-name">Mathematics</div>
+              <div class="acc-odia">ଗଣିତ (ଅନର୍ସ)</div>
+            </div>
+            <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+          </div>
+          <div class="acc-body"><div class="grid2">
+            <a href="./p3-science-mathematics-sem1/index.html" class="lv-card lv-sem1" data-modal="modal-mat1"><div class="lv-icon">📘</div><div class="lv-name">Sem-1</div><div class="lv-sub">Mathematics</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-mathematics-sem2/index.html" class="lv-card lv-sem2" data-modal="modal-mat2"><div class="lv-icon">📗</div><div class="lv-name">Sem-2</div><div class="lv-sub">Mathematics</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-mathematics-sem3/index.html" class="lv-card lv-sem3" data-modal="modal-mat3"><div class="lv-icon">📙</div><div class="lv-name">Sem-3</div><div class="lv-sub">Mathematics</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-mathematics-sem4/index.html" class="lv-card lv-sem4" data-modal="modal-mat4"><div class="lv-icon">📕</div><div class="lv-name">Sem-4</div><div class="lv-sub">Mathematics</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-mathematics-sem5/index.html" class="lv-card lv-sem1" data-modal="modal-mat5"><div class="lv-icon">📓</div><div class="lv-name">Sem-5</div><div class="lv-sub">Mathematics</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-mathematics-sem6/index.html" class="lv-card lv-sem2" data-modal="modal-mat6"><div class="lv-icon">📔</div><div class="lv-name">Sem-6</div><div class="lv-sub">Mathematics</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-mathematics-sem7/index.html" class="lv-card lv-sem3" data-modal="modal-mat7"><div class="lv-icon">📒</div><div class="lv-name">Sem-7</div><div class="lv-sub">Mathematics</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-mathematics-sem8/index.html" class="lv-card lv-sem4" data-modal="modal-mat8"><div class="lv-icon">🎓</div><div class="lv-name">Sem-8</div><div class="lv-sub">Mathematics</div><div class="lv-bar"></div></a>
+          </div></div>
+        </div>
+
+        <div class="acc-item" id="acc-botany">
+          <div class="acc-trigger acc-psych" onclick="toggleAcc('acc-botany')">
+            <div class="acc-ico">🌿</div>
+            <div class="acc-label">
+              <div class="acc-eyebrow">+3 Honours · 8 Semesters</div>
+              <div class="acc-name">Botany</div>
+              <div class="acc-odia">ଉଦ୍ଭିଦ ବିଜ୍ଞାନ (ଅନର୍ସ)</div>
+            </div>
+            <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+          </div>
+          <div class="acc-body"><div class="grid2">
+            <a href="./p3-science-botany-sem1/index.html" class="lv-card lv-sem1" data-modal="modal-bot1"><div class="lv-icon">📘</div><div class="lv-name">Sem-1</div><div class="lv-sub">Botany</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-botany-sem2/index.html" class="lv-card lv-sem2" data-modal="modal-bot2"><div class="lv-icon">📗</div><div class="lv-name">Sem-2</div><div class="lv-sub">Botany</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-botany-sem3/index.html" class="lv-card lv-sem3" data-modal="modal-bot3"><div class="lv-icon">📙</div><div class="lv-name">Sem-3</div><div class="lv-sub">Botany</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-botany-sem4/index.html" class="lv-card lv-sem4" data-modal="modal-bot4"><div class="lv-icon">📕</div><div class="lv-name">Sem-4</div><div class="lv-sub">Botany</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-botany-sem5/index.html" class="lv-card lv-sem1" data-modal="modal-bot5"><div class="lv-icon">📓</div><div class="lv-name">Sem-5</div><div class="lv-sub">Botany</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-botany-sem6/index.html" class="lv-card lv-sem2" data-modal="modal-bot6"><div class="lv-icon">📔</div><div class="lv-name">Sem-6</div><div class="lv-sub">Botany</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-botany-sem7/index.html" class="lv-card lv-sem3" data-modal="modal-bot7"><div class="lv-icon">📒</div><div class="lv-name">Sem-7</div><div class="lv-sub">Botany</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-botany-sem8/index.html" class="lv-card lv-sem4" data-modal="modal-bot8"><div class="lv-icon">🎓</div><div class="lv-name">Sem-8</div><div class="lv-sub">Botany</div><div class="lv-bar"></div></a>
+          </div></div>
+        </div>
+
+        <div class="acc-item" id="acc-zoology">
+          <div class="acc-trigger acc-econ" onclick="toggleAcc('acc-zoology')">
+            <div class="acc-ico">🐾</div>
+            <div class="acc-label">
+              <div class="acc-eyebrow">+3 Honours · 8 Semesters</div>
+              <div class="acc-name">Zoology</div>
+              <div class="acc-odia">ପ୍ରାଣୀ ବିଜ୍ଞାନ (ଅନର୍ସ)</div>
+            </div>
+            <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+          </div>
+          <div class="acc-body"><div class="grid2">
+            <a href="./p3-science-zoology-sem1/index.html" class="lv-card lv-sem1" data-modal="modal-zoo1"><div class="lv-icon">📘</div><div class="lv-name">Sem-1</div><div class="lv-sub">Zoology</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-zoology-sem2/index.html" class="lv-card lv-sem2" data-modal="modal-zoo2"><div class="lv-icon">📗</div><div class="lv-name">Sem-2</div><div class="lv-sub">Zoology</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-zoology-sem3/index.html" class="lv-card lv-sem3" data-modal="modal-zoo3"><div class="lv-icon">📙</div><div class="lv-name">Sem-3</div><div class="lv-sub">Zoology</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-zoology-sem4/index.html" class="lv-card lv-sem4" data-modal="modal-zoo4"><div class="lv-icon">📕</div><div class="lv-name">Sem-4</div><div class="lv-sub">Zoology</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-zoology-sem5/index.html" class="lv-card lv-sem1" data-modal="modal-zoo5"><div class="lv-icon">📓</div><div class="lv-name">Sem-5</div><div class="lv-sub">Zoology</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-zoology-sem6/index.html" class="lv-card lv-sem2" data-modal="modal-zoo6"><div class="lv-icon">📔</div><div class="lv-name">Sem-6</div><div class="lv-sub">Zoology</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-zoology-sem7/index.html" class="lv-card lv-sem3" data-modal="modal-zoo7"><div class="lv-icon">📒</div><div class="lv-name">Sem-7</div><div class="lv-sub">Zoology</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-zoology-sem8/index.html" class="lv-card lv-sem4" data-modal="modal-zoo8"><div class="lv-icon">🎓</div><div class="lv-name">Sem-8</div><div class="lv-sub">Zoology</div><div class="lv-bar"></div></a>
+          </div></div>
+        </div>
+
+        <div class="acc-item" id="acc-compsci">
+          <div class="acc-trigger acc-socio" onclick="toggleAcc('acc-compsci')">
+            <div class="acc-ico">💻</div>
+            <div class="acc-label">
+              <div class="acc-eyebrow">+3 Honours · 8 Semesters</div>
+              <div class="acc-name">Computer Science</div>
+              <div class="acc-odia">କମ୍ପ୍ୟୁଟର ବିଜ୍ଞାନ (ଅନର୍ସ)</div>
+            </div>
+            <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+          </div>
+          <div class="acc-body"><div class="grid2">
+            <a href="./p3-science-compsci-sem1/index.html" class="lv-card lv-sem1" data-modal="modal-cs1"><div class="lv-icon">📘</div><div class="lv-name">Sem-1</div><div class="lv-sub">Comp. Science</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-compsci-sem2/index.html" class="lv-card lv-sem2" data-modal="modal-cs2"><div class="lv-icon">📗</div><div class="lv-name">Sem-2</div><div class="lv-sub">Comp. Science</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-compsci-sem3/index.html" class="lv-card lv-sem3" data-modal="modal-cs3"><div class="lv-icon">📙</div><div class="lv-name">Sem-3</div><div class="lv-sub">Comp. Science</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-compsci-sem4/index.html" class="lv-card lv-sem4" data-modal="modal-cs4"><div class="lv-icon">📕</div><div class="lv-name">Sem-4</div><div class="lv-sub">Comp. Science</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-compsci-sem5/index.html" class="lv-card lv-sem1" data-modal="modal-cs5"><div class="lv-icon">📓</div><div class="lv-name">Sem-5</div><div class="lv-sub">Comp. Science</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-compsci-sem6/index.html" class="lv-card lv-sem2" data-modal="modal-cs6"><div class="lv-icon">📔</div><div class="lv-name">Sem-6</div><div class="lv-sub">Comp. Science</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-compsci-sem7/index.html" class="lv-card lv-sem3" data-modal="modal-cs7"><div class="lv-icon">📒</div><div class="lv-name">Sem-7</div><div class="lv-sub">Comp. Science</div><div class="lv-bar"></div></a>
+            <a href="./p3-science-compsci-sem8/index.html" class="lv-card lv-sem4" data-modal="modal-cs8"><div class="lv-icon">🎓</div><div class="lv-name">Sem-8</div><div class="lv-sub">Comp. Science</div><div class="lv-bar"></div></a>
+          </div></div>
+        </div>
+
+      </div>
+    </div>
+
     <div class="modal-btn-row">
       <button class="modal-btn-cancel" onclick="closeModal('modal-plus3-list')">ବାତିଲ</button>
     </div>
@@ -1163,6 +1335,13 @@ html, body {
         <li>Basic Reasoning — ମୌଳିକ ଯୁକ୍ତି ଦକ୍ଷତା</li>
         <li>Basic General Knowledge — ସାଧାରଣ ଜ୍ଞାନ</li>
         <li>Mind Power Development Training — ମାନସିକ ଶକ୍ତି ବିକାଶ ପ୍ରଶିକ୍ଷଣ</li>
+      </ul>
+    </div>
+    <div class="modal-notice">
+      <div class="modal-notice-title">📋 ଏହି ଆପ୍ ବିଷୟରେ:</div>
+      <ul class="modal-list">
+        <li>ଏହି ଆପ୍ ଅଭିଭାବକଙ୍କୁ ପିଲାର ଘର ଅଭ୍ୟାସରେ ସାହାଯ୍ୟ କରିବା ପାଇଁ ଅତିରିକ୍ତ ଡିଜିଟାଲ କ୍ଲାସ୍ ପ୍ରଦାନ କରିଥାଏ ।</li>
+        <li>ପ୍ରସ୍ତୁତକାରୀ: ଇ-ବିଦ୍ୟା ଏକାଡେମୀ ।</li>
       </ul>
     </div>
     <div class="modal-btn-row">
@@ -1338,16 +1517,20 @@ const ICONS = ['📘','📗','📙','📕','📓','📔','📒','🎓'];
 const DYNA = [];
 
 // +2 Arts
-DYNA.push({id:'modal-p2a1',icon:'📘',title:'+୨ ପ୍ରଥମ ବର୍ଷ — କଳା',sub:'+2 First Year Arts',note:'ଏହି ଆପ୍ +2 ପ୍ରଥମ ବର୍ଷ (Arts) ର ସମସ୍ତ ବିଷୟ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।',col:COLS[0],href:'./p2-arts-1/index.html'});
-DYNA.push({id:'modal-p2a2',icon:'📗',title:'+୨ ଦ୍ୱିତୀୟ ବର୍ଷ — କଳା',sub:'+2 Second Year Arts',note:'ଏହି ଆପ୍ +2 ଦ୍ୱିତୀୟ ବର୍ଷ (Arts) ର ସମସ୍ତ ବିଷୟ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।',col:COLS[1],href:'https://plus-2-arts-ii.pages.dev/'});
+DYNA.push({id:'modal-p2a1',icon:'📘',title:'+୨ ପ୍ରଥମ ବର୍ଷ — କଳା',sub:'+2 First Year Arts',note:'ଏହି ଆପ୍ +2 ପ୍ରଥମ ବର୍ଷ (Arts) ର ବିଷୟଗୁଡ଼ିକ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।',col:COLS[0],href:'./p2-arts-1/index.html',producer:'ଇ-ବିଦ୍ୟା କଳା'});
+DYNA.push({id:'modal-p2a2',icon:'📗',title:'+୨ ଦ୍ୱିତୀୟ ବର୍ଷ — କଳା',sub:'+2 Second Year Arts',note:'ଏହି ଆପ୍ +2 ଦ୍ୱିତୀୟ ବର୍ଷ (Arts) ର ବିଷୟଗୁଡ଼ିକ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।',col:COLS[1],href:'https://plus-2-arts-ii.pages.dev/',producer:'ଇ-ବିଦ୍ୟା କଳା'});
 
 // +2 Commerce
-DYNA.push({id:'modal-p2c1',icon:'💼',title:'+୨ ପ୍ରଥମ ବର୍ଷ — ବାଣିଜ୍ୟ',sub:'+2 First Year Commerce',note:'ଏହି ଆପ୍ +2 ପ୍ରଥମ ବର୍ଷ (Commerce) ର ସମସ୍ତ ବିଷୟ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।',col:COLS[2],href:'./p2-commerce-1/index.html'});
-DYNA.push({id:'modal-p2c2',icon:'📋',title:'+୨ ଦ୍ୱିତୀୟ ବର୍ଷ — ବାଣିଜ୍ୟ',sub:'+2 Second Year Commerce',note:'ଏହି ଆପ୍ +2 ଦ୍ୱିତୀୟ ବର୍ଷ (Commerce) ର ସମସ୍ତ ବିଷୟ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।',col:COLS[3],href:'https://plus-2-com-ii.pages.dev/'});
+DYNA.push({id:'modal-p2c1',icon:'💼',title:'+୨ ପ୍ରଥମ ବର୍ଷ — ବାଣିଜ୍ୟ',sub:'+2 First Year Commerce',note:'ଏହି ଆପ୍ +2 ପ୍ରଥମ ବର୍ଷ (Commerce) ର ବିଷୟଗୁଡ଼ିକ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।',col:COLS[2],href:'./p2-commerce-1/index.html',producer:'ଇ-ବିଦ୍ୟା ବାଣିଜ୍ୟ'});
+DYNA.push({id:'modal-p2c2',icon:'📋',title:'+୨ ଦ୍ୱିତୀୟ ବର୍ଷ — ବାଣିଜ୍ୟ',sub:'+2 Second Year Commerce',note:'ଏହି ଆପ୍ +2 ଦ୍ୱିତୀୟ ବର୍ଷ (Commerce) ର ବିଷୟଗୁଡ଼ିକ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।',col:COLS[3],href:'https://plus-2-com-ii.pages.dev/',producer:'ଇ-ବିଦ୍ୟା ବାଣିଜ୍ୟ'});
+
+// +2 Science
+DYNA.push({id:'modal-p2s1',icon:'🔬',title:'+୨ ପ୍ରଥମ ବର୍ଷ — ବିଜ୍ଞାନ',sub:'+2 First Year Science',note:'ଏହି ଆପ୍ +2 ପ୍ରଥମ ବର୍ଷ (Science) ର ବିଷୟଗୁଡ଼ିକ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।',col:COLS[0],href:'./p2-science-1/index.html',producer:'ଇ-ବିଦ୍ୟା ବିଜ୍ଞାନ'});
+DYNA.push({id:'modal-p2s2',icon:'🧪',title:'+୨ ଦ୍ୱିତୀୟ ବର୍ଷ — ବିଜ୍ଞାନ',sub:'+2 Second Year Science',note:'ଏହି ଆପ୍ +2 ଦ୍ୱିତୀୟ ବର୍ଷ (Science) ର ବିଷୟଗୁଡ଼ିକ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।',col:COLS[1],href:'./p2-science-2/index.html',producer:'ଇ-ବିଦ୍ୟା ବିଜ୍ଞାନ'});
 
 // +3 Commerce Sem 1–8
 [1,2,3,4,5,6,7,8].forEach(s => {
-  DYNA.push({id:`modal-p3c${s}`,icon:ICONS[s-1],title:`+3 Commerce — Sem-${s}`,sub:`Semester ${s} · Commerce`,note:`ଏହି ଆପ୍ +3 Commerce Sem-${s} ର ସମସ୍ତ ବିଷୟ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।`,col:COLS[(s-1)%4],href:`./p3-commerce-sem${s}/index.html`});
+  DYNA.push({id:`modal-p3c${s}`,icon:ICONS[s-1],title:`+3 Commerce — Sem-${s}`,sub:`Semester ${s} · Commerce`,note:`ଏହି ଆପ୍ +3 Commerce Sem-${s} ର ବିଷୟଗୁଡ଼ିକ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।`,col:COLS[(s-1)%4],href:`./p3-commerce-sem${s}/index.html`,producer:'ଇ-ବିଦ୍ୟା ସ୍ନାତକ ବାଣିଜ୍ୟ'});
 });
 
 // +3 Arts subjects
@@ -1366,9 +1549,34 @@ ARTS.forEach(a => {
       icon:ICONS[s-1],
       title:`${a.name} — Sem-${s}`,
       sub:`${a.odia} (ଅନର୍ସ) · Semester ${s}`,
-      note:`ଏହି ଆପ୍ +3 ${a.name} (ଅନର୍ସ) Sem-${s} ର ସମସ୍ତ ବିଷୟ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।`,
+      note:`ଏହି ଆପ୍ +3 ${a.name} (ଅନର୍ସ) Sem-${s} ର ବିଷୟଗୁଡ଼ିକ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।`,
       col:COLS[(s-1)%4],
-      href:`./p3-arts-${a.path}-sem${s}/index.html`
+      href:`./p3-arts-${a.path}-sem${s}/index.html`,
+      producer:'ଇ-ବିଦ୍ୟା ସ୍ନାତକ କଳା'
+    });
+  });
+});
+
+// +3 Science subjects
+const SCIENCE = [
+  {key:'phy',name:'Physics',odia:'ପଦାର୍ଥ ବିଜ୍ଞାନ',path:'physics'},
+  {key:'che',name:'Chemistry',odia:'ରସାୟନ ବିଜ୍ଞାନ',path:'chemistry'},
+  {key:'mat',name:'Mathematics',odia:'ଗଣିତ',path:'mathematics'},
+  {key:'bot',name:'Botany',odia:'ଉଦ୍ଭିଦ ବିଜ୍ଞାନ',path:'botany'},
+  {key:'zoo',name:'Zoology',odia:'ପ୍ରାଣୀ ବିଜ୍ଞାନ',path:'zoology'},
+  {key:'cs',name:'Computer Science',odia:'କମ୍ପ୍ୟୁଟର ବିଜ୍ଞାନ',path:'compsci'},
+];
+SCIENCE.forEach(a => {
+  [1,2,3,4,5,6,7,8].forEach(s => {
+    DYNA.push({
+      id:`modal-${a.key}${s}`,
+      icon:ICONS[s-1],
+      title:`${a.name} — Sem-${s}`,
+      sub:`${a.odia} (ଅନର୍ସ) · Semester ${s}`,
+      note:`ଏହି ଆପ୍ +3 ${a.name} (ଅନର୍ସ) Sem-${s} ର ବିଷୟଗୁଡ଼ିକ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।`,
+      col:COLS[(s-1)%4],
+      href:`./p3-science-${a.path}-sem${s}/index.html`,
+      producer:'ଇ-ବିଦ୍ୟା ସ୍ନାତକ ବିଜ୍ଞାନ'
     });
   });
 });
@@ -1403,7 +1611,7 @@ const LAW_COLS = [
     icon: LAW_ICONS[i-1],
     title: LAW_NAMES[i-1],
     sub: `Legal Awareness · ${LAW_ODIA[i-1]}`,
-    note: `ଏହି ଆପ୍ ${LAW_NAMES[i-1]} ର ସମସ୍ତ ବିଷୟ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।`,
+    note: `ଏହି ଆପ୍ ${LAW_NAMES[i-1]} ର ବିଷୟଗୁଡ଼ିକ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।`,
     col: LAW_COLS[i-1],
     href: LAW_HREFS[i-1]
   });
@@ -1438,14 +1646,18 @@ const SC_COLS = [
 ];
 
 [1,2,3,4,5,6,7,8,9,10].forEach(c => {
+  let scProducer = 'ଇ-ବିଦ୍ୟା ପ୍ରଥମ';
+  if (c >= 6 && c <= 8) scProducer = 'ଇ-ବିଦ୍ୟା ମଧ୍ୟମ';
+  else if (c >= 9) scProducer = 'ଇ-ବିଦ୍ୟା ଉତ୍ତମ';
   DYNA.push({
     id:`modal-sc${c}`,
     icon:SC_ICONS[c-1],
     title:`Class ${c} — ${SC_ODIA[c-1]} ଶ୍ରେଣୀ`,
     sub:`School Education · Class ${c}`,
-    note:`ଏହି ଆପ୍ Class ${c} ର ସମସ୍ତ ବିଷୟ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।`,
+    note:`ଏହି ଆପ୍ Class ${c} ର ବିଷୟଗୁଡ଼ିକ ପାଇଁ ସୁପ୍ଲିମେଣ୍ଟାରୀ ଡିଜିଟାଲ କ୍ଲାସ ଉପଲବ୍ଧ କରାଏ ।`,
     col: SC_COLS[c-1],
-    href: SC_HREFS[c-1]
+    href: SC_HREFS[c-1],
+    producer: scProducer
   });
 });
 
@@ -1466,7 +1678,8 @@ DYNA.forEach(d => {
       <div class="modal-notice-title">📋 ଏହି ଆପ୍ ବିଷୟରେ:</div>
       <ul class="modal-list">
         <li>${d.note}</li>
-        <li>ବିଦ୍ୟାର୍ଥୀଙ୍କ ଅଧିକ ଅଭ୍ୟାସ ପାଇଁ ଏହି ଆପ୍ ଅତିରିକ୍ତ ଡିଜିଟାଲ କ୍ଲାସ୍ ପ୍ରଦାନ କରିଥାଏ ।</li>
+        <li>ଏହି ଆପ୍ ଅଭିଭାବକଙ୍କୁ ପିଲାର ଘର ଅଭ୍ୟାସରେ ସାହାଯ୍ୟ କରିବା ପାଇଁ ଅତିରିକ୍ତ ଡିଜିଟାଲ କ୍ଲାସ୍ ପ୍ରଦାନ କରିଥାଏ ।</li>
+        ${d.producer ? `<li>ପ୍ରସ୍ତୁତକାରୀ: ${d.producer} — କେନ୍ଦ୍ର ସରକାରଙ୍କ ସୂକ୍ଷ୍ମ, କ୍ଷୁଦ୍ର ଓ ମଧ୍ୟମ ଉଦ୍ୟୋଗ ମନ୍ତ୍ରଣାଳୟ ଅଧୀନରେ ପଞ୍ଜୀକୃତ ଉଦ୍ୟମୀ । ଇ-ବିଦ୍ୟା ଏକାଡେମୀ ମାଧ୍ୟମରେ ପ୍ରକାଶିତ ।</li>` : ''}
       </ul>
     </div>
     <div class="modal-btn-row">
