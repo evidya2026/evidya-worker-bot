@@ -958,7 +958,6 @@ function dialExecutiveNow(){
 }
 
 function placeRealExecutiveCall(){
-    callStatusLabel.textContent = "ସଂଯୋଗ କରାଯାଉଛି...";
     liveCallDot.classList.add('show');
     keypad.style.opacity = "0.4";
     keypad.style.pointerEvents = "none";
@@ -1014,7 +1013,6 @@ function resetDialerUI(){
     keypad.style.pointerEvents = "auto";
     endBtn.style.opacity = "1";
     endBtn.style.pointerEvents = "auto";
-    callStatusLabel.textContent = "ସଂଯୋଗ ହେଉଛି...";
     muted = false;
     muteBtn.classList.remove('active');
     history = [];
