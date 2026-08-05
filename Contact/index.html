@@ -514,13 +514,7 @@ body {
     margin-bottom: 2px;
 }
 
-.call-timer {
-    text-align: center;
-    color: var(--text-dim);
-    font-size: 15px;
-    letter-spacing: 1px;
-    margin-bottom: 16px;
-}
+
 
 .live-call-dot {
     width: 10px;
@@ -763,9 +757,7 @@ body {
 
                 <div class="phone-notch"></div>
 
-        <div class="call-status-label" id="callStatusLabel">ସଂଯୋଗ ହେଉଛି...</div>
-        <div class="call-timer" id="callTimer">00:00</div>
-
+     
         <div class="live-call-dot" id="liveCallDot"></div>
 
         <div class="speaking-indicator" id="speakingIndicator">
@@ -871,7 +863,7 @@ const overlay = document.getElementById('ivrOverlay');
 const openBtn = document.getElementById('openIvrBtn');
 const endBtn = document.getElementById('endBtn');
 const muteBtn = document.getElementById('muteBtn');
-const callTimerEl = document.getElementById('callTimer');
+
 const callStatusLabel = document.getElementById('callStatusLabel');
 const speakingIndicator = document.getElementById('speakingIndicator');
 const liveCallDot = document.getElementById('liveCallDot');
@@ -880,29 +872,10 @@ const keypad = document.getElementById('keypad');
 let currentNodeId = null;
 let history = [];
 let muted = false;
-let timerInterval = null;
-let secondsElapsed = 0;
+
 let currentAudio = null;
 let ivrStarted = false;
 
-function formatTime(s){
-    const m = String(Math.floor(s/60)).padStart(2,'0');
-    const sec = String(s%60).padStart(2,'0');
-    return m+":"+sec;
-}
-
-function startTimer(){
-    secondsElapsed = 0;
-    callTimerEl.textContent = "00:00";
-    clearInterval(timerInterval);
-    timerInterval = setInterval(() => {
-        secondsElapsed++;
-        callTimerEl.textContent = formatTime(secondsElapsed);
-    }, 1000);
-}
-function stopTimer(){
-    clearInterval(timerInterval);
-}
 
 function speak(text){
     window.speechSynthesis.cancel();
@@ -1053,9 +1026,7 @@ function openIvr(){
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
     ivrStarted = false;
-    startTimer();
     setTimeout(() => {
-        callStatusLabel.textContent = "ସଂଯୋଗ ହେଲା";
         ivrStarted = true;
         goToNode('welcome', false);
     }, 800);
@@ -1064,7 +1035,6 @@ function openIvr(){
 function closeIvr(){
     window.speechSynthesis.cancel();
     if(currentAudio) currentAudio.pause();
-    stopTimer();
     overlay.classList.remove('active');
     document.body.style.overflow = '';
     resetDialerUI();
