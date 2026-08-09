@@ -48,13 +48,10 @@ button:disabled { opacity: .65; cursor: not-allowed; transform: none; }
 <div class="box" id="taskBox" style="display:none;">
   <h3 id="taskTitle"></h3>
   <p id="taskInstructions" style="font-size:14px;color:#333;font-weight:600;white-space:pre-wrap;word-break:break-word;margin-bottom:12px;"></p>
-  <button id="copyPromptBtn" onclick="copyPrompt()" style="background:#059669;margin-bottom:10px;">📋 Copy Prompt for AI</button>
-  <button id="copyNotebookBtn" onclick="copyNotebookPrompt()" style="display:none;background:#0d9488;margin-bottom:10px;">📓 Copy NotebookLM Prompt</button>
-<a id="openNotebookLmBtn" href="https://notebooklm.google.com/" target="_blank" style="display:none;text-align:center;background:#4c1d95;color:white;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;margin-bottom:10px;">🔗 Open NotebookLM</a>
-<a id="openChatGptBtn" href="https://chat.openai.com/" target="_blank" style="display:none;text-align:center;background:#10a37f;color:white;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;margin-bottom:10px;">🤖 Open ChatGPT</a>
-<a id="openClaudeBtn" href="https://claude.ai/new" target="_blank" style="display:none;text-align:center;background:#d97757;color:white;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;margin-bottom:10px;">✨ Open Claude</a>
-  <a id="compressLinkBtn" href="#" target="_blank" style="display:none;text-align:center;background:#d97706;color:white;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;margin-bottom:14px;">🗜️ Open Compression Tool</a>
-
+ <button id="copyPromptBtn" onclick="copyPrompt()" style="background:#059669;margin-bottom:10px;">📋 Copy Prompt for AI</button>
+<button id="copyTextBtn" onclick="copyTaskText()" style="background:#0d9488;margin-bottom:10px;">📄 Copy Text</button>
+<a id="openNotebookLmBtn" href="https://notebooklm.google.com/" target="_blank" style="display:none;text-align:center;background:#4c1d95;color:white;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;margin-bottom:10px;">🔗 Open AI Tool</a>
+<a id="compressLinkBtn" href="#" target="_blank" style="display:none;text-align:center;background:#d97706;color:white;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;margin-bottom:14px;">🗜️ Open Compression Tool</a>
  <textarea id="taskContent" placeholder="Paste the AI-generated content here..." oninput="saveDraftNow()"></textarea>
   <button id="submitTextBtn" onclick="submitTask()">Submit</button>
 
@@ -831,31 +828,14 @@ function openTask(id) {
   const isMedia = j.jobKind === 'media';
   const isFileUpload = isMedia && (j.mediaType === 'audio' || j.mediaType === 'pdf' || j.mediaType === 'infographic');
   const isVideo = isMedia && j.mediaType === 'video';
-const isNotebookMedia = isMedia && (j.mediaType === 'audio' || j.mediaType === 'video' || j.mediaType === 'pdf' || j.mediaType === 'infographic');
+const isNotebookMedia = !isMedia || (j.mediaType === 'audio' || j.mediaType === 'video' || j.mediaType === 'pdf' || j.mediaType === 'infographic');
 
-  const copyBtnEl = document.getElementById('copyPromptBtn');
-  if (isMedia) {
-    copyBtnEl.textContent = '📄 Source Text';
-  } else {
-    copyBtnEl.textContent = '📋 Copy Prompt for AI';
-  }
-  document.getElementById('copyNotebookBtn').textContent = '🤖 Prompt Text';
-
-  document.getElementById('taskContent').style.display = isMedia ? 'none' : 'block';
+ document.getElementById('taskContent').style.display = isMedia ? 'none' : 'block';
   document.getElementById('mediaFileSection').style.display = isFileUpload ? 'block' : 'none';
   document.getElementById('mediaVideoSection').style.display = isVideo ? 'block' : 'none';
   document.getElementById('submitTextBtn').style.display = isMedia ? 'none' : 'block';
-  document.getElementById('copyNotebookBtn').style.display = isNotebookMedia ? 'block' : 'none';
- document.getElementById('openNotebookLmBtn').style.display = isNotebookMedia ? 'block' : 'none';
-const taskPathParts = (j.targetPath || '').split('/');
-  const taskFileName = taskPathParts[taskPathParts.length - 1] || '';
-  const taskClassFolder = taskPathParts[1] || '';
-  const taskLessonMatch = taskClassFolder.match(/CLASS-(\d+)/);
-  const taskLessonNum = taskLessonMatch ? parseInt(taskLessonMatch[1], 10) : null;
-  const taskIsOddLesson = taskLessonNum !== null && taskLessonNum % 2 !== 0;
-  const useClaudeForThis = !isMedia && (taskFileName === 'mermaid.js' || (taskFileName === 'topicsdata.js' && taskIsOddLesson));
-  document.getElementById('openChatGptBtn').style.display = (!isMedia && !useClaudeForThis) ? 'block' : 'none';
-  document.getElementById('openClaudeBtn').style.display = useClaudeForThis ? 'block' : 'none';
+  document.getElementById('copyTextBtn').style.display = 'block';
+  document.getElementById('openNotebookLmBtn').style.display = 'block';
 
   if (isFileUpload) {
     document.getElementById('mediaFileNameHint').textContent = 'This file will be saved as: ' + j.r2Key;
@@ -897,26 +877,40 @@ async function copyTextToClipboard(text) {
 async function copyPrompt() {
   const j = jobsCache[currentJobId];
   const isMedia = j && j.jobKind === 'media';
-  const text = j ? (isMedia ? (j.sourceText || j.promptText || '') : (j.promptText || '')) : '';
-  const restoreLabel = isMedia ? '📄 Source Text' : '📋 Copy Prompt for AI';
+  let text = '';
+  if (j) {
+    if (isMedia) {
+      text = j.promptOnly || (j.promptText ? j.promptText.split('THE TEXT:')[0] : '') || '';
+    } else {
+      text = j.promptText ? j.promptText.split('THE TEXT:')[0] : '';
+    }
+  }
   const btn = document.getElementById('copyPromptBtn');
   try {
-    await copyTextToClipboard(text);
+    await copyTextToClipboard(text.trim());
     btn.textContent = '✅ Copied!';
-    setTimeout(() => { btn.textContent = restoreLabel; }, 2000);
+    setTimeout(() => { btn.textContent = '📋 Copy Prompt for AI'; }, 2000);
   } catch (err) {
     alert('Could not copy automatically. Please select and copy the text manually.');
   }
 }
 
-async function copyNotebookPrompt() {
+async function copyTaskText() {
   const j = jobsCache[currentJobId];
-  const text = j ? (j.promptOnly || '') : '';
-  const btn = document.getElementById('copyNotebookBtn');
+  const isMedia = j && j.jobKind === 'media';
+  let text = '';
+  if (j) {
+    if (isMedia) {
+      text = j.sourceText || (j.promptText ? j.promptText.split('THE TEXT:').pop() : '') || '';
+    } else {
+      text = j.promptText ? j.promptText.split('THE TEXT:').pop() : '';
+    }
+  }
+  const btn = document.getElementById('copyTextBtn');
   try {
-    await copyTextToClipboard(text);
+    await copyTextToClipboard(text.trim());
     btn.textContent = '✅ Copied!';
-    setTimeout(() => { btn.textContent = '🤖 Prompt Text'; }, 2000);
+    setTimeout(() => { btn.textContent = '📄 Copy Text'; }, 2000);
   } catch (err) {
     alert('Could not copy automatically. Please select and copy the text manually.');
   }
