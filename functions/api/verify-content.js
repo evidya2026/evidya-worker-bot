@@ -23,7 +23,6 @@ You MUST flag as an issue any of the following, even if only ONE word is affecte
 - Sentences that do not grammatically parse as valid Odia
 - Any word or phrase you cannot confidently state the meaning of
 Do NOT pass a word just because it looks visually similar to a correct word or is in the right position in the sentence — it must be independently readable and meaningful on its own merit. When in doubt about whether a word is real Odia, treat it as a FAIL, not a PASS.
-For every such word/phrase found, quote the exact broken text and state what you believe the correct word should be, based on context and the source chapter.
 
 PRIORITY 2 — Factual accuracy vs the source chapter text (no invented facts, no contradictions).
 PRIORITY 3 — Correct answers (for MCQs, true/false, fill-in-blanks, matching — is the marked "correct" answer actually correct?).
@@ -32,8 +31,14 @@ PRIORITY 5 — Anything else a Class 9 student would find confusing or misleadin
 
 If ANY Priority 1 issue is found, the verdict MUST be "FAIL" regardless of how minor it seems — a student cannot learn from an unreadable or wrong word, even a single one.
 
+For EVERY issue you find (any priority), you MUST provide a "wrong" and "correct" pair so it can be auto-fixed:
+- "wrong": the EXACT substring as it appears in WORKER-SUBMITTED CONTENT (copy it character-for-character, including any surrounding punctuation if relevant, so it can be found with an exact text match).
+- "correct": the exact replacement text that should be substituted in.
+- "reason": a short explanation of why it's wrong.
+If an issue cannot be expressed as a simple wrong→correct text substitution (e.g. a structural or missing-content problem), still include it but set "wrong" and "correct" to empty strings "" and put the full explanation in "reason".
+
 Respond ONLY with strict JSON, nothing else, in this exact shape:
-{"verdict":"PASS" or "FAIL","issues":["short issue 1 (quote the broken word/phrase and the suggested fix)","short issue 2"],"confidence":"high"|"medium"|"low"}`;
+{"verdict":"PASS" or "FAIL","issues":[{"wrong":"exact wrong text","correct":"exact correct text","reason":"short reason"}],"confidence":"high"|"medium"|"low"}`;
   try {
     const geminiRes = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${env.GEMINI_API_KEY}`,
@@ -56,7 +61,7 @@ Respond ONLY with strict JSON, nothing else, in this exact shape:
     return new Response(JSON.stringify({
       success: true,
       verdict: "FAIL",
-      issues: ["AI check could not run — please review this manually."],
+      issues: [{ wrong: "", correct: "", reason: "AI check could not run — please review this manually." }],
       confidence: "low"
     }), { headers: { 'Content-Type': 'application/json' } });
   }
