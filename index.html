@@ -2,541 +2,472 @@
 <html lang="or">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ଇ-ବିଦ୍ୟା ଏକାଡେମୀ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ଇ-ବିଦ୍ୟା ଏକାଡେମୀ — ପାଠ ସହାୟକ</title>
+<meta name="theme-color" content="#667eea">
 
 <style>
-:root {
-  --navy:    #07111f;
-  --gold:    #c8962a;
-  --gold-lt: #e4b84a;
-  --white:   #ffffff;
-  --bg:      #f0f4f8;
-  --border:  #e2e8f2;
-  --slate:   #4a5568;
-  --text:    #1a2438;
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{
+  font-family:'Noto Sans Oriya',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+  display:flex;justify-content:center;
+}
+#app{
+  width:100%;max-width:520px;height:100vh;height:var(--app-height,100vh);
+  background:#eef0fb;display:flex;flex-direction:column;box-shadow:0 0 40px rgba(0,0,0,0.25);
+}
+.chat-header{
+  background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+  padding:14px 16px;display:flex;align-items:center;gap:12px;
+  box-shadow:0 4px 14px rgba(0,0,0,0.15);position:sticky;top:0;z-index:50;
+}
+.chat-header img{width:42px;height:42px;border-radius:50%;background:white;object-fit:contain;}
+.chat-header .h-title{color:white;font-weight:900;font-size:15px;line-height:1.3;}
+.chat-header .h-sub{color:rgba(255,255,255,0.85);font-size:11.5px;font-weight:600;}
+.reload-btn{
+  margin-left:auto;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.4);
+  color:white;font-size:12.5px;font-weight:800;padding:8px 12px;border-radius:20px;cursor:pointer;
 }
 
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+#chatLog{flex:1;overflow-y:auto;padding:16px 12px 76px;overscroll-behavior-y:contain;}
 
-html { overflow-x:hidden; scroll-behavior:smooth; scroll-padding-top:70px; }
-body {
-  font-family: 'Noto Sans Oriya', sans-serif;
-  background: var(--bg);
-  min-height: 100vh;
-  overflow-x: hidden;
+.msg-row{display:flex;gap:8px;align-items:flex-end;animation:msgIn 0.35s ease-out;}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.msg-avatar{width:30px;height:30px;border-radius:50%;flex-shrink:0;background:white;object-fit:contain;box-shadow:0 2px 6px rgba(0,0,0,0.2);}
+.bubble{max-width:78%;padding:11px 14px;border-radius:16px;font-size:14.5px;line-height:1.55;font-weight:600;white-space:pre-line;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+.bubble.bot{max-width:calc(100% - 40px);background:white;color:#2d2d3a;border-bottom-left-radius:4px;text-align:justify;}
+.type-cursor{display:inline-block;width:2px;height:14px;background:#764ba2;margin-left:2px;animation:blink 0.8s infinite;vertical-align:middle;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+.typing-row .bubble{padding:14px 16px;}
+.typing-dots{display:flex;gap:4px;}
+.typing-dots span{width:7px;height:7px;border-radius:50%;background:#c4c4d8;animation:tdot 1.1s infinite;}
+.typing-dots span:nth-child(2){animation-delay:0.15s;}
+.typing-dots span:nth-child(3){animation-delay:0.3s;}
+@keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:0.5;}30%{transform:translateY(-4px);opacity:1;}}
+
+.qr-wrap{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 6px 38px;}
+.qr-btn{background:white;border:2px solid #764ba2;color:#5b3d99;padding:10px 14px;border-radius:20px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.08);}
+.qr-btn:active{transform:scale(0.96);}
+.qr-btn.qj-school{background:linear-gradient(135deg,#7b1a0a,#b22222);color:#fff;border-color:transparent;}
+.qr-btn.qj-p2{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;border-color:transparent;}
+.qr-btn.qj-p3{background:linear-gradient(135deg,#3b0764,#6d28d9);color:#fff;border-color:transparent;}
+.qr-btn.qj-legal{background:linear-gradient(135deg,#7f1d1d,#b91c1c);color:#fff;border-color:transparent;}
+.qr-btn.qj-special{background:linear-gradient(135deg,#065f46,#059669);color:#fff;border-color:transparent;}
+
+/* menu / selection cards */
+.menu-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:2px 0 6px 38px;width:calc(100% - 38px);}
+.menu-card{border-radius:14px;padding:14px 10px;color:#fff;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.25);text-align:center;transition:transform .15s ease;}
+.menu-card:active{transform:scale(0.96);}
+.menu-card .mc-icon{font-size:22px;margin-bottom:6px;line-height:1;}
+.menu-card .mc-title{font-size:13px;font-weight:900;line-height:1.3;}
+.menu-card .mc-sub{font-size:10.5px;font-weight:700;opacity:0.92;margin-top:3px;line-height:1.35;}
+
+/* enter card (tap to open a link) */
+@keyframes ecPulse{0%,100%{box-shadow:0 8px 20px rgba(245,158,11,0.6),0 0 0 0 rgba(245,158,11,0.7);}50%{box-shadow:0 8px 30px rgba(245,158,11,0.8),0 0 0 12px rgba(245,158,11,0);}}
+@keyframes ecShimmer{0%{left:-100%;}100%{left:100%;}}
+.enter-card{
+  margin:2px 0 6px 38px;width:calc(100% - 38px);
+  background:linear-gradient(135deg,#3b82f6,#1d4ed8);border-radius:14px;padding:16px;text-align:center;color:white;
+  box-shadow:0 8px 22px rgba(59,130,246,0.5);cursor:pointer;border:2px solid rgba(255,255,255,0.6);
+  text-decoration:none;display:block;position:relative;overflow:hidden;animation:ecPulse 2s infinite;
 }
+.enter-card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);animation:ecShimmer 2s infinite;}
+.enter-card .ec-label{font-size:11px;font-weight:800;background:rgba(255,255,255,0.25);padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:6px;position:relative;z-index:1;}
+.enter-card .ec-title{font-size:15px;font-weight:900;position:relative;z-index:1;}
+.enter-card .ec-prompt{font-size:12px;font-weight:600;opacity:0.95;margin-top:6px;padding:5px 12px;background:rgba(255,255,255,0.25);border-radius:8px;display:inline-block;position:relative;z-index:1;}
+.enter-card .ec-feedback{position:absolute;inset:0;background:rgba(0,0,0,0.5);border-radius:14px;display:flex;justify-content:center;align-items:center;opacity:0;transform:scale(0.8);transition:all 0.3s ease;z-index:2;}
+.enter-card .ec-feedback::before{content:'';width:70px;height:70px;background:white;border-radius:50%;position:absolute;box-shadow:0 8px 30px rgba(0,0,0,0.4);}
+.enter-card .ec-feedback::after{content:'';width:16px;height:32px;border:solid #10b981;border-width:0 5px 5px 0;transform:rotate(45deg);display:block;z-index:1;}
+.enter-card.clicked .ec-feedback{opacity:1;transform:scale(1);}
 
-body::before {
-  content:''; position:fixed; top:0; left:0; right:0; height:460px;
-  background: linear-gradient(170deg,#07111f 0%,#0c1c35 45%,#0f2548 75%,#07111f 100%);
-  z-index:0;
-}
-body::after {
-  content:''; position:fixed; top:0; left:0; right:0; height:460px;
-  background:
-    radial-gradient(ellipse at 20% 0%, rgba(26,58,110,0.7) 0%, transparent 55%),
-    radial-gradient(ellipse at 80% 15%, rgba(200,150,42,0.13) 0%, transparent 50%);
-  z-index:0;
-}
-
-/* ── TOP NAV (site pages) ── */
-.top-nav {
-  position:relative; z-index:2;
-  display:flex; align-items:center;
-  gap:4px 2px;
-  padding:14px 10px;
-  max-width:640px; margin:0 auto;
-  overflow-x:auto; white-space:nowrap;
-  scrollbar-width:none; -ms-overflow-style:none;
-}
-.top-nav::-webkit-scrollbar { display:none; }
-.top-nav a {
-  color:rgba(255,255,255,0.78);
-  text-decoration:none;
-  font-size:clamp(11px,3vw,13px);
-  font-weight:600; letter-spacing:0.02em;
-  padding:7px 12px; border-radius:20px;
-  transition:background 0.2s, color 0.2s;
-  white-space:nowrap;
-}
-.top-nav a.active, .top-nav a:hover { background:rgba(200,150,42,0.18); color:var(--gold-lt); }
-
-.page { position:relative; z-index:1; max-width:640px; margin:0 auto; padding:0 14px 60px; }
-
-header { padding:10px 0 18px; text-align:center; animation: fadeUp 0.55s ease both; }
-.logo-wrap { margin:0 auto 16px; width:100%; max-width:340px; }
-.logo-wrap img { display:block; width:100%; height:auto; border-radius:18px; mix-blend-mode:screen; }
-.academy-name {
-  font-family:'Playfair Display',serif;
-  font-size: clamp(1.7em, 7vw, 2.1em);
-  font-weight:800; color:#fff;
-  letter-spacing:0.03em;
-  text-shadow:0 3px 16px rgba(0,0,0,0.5);
-  margin-bottom:10px; line-height:1.2;
-}
-.academy-tagline {
-  font-size: clamp(0.85em, 3.6vw, 1em);
-  color: rgba(255,255,255,0.72);
-  font-weight:600; letter-spacing:0.02em;
-  line-height:1.5;
-}
-
-/* ── QUICK-JUMP CHIPS ── */
-.quick-jump {
-  display:flex; gap:8px; overflow-x:auto; padding:16px 2px 4px;
-  scrollbar-width:none; -ms-overflow-style:none;
-}
-.quick-jump::-webkit-scrollbar { display:none; }
-.quick-jump a {
-  flex-shrink:0; display:inline-flex; align-items:center; gap:6px;
-  padding:9px 16px; border-radius:50px;
-  font-size:clamp(12px,3.4vw,13.5px); font-weight:700;
-  text-decoration:none; color:#fff;
-  border:1px solid rgba(255,255,255,0.16);
-}
-.qj-school{background:linear-gradient(135deg,#7b1a0a,#b22222);}
-.qj-p2{background:linear-gradient(135deg,#1e3a8a,#2563eb);}
-.qj-p3{background:linear-gradient(135deg,#3b0764,#6d28d9);}
-.qj-legal{background:linear-gradient(135deg,#7f1d1d,#b91c1c);}
-.qj-special{background:linear-gradient(135deg,#065f46,#059669);}
-
-.sections { display:flex; flex-direction:column; gap:14px; margin-top:16px; }
-
-.sec { background:#fff; border-radius:20px; padding:18px 16px 20px; box-shadow:0 6px 28px rgba(7,17,31,0.11); border:1px solid var(--border); scroll-margin-top:70px; }
-.sec:nth-child(1){animation:fadeUp 0.45s ease 0.10s both;}
-.sec:nth-child(2){animation:fadeUp 0.45s ease 0.16s both;}
-.sec:nth-child(3){animation:fadeUp 0.45s ease 0.22s both;}
-.sec:nth-child(4){animation:fadeUp 0.45s ease 0.28s both;}
-.sec:nth-child(5){animation:fadeUp 0.45s ease 0.34s both;}
-
-.sec-hd { display:flex; align-items:center; gap:12px; margin-bottom:16px; padding-bottom:14px; border-bottom:1.5px solid var(--border); }
-.sec-ico { width:48px; height:48px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
-.sec-eyebrow { font-size: clamp(10px,2.8vw,12px); font-weight:700; letter-spacing:0.10em; text-transform:uppercase; margin-bottom:3px; }
-.sec-title { font-family:'Playfair Display',serif; font-size: clamp(16px,5vw,20px); font-weight:700; color:var(--text); line-height:1.2; }
-
-.sub-lbl {
-  font-family:'Noto Sans Oriya',sans-serif;
-  font-size: clamp(14px,4.4vw,17px); font-weight:800;
-  display:flex; align-items:center; gap:10px;
-  margin:18px 0 12px; padding:10px 14px; border-radius:12px;
-  background:rgba(0,0,0,0.055); line-height:1.3;
-}
-.sub-lbl:first-child { margin-top:0; }
-.sub-lbl::after { content:''; flex:1; height:2px; background:linear-gradient(to right,currentColor,transparent); opacity:0.18; }
-
-.t-spl1 .sec-ico{background:#fff0eb;} .t-spl1 .sec-eyebrow{color:#9a3015;}
-.t-spl2 .sec-ico{background:#e6f7f0;} .t-spl2 .sec-eyebrow{color:#065f46;}
-.t-arts .sec-ico{background:#eff6ff;} .t-arts .sec-eyebrow{color:#1d4ed8;} .t-arts .sub-lbl{color:#1d4ed8;}
-.t-com  .sec-ico{background:#f5f3ff;} .t-com  .sec-eyebrow{color:#5b21b6;} .t-com  .sub-lbl{color:#5b21b6;}
-.t-legal .sec-ico{background:#fef2f2;} .t-legal .sec-eyebrow{color:#991b1b;}
-.t-sci  .sub-lbl{color:#065f46;}
-
-.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.grid1 { display:flex; flex-direction:column; gap:10px; }
-
-.lv-card {
-  position:relative; border-radius:15px; padding:18px 12px 16px;
-  text-align:center; text-decoration:none; color:#fff;
-  display:flex; flex-direction:column; align-items:center;
-  min-height:112px; overflow:hidden; transition:transform 0.15s;
-  border:1px solid rgba(255,255,255,0.12);
-}
-.lv-card::before {
-  content:''; position:absolute; top:-40%; right:-15%; width:110px; height:110px; border-radius:50%;
-  background:radial-gradient(circle,rgba(255,255,255,0.14) 0%,transparent 70%); pointer-events:none;
-}
-.lv-card:active { transform:scale(0.96); }
-.lv-icon { font-size:clamp(1.8em,6vw,2.2em); margin-bottom:8px; line-height:1; filter:drop-shadow(0 2px 5px rgba(0,0,0,0.28)); }
-.lv-name { font-family:'Noto Sans Oriya','Playfair Display',sans-serif; font-size:clamp(0.95em,4vw,1.08em); font-weight:700; line-height:1.25; text-shadow:0 1px 6px rgba(0,0,0,0.25); }
-.lv-sub  { font-size:clamp(0.72em,2.9vw,0.82em); opacity:0.85; margin-top:5px; font-weight:500; line-height:1.3; }
-
-.lv-sc1{background:linear-gradient(145deg,#7b1a0a,#b22222);} .lv-sc2{background:linear-gradient(145deg,#7b1a0a,#b22222);}
-.lv-sc3{background:linear-gradient(145deg,#1e3a8a,#2563eb);} .lv-sc4{background:linear-gradient(145deg,#1e3a8a,#2563eb);}
-.lv-sc5{background:linear-gradient(145deg,#065f46,#059669);} .lv-sc6{background:linear-gradient(145deg,#065f46,#059669);}
-.lv-sc7{background:linear-gradient(145deg,#3b0764,#6d28d9);} .lv-sc8{background:linear-gradient(145deg,#3b0764,#6d28d9);}
-.lv-sc9{background:linear-gradient(145deg,#7f1d1d,#b91c1c);} .lv-sc10{background:linear-gradient(145deg,#7f1d1d,#b91c1c);}
-
-.lv-arts1{background:linear-gradient(145deg,#1e3a8a,#2563eb);} .lv-arts2{background:linear-gradient(145deg,#1e40af,#3b82f6);}
-.lv-com1 {background:linear-gradient(145deg,#3b0764,#6d28d9);} .lv-com2 {background:linear-gradient(145deg,#4c1d95,#7c3aed);}
-.lv-sci1 {background:linear-gradient(145deg,#065f46,#059669);} .lv-sci2 {background:linear-gradient(145deg,#047857,#10b981);}
-
-.lv-sem1{background:linear-gradient(145deg,#1e3a8a,#2563eb);} .lv-sem2{background:linear-gradient(145deg,#0369a1,#0ea5e9);}
-.lv-sem3{background:linear-gradient(145deg,#065f46,#059669);} .lv-sem4{background:linear-gradient(145deg,#3b0764,#6d28d9);}
-
-.lv-legal1{background:linear-gradient(145deg,#7b1a0a,#b22222);} .lv-legal2{background:linear-gradient(145deg,#1e3a8a,#2563eb);}
-.lv-legal3{background:linear-gradient(145deg,#065f46,#059669);} .lv-legal4{background:linear-gradient(145deg,#3b0764,#6d28d9);}
-
-.lv-wide { min-height:96px; }
-
-/* ── ACCORDION (subject groups inside +3) ── */
-.accordion { display:flex; flex-direction:column; gap:10px; min-width:0; overflow-x:hidden; }
-.acc-item { border-radius:15px; overflow:hidden; border:1.5px solid var(--border); box-shadow:0 3px 12px rgba(7,17,31,0.08); min-width:0; }
-.acc-trigger { display:flex; align-items:center; gap:12px; padding:15px 14px; cursor:pointer; user-select:none; min-width:0; }
-.acc-trigger:active { opacity:0.88; }
-.acc-polsci {background:linear-gradient(135deg,#1e3a8a,#2563eb);}
-.acc-history{background:linear-gradient(135deg,#065f46,#059669);}
-.acc-educ   {background:linear-gradient(135deg,#0369a1,#0ea5e9);}
-.acc-psych  {background:linear-gradient(135deg,#4c1d95,#7c3aed);}
-.acc-econ   {background:linear-gradient(135deg,#b45309,#d97706);}
-.acc-socio  {background:linear-gradient(135deg,#7b1a0a,#b22222);}
-.acc-physics{background:linear-gradient(135deg,#1e3a8a,#2563eb);}
-.acc-chem   {background:linear-gradient(135deg,#065f46,#059669);}
-.acc-maths  {background:linear-gradient(135deg,#0369a1,#0ea5e9);}
-.acc-botany {background:linear-gradient(135deg,#4c1d95,#7c3aed);}
-.acc-zoo    {background:linear-gradient(135deg,#b45309,#d97706);}
-.acc-cs     {background:linear-gradient(135deg,#7b1a0a,#b22222);}
-
-.acc-ico { width:44px; height:44px; border-radius:11px; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; pointer-events:none; }
-.acc-label { flex:1; min-width:0; pointer-events:none; }
-.acc-eyebrow { font-size:clamp(10px,2.8vw,11.5px); font-weight:700; letter-spacing:0.09em; text-transform:uppercase; color:rgba(255,255,255,0.72); margin-bottom:2px; }
-.acc-name { font-family:'Noto Sans Oriya',sans-serif; font-size:clamp(15px,4.5vw,17px); font-weight:700; color:#fff; line-height:1.2; word-break:break-word; }
-.acc-odia { font-size:clamp(12px,3.5vw,13.5px); color:rgba(255,255,255,0.8); margin-top:3px; font-weight:500; }
-.acc-chevron { width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:transform 0.3s cubic-bezier(0.4,0,0.2,1); pointer-events:none; }
-.acc-chevron svg { width:14px; height:14px; fill:none; stroke:#fff; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
-.acc-item.open .acc-chevron { transform:rotate(180deg); }
-.acc-body { max-height:0; overflow:hidden; transition:max-height 0.35s cubic-bezier(0.4,0,0.2,1),padding 0.25s; background:#f4f6fb; padding:0 12px; min-width:0; overflow-x:hidden; }
-.acc-item.open .acc-body { max-height:900px; padding:12px 12px 14px; }
-
-footer {
-  background:var(--navy); border-radius:20px; padding:26px 20px 22px; margin-top:18px;
-  border:1px solid rgba(200,150,42,0.18); box-shadow:0 8px 32px rgba(7,17,31,0.3);
-  text-align:center; animation:fadeUp 0.5s ease 0.4s both;
-}
-.footer-brand h3 { font-family:'Playfair Display',serif; font-size:clamp(1em,4.5vw,1.2em); color:var(--gold-lt); font-weight:700; margin-bottom:8px; }
-.footer-brand p { font-size:clamp(0.76em,2.8vw,0.82em); color:rgba(255,255,255,0.55); line-height:1.6; margin-bottom:6px; }
-.footer-disclaimer { font-size:clamp(0.68em,2.4vw,0.74em); color:rgba(255,255,255,0.38); line-height:1.6; margin-top:8px; }
-.footer-div { height:1px; background:rgba(200,150,42,0.14); margin:16px 0; }
-.footer-pages { display:flex; flex-wrap:wrap; justify-content:center; gap:6px 4px; margin-bottom:14px; }
-.footer-pages a { color:rgba(255,255,255,0.6); font-size:clamp(0.72em,2.6vw,0.8em); text-decoration:none; padding:5px 10px; border-radius:14px; transition:background 0.2s,color 0.2s; }
-.footer-pages a:hover { background:rgba(200,150,42,0.14); color:var(--gold-lt); }
-.footer-copy { font-size:clamp(0.65em,2.2vw,0.72em); color:rgba(255,255,255,0.28); }
-
-@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-@supports (padding:max(0px)) { .page { padding-bottom:max(60px,env(safe-area-inset-bottom)); } }
+#navRowFixed{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;display:flex;z-index:55;box-shadow:0 -2px 10px rgba(0,0,0,0.12);}
+.nav-half-btn{flex:1;border:none;padding:14px 0;font-size:14px;font-weight:800;cursor:pointer;color:white;}
+#navBackBtn{background:linear-gradient(135deg,#f59e0b,#d97706);border-right:1px solid rgba(255,255,255,0.35);}
+#navFwdBtn{background:linear-gradient(135deg,#10b981,#059669);}
+.nav-half-btn:disabled{background:#e5e7eb !important;color:#a3a3af;cursor:default;}
 </style>
 </head>
 <body>
 
-<nav class="top-nav">
-  <a href="index.html" class="active">🏠 Home</a>
-  <a href="About/">About</a>
-  <a href="Contact/">Contact</a>
-  <a href="Terms/">Terms</a>
-  <a href="Agent-Terms/">Agent-Terms</a>
-  <a href="Disclaimer/">Disclaimer</a>
-  <a href="Privacy/">Privacy Policy</a>
-  <a href="Grievance-Redressal/">Grievance-Redressal</a>
-  <a href="https://evidya-admin.pages.dev/Agent%20registration/" target="_blank" rel="noopener noreferrer">Agent Log-in</a>
-  <a href="https://evidya.pages.dev/worker-portal" target="_blank" rel="noopener noreferrer">Worker Log-in</a>
-</nav>
-
-<div class="page">
-
-<header>
-  <div class="logo-wrap">
-    <img src="https://raw.githubusercontent.com/happysangitanms/assets/main/LOGO.png" alt="E-Vidya Academy Logo">
+<div id="app">
+  <div class="chat-header">
+    <img src="https://raw.githubusercontent.com/happysangitanms/assets/main/LOGO.png" alt="logo" onerror="this.style.display='none'">
+    <div>
+      <div class="h-title">ଇ-ବିଦ୍ୟା ଏକାଡେମୀ</div>
+      <div class="h-sub">ପାଠ ସହାୟକ · Home</div>
+    </div>
+    <button class="reload-btn" onclick="window.location.reload()" title="Reload">🔄 ପୁନଃ ଆରମ୍ଭ</button>
   </div>
-  <h1 class="academy-name">ଇ-ବିଦ୍ୟା ଏକାଡେମୀ</h1>
-  <div class="academy-tagline">ପିଲାମାନଙ୍କ ଅଭିଭାବକଙ୍କ ପାଇଁ ଡିଜିଟାଲ୍ ଶିକ୍ଷା ସହାୟତା — ଘରେ ପାଠପଢ଼ାରେ ସାହାଯ୍ୟ</div>
-</header>
 
-<!-- ── QUICK JUMP ── -->
-<nav class="quick-jump">
-  <a href="#school" class="qj-school">🏫 ସ୍କୁଲ୍</a>
-  <a href="#plus2" class="qj-p2">📘 +2</a>
-  <a href="#plus3" class="qj-p3">🎓 +3</a>
-  <a href="#legal" class="qj-legal">⚖️ ଆଇନ</a>
-  <a href="#special" class="qj-special">🌟 ସ୍ଵତନ୍ତ୍ର</a>
-</nav>
+  <div id="chatLog"></div>
 
-<div class="sections">
-
-  <!-- ══════════ SCHOOL — CLASS 1-10 ══════════ -->
-  <section class="sec t-spl1" id="school">
-    <div class="sec-hd">
-      <div class="sec-ico">🏫</div>
-      <div>
-        <div class="sec-eyebrow">Class 1 – 10</div>
-        <div class="sec-title">ସ୍କୁଲ୍ ଶିକ୍ଷାର୍ଥୀଙ୍କ ପାଇଁ ଡିଜିଟାଲ ବୁକ୍</div>
-      </div>
-    </div>
-    <div class="grid2">
-      <a href="https://school-class-1.pages.dev/"  class="lv-card lv-sc1"><div class="lv-icon">🔢</div><div class="lv-name">Class 1</div><div class="lv-sub">ପ୍ରଥମ ଶ୍ରେଣୀ</div></a>
-      <a href="https://school-class-2.pages.dev/"  class="lv-card lv-sc2"><div class="lv-icon">✏️</div><div class="lv-name">Class 2</div><div class="lv-sub">ଦ୍ୱିତୀୟ ଶ୍ରେଣୀ</div></a>
-      <a href="https://school-class-3.pages.dev/"  class="lv-card lv-sc3"><div class="lv-icon">📖</div><div class="lv-name">Class 3</div><div class="lv-sub">ତୃତୀୟ ଶ୍ରେଣୀ</div></a>
-      <a href="https://school-class-4.pages.dev/"  class="lv-card lv-sc4"><div class="lv-icon">📝</div><div class="lv-name">Class 4</div><div class="lv-sub">ଚତୁର୍ଥ ଶ୍ରେଣୀ</div></a>
-      <a href="https://school-class-5.pages.dev/"  class="lv-card lv-sc5"><div class="lv-icon">🔬</div><div class="lv-name">Class 5</div><div class="lv-sub">ପଞ୍ଚମ ଶ୍ରେଣୀ</div></a>
-      <a href="https://school-class-6.pages.dev/"  class="lv-card lv-sc6"><div class="lv-icon">🌍</div><div class="lv-name">Class 6</div><div class="lv-sub">ଷଷ୍ଠ ଶ୍ରେଣୀ</div></a>
-      <a href="https://school-class-7.pages.dev/"  class="lv-card lv-sc7"><div class="lv-icon">📐</div><div class="lv-name">Class 7</div><div class="lv-sub">ସପ୍ତମ ଶ୍ରେଣୀ</div></a>
-      <a href="https://school-class-8.pages.dev/"  class="lv-card lv-sc8"><div class="lv-icon">🧪</div><div class="lv-name">Class 8</div><div class="lv-sub">ଅଷ୍ଟମ ଶ୍ରେଣୀ</div></a>
-      <a href="https://school-class-9.pages.dev/"  class="lv-card lv-sc9"><div class="lv-icon">📚</div><div class="lv-name">Class 9</div><div class="lv-sub">ନବମ ଶ୍ରେଣୀ</div></a>
-      <a href="https://school-class-10.pages.dev/" class="lv-card lv-sc10"><div class="lv-icon">🎓</div><div class="lv-name">Class 10</div><div class="lv-sub">ଦଶମ ଶ୍ରେଣୀ</div></a>
-    </div>
-  </section>
-
-  <!-- ══════════ +2 ARTS / COMMERCE / SCIENCE ══════════ -->
-  <section class="sec t-arts" id="plus2">
-    <div class="sec-hd">
-      <div class="sec-ico">📘</div>
-      <div>
-        <div class="sec-eyebrow">+2 Arts · Commerce · Science</div>
-        <div class="sec-title">+2 ଶିକ୍ଷାର୍ଥୀଙ୍କ ପାଇଁ ଡିଜିଟାଲ ବୁକ୍</div>
-      </div>
-    </div>
-
-    <div class="sub-lbl">+୨ ଶ୍ରେଣୀ — କଳା</div>
-    <div class="grid2">
-      <a href="./p2-arts-1/index.html" class="lv-card lv-arts1"><div class="lv-icon">📘</div><div class="lv-name">+୨ ପ୍ରଥମ ବର୍ଷ</div><div class="lv-sub">କଳା ବିଭାଗ</div></a>
-      <a href="https://plus-2-arts-ii.pages.dev/" class="lv-card lv-arts2"><div class="lv-icon">📗</div><div class="lv-name">+୨ ଦ୍ୱିତୀୟ ବର୍ଷ</div><div class="lv-sub">କଳା ବିଭାଗ</div></a>
-    </div>
-
-    <div class="sub-lbl" style="color:#5b21b6;">+୨ ଶ୍ରେଣୀ — ବାଣିଜ୍ୟ</div>
-    <div class="grid2">
-      <a href="./p2-commerce-1/index.html" class="lv-card lv-com1"><div class="lv-icon">💼</div><div class="lv-name">+୨ ପ୍ରଥମ ବର୍ଷ</div><div class="lv-sub">ବାଣିଜ୍ୟ ବିଭାଗ</div></a>
-      <a href="https://plus-2-com-ii.pages.dev/" class="lv-card lv-com2"><div class="lv-icon">📋</div><div class="lv-name">+୨ ଦ୍ୱିତୀୟ ବର୍ଷ</div><div class="lv-sub">ବାଣିଜ୍ୟ ବିଭାଗ</div></a>
-    </div>
-
-    <div class="sub-lbl" style="color:#065f46;">+୨ ଶ୍ରେଣୀ — ବିଜ୍ଞାନ</div>
-    <div class="grid2">
-      <a href="./p2-science-1/index.html" class="lv-card lv-sci1"><div class="lv-icon">🔬</div><div class="lv-name">+୨ ପ୍ରଥମ ବର୍ଷ</div><div class="lv-sub">ବିଜ୍ଞାନ ବିଭାଗ</div></a>
-      <a href="./p2-science-2/index.html" class="lv-card lv-sci2"><div class="lv-icon">🧪</div><div class="lv-name">+୨ ଦ୍ୱିତୀୟ ବର୍ଷ</div><div class="lv-sub">ବିଜ୍ଞାନ ବିଭାଗ</div></a>
-    </div>
-  </section>
-
-  <!-- ══════════ +3 COMMERCE / ARTS HONOURS / SCIENCE HONOURS ══════════ -->
-  <section class="sec t-com" id="plus3">
-    <div class="sec-hd">
-      <div class="sec-ico">🎓</div>
-      <div>
-        <div class="sec-eyebrow">+3 Commerce · Arts · Science Honours</div>
-        <div class="sec-title">+3 ଶିକ୍ଷାର୍ଥୀଙ୍କ ପାଇଁ ଡିଜିଟାଲ ବୁକ୍</div>
-      </div>
-    </div>
-
-    <div class="sub-lbl">+3 Commerce — 8 Semesters</div>
-    <div class="grid2">
-      <a href="./p3-commerce-sem1/index.html" class="lv-card lv-sem1"><div class="lv-icon">📘</div><div class="lv-name">Sem-1</div></a>
-      <a href="./p3-commerce-sem2/index.html" class="lv-card lv-sem2"><div class="lv-icon">📗</div><div class="lv-name">Sem-2</div></a>
-      <a href="./p3-commerce-sem3/index.html" class="lv-card lv-sem3"><div class="lv-icon">📙</div><div class="lv-name">Sem-3</div></a>
-      <a href="./p3-commerce-sem4/index.html" class="lv-card lv-sem4"><div class="lv-icon">📕</div><div class="lv-name">Sem-4</div></a>
-      <a href="./p3-commerce-sem5/index.html" class="lv-card lv-sem1"><div class="lv-icon">📓</div><div class="lv-name">Sem-5</div></a>
-      <a href="./p3-commerce-sem6/index.html" class="lv-card lv-sem2"><div class="lv-icon">📔</div><div class="lv-name">Sem-6</div></a>
-      <a href="./p3-commerce-sem7/index.html" class="lv-card lv-sem3"><div class="lv-icon">📒</div><div class="lv-name">Sem-7</div></a>
-      <a href="./p3-commerce-sem8/index.html" class="lv-card lv-sem4"><div class="lv-icon">🎓</div><div class="lv-name">Sem-8</div></a>
-    </div>
-
-    <div class="sub-lbl">+3 Arts Honours Subjects</div>
-    <div class="accordion">
-      <div class="acc-item" id="acc-polsci">
-        <div class="acc-trigger acc-polsci" onclick="toggleAcc('acc-polsci')">
-          <div class="acc-ico">🏛️</div>
-          <div class="acc-label"><div class="acc-eyebrow">8 Semesters</div><div class="acc-name">Political Science</div><div class="acc-odia">ରାଜନୀତି ବିଜ୍ଞାନ (ଅନର୍ସ)</div></div>
-          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
-        </div>
-        <div class="acc-body"><div class="grid2" id="grid-polsci"></div></div>
-      </div>
-      <div class="acc-item" id="acc-history">
-        <div class="acc-trigger acc-history" onclick="toggleAcc('acc-history')">
-          <div class="acc-ico">📜</div>
-          <div class="acc-label"><div class="acc-eyebrow">8 Semesters</div><div class="acc-name">History</div><div class="acc-odia">ଇତିହାସ (ଅନର୍ସ)</div></div>
-          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
-        </div>
-        <div class="acc-body"><div class="grid2" id="grid-history"></div></div>
-      </div>
-      <div class="acc-item" id="acc-educ">
-        <div class="acc-trigger acc-educ" onclick="toggleAcc('acc-educ')">
-          <div class="acc-ico">🎓</div>
-          <div class="acc-label"><div class="acc-eyebrow">8 Semesters</div><div class="acc-name">Education</div><div class="acc-odia">ଶିକ୍ଷା (ଅନର୍ସ)</div></div>
-          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
-        </div>
-        <div class="acc-body"><div class="grid2" id="grid-educ"></div></div>
-      </div>
-      <div class="acc-item" id="acc-psych">
-        <div class="acc-trigger acc-psych" onclick="toggleAcc('acc-psych')">
-          <div class="acc-ico">🧠</div>
-          <div class="acc-label"><div class="acc-eyebrow">8 Semesters</div><div class="acc-name">Psychology</div><div class="acc-odia">ମନୋ ବିଜ୍ଞାନ (ଅନର୍ସ)</div></div>
-          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
-        </div>
-        <div class="acc-body"><div class="grid2" id="grid-psych"></div></div>
-      </div>
-      <div class="acc-item" id="acc-econ">
-        <div class="acc-trigger acc-econ" onclick="toggleAcc('acc-econ')">
-          <div class="acc-ico">📈</div>
-          <div class="acc-label"><div class="acc-eyebrow">8 Semesters</div><div class="acc-name">Economics</div><div class="acc-odia">ଅର୍ଥନୀତି (ଅନର୍ସ)</div></div>
-          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
-        </div>
-        <div class="acc-body"><div class="grid2" id="grid-econ"></div></div>
-      </div>
-      <div class="acc-item" id="acc-socio">
-        <div class="acc-trigger acc-socio" onclick="toggleAcc('acc-socio')">
-          <div class="acc-ico">👥</div>
-          <div class="acc-label"><div class="acc-eyebrow">8 Semesters</div><div class="acc-name">Sociology</div><div class="acc-odia">ସମାଜ ବିଜ୍ଞାନ (ଅନର୍ସ)</div></div>
-          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
-        </div>
-        <div class="acc-body"><div class="grid2" id="grid-socio"></div></div>
-      </div>
-    </div>
-
-    <div class="sub-lbl" style="color:#065f46;">+3 Science Honours Subjects</div>
-    <div class="accordion">
-      <div class="acc-item" id="acc-physics">
-        <div class="acc-trigger acc-physics" onclick="toggleAcc('acc-physics')">
-          <div class="acc-ico">⚛️</div>
-          <div class="acc-label"><div class="acc-eyebrow">8 Semesters</div><div class="acc-name">Physics</div><div class="acc-odia">ପଦାର୍ଥ ବିଜ୍ଞାନ (ଅନର୍ସ)</div></div>
-          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
-        </div>
-        <div class="acc-body"><div class="grid2" id="grid-physics"></div></div>
-      </div>
-      <div class="acc-item" id="acc-chem">
-        <div class="acc-trigger acc-chem" onclick="toggleAcc('acc-chem')">
-          <div class="acc-ico">🧪</div>
-          <div class="acc-label"><div class="acc-eyebrow">8 Semesters</div><div class="acc-name">Chemistry</div><div class="acc-odia">ରସାୟନ ବିଜ୍ଞାନ (ଅନର୍ସ)</div></div>
-          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
-        </div>
-        <div class="acc-body"><div class="grid2" id="grid-chem"></div></div>
-      </div>
-      <div class="acc-item" id="acc-maths">
-        <div class="acc-trigger acc-maths" onclick="toggleAcc('acc-maths')">
-          <div class="acc-ico">📐</div>
-          <div class="acc-label"><div class="acc-eyebrow">8 Semesters</div><div class="acc-name">Mathematics</div><div class="acc-odia">ଗଣିତ (ଅନର୍ସ)</div></div>
-          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
-        </div>
-        <div class="acc-body"><div class="grid2" id="grid-maths"></div></div>
-      </div>
-      <div class="acc-item" id="acc-botany">
-        <div class="acc-trigger acc-botany" onclick="toggleAcc('acc-botany')">
-          <div class="acc-ico">🌿</div>
-          <div class="acc-label"><div class="acc-eyebrow">8 Semesters</div><div class="acc-name">Botany</div><div class="acc-odia">ଉଦ୍ଭିଦ ବିଜ୍ଞାନ (ଅନର୍ସ)</div></div>
-          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
-        </div>
-        <div class="acc-body"><div class="grid2" id="grid-botany"></div></div>
-      </div>
-      <div class="acc-item" id="acc-zoo">
-        <div class="acc-trigger acc-zoo" onclick="toggleAcc('acc-zoo')">
-          <div class="acc-ico">🐾</div>
-          <div class="acc-label"><div class="acc-eyebrow">8 Semesters</div><div class="acc-name">Zoology</div><div class="acc-odia">ପ୍ରାଣୀ ବିଜ୍ଞାନ (ଅନର୍ସ)</div></div>
-          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
-        </div>
-        <div class="acc-body"><div class="grid2" id="grid-zoo"></div></div>
-      </div>
-      <div class="acc-item" id="acc-cs">
-        <div class="acc-trigger acc-cs" onclick="toggleAcc('acc-cs')">
-          <div class="acc-ico">💻</div>
-          <div class="acc-label"><div class="acc-eyebrow">8 Semesters</div><div class="acc-name">Computer Science</div><div class="acc-odia">କମ୍ପ୍ୟୁଟର ବିଜ୍ଞାନ (ଅନର୍ସ)</div></div>
-          <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
-        </div>
-        <div class="acc-body"><div class="grid2" id="grid-cs"></div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════ LEGAL AWARENESS ══════════ -->
-  <section class="sec t-legal" id="legal">
-    <div class="sec-hd">
-      <div class="sec-ico">⚖️</div>
-      <div>
-        <div class="sec-eyebrow">Legal Awareness</div>
-        <div class="sec-title">ଆଇନ ସଚେତନତା ପାଇଁ ଡିଜିଟାଲ ବୁକ୍</div>
-      </div>
-    </div>
-    <div class="grid2">
-      <a href="https://law-constitutional.pages.dev/" class="lv-card lv-legal1"><div class="lv-icon">📜</div><div class="lv-name">Constitutional Law</div><div class="lv-sub">ସାମ୍ବିଧାନିକ ଆଇନ</div></a>
-      <a href="https://law-cpc.pages.dev/"             class="lv-card lv-legal2"><div class="lv-icon">📋</div><div class="lv-name">CPC</div><div class="lv-sub">Civil Procedure Code</div></a>
-      <a href="https://law-bnss.pages.dev/"            class="lv-card lv-legal3"><div class="lv-icon">🛡️</div><div class="lv-name">BNSS</div><div class="lv-sub">Nagarik Suraksha Sanhita</div></a>
-      <a href="https://law-bns.pages.dev/"             class="lv-card lv-legal4"><div class="lv-icon">⚖️</div><div class="lv-name">BNS</div><div class="lv-sub">Bharatiya Nyaya Sanhita</div></a>
-      <a href="https://law-bsa.pages.dev/"             class="lv-card lv-legal1"><div class="lv-icon">📚</div><div class="lv-name">BSA</div><div class="lv-sub">Bharatiya Sakshya Adhiniyam</div></a>
-      <a href="https://law-grco-civil.pages.dev/"      class="lv-card lv-legal2"><div class="lv-icon">🏛️</div><div class="lv-name">GRCO (Civil)</div><div class="lv-sub">Odisha HC — Civil</div></a>
-      <a href="https://law-grco-criminal.pages.dev/"   class="lv-card lv-legal3"><div class="lv-icon">📜</div><div class="lv-name">GRCO (Criminal)</div><div class="lv-sub">Odisha HC — Criminal</div></a>
-      <a href="https://law-fl.pages.dev/"               class="lv-card lv-legal4"><div class="lv-icon">📋</div><div class="lv-name">Family Law</div><div class="lv-sub">Hindu Marriage Act &amp; DV Act</div></a>
-    </div>
-  </section>
-
-  <!-- ══════════ SPECIAL TRAINING ══════════ -->
-  <section class="sec t-spl2" id="special">
-    <div class="sec-hd">
-      <div class="sec-ico">🌟</div>
-      <div>
-        <div class="sec-eyebrow">Special Training</div>
-        <div class="sec-title">ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ ପାଇଁ ଡିଜିଟାଲ ବୁକ୍</div>
-      </div>
-    </div>
-    <div class="grid1">
-      <a href="./special-training/index.html" class="lv-card lv-legal3 lv-wide">
-        <div class="lv-icon">🌟</div>
-        <div class="lv-name">ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ ଆପ୍</div>
-        <div class="lv-sub">English · Mathematics · Legal Awareness · Reasoning · GK · Mind Power</div>
-      </a>
-    </div>
-  </section>
-
-</div><!-- /sections -->
-
-<footer>
-  <div class="footer-brand">
-    <h3>🌹 E-Vidya Academy 🌹</h3>
-    <p>evidya.de ରେ ଉପଲବ୍ଧ ସମସ୍ତ ଡିଜିଟାଲ ବୁକ୍‌ର ପ୍ରକାଶକ ଇ-ବିଦ୍ୟା ଏକାଡେମୀ, ଏବଂ ଏହି ସମସ୍ତ ବହି ଟାପନ କୁମାର ବେହେରା ଙ୍କ ଦ୍ଵାରା ରଚିତ ।</p>
-    <p class="footer-disclaimer">ଏହି ଆପ୍ ଅଭିଭାବକଙ୍କୁ ପିଲାର ଘର ପାଠପଢ଼ାରେ ସାହାଯ୍ୟ କରିବା ପାଇଁ ତିଆରି ହୋଇଛି । ବ୍ୟବହାର, ଡାଉନଲୋଡ୍ ଓ ପଞ୍ଜୀକରଣ ସମ୍ବନ୍ଧୀୟ ନିଷ୍ପତ୍ତି ଏକ ଅଭିଭାବକ କିମ୍ବା ଅଭିଭାବକ-ସମାନ ପ୍ରାପ୍ତବୟସ୍କ ଦ୍ଵାରା ନିଆଯିବା ଉଚିତ୍ । ଏହା କୌଣସି ସରକାରୀ ବୋର୍ଡ କିମ୍ବା ଶିକ୍ଷା ବିଭାଗ ଦ୍ଵାରା ପ୍ରକାଶିତ କିମ୍ବା ସ୍ୱୀକୃତିପ୍ରାପ୍ତ ନୁହେଁ — ଏହା ଏକ ପ୍ରାଇଭେଟ୍ ସହାୟକ ପଦକ୍ଷେପ ମାତ୍ର ।</p>
+  <div id="navRowFixed">
+    <button id="navBackBtn" class="nav-half-btn">⬅ ପଛକୁ</button>
+    <button id="navFwdBtn" class="nav-half-btn">ଆଗକୁ ➡</button>
   </div>
-  <div class="footer-div"></div>
-  <div class="footer-pages">
-    <a href="index.html">🏠 Home</a>
-    <a href="About/">About</a>
-    <a href="Contact/">Contact</a>
-    <a href="Terms/">Terms</a>
-    <a href="Agent-Terms/">Agent-Terms</a>
-    <a href="Disclaimer/">Disclaimer</a>
-    <a href="Privacy/">Privacy Policy</a>
-    <a href="Grievance-Redressal/">Grievance-Redressal</a>
-    <a href="https://evidya-admin.pages.dev/Agent%20registration/" target="_blank" rel="noopener noreferrer">Agent Log-in</a>
-    <a href="https://evidya.pages.dev/worker-portal" target="_blank" rel="noopener noreferrer">Worker Log-in</a>
-  </div>
-  <div class="footer-copy">© 2026 E-Vidya Academy · All Rights Reserved</div>
-</footer>
-
-</div><!-- /page -->
+</div>
 
 <script>
-// ── Accordion toggle ──
-function toggleAcc(id) {
-  const item = document.getElementById(id);
-  const open = item.classList.contains('open');
-  document.querySelectorAll('.acc-item.open').forEach(el => el.classList.remove('open'));
-  if (!open) item.classList.add('open');
-}
+/* ============ DATA (same destinations as the original link page) ============ */
 
-// ── Generate the 8-semester link grids inside each +3 honours accordion ──
-const SEM_ICONS = ['📘','📗','📙','📕','📓','📔','📒','🎓'];
-const SEM_COLS  = ['lv-sem1','lv-sem2','lv-sem3','lv-sem4','lv-sem1','lv-sem2','lv-sem3','lv-sem4'];
+const cardColors = ['#7c3aed,#5b21b6','#0e7490,#164e63','#b45309,#78350f','#be185d,#881337','#c2410c,#7c2d12','#0f766e,#134e4a'];
+function gradFor(i){ return 'linear-gradient(135deg,'+cardColors[i % cardColors.length]+')'; }
 
-function semGridHTML(basePath) {
-  let html = '';
-  for (let s = 1; s <= 8; s++) {
-    html += `<a href="./${basePath}-sem${s}/index.html" class="lv-card ${SEM_COLS[s-1]}"><div class="lv-icon">${SEM_ICONS[s-1]}</div><div class="lv-name">Sem-${s}</div></a>`;
+const SCHOOL = [
+  {n:1,  label:'ପ୍ରଥମ ଶ୍ରେଣୀ', icon:'🔢', url:'https://school-class-1.pages.dev/'},
+  {n:2,  label:'ଦ୍ୱିତୀୟ ଶ୍ରେଣୀ', icon:'✏️', url:'https://school-class-2.pages.dev/'},
+  {n:3,  label:'ତୃତୀୟ ଶ୍ରେଣୀ', icon:'📖', url:'https://school-class-3.pages.dev/'},
+  {n:4,  label:'ଚତୁର୍ଥ ଶ୍ରେଣୀ', icon:'📝', url:'https://school-class-4.pages.dev/'},
+  {n:5,  label:'ପଞ୍ଚମ ଶ୍ରେଣୀ', icon:'🔬', url:'https://school-class-5.pages.dev/'},
+  {n:6,  label:'ଷଷ୍ଠ ଶ୍ରେଣୀ', icon:'🌍', url:'https://school-class-6.pages.dev/'},
+  {n:7,  label:'ସପ୍ତମ ଶ୍ରେଣୀ', icon:'📐', url:'https://school-class-7.pages.dev/'},
+  {n:8,  label:'ଅଷ୍ଟମ ଶ୍ରେଣୀ', icon:'🧪', url:'https://school-class-8.pages.dev/'},
+  {n:9,  label:'ନବମ ଶ୍ରେଣୀ', icon:'📚', url:'https://school-class-9.pages.dev/'},
+  {n:10, label:'ଦଶମ ଶ୍ରେଣୀ', icon:'🎓', url:'https://school-class10.pages.dev/'}
+];
+
+const PLUS2 = {
+  arts:{ name:'କଳା', items:[
+    {title:'+୨ ପ୍ରଥମ ବର୍ଷ', sub:'କଳା ବିଭାଗ', icon:'📘', url:'./p2-arts-1/index.html'},
+    {title:'+୨ ଦ୍ୱିତୀୟ ବର୍ଷ', sub:'କଳା ବିଭାଗ', icon:'📗', url:'https://plus-2-arts-ii.pages.dev/'}
+  ]},
+  commerce:{ name:'ବାଣିଜ୍ୟ', items:[
+    {title:'+୨ ପ୍ରଥମ ବର୍ଷ', sub:'ବାଣିଜ୍ୟ ବିଭାଗ', icon:'💼', url:'./p2-commerce-1/index.html'},
+    {title:'+୨ ଦ୍ୱିତୀୟ ବର୍ଷ', sub:'ବାଣିଜ୍ୟ ବିଭାଗ', icon:'📋', url:'https://plus-2-com-ii.pages.dev/'}
+  ]},
+  science:{ name:'ବିଜ୍ଞାନ', items:[
+    {title:'+୨ ପ୍ରଥମ ବର୍ଷ', sub:'ବିଜ୍ଞାନ ବିଭାଗ', icon:'🔬', url:'./p2-science-1/index.html'},
+    {title:'+୨ ଦ୍ୱିତୀୟ ବର୍ଷ', sub:'ବିଜ୍ଞାନ ବିଭାଗ', icon:'🧪', url:'./p2-science-2/index.html'}
+  ]}
+};
+
+const ARTS_HON = [
+  {name:'Political Science',      odia:'ରାଜନୀତି ବିଜ୍ଞାନ (ଅନର୍ସ)',       icon:'🏛️', path:'p3-arts-polsci'},
+  {name:'History',                odia:'ଇତିହାସ (ଅନର୍ସ)',                icon:'📜', path:'p3-arts-history'},
+  {name:'Education',              odia:'ଶିକ୍ଷା (ଅନର୍ସ)',                icon:'🎓', path:'p3-arts-education'},
+  {name:'Psychology',             odia:'ମନୋ ବିଜ୍ଞାନ (ଅନର୍ସ)',           icon:'🧠', path:'p3-arts-psychology'},
+  {name:'Economics',              odia:'ଅର୍ଥନୀତି (ଅନର୍ସ)',              icon:'📈', path:'p3-arts-economics'},
+  {name:'Sociology',              odia:'ସମାଜ ବିଜ୍ଞାନ (ଅନର୍ସ)',          icon:'👥', path:'p3-arts-sociology'},
+  {name:'Home Science',           odia:'ଗୃହ ବିଜ୍ଞାନ (ଅନର୍ସ)',           icon:'🏠', path:'p3-arts-homescience'},
+  {name:'Philosophy',             odia:'ଦର୍ଶନ (ଅନର୍ସ)',                 icon:'🦉', path:'p3-arts-philosophy'},
+  {name:'English',                odia:'ଇଂରାଜୀ (ଅନର୍ସ)',                icon:'📖', path:'p3-arts-english'},
+  {name:'Public Administration',  odia:'ଲୋକ ପ୍ରଶାସନ (ଅନର୍ସ)',           icon:'🏢', path:'p3-arts-publicadmin'}
+];
+const SCI_HON = [
+  {name:'Physics',              odia:'ପଦାର୍ଥ ବିଜ୍ଞାନ (ଅନର୍ସ)',     icon:'⚛️', path:'p3-science-physics'},
+  {name:'Chemistry',            odia:'ରସାୟନ ବିଜ୍ଞାନ (ଅନର୍ସ)',      icon:'🧪', path:'p3-science-chemistry'},
+  {name:'Botany',               odia:'ଉଦ୍ଭିଦ ବିଜ୍ଞାନ (ଅନର୍ସ)',     icon:'🌿', path:'p3-science-botany'},
+  {name:'Zoology',               odia:'ପ୍ରାଣୀ ବିଜ୍ଞାନ (ଅନର୍ସ)',     icon:'🐾', path:'p3-science-zoology'},
+  {name:'Computer Science',     odia:'କମ୍ପ୍ୟୁଟର ବିଜ୍ଞାନ (ଅନର୍ସ)',  icon:'💻', path:'p3-science-compsci'},
+  {name:'Environmental Science', odia:'ପରିବେଶ ବିଜ୍ଞାନ (ଅନର୍ସ)',     icon:'🌱', path:'p3-science-envscience'}
+];
+
+const LEGAL = [
+  {title:'Constitutional Law', sub:'ସାମ୍ବିଧାନିକ ଆଇନ', icon:'📜', url:'https://law-constitutional.pages.dev/'},
+  {title:'CPC',  sub:'Civil Procedure Code', icon:'📋', url:'https://law-cpc.pages.dev/'},
+  {title:'BNSS', sub:'Nagarik Suraksha Sanhita', icon:'🛡️', url:'https://law-bnss.pages.dev/'},
+  {title:'BNS',  sub:'Bharatiya Nyaya Sanhita', icon:'⚖️', url:'https://law-bns.pages.dev/'},
+  {title:'BSA',  sub:'Bharatiya Sakshya Adhiniyam', icon:'📚', url:'https://law-bsa.pages.dev/'},
+  {title:'GRCO (Civil)',    sub:'Odisha HC — Civil',    icon:'🏛️', url:'https://law-grco-civil.pages.dev/'},
+  {title:'GRCO (Criminal)', sub:'Odisha HC — Criminal', icon:'📜', url:'https://law-grco-criminal.pages.dev/'},
+  {title:'Family Law', sub:'Hindu Marriage Act & DV Act', icon:'📋', url:'https://law-fl.pages.dev/'}
+];
+
+const SPECIAL_URL = './special-training/index.html';
+
+function semItems(basePath, count){
+  const icons = ['📘','📗','📙','📕','📓','📔','📒','🎓'];
+  const arr = [];
+  for (let s = 1; s <= count; s++){
+    arr.push({ title:'Sem-'+s, sub:'ସେମିଷ୍ଟାର '+s, icon: icons[(s-1)%8], url:'./'+basePath+'-sem'+s+'/index.html' });
   }
-  return html;
+  return arr;
 }
 
-const ARTS_SUBJECTS = [
-  { grid:'grid-polsci', path:'p3-arts-polsci' },
-  { grid:'grid-history', path:'p3-arts-history' },
-  { grid:'grid-educ',    path:'p3-arts-education' },
-  { grid:'grid-psych',   path:'p3-arts-psychology' },
-  { grid:'grid-econ',    path:'p3-arts-economics' },
-  { grid:'grid-socio',   path:'p3-arts-sociology' },
-];
-const SCIENCE_SUBJECTS = [
-  { grid:'grid-physics', path:'p3-science-physics' },
-  { grid:'grid-chem',    path:'p3-science-chemistry' },
-  { grid:'grid-maths',   path:'p3-science-mathematics' },
-  { grid:'grid-botany',  path:'p3-science-botany' },
-  { grid:'grid-zoo',     path:'p3-science-zoology' },
-  { grid:'grid-cs',      path:'p3-science-compsci' },
-];
+/* ============ ODIA DATE GREETING (trimmed — no festival calendar) ============ */
+const MONTH_NAMES_OD = ['ଜାନୁୟାରୀ','ଫେବୃୟାରୀ','ମାର୍ଚ୍ଚ','ଏପ୍ରିଲ','ମଇ','ଜୁନ','ଜୁଲାଇ','ଅଗଷ୍ଟ','ସେପ୍ଟେମ୍ବର','ଅକ୍ଟୋବର','ନଭେମ୍ବର','ଡିସେମ୍ବର'];
+const WEEKDAY_NAMES_OD = ['ରବିବାର','ସୋମବାର','ମଙ୍ଗଳବାର','ବୁଧବାର','ଗୁରୁବାର','ଶୁକ୍ରବାର','ଶନିବାର'];
+function buildOdiaDatePhrase(date){
+  const y = date.getFullYear();
+  const monthName = MONTH_NAMES_OD[date.getMonth()];
+  const weekdayName = WEEKDAY_NAMES_OD[date.getDay()];
+  const dd = date.getDate();
+  return 'ଆଜି ' + y + ' ମସିହା ' + monthName + ' ମାସ ' + dd + ' ତାରିଖ, ' + weekdayName + ' ଅଟେ ।';
+}
 
-[...ARTS_SUBJECTS, ...SCIENCE_SUBJECTS].forEach(s => {
-  document.getElementById(s.grid).innerHTML = semGridHTML(s.path);
+/* ============ CORE CHAT ENGINE ============ */
+const chatLog = document.getElementById('chatLog');
+let userScrolledUp = false;
+chatLog.addEventListener('scroll', function(){
+  const distanceFromBottom = chatLog.scrollHeight - chatLog.scrollTop - chatLog.clientHeight;
+  userScrolledUp = distanceFromBottom > 60;
 });
+function scrollToBottom(opts){
+  opts = opts || {};
+  if (opts.respectUserScroll && userScrolledUp) return;
+  requestAnimationFrame(()=>{ chatLog.scrollTop = chatLog.scrollHeight + 200; });
+}
+
+let screenStack = [];
+let forwardStack = [];
+
+function newScreen(){
+  userScrolledUp = false;
+  if (chatLog.children.length){
+    screenStack.push(Array.from(chatLog.children));
+    chatLog.innerHTML = '';
+  }
+  forwardStack = [];
+  renderNavRow();
+}
+function reactivateButtons(){
+  chatLog.querySelectorAll('.qr-btn').forEach(b => { b.disabled = false; b.style.pointerEvents = ''; b.style.opacity = ''; });
+}
+function goBack(){
+  if (!screenStack.length) return;
+  userScrolledUp = false;
+  forwardStack.push(Array.from(chatLog.children));
+  chatLog.innerHTML = '';
+  screenStack.pop().forEach(n => chatLog.appendChild(n));
+  reactivateButtons(); renderNavRow(); scrollToBottom();
+}
+function goForward(){
+  if (!forwardStack.length) return;
+  userScrolledUp = false;
+  screenStack.push(Array.from(chatLog.children));
+  chatLog.innerHTML = '';
+  forwardStack.pop().forEach(n => chatLog.appendChild(n));
+  reactivateButtons(); renderNavRow(); scrollToBottom();
+}
+const navBackBtn = document.getElementById('navBackBtn');
+const navFwdBtn = document.getElementById('navFwdBtn');
+navBackBtn.onclick = goBack;
+navFwdBtn.onclick = goForward;
+function renderNavRow(){
+  navBackBtn.disabled = !screenStack.length;
+  navFwdBtn.disabled = !forwardStack.length;
+}
+
+function showTypingIndicator(){
+  const row = document.createElement('div');
+  row.className = 'msg-row typing-row';
+  row.id = 'typingRow';
+  row.innerHTML = '<img class="msg-avatar" src="https://raw.githubusercontent.com/happysangitanms/assets/main/bot%20image-2.gif" onerror="this.style.display=\'none\'"><div class="bubble bot"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+  chatLog.appendChild(row);
+  scrollToBottom();
+}
+function removeTypingIndicator(){ const r = document.getElementById('typingRow'); if (r) r.remove(); }
+
+function botSay(text, opts){
+  opts = opts || {};
+  return new Promise(resolve => {
+    if (!opts.sameScreen) newScreen();
+    showTypingIndicator();
+    setTimeout(()=>{
+      removeTypingIndicator();
+      const row = document.createElement('div');
+      row.className = 'msg-row';
+      row.innerHTML = '<img class="msg-avatar" src="https://raw.githubusercontent.com/happysangitanms/assets/main/bot%20image-2.gif" onerror="this.style.display=\'none\'"><div class="bubble bot"><span class="type-target"></span><span class="type-cursor"></span></div>';
+      chatLog.appendChild(row);
+      scrollToBottom();
+      const target = row.querySelector('.type-target');
+      const cursor = row.querySelector('.type-cursor');
+      let i = 0;
+      const speed = opts.speed || 16;
+      function tick(){
+        if (i <= text.length){
+          target.textContent = text.slice(0, i);
+          i++;
+          scrollToBottom({respectUserScroll:true});
+          setTimeout(tick, speed);
+        } else {
+          cursor.remove();
+          renderNavRow();
+          resolve();
+        }
+      }
+      tick();
+    }, opts.thinkDelay === undefined ? 450 : opts.thinkDelay);
+  });
+}
+
+function addQuickReplies(options){
+  const wrap = document.createElement('div');
+  wrap.className = 'qr-wrap';
+  options.forEach(o => {
+    const btn = document.createElement('button');
+    btn.className = 'qr-btn' + (o.className ? ' ' + o.className : '');
+    btn.textContent = o.label;
+    btn.onclick = () => {
+      wrap.querySelectorAll('.qr-btn').forEach(b => { b.disabled = true; b.style.pointerEvents = 'none'; b.style.opacity = '0.55'; });
+      o.onClick();
+    };
+    wrap.appendChild(btn);
+  });
+  chatLog.appendChild(wrap);
+  renderNavRow(); scrollToBottom();
+  return wrap;
+}
+
+function addCardGrid(cards){
+  const wrap = document.createElement('div');
+  wrap.className = 'menu-card-grid';
+  cards.forEach(c => {
+    const el = document.createElement('div');
+    el.className = 'menu-card';
+    el.style.background = c.bg;
+    el.innerHTML = '<div class="mc-icon">'+c.icon+'</div><div class="mc-title">'+c.title+'</div>' + (c.sub ? '<div class="mc-sub">'+c.sub+'</div>' : '');
+    el.onclick = c.onClick;
+    wrap.appendChild(el);
+  });
+  chatLog.appendChild(wrap);
+  renderNavRow(); scrollToBottom();
+  return wrap;
+}
+
+function addEnterCard(title, href){
+  const isExternal = /^https?:\/\//i.test(href);
+  const a = document.createElement('a');
+  a.className = 'enter-card';
+  a.href = href;
+  a.innerHTML =
+    '<div class="ec-label">👆 Tap to Enter</div>' +
+    '<div class="ec-title">'+title+'</div>' +
+    '<div class="ec-prompt">ଖୋଲିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ →</div>' +
+    '<div class="ec-feedback"></div>';
+  a.onclick = function(e){
+    e.preventDefault();
+    a.classList.add('clicked');
+    setTimeout(()=>{
+      a.classList.remove('clicked');
+      if (isExternal) window.open(href, '_blank');
+      else window.location.href = href;
+    }, 500);
+  };
+  chatLog.appendChild(a);
+  renderNavRow(); scrollToBottom();
+  return a;
+}
+
+async function confirmEnter(title, url, backFn){
+  await botSay('ବହୁତ ଭଲ! "' + title + '" ଖୋଲିବାକୁ ପ୍ରସ୍ତୁତ ଅଛି । ତଳେ ଥିବା ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ ।');
+  addEnterCard(title, url);
+  addQuickReplies([{ label: '← ପଛକୁ ଫେରନ୍ତୁ', onClick: backFn }]);
+}
+
+/* ============ CONVERSATION FLOW ============ */
+async function openMainMenu(sameScreen){
+  await botSay('ଆପଣ କେଉଁ ବିଭାଗ ଦେଖିବାକୁ ଚାହୁଁଛନ୍ତି ?', { sameScreen: !!sameScreen });
+  addQuickReplies([
+    { label: '🏫 ସ୍କୁଲ୍ (ପ୍ରଥମ ଶ୍ରେଣୀ ରୁ ଦଶମ ଶ୍ରେଣୀ)', className:'qj-school', onClick: () => askSchool() },
+    { label: '📘 +୨ (କଳା · ବାଣିଜ୍ୟ · ବିଜ୍ଞାନ)', className:'qj-p2', onClick: () => askPlus2() },
+    { label: '🎓 +୩ (ବାଣିଜ୍ୟ · କଳା · ବିଜ୍ଞାନ ଅନର୍ସ)', className:'qj-p3', onClick: () => askPlus3() },
+    { label: '⚖️ ଆଇନ ସଚେତନତା', className:'qj-legal', onClick: () => askLegal() },
+    { label: '🌟 ସାଧାରଣ ଇଂରାଜୀ, ଯୁକ୍ତି ଦକ୍ଷତା ଏବଂ ମାନସିକ ଶକ୍ତିର ବିକାଶ ପାଇଁ ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ', className:'qj-special', onClick: () => askSpecial() }
+  ]);
+}
+
+async function askSchool(){
+  await botSay('ସ୍କୁଲ୍ ଶିକ୍ଷାର୍ଥୀଙ୍କ ପାଇଁ କେଉଁ ଶ୍ରେଣୀ ଖୋଲିବେ ?');
+  const cards = SCHOOL.map((c,i) => ({
+    title: 'Class ' + c.n, sub: c.label, icon: c.icon, bg: gradFor(i),
+    onClick: () => confirmEnter('Class ' + c.n + ' — ' + c.label, c.url, () => askSchool())
+  }));
+  addCardGrid(cards);
+  addQuickReplies([{ label: '← ମୁଖ୍ୟ ମେନୁକୁ ଫେରନ୍ତୁ', onClick: () => openMainMenu() }]);
+}
+
+async function askPlus2(){
+  await botSay('+୨ ଶ୍ରେଣୀରେ କେଉଁ ବିଭାଗ ପଢିବେ ?');
+  addQuickReplies([
+    { label: '📘 କଳା', onClick: () => showPlus2Stream('arts') },
+    { label: '💼 ବାଣିଜ୍ୟ', onClick: () => showPlus2Stream('commerce') },
+    { label: '🔬 ବିଜ୍ଞାନ', onClick: () => showPlus2Stream('science') },
+    { label: '← ମୁଖ୍ୟ ମେନୁ', onClick: () => openMainMenu() }
+  ]);
+}
+async function showPlus2Stream(key){
+  const g = PLUS2[key];
+  await botSay('+୨ ' + g.name + ' — କେଉଁ ବର୍ଷ ଖୋଲିବେ ?');
+  const cards = g.items.map((it,i) => ({
+    title: it.title, sub: it.sub, icon: it.icon, bg: gradFor(i),
+    onClick: () => confirmEnter(it.title, it.url, () => showPlus2Stream(key))
+  }));
+  addCardGrid(cards);
+  addQuickReplies([{ label: '← ଅନ୍ୟ ବିଭାଗ', onClick: () => askPlus2() }]);
+}
+
+async function askPlus3(){
+  await botSay('+୩ ଶ୍ରେଣୀରେ କେଉଁ ବିଭାଗ ପଢିବେ ?');
+  addQuickReplies([
+    { label: '💼 ବାଣିଜ୍ୟ ଅନର୍ସ', onClick: () => showPlus3Commerce() },
+    { label: '📜 କଳା ଅନର୍ସ', onClick: () => showHonoursSubjects('arts') },
+    { label: '🔬 ବିଜ୍ଞାନ ଅନର୍ସ', onClick: () => showHonoursSubjects('science') },
+    { label: '← ମୁଖ୍ୟ ମେନୁ', onClick: () => openMainMenu() }
+  ]);
+}
+async function showPlus3Commerce(){
+  await botSay('ବାଣିଜ୍ୟ — କେଉଁ ସେମିଷ୍ଟାର ଖୋଲିବେ ?');
+  const cards = semItems('p3-commerce', 8).map((it,i) => ({
+    title: it.title, sub: it.sub, icon: it.icon, bg: gradFor(i),
+    onClick: () => confirmEnter('Commerce ' + it.title, it.url, () => showPlus3Commerce())
+  }));
+  addCardGrid(cards);
+  addQuickReplies([{ label: '← ପଛକୁ', onClick: () => askPlus3() }]);
+}
+async function showHonoursSubjects(stream){
+  const list = stream === 'arts' ? ARTS_HON : SCI_HON;
+  await botSay((stream === 'arts' ? 'କଳା' : 'ବିଜ୍ଞାନ') + ' ଅନର୍ସ — କେଉଁ ବିଷୟ ପଢିବେ ?');
+  const cards = list.map((s,i) => ({
+    title: s.name, sub: s.odia, icon: s.icon, bg: gradFor(i),
+    onClick: () => showHonoursSemesters(stream, s)
+  }));
+  addCardGrid(cards);
+  addQuickReplies([{ label: '← ପଛକୁ', onClick: () => askPlus3() }]);
+}
+async function showHonoursSemesters(stream, subj){
+  await botSay(subj.name + ' (' + subj.odia + ') — କେଉଁ ସେମିଷ୍ଟାର ଖୋଲିବେ ?');
+  const cards = semItems(subj.path, 8).map((it,i) => ({
+    title: it.title, sub: it.sub, icon: it.icon, bg: gradFor(i),
+    onClick: () => confirmEnter(subj.name + ' ' + it.title, it.url, () => showHonoursSemesters(stream, subj))
+  }));
+  addCardGrid(cards);
+  addQuickReplies([{ label: '← ଅନ୍ୟ ବିଷୟ', onClick: () => showHonoursSubjects(stream) }]);
+}
+
+async function askLegal(){
+  await botSay('ଆଇନ ସଚେତନତା ପାଇଁ କେଉଁ ବିଷୟ ଖୋଲିବେ ?');
+  const cards = LEGAL.map((it,i) => ({
+    title: it.title, sub: it.sub, icon: it.icon, bg: gradFor(i),
+    onClick: () => confirmEnter(it.title, it.url, () => askLegal())
+  }));
+  addCardGrid(cards);
+  addQuickReplies([{ label: '← ମୁଖ୍ୟ ମେନୁ', onClick: () => openMainMenu() }]);
+}
+
+async function askSpecial(){
+  await confirmEnter('ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ ବହି', SPECIAL_URL, () => openMainMenu());
+}
+
+/* ============ BOOT ============ */
+async function startConversation(){
+  await botSay('🌹 ଇ-ବିଦ୍ୟା ଏକାଡେମୀରେ ଆପଣଙ୍କୁ ସ୍ଵାଗତ! ମୁଁ ଆପଣଙ୍କ ପାଠ୍ୟ ସହାୟକ । ଚାଲନ୍ତୁ ଆଗକୁ ବଢିବା ।', { sameScreen:true });
+  await openMainMenu(true);
+}
+
+function setAppHeight(){
+  const vh = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+  document.documentElement.style.setProperty('--app-height', vh + 'px');
+}
+setAppHeight();
+window.addEventListener('resize', setAppHeight);
+window.addEventListener('orientationchange', setAppHeight);
+if (window.visualViewport) window.visualViewport.addEventListener('resize', setAppHeight);
+
+startConversation();
 </script>
 </body>
 </html>
