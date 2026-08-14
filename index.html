@@ -352,10 +352,13 @@ function addEnterCard(title, href){
   return a;
 }
 
-async function confirmEnter(title, url, backFn){
-  await botSay('ବହୁତ ଭଲ! "' + title + '" ଖୋଲିବାକୁ ପ୍ରସ୍ତୁତ ଅଛି । ତଳେ ଥିବା ବଟନ୍‌ରେ କ୍ଲିକ୍ କରନ୍ତୁ ।');
-  addEnterCard(title, url);
-  addQuickReplies([{ label: '← ପଛକୁ ଫେରନ୍ତୁ', onClick: backFn }]);
+function confirmEnter(title, url, backFn){
+  const isExternal = /^https?:\/\//i.test(url);
+  if (isExternal) {
+    window.open(url, '_blank');
+  } else {
+    window.location.href = url;
+  }
 }
 
 /* ============ CONVERSATION FLOW ============ */
