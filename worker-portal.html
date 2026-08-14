@@ -324,13 +324,15 @@ async function downloadMyPerformancePDF() {
 function isNonEmptyStr(v) { return typeof v === 'string' && v.length > 0; }
 
 const FILE_SCHEMAS = {
-  'worddata.js': { check: o =>
+ 'worddata.js': { check: o =>
     typeof o.currentWord === 'number' &&
     Array.isArray(o.words) && o.words.length > 0 &&
     o.words.every(w =>
-      isNonEmptyStr(w.word) && isNonEmptyStr(w.odia) && isNonEmptyStr(w.emoji) && isNonEmptyStr(w.odiaUse) &&
+      isNonEmptyStr(w.word) && isNonEmptyStr(w.odia) && isNonEmptyStr(w.emoji) &&
+      isNonEmptyStr(w.what) && isNonEmptyStr(w.why) && isNonEmptyStr(w.when) &&
+      isNonEmptyStr(w.where) && isNonEmptyStr(w.how) &&
       w.audio && isNonEmptyStr(w.audio.intro) && isNonEmptyStr(w.audio.encourage) && isNonEmptyStr(w.audio.praise) &&
-      Object.keys(w).length === 5 && Object.keys(w.audio).length === 3
+      Object.keys(w).length === 9 && Object.keys(w.audio).length === 3
     )
   },
   'truefalse.js': { check: o =>
@@ -443,7 +445,11 @@ function formatWordData(data) {
             word: ${J(w.word)},
             odia: ${J(w.odia)},
             emoji: ${J(w.emoji)},
-            odiaUse: ${J(w.odiaUse)},
+            what: ${J(w.what)},
+            why: ${J(w.why)},
+            when: ${J(w.when)},
+            where: ${J(w.where)},
+            how: ${J(w.how)},
             audio: { intro: ${J(w.audio.intro)}, encourage: ${J(w.audio.encourage)}, praise: ${J(w.audio.praise)} }
         }`).join(',\n');
   return `{
