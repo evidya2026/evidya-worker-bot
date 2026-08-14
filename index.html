@@ -57,6 +57,7 @@ body{
 .qr-btn.qj-legal{background:linear-gradient(135deg,#7f1d1d,#b91c1c);color:#fff;border-color:transparent;}
 .qr-btn.qj-special{background:linear-gradient(135deg,#065f46,#059669);color:#fff;border-color:transparent;}
 
+  
 /* menu / selection cards — made bigger */
 .menu-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:2px 0 6px 38px;width:calc(100% - 38px);}
 .menu-card{border-radius:16px;padding:20px 14px;color:#fff;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.25);text-align:center;transition:transform .15s ease;}
@@ -64,6 +65,18 @@ body{
 .menu-card .mc-icon{font-size:30px;margin-bottom:8px;line-height:1;}
 .menu-card .mc-title{font-size:15.5px;font-weight:900;line-height:1.35;}
 .menu-card .mc-sub{font-size:12px;font-weight:700;opacity:0.92;margin-top:4px;line-height:1.4;}
+
+  .school-btn-grid{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:8px;
+  margin:2px 0 6px 38px;width:calc(100% - 38px);
+}
+.school-btn{
+  border:none;border-radius:12px;padding:14px 2px;color:#fff;
+  font-size:13.5px;font-weight:900;cursor:pointer;text-align:center;
+  line-height:1.25;box-shadow:0 4px 10px rgba(0,0,0,0.18);
+  white-space:normal;word-break:keep-all;
+}
+.school-btn:active{transform:scale(0.94);}
 
 /* enter card (tap to open a link) */
 @keyframes ecPulse{0%,100%{box-shadow:0 8px 20px rgba(245,158,11,0.6),0 0 0 0 rgba(245,158,11,0.7);}50%{box-shadow:0 8px 30px rgba(245,158,11,0.8),0 0 0 12px rgba(245,158,11,0);}}
@@ -117,16 +130,16 @@ const cardColors = ['#7c3aed,#5b21b6','#0e7490,#164e63','#b45309,#78350f','#be18
 function gradFor(i){ return 'linear-gradient(135deg,'+cardColors[i % cardColors.length]+')'; }
 
 const SCHOOL = [
-  {n:1,  label:'ପ୍ରଥମ ଶ୍ରେଣୀ', icon:'🔢', url:'https://school-class1.pages.dev/'},
-  {n:2,  label:'ଦ୍ୱିତୀୟ ଶ୍ରେଣୀ', icon:'✏️', url:'https://school-class2.pages.dev/'},
-  {n:3,  label:'ତୃତୀୟ ଶ୍ରେଣୀ', icon:'📖', url:'https://school-class3.pages.dev/'},
-  {n:4,  label:'ଚତୁର୍ଥ ଶ୍ରେଣୀ', icon:'📝', url:'https://school-class4.pages.dev/'},
-  {n:5,  label:'ପଞ୍ଚମ ଶ୍ରେଣୀ', icon:'🔬', url:'https://school-class5.pages.dev/'},
-  {n:6,  label:'ଷଷ୍ଠ ଶ୍ରେଣୀ', icon:'🌍', url:'https://school-class6.pages.dev/'},
-  {n:7,  label:'ସପ୍ତମ ଶ୍ରେଣୀ', icon:'📐', url:'https://school-class7.pages.dev/'},
-  {n:8,  label:'ଅଷ୍ଟମ ଶ୍ରେଣୀ', icon:'🧪', url:'https://school-class8.pages.dev/'},
-  {n:9,  label:'ନବମ ଶ୍ରେଣୀ', icon:'📚', url:'https://school-class-9.pages.dev/'},
-  {n:10, label:'ଦଶମ ଶ୍ରେଣୀ', icon:'🎓', url:'https://school-class10.pages.dev/'}
+  {n:1,  short:'ପ୍ରଥମ',   label:'ପ୍ରଥମ ଶ୍ରେଣୀ',   url:'https://school-class1.pages.dev/'},
+  {n:2,  short:'ଦ୍ୱିତୀୟ', label:'ଦ୍ୱିତୀୟ ଶ୍ରେଣୀ', url:'https://school-class2.pages.dev/'},
+  {n:3,  short:'ତୃତୀୟ',   label:'ତୃତୀୟ ଶ୍ରେଣୀ',   url:'https://school-class3.pages.dev/'},
+  {n:4,  short:'ଚତୁର୍ଥ',  label:'ଚତୁର୍ଥ ଶ୍ରେଣୀ',  url:'https://school-class4.pages.dev/'},
+  {n:5,  short:'ପଞ୍ଚମ',   label:'ପଞ୍ଚମ ଶ୍ରେଣୀ',   url:'https://school-class5.pages.dev/'},
+  {n:6,  short:'ଷଷ୍ଠ',    label:'ଷଷ୍ଠ ଶ୍ରେଣୀ',    url:'https://school-class6.pages.dev/'},
+  {n:7,  short:'ସପ୍ତମ',   label:'ସପ୍ତମ ଶ୍ରେଣୀ',   url:'https://school-class7.pages.dev/'},
+  {n:8,  short:'ଅଷ୍ଟମ',   label:'ଅଷ୍ଟମ ଶ୍ରେଣୀ',   url:'https://school-class8.pages.dev/'},
+  {n:9,  short:'ନବମ',     label:'ନବମ ଶ୍ରେଣୀ',     url:'https://school-class-9.pages.dev/'},
+  {n:10, short:'ଦଶମ',     label:'ଦଶମ ଶ୍ରେଣୀ',     url:'https://school-class10.pages.dev/'}
 ];
 
 const PLUS2 = {
@@ -631,14 +644,21 @@ async function openMainMenu(sameScreen){
 
 async function askSchool(){
   await botSay('ସ୍କୁଲ୍ ଶିକ୍ଷାର୍ଥୀଙ୍କ ପାଇଁ କେଉଁ ଶ୍ରେଣୀ ଖୋଲିବେ ?');
-  const cards = SCHOOL.map((c,i) => ({
-    title: 'Class ' + c.n, sub: c.label, icon: c.icon, bg: gradFor(i),
-    onClick: () => confirmEnter('Class ' + c.n + ' — ' + c.label, c.url, () => askSchool())
-  }));
-  addCardGrid(cards);
+  const wrap = document.createElement('div');
+  wrap.className = 'school-btn-grid';
+  SCHOOL.forEach((c,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'school-btn';
+    btn.style.background = gradFor(i);
+    btn.textContent = c.short;
+    btn.onclick = () => confirmEnter(c.label, c.url, () => askSchool());
+    wrap.appendChild(btn);
+  });
+  chatLog.appendChild(wrap);
+  renderNavRow(); scrollToBottom();
   addQuickReplies([{ label: '← ମୁଖ୍ୟ ମେନୁକୁ ଫେରନ୍ତୁ', onClick: () => openMainMenu() }]);
 }
-
+  
 async function askPlus2(){
   await botSay('+2 ଶ୍ରେଣୀରେ କେଉଁ ବିଭାଗ ପଢିବେ ?');
   addQuickReplies([
