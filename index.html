@@ -365,11 +365,11 @@ function confirmEnter(title, url, backFn){
 async function openMainMenu(sameScreen){
   await botSay('ଆପଣ କେଉଁ ବିଭାଗ ଦେଖିବାକୁ ଚାହୁଁଛନ୍ତି ?', { sameScreen: !!sameScreen });
   addQuickReplies([
-    { label: '🏫 ସ୍କୁଲ୍ (ପ୍ରଥମ ଶ୍ରେଣୀ ରୁ ଦଶମ ଶ୍ରେଣୀ)', className:'qj-school', onClick: () => askSchool() },
-    { label: '📘 +୨ (କଳା · ବାଣିଜ୍ୟ · ବିଜ୍ଞାନ)', className:'qj-p2', onClick: () => askPlus2() },
-    { label: '🎓 +୩ (ବାଣିଜ୍ୟ · କଳା · ବିଜ୍ଞାନ ଅନର୍ସ)', className:'qj-p3', onClick: () => askPlus3() },
-    { label: '⚖️ ଆଇନ ସଚେତନତା', className:'qj-legal', onClick: () => askLegal() },
-    { label: '🌟 ସାଧାରଣ ଇଂରାଜୀ, ଯୁକ୍ତି ଦକ୍ଷତା ଏବଂ ମାନସିକ ଶକ୍ତିର ବିକାଶ ପାଇଁ ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ', className:'qj-special', onClick: () => askSpecial() }
+    { label: '🏫 ସ୍କୁଲ୍', className:'qj-school', onClick: () => askSchool() },
+    { label: '📘 +2', className:'qj-p2', onClick: () => askPlus2() },
+    { label: '🎓 +3', className:'qj-p3', onClick: () => askPlus3() },
+    { label: '⚖️ ଆଇନ ସଚେତନତା ପାଇଁ ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ', className:'qj-legal', onClick: () => askLegal() },
+    { label: '🌟 ଇଂରାଜୀ ଜ୍ଞାନ, ଯୁକ୍ତି ଦକ୍ଷତା ଏବଂ ମାନସିକ ଶକ୍ତିର ବିକାଶ ପାଇଁ ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ', className:'qj-special', onClick: () => askSpecial() }
   ]);
 }
 
