@@ -2,441 +2,496 @@
 <html lang="or">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>ଇ-ବିଦ୍ୟା ଏକାଡେମୀ — ପାଠ ସହାୟକ</title>
-<meta name="theme-color" content="#667eea">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ଇ-ବିଦ୍ୟା ଏକାଡେମୀ</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
-body{
-  font-family:'Noto Sans Oriya',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-  background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-  display:flex;justify-content:center;
-}
-#app{
-  width:100%;max-width:520px;height:100vh;height:var(--app-height,100vh);
-  background:#eef0fb;display:flex;flex-direction:column;box-shadow:0 0 40px rgba(0,0,0,0.25);
-}
-.chat-header{
-  background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-  padding:14px 16px;display:flex;align-items:center;gap:12px;
-  box-shadow:0 4px 14px rgba(0,0,0,0.15);position:sticky;top:0;z-index:50;
-}
-.chat-header img{width:42px;height:42px;border-radius:50%;background:white;object-fit:contain;}
-.chat-header .h-title{color:white;font-weight:900;font-size:15px;line-height:1.3;}
-.chat-header .h-sub{color:rgba(255,255,255,0.85);font-size:11.5px;font-weight:600;}
-.reload-btn{
-  margin-left:auto;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.4);
-  color:white;font-size:12.5px;font-weight:800;padding:8px 12px;border-radius:20px;cursor:pointer;
+:root {
+  --navy:    #07111f;
+  --gold:    #c8962a;
+  --gold-lt: #e4b84a;
+  --white:   #ffffff;
+  --bg:      #f0f4f8;
+  --border:  #e2e8f2;
+  --slate:   #4a5568;
+  --text:    #1a2438;
 }
 
-#chatLog{flex:1;overflow-y:auto;padding:16px 12px 76px;overscroll-behavior-y:contain;}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
-.msg-row{display:flex;gap:8px;align-items:flex-end;animation:msgIn 0.35s ease-out;}
-@keyframes msgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-.msg-avatar{width:30px;height:30px;border-radius:50%;flex-shrink:0;background:white;object-fit:contain;box-shadow:0 2px 6px rgba(0,0,0,0.2);}
-.bubble{max-width:78%;padding:11px 14px;border-radius:16px;font-size:14.5px;line-height:1.55;font-weight:600;white-space:pre-line;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
-.bubble.bot{max-width:calc(100% - 40px);background:white;color:#2d2d3a;border-bottom-left-radius:4px;text-align:justify;}
-.type-cursor{display:inline-block;width:2px;height:14px;background:#764ba2;margin-left:2px;animation:blink 0.8s infinite;vertical-align:middle;}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
-
-.typing-row .bubble{padding:14px 16px;}
-.typing-dots{display:flex;gap:4px;}
-.typing-dots span{width:7px;height:7px;border-radius:50%;background:#c4c4d8;animation:tdot 1.1s infinite;}
-.typing-dots span:nth-child(2){animation-delay:0.15s;}
-.typing-dots span:nth-child(3){animation-delay:0.3s;}
-@keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:0.5;}30%{transform:translateY(-4px);opacity:1;}}
-
-.qr-wrap{display:flex;flex-wrap:wrap;gap:10px;margin:2px 0 6px 38px;}
-.qr-btn{background:white;border:2px solid #764ba2;color:#5b3d99;padding:13px 18px;border-radius:22px;font-size:14.5px;font-weight:800;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.08);}
-.qr-btn:active{transform:scale(0.96);}
-.qr-btn.qj-school{background:linear-gradient(135deg,#7b1a0a,#b22222);color:#fff;border-color:transparent;}
-.qr-btn.qj-p2{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;border-color:transparent;}
-.qr-btn.qj-p3{background:linear-gradient(135deg,#3b0764,#6d28d9);color:#fff;border-color:transparent;}
-.qr-btn.qj-legal{background:linear-gradient(135deg,#7f1d1d,#b91c1c);color:#fff;border-color:transparent;}
-.qr-btn.qj-special{background:linear-gradient(135deg,#065f46,#059669);color:#fff;border-color:transparent;}
-
-  
-/* menu / selection cards — made bigger */
-.menu-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:2px 0 6px 38px;width:calc(100% - 38px);}
-.menu-card{border-radius:16px;padding:20px 14px;color:#fff;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.25);text-align:center;transition:transform .15s ease;}
-.menu-card:active{transform:scale(0.96);}
-.menu-card .mc-icon{font-size:30px;margin-bottom:8px;line-height:1;}
-.menu-card .mc-title{font-size:15.5px;font-weight:900;line-height:1.35;}
-.menu-card .mc-sub{font-size:12px;font-weight:700;opacity:0.92;margin-top:4px;line-height:1.4;}
-
-.school-btn-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:9px;
-  margin:2px 0 6px 38px;width:calc(100% - 38px);
+html { overflow-x: hidden; max-width:100%; }
+body {
+  font-family: 'Noto Sans Oriya', sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  overflow-x: hidden;
+  max-width:100%;
 }
-.school-btn{
-  border:none;border-radius:12px;padding:12px 6px;color:#fff;
-  font-size:17px;font-weight:900;cursor:pointer;text-align:center;
-  line-height:1.2;box-shadow:0 4px 10px rgba(0,0,0,0.18);
-  white-space:normal;word-break:keep-all;
-}
-.school-btn:active{transform:scale(0.94);}
 
-/* enter card (tap to open a link) */
-@keyframes ecPulse{0%,100%{box-shadow:0 8px 20px rgba(245,158,11,0.6),0 0 0 0 rgba(245,158,11,0.7);}50%{box-shadow:0 8px 30px rgba(245,158,11,0.8),0 0 0 12px rgba(245,158,11,0);}}
-@keyframes ecShimmer{0%{left:-100%;}100%{left:100%;}}
-.enter-card{
-  margin:2px 0 6px 38px;width:calc(100% - 38px);
-  background:linear-gradient(135deg,#3b82f6,#1d4ed8);border-radius:14px;padding:16px;text-align:center;color:white;
-  box-shadow:0 8px 22px rgba(59,130,246,0.5);cursor:pointer;border:2px solid rgba(255,255,255,0.6);
-  text-decoration:none;display:block;position:relative;overflow:hidden;animation:ecPulse 2s infinite;
+body::before {
+  content:''; position:fixed; top:0; left:0; right:0; height:620px;
+  background: linear-gradient(170deg,#07111f 0%,#0c1c35 45%,#0f2548 75%,#07111f 100%);
+  z-index:0;
 }
-.enter-card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent);animation:ecShimmer 2s infinite;}
-.enter-card .ec-label{font-size:11px;font-weight:800;background:rgba(255,255,255,0.25);padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:6px;position:relative;z-index:1;}
-.enter-card .ec-title{font-size:15px;font-weight:900;position:relative;z-index:1;}
-.enter-card .ec-prompt{font-size:12px;font-weight:600;opacity:0.95;margin-top:6px;padding:5px 12px;background:rgba(255,255,255,0.25);border-radius:8px;display:inline-block;position:relative;z-index:1;}
-.enter-card .ec-feedback{position:absolute;inset:0;background:rgba(0,0,0,0.5);border-radius:14px;display:flex;justify-content:center;align-items:center;opacity:0;transform:scale(0.8);transition:all 0.3s ease;z-index:2;}
-.enter-card .ec-feedback::before{content:'';width:70px;height:70px;background:white;border-radius:50%;position:absolute;box-shadow:0 8px 30px rgba(0,0,0,0.4);}
-.enter-card .ec-feedback::after{content:'';width:16px;height:32px;border:solid #10b981;border-width:0 5px 5px 0;transform:rotate(45deg);display:block;z-index:1;}
-.enter-card.clicked .ec-feedback{opacity:1;transform:scale(1);}
+body::after {
+  content:''; position:fixed; top:0; left:0; right:0; height:620px;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(26,58,110,0.7) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 15%, rgba(200,150,42,0.13) 0%, transparent 50%);
+  z-index:0;
+}
 
-#navRowFixed{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;display:flex;z-index:55;box-shadow:0 -2px 10px rgba(0,0,0,0.12);}
-.nav-half-btn{flex:1;border:none;padding:14px 0;font-size:14px;font-weight:800;cursor:pointer;color:white;}
-#navBackBtn{background:linear-gradient(135deg,#f59e0b,#d97706);border-right:1px solid rgba(255,255,255,0.35);}
-#navFwdBtn{background:linear-gradient(135deg,#10b981,#059669);}
-.nav-half-btn:disabled{background:#e5e7eb !important;color:#a3a3af;cursor:default;}
+/* ── TOP NAV ── */
+.top-nav {
+  position:relative; z-index:2;
+  display:flex; align-items:center;
+  gap:4px 2px;
+  padding:14px 10px;
+  max-width:640px; margin:0 auto;
+  overflow-x:auto;
+  white-space:nowrap;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+}
+.top-nav::-webkit-scrollbar { display:none; }
+.top-nav a {
+  color:rgba(255,255,255,0.78);
+  text-decoration:none;
+  font-size:clamp(11px,3vw,13px);
+  font-weight:600;
+  letter-spacing:0.02em;
+  padding:7px 12px;
+  border-radius:20px;
+  transition:background 0.2s, color 0.2s;
+  white-space:nowrap;
+}
+.top-nav a.active,
+.top-nav a:hover { background:rgba(200,150,42,0.18); color:var(--gold-lt); }
+
+.page { position:relative; z-index:1; max-width:640px; margin:0 auto; padding:0 14px 40px; }
+
+header { padding:10px 0 24px; text-align:center; animation: fadeUp 0.55s ease both; }
+.logo-wrap { margin:0 auto 16px; width:100%; max-width:360px; }
+.logo-wrap img { display:block; width:100%; height:auto; border-radius:18px; mix-blend-mode:screen; }
+.academy-name {
+  font-family:'Playfair Display',serif;
+  font-size: clamp(1.7em, 7vw, 2.1em);
+  font-weight:800; color:#fff;
+  letter-spacing:0.03em;
+  text-shadow:0 3px 16px rgba(0,0,0,0.5);
+  margin-bottom:14px; line-height:1.2;
+}
+.academy-tagline {
+  font-size: clamp(0.85em, 3.6vw, 1em);
+  color: rgba(255,255,255,0.72);
+  font-weight:600; letter-spacing:0.02em;
+  margin-bottom:6px; line-height:1.5;
+}
+
+/* ── GREETING BANNER ── */
+.greeting-box {
+  background:rgba(200,150,42,0.10);
+  border:1.5px solid rgba(200,150,42,0.4);
+  border-radius:16px;
+  padding:16px 18px;
+  margin:6px 0 22px;
+  animation: fadeUp 0.5s ease 0.05s both;
+}
+.greeting-text {
+  color:#fdf3dd;
+  font-size:clamp(13.5px,3.8vw,15.5px);
+  line-height:1.7;
+  font-weight:600;
+  text-align:justify;
+  text-justify:inter-word;
+}
+
+.choose-heading {
+  font-size: clamp(1.05em,4.5vw,1.3em);
+  font-weight:800; color:#fff;
+  letter-spacing:0.04em;
+  margin:6px 0 18px;
+  text-shadow:0 2px 10px rgba(0,0,0,0.5);
+}
+.choose-heading span { color:var(--gold-lt); }
+
+/* ── MAIN MENU (home) CARDS ── */
+.home-cards { display:flex; flex-direction:column; gap:12px; margin-bottom:8px; animation:fadeUp 0.45s ease 0.1s both; }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.grid1 { display:flex; flex-direction:column; gap:10px; }
+
+.lv-card {
+  position:relative; border-radius:15px;
+  padding:18px 12px 16px;
+  text-align:center; cursor:pointer;
+  text-decoration:none; color:#fff;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  min-height:112px; overflow:hidden;
+  transition:transform 0.2s;
+  border:1px solid rgba(255,255,255,0.12);
+}
+.lv-card::before {
+  content:''; position:absolute; top:-40%; right:-15%;
+  width:110px; height:110px; border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,0.14) 0%,transparent 70%);
+  pointer-events:none;
+}
+.lv-card:active { transform:scale(0.96); }
+.lv-icon { font-size:clamp(1.9em,6.5vw,2.3em); margin-bottom:9px; line-height:1; filter:drop-shadow(0 2px 5px rgba(0,0,0,0.28)); pointer-events:none; }
+.lv-name { font-family:'Noto Sans Oriya','Playfair Display',sans-serif; font-size:clamp(0.95em,4vw,1.1em); font-weight:700; line-height:1.25; text-shadow:0 1px 6px rgba(0,0,0,0.25); pointer-events:none; }
+.lv-sub { font-size:clamp(0.75em,3vw,0.85em); opacity:0.85; margin-top:5px; font-weight:500; line-height:1.3; pointer-events:none; }
+.lv-bar { position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:26px; height:3px; border-radius:2px; background:rgba(255,255,255,0.38); pointer-events:none; }
+
+.lv-school{background:linear-gradient(145deg,#7b1a0a,#b22222);box-shadow:0 7px 24px rgba(123,26,10,0.38);}
+.lv-p2    {background:linear-gradient(145deg,#1e3a8a,#2563eb);box-shadow:0 7px 24px rgba(30,58,138,0.38);}
+.lv-p3    {background:linear-gradient(145deg,#3b0764,#6d28d9);box-shadow:0 7px 24px rgba(59,7,100,0.38);}
+.lv-legalM{background:linear-gradient(145deg,#7f1d1d,#b91c1c);box-shadow:0 7px 24px rgba(127,29,29,0.38);}
+.lv-spl   {background:linear-gradient(145deg,#065f46,#059669);box-shadow:0 7px 24px rgba(6,95,70,0.36);}
+
+.lv-arts1{background:linear-gradient(145deg,#1e3a8a,#2563eb);box-shadow:0 7px 24px rgba(30,58,138,0.38);}
+.lv-arts2{background:linear-gradient(145deg,#1e40af,#3b82f6);box-shadow:0 7px 24px rgba(30,64,175,0.36);}
+.lv-com1 {background:linear-gradient(145deg,#3b0764,#6d28d9);box-shadow:0 7px 24px rgba(59,7,100,0.38);}
+.lv-com2 {background:linear-gradient(145deg,#4c1d95,#7c3aed);box-shadow:0 7px 24px rgba(76,29,149,0.36);}
+.lv-sci1 {background:linear-gradient(145deg,#065f46,#059669);box-shadow:0 7px 24px rgba(6,95,70,0.38);}
+.lv-sci2 {background:linear-gradient(145deg,#047857,#10b981);box-shadow:0 7px 24px rgba(4,120,87,0.36);}
+.lv-sem1 {background:linear-gradient(145deg,#1e3a8a,#2563eb);box-shadow:0 6px 20px rgba(30,58,138,0.36);}
+.lv-sem2 {background:linear-gradient(145deg,#0369a1,#0ea5e9);box-shadow:0 6px 20px rgba(3,105,161,0.36);}
+.lv-sem3 {background:linear-gradient(145deg,#065f46,#059669);box-shadow:0 6px 20px rgba(6,95,70,0.36);}
+.lv-sem4 {background:linear-gradient(145deg,#3b0764,#6d28d9);box-shadow:0 6px 20px rgba(59,7,100,0.36);}
+.lv-sc1  {background:linear-gradient(145deg,#7b1a0a,#b22222);box-shadow:0 6px 20px rgba(123,26,10,0.36);}
+.lv-sc2  {background:linear-gradient(145deg,#7b1a0a,#b22222);box-shadow:0 6px 20px rgba(123,26,10,0.36);}
+.lv-sc3  {background:linear-gradient(145deg,#1e3a8a,#2563eb);box-shadow:0 6px 20px rgba(30,58,138,0.36);}
+.lv-sc4  {background:linear-gradient(145deg,#1e3a8a,#2563eb);box-shadow:0 6px 20px rgba(30,58,138,0.36);}
+.lv-sc5  {background:linear-gradient(145deg,#065f46,#059669);box-shadow:0 6px 20px rgba(6,95,70,0.36);}
+.lv-sc6  {background:linear-gradient(145deg,#065f46,#059669);box-shadow:0 6px 20px rgba(6,95,70,0.36);}
+.lv-sc7  {background:linear-gradient(145deg,#3b0764,#6d28d9);box-shadow:0 6px 20px rgba(59,7,100,0.36);}
+.lv-sc8  {background:linear-gradient(145deg,#3b0764,#6d28d9);box-shadow:0 6px 20px rgba(59,7,100,0.36);}
+.lv-sc9  {background:linear-gradient(145deg,#7f1d1d,#b91c1c);box-shadow:0 6px 20px rgba(127,29,29,0.36);}
+.lv-sc10 {background:linear-gradient(145deg,#7f1d1d,#b91c1c);box-shadow:0 6px 20px rgba(127,29,29,0.36);}
+.lv-legal{background:linear-gradient(145deg,#7f1d1d,#b91c1c);box-shadow:0 7px 24px rgba(127,29,29,0.38);}
+
+.sub-lbl {
+  font-family:'Noto Sans Oriya',sans-serif;
+  font-size: clamp(15px,4.8vw,19px);
+  font-weight:800;
+  display:flex; align-items:center; gap:10px;
+  margin:20px 0 12px;
+  padding:11px 14px;
+  border-radius:12px;
+  background:rgba(0,0,0,0.055);
+  line-height:1.3;
+  color:var(--text);
+}
+.sub-lbl:first-child { margin-top:0; }
+.sub-lbl::after { content:''; flex:1; height:2px; background:linear-gradient(to right,currentColor,transparent); opacity:0.18; }
+
+.accordion { display:flex; flex-direction:column; gap:10px; min-width:0; overflow-x:hidden; }
+.acc-item { border-radius:15px; overflow:hidden; border:1.5px solid var(--border); box-shadow:0 3px 12px rgba(7,17,31,0.08); min-width:0; }
+.acc-trigger { display:flex; align-items:center; gap:12px; padding:15px 14px; cursor:pointer; user-select:none; min-width:0; }
+.acc-trigger:active { opacity:0.88; }
+.acc-polsci {background:linear-gradient(135deg,#1e3a8a,#2563eb);}
+.acc-history{background:linear-gradient(135deg,#065f46,#059669);}
+.acc-educ   {background:linear-gradient(135deg,#0369a1,#0ea5e9);}
+.acc-psych  {background:linear-gradient(135deg,#4c1d95,#7c3aed);}
+.acc-econ   {background:linear-gradient(135deg,#b45309,#d97706);}
+.acc-socio  {background:linear-gradient(135deg,#7b1a0a,#b22222);}
+
+.acc-ico { width:44px; height:44px; border-radius:11px; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; pointer-events:none; }
+.acc-label { flex:1; min-width:0; pointer-events:none; }
+.acc-eyebrow { font-size:clamp(10px,2.8vw,11.5px); font-weight:700; letter-spacing:0.09em; text-transform:uppercase; color:rgba(255,255,255,0.72); margin-bottom:2px; }
+.acc-name { font-family:'Noto Sans Oriya',sans-serif; font-size:clamp(15px,4.5vw,17px); font-weight:700; color:#fff; line-height:1.2; word-break: break-word; overflow-wrap: anywhere; }
+.acc-odia { font-size:clamp(12px,3.5vw,13.5px); color:rgba(255,255,255,0.8); margin-top:3px; font-weight:500; }
+.acc-chevron { width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:transform 0.3s cubic-bezier(0.4,0,0.2,1); pointer-events:none; }
+.acc-chevron svg { width:14px; height:14px; fill:none; stroke:#fff; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
+.acc-item.open .acc-chevron { transform:rotate(180deg); }
+.acc-body { max-height:0; overflow:hidden; transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1),padding 0.25s; background:#f4f6fb; padding:0 12px; min-width:0; overflow-x:hidden; }
+.acc-item.open .acc-body { max-height:1400px; padding:12px 12px 14px; }
+
+/* ── SECTION PANELS (replace bot screens; open/close like a card) ── */
+.section-panel {
+  background:#fff; border-radius:20px; padding:18px 16px 20px;
+  box-shadow:0 6px 28px rgba(7,17,31,0.11); border:1px solid var(--border);
+  margin-bottom:14px; display:none;
+}
+.section-panel.open { display:block; animation:fadeUp 0.35s ease both; }
+.section-panel-head { display:flex; align-items:center; gap:12px; margin-bottom:16px; padding-bottom:14px; border-bottom:1.5px solid var(--border); }
+.section-panel-title { font-family:'Playfair Display',serif; font-size:clamp(17px,5vw,20px); font-weight:700; color:var(--text); line-height:1.2; flex:1; }
+.section-close-btn {
+  width:34px; height:34px; border-radius:50%; border:none;
+  background:rgba(7,17,31,0.06); color:var(--slate); font-size:16px; font-weight:700;
+  display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;
+}
+.section-close-btn:active { background:rgba(7,17,31,0.14); }
+
+/* ── FOOTER ── */
+footer { background:var(--navy); border-radius:20px; padding:26px 20px 22px; margin-top:18px; border:1px solid rgba(200,150,42,0.18); box-shadow:0 8px 32px rgba(7,17,31,0.3); text-align:center; animation:fadeUp 0.5s ease 0.5s both; }
+.footer-brand h3 { font-family:'Playfair Display',serif; font-size:clamp(1em,4.5vw,1.2em); color:var(--gold-lt); font-weight:700; margin-bottom:6px; }
+.footer-brand p { font-size:clamp(0.72em,2.5vw,0.78em); color:rgba(255,255,255,0.45); line-height:1.5; }
+.footer-disclaimer { font-size:clamp(0.68em,2.4vw,0.74em); color:rgba(255,255,255,0.38); line-height:1.6; margin-top:6px; }
+.footer-div { height:1px; background:rgba(200,150,42,0.14); margin:16px 0; }
+.footer-pages { display:flex; flex-wrap:wrap; justify-content:center; gap:6px 4px; margin-bottom:14px; }
+.footer-pages a { color:rgba(255,255,255,0.6); font-size:clamp(0.72em,2.6vw,0.8em); text-decoration:none; padding:5px 10px; border-radius:14px; transition:background 0.2s,color 0.2s; }
+.footer-pages a:hover { background:rgba(200,150,42,0.14); color:var(--gold-lt); }
+.footer-copy { font-size:clamp(0.65em,2.2vw,0.72em); color:rgba(255,255,255,0.28); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+@supports (padding:max(0px)) { .page { padding-bottom:max(40px,env(safe-area-inset-bottom)); } }
+
+.acc-name, .sub-lbl, .lv-name, .lv-sub, .acc-odia, .acc-eyebrow, .greeting-text {
+  overflow-wrap: anywhere; word-break: break-word;
+}
 </style>
 </head>
 <body>
 
-<div id="app">
-  <div class="chat-header">
-    <img src="https://raw.githubusercontent.com/happysangitanms/assets/main/LOGO.png" alt="logo" onerror="this.style.display='none'">
-    <div>
-      <div class="h-title">ଇ-ବିଦ୍ୟା ଏକାଡେମୀ</div>
-      <div class="h-sub">ପାଠ ସହାୟକ · Home</div>
-    </div>
-    <button class="reload-btn" onclick="window.location.reload()" title="Reload">🔄 ପୁନଃ ଆରମ୍ଭ</button>
+<nav class="top-nav">
+  <a href="index.html" class="active">🏠 Home</a>
+  <a href="About/">About</a>
+  <a href="Contact/">Contact</a>
+  <a href="Terms/">Terms</a>
+  <a href="Agent-Terms/">Agent-Terms</a>
+  <a href="Disclaimer/">Disclaimer</a>
+  <a href="Privacy/">Privacy Policy</a>
+  <a href="Grievance-Redressal/">Grievance-Redressal</a>
+  <a href="https://evidya-admin.pages.dev/Agent%20registration/" target="_blank" rel="noopener noreferrer">Agent Log-in</a>
+  <a href="https://evidya.pages.dev/worker-portal" target="_blank" rel="noopener noreferrer">Worker Log-in</a>
+</nav>
+
+<div class="page">
+
+<header>
+  <div class="logo-wrap">
+    <img src="https://raw.githubusercontent.com/happysangitanms/assets/main/LOGO.png" alt="E-Vidya Academy Logo">
   </div>
+  <h1 class="academy-name">ଇ-ବିଦ୍ୟା ଏକାଡେମୀ</h1>
+  <div class="academy-tagline">ପିଲାମାନଙ୍କ ଅଭିଭାବକଙ୍କ ପାଇଁ ଡିଜିଟାଲ୍ ଶିକ୍ଷା ସହାୟତା — ଘରେ ପାଠପଢ଼ାରେ ସାହାଯ୍ୟ</div>
+</header>
 
-  <div id="chatLog"></div>
+<div class="greeting-box"><div class="greeting-text" id="greetingText"></div></div>
 
-  <div id="navRowFixed">
-    <button id="navBackBtn" class="nav-half-btn">⬅ ପଛକୁ</button>
-    <button id="navFwdBtn" class="nav-half-btn">ଆଗକୁ ➡</button>
+<h2 class="choose-heading">ଆପଣ କେଉଁ <span>ବିଭାଗ</span> ଦେଖିବାକୁ ଚାହୁଁଛନ୍ତି ?</h2>
+
+<!-- ══ MAIN MENU — always visible on homepage ══ -->
+<div class="home-cards">
+  <div class="grid2">
+    <div class="lv-card lv-school" onclick="openPanel('panel-school')">
+      <div class="lv-icon">🏫</div><div class="lv-name">ସ୍କୁଲ୍</div><div class="lv-bar"></div>
+    </div>
+    <div class="lv-card lv-p2" onclick="openPanel('panel-plus2')">
+      <div class="lv-icon">📘</div><div class="lv-name">+2</div><div class="lv-bar"></div>
+    </div>
+    <div class="lv-card lv-p3" onclick="openPanel('panel-plus3')">
+      <div class="lv-icon">🎓</div><div class="lv-name">+3</div><div class="lv-bar"></div>
+    </div>
+    <div class="lv-card lv-legalM" onclick="openPanel('panel-legal')">
+      <div class="lv-icon">⚖️</div><div class="lv-name">ଆଇନ ସଚେତନତା</div><div class="lv-sub">ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ</div><div class="lv-bar"></div>
+    </div>
+  </div>
+  <div class="grid1">
+    <a href="./special-training/index.html" class="lv-card lv-spl" style="min-height:96px;">
+      <div class="lv-icon">🌟</div>
+      <div class="lv-name">ଇଂରାଜୀ ଜ୍ଞାନ, ଯୁକ୍ତି ଦକ୍ଷତା ଏବଂ ମାନସିକ ଶକ୍ତିର ବିକାଶ ପାଇଁ ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ</div>
+      <div class="lv-bar"></div>
+    </a>
   </div>
 </div>
 
+<!-- ══ SCREEN: School ══ -->
+<div class="section-panel" id="panel-school">
+  <div class="section-panel-head">
+    <div class="section-panel-title">🏫 ସ୍କୁଲ୍ ଶିକ୍ଷାର୍ଥୀଙ୍କ ପାଇଁ — କେଉଁ ଶ୍ରେଣୀ ?</div>
+    <button class="section-close-btn" onclick="closePanel('panel-school')">✕</button>
+  </div>
+  <div class="grid2">
+    <a href="https://school-class1.pages.dev/"  target="_blank" rel="noopener" class="lv-card lv-sc1"><div class="lv-icon">🔢</div><div class="lv-name">Class 1</div><div class="lv-sub">ପ୍ରଥମ ଶ୍ରେଣୀ</div><div class="lv-bar"></div></a>
+    <a href="https://school-class2.pages.dev/"  target="_blank" rel="noopener" class="lv-card lv-sc2"><div class="lv-icon">✏️</div><div class="lv-name">Class 2</div><div class="lv-sub">ଦ୍ୱିତୀୟ ଶ୍ରେଣୀ</div><div class="lv-bar"></div></a>
+    <a href="https://school-class3.pages.dev/"  target="_blank" rel="noopener" class="lv-card lv-sc3"><div class="lv-icon">📖</div><div class="lv-name">Class 3</div><div class="lv-sub">ତୃତୀୟ ଶ୍ରେଣୀ</div><div class="lv-bar"></div></a>
+    <a href="https://school-class4.pages.dev/"  target="_blank" rel="noopener" class="lv-card lv-sc4"><div class="lv-icon">📝</div><div class="lv-name">Class 4</div><div class="lv-sub">ଚତୁର୍ଥ ଶ୍ରେଣୀ</div><div class="lv-bar"></div></a>
+    <a href="https://school-class5.pages.dev/"  target="_blank" rel="noopener" class="lv-card lv-sc5"><div class="lv-icon">🔬</div><div class="lv-name">Class 5</div><div class="lv-sub">ପଞ୍ଚମ ଶ୍ରେଣୀ</div><div class="lv-bar"></div></a>
+    <a href="https://school-class6.pages.dev/"  target="_blank" rel="noopener" class="lv-card lv-sc6"><div class="lv-icon">🌍</div><div class="lv-name">Class 6</div><div class="lv-sub">ଷଷ୍ଠ ଶ୍ରେଣୀ</div><div class="lv-bar"></div></a>
+    <a href="https://school-class7.pages.dev/"  target="_blank" rel="noopener" class="lv-card lv-sc7"><div class="lv-icon">📐</div><div class="lv-name">Class 7</div><div class="lv-sub">ସପ୍ତମ ଶ୍ରେଣୀ</div><div class="lv-bar"></div></a>
+    <a href="https://school-class8.pages.dev/"  target="_blank" rel="noopener" class="lv-card lv-sc8"><div class="lv-icon">🧪</div><div class="lv-name">Class 8</div><div class="lv-sub">ଅଷ୍ଟମ ଶ୍ରେଣୀ</div><div class="lv-bar"></div></a>
+    <a href="https://school-class-9.pages.dev/" target="_blank" rel="noopener" class="lv-card lv-sc9"><div class="lv-icon">📚</div><div class="lv-name">Class 9</div><div class="lv-sub">ନବମ ଶ୍ରେଣୀ</div><div class="lv-bar"></div></a>
+    <a href="https://school-class10.pages.dev/" target="_blank" rel="noopener" class="lv-card lv-sc10"><div class="lv-icon">🎓</div><div class="lv-name">Class 10</div><div class="lv-sub">ଦଶମ ଶ୍ରେଣୀ</div><div class="lv-bar"></div></a>
+  </div>
+</div>
+
+<!-- ══ SCREEN: +2 ══ -->
+<div class="section-panel" id="panel-plus2">
+  <div class="section-panel-head">
+    <div class="section-panel-title">📘 +2 ଶ୍ରେଣୀରେ କେଉଁ ବିଭାଗ ?</div>
+    <button class="section-close-btn" onclick="closePanel('panel-plus2')">✕</button>
+  </div>
+
+  <div class="sub-lbl">📘 କଳା</div>
+  <div class="grid2">
+    <a href="./p2-arts-1/index.html" class="lv-card lv-arts1"><div class="lv-icon">📘</div><div class="lv-name">ପ୍ରଥମ ବର୍ଷ</div><div class="lv-sub">କଳା ବିଭାଗ</div><div class="lv-bar"></div></a>
+    <a href="https://plus-2-arts-ii.pages.dev/" target="_blank" rel="noopener" class="lv-card lv-arts2"><div class="lv-icon">📗</div><div class="lv-name">ଦ୍ୱିତୀୟ ବର୍ଷ</div><div class="lv-sub">କଳା ବିଭାଗ</div><div class="lv-bar"></div></a>
+  </div>
+
+  <div class="sub-lbl">💼 ବାଣିଜ୍ୟ</div>
+  <div class="grid2">
+    <a href="./p2-commerce-1/index.html" class="lv-card lv-com1"><div class="lv-icon">💼</div><div class="lv-name">ପ୍ରଥମ ବର୍ଷ</div><div class="lv-sub">ବାଣିଜ୍ୟ ବିଭାଗ</div><div class="lv-bar"></div></a>
+    <a href="https://plus-2-com-ii.pages.dev/" target="_blank" rel="noopener" class="lv-card lv-com2"><div class="lv-icon">📋</div><div class="lv-name">ଦ୍ୱିତୀୟ ବର୍ଷ</div><div class="lv-sub">ବାଣିଜ୍ୟ ବିଭାଗ</div><div class="lv-bar"></div></a>
+  </div>
+
+  <div class="sub-lbl">🔬 ବିଜ୍ଞାନ</div>
+  <div class="grid2">
+    <a href="./p2-science-1/index.html" class="lv-card lv-sci1"><div class="lv-icon">🔬</div><div class="lv-name">ପ୍ରଥମ ବର୍ଷ</div><div class="lv-sub">ବିଜ୍ଞାନ ବିଭାଗ</div><div class="lv-bar"></div></a>
+    <a href="./p2-science-2/index.html" class="lv-card lv-sci2"><div class="lv-icon">🧪</div><div class="lv-name">ଦ୍ୱିତୀୟ ବର୍ଷ</div><div class="lv-sub">ବିଜ୍ଞାନ ବିଭାଗ</div><div class="lv-bar"></div></a>
+  </div>
+</div>
+
+<!-- ══ SCREEN: +3 ══ -->
+<div class="section-panel" id="panel-plus3">
+  <div class="section-panel-head">
+    <div class="section-panel-title">🎓 +3 ଶ୍ରେଣୀରେ କେଉଁ ବିଭାଗ ?</div>
+    <button class="section-close-btn" onclick="closePanel('panel-plus3')">✕</button>
+  </div>
+
+  <div class="sub-lbl">💼 ବାଣିଜ୍ୟ ଅନର୍ସ — ସେମିଷ୍ଟାର</div>
+  <div class="grid2" id="p3-commerce-grid"></div>
+
+  <div class="sub-lbl">📜 କଳା ଅନର୍ସ — ବିଷୟ</div>
+  <div class="accordion" id="p3-arts-accordion"></div>
+
+  <div class="sub-lbl">🔬 ବିଜ୍ଞାନ ଅନର୍ସ — ବିଷୟ</div>
+  <div class="accordion" id="p3-science-accordion"></div>
+</div>
+
+<!-- ══ SCREEN: Legal ══ -->
+<div class="section-panel" id="panel-legal">
+  <div class="section-panel-head">
+    <div class="section-panel-title">⚖️ ଆଇନ ସଚେତନତା ପାଇଁ — କେଉଁ ବିଷୟ ?</div>
+    <button class="section-close-btn" onclick="closePanel('panel-legal')">✕</button>
+  </div>
+  <div class="grid2">
+    <a href="https://law-constitutional.pages.dev/" target="_blank" rel="noopener" class="lv-card lv-legal"><div class="lv-icon">📜</div><div class="lv-name">Constitutional Law</div><div class="lv-sub">ସାମ୍ବିଧାନିକ ଆଇନ</div><div class="lv-bar"></div></a>
+    <a href="https://law-cpc.pages.dev/" target="_blank" rel="noopener" class="lv-card lv-legal"><div class="lv-icon">📋</div><div class="lv-name">CPC</div><div class="lv-sub">Civil Procedure Code</div><div class="lv-bar"></div></a>
+    <a href="https://law-bnss.pages.dev/" target="_blank" rel="noopener" class="lv-card lv-legal"><div class="lv-icon">🛡️</div><div class="lv-name">BNSS</div><div class="lv-sub">Nagarik Suraksha Sanhita</div><div class="lv-bar"></div></a>
+    <a href="https://law-bns.pages.dev/" target="_blank" rel="noopener" class="lv-card lv-legal"><div class="lv-icon">⚖️</div><div class="lv-name">BNS</div><div class="lv-sub">Bharatiya Nyaya Sanhita</div><div class="lv-bar"></div></a>
+    <a href="https://law-bsa.pages.dev/" target="_blank" rel="noopener" class="lv-card lv-legal"><div class="lv-icon">📚</div><div class="lv-name">BSA</div><div class="lv-sub">Bharatiya Sakshya Adhiniyam</div><div class="lv-bar"></div></a>
+    <a href="https://law-grco-civil.pages.dev/" target="_blank" rel="noopener" class="lv-card lv-legal"><div class="lv-icon">🏛️</div><div class="lv-name">GRCO (Civil)</div><div class="lv-sub">Odisha HC — Civil</div><div class="lv-bar"></div></a>
+    <a href="https://law-grco-criminal.pages.dev/" target="_blank" rel="noopener" class="lv-card lv-legal"><div class="lv-icon">📜</div><div class="lv-name">GRCO (Criminal)</div><div class="lv-sub">Odisha HC — Criminal</div><div class="lv-bar"></div></a>
+    <a href="https://law-fl.pages.dev/" target="_blank" rel="noopener" class="lv-card lv-legal"><div class="lv-icon">📋</div><div class="lv-name">Family Law</div><div class="lv-sub">Hindu Marriage Act &amp; DV Act</div><div class="lv-bar"></div></a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand">
+    <h3>🌹 E-Vidya Academy 🌹</h3>
+    <p>Private initiative · Supplementary Digital Classes for Parents &amp; Students</p>
+    <p class="footer-disclaimer">This app is designed to help parents support their child's or ward's studies at home. Decisions about downloading or using the app should be made by a parent or a parent-like adult. It is not affiliated with any government board or education department. Content is prepared with AI assistance — please cross-check with the original textbook for best results.</p>
+  </div>
+  <div class="footer-div"></div>
+  <div class="footer-pages">
+    <a href="index.html" class="active">🏠 Home</a>
+    <a href="About/">About</a>
+    <a href="Contact/">Contact</a>
+    <a href="Terms/">Terms</a>
+    <a href="Agent-Terms/">Agent-Terms</a>
+    <a href="Disclaimer/">Disclaimer</a>
+    <a href="Privacy/">Privacy Policy</a>
+    <a href="Grievance-Redressal/">Grievance-Redressal</a>
+    <a href="https://evidya-admin.pages.dev/Agent%20registration/" target="_blank" rel="noopener noreferrer">Agent Log-in</a>
+    <a href="https://evidya.pages.dev/worker-portal" target="_blank" rel="noopener noreferrer">Worker Log-in</a>
+  </div>
+  <div class="footer-copy">© 2026 E-Vidya Academy · All Rights Reserved</div>
+</footer>
+
+</div><!-- /page -->
+
 <script>
-/* ============ DATA (same destinations as the original link page) ============ */
+/* ============ PANEL (screen) OPEN/CLOSE — no chat, no typewriter ============ */
+function openPanel(id){
+  document.querySelectorAll('.section-panel.open').forEach(p => { if (p.id !== id) p.classList.remove('open'); });
+  const el = document.getElementById(id);
+  el.classList.add('open');
+  el.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+function closePanel(id){ document.getElementById(id).classList.remove('open'); }
 
-const cardColors = ['#7c3aed,#5b21b6','#0e7490,#164e63','#b45309,#78350f','#be185d,#881337','#c2410c,#7c2d12','#0f766e,#134e4a'];
-function gradFor(i){ return 'linear-gradient(135deg,'+cardColors[i % cardColors.length]+')'; }
-
-const SCHOOL = [
-  {n:1,  short:'ପ୍ରଥମ',   label:'ପ୍ରଥମ ଶ୍ରେଣୀ',   url:'https://school-class1.pages.dev/'},
-  {n:2,  short:'ଦ୍ୱିତୀୟ', label:'ଦ୍ୱିତୀୟ ଶ୍ରେଣୀ', url:'https://school-class2.pages.dev/'},
-  {n:3,  short:'ତୃତୀୟ',   label:'ତୃତୀୟ ଶ୍ରେଣୀ',   url:'https://school-class3.pages.dev/'},
-  {n:4,  short:'ଚତୁର୍ଥ',  label:'ଚତୁର୍ଥ ଶ୍ରେଣୀ',  url:'https://school-class4.pages.dev/'},
-  {n:5,  short:'ପଞ୍ଚମ',   label:'ପଞ୍ଚମ ଶ୍ରେଣୀ',   url:'https://school-class5.pages.dev/'},
-  {n:6,  short:'ଷଷ୍ଠ',    label:'ଷଷ୍ଠ ଶ୍ରେଣୀ',    url:'https://school-class6.pages.dev/'},
-  {n:7,  short:'ସପ୍ତମ',   label:'ସପ୍ତମ ଶ୍ରେଣୀ',   url:'https://school-class7.pages.dev/'},
-  {n:8,  short:'ଅଷ୍ଟମ',   label:'ଅଷ୍ଟମ ଶ୍ରେଣୀ',   url:'https://school-class8.pages.dev/'},
-  {n:9,  short:'ନବମ',     label:'ନବମ ଶ୍ରେଣୀ',     url:'https://school-class-9.pages.dev/'},
-  {n:10, short:'ଦଶମ',     label:'ଦଶମ ଶ୍ରେଣୀ',     url:'https://school-class10.pages.dev/'}
-];
-
-const PLUS2 = {
-  arts:{ name:'କଳା', items:[
-    {title:'+2 ପ୍ରଥମ ବର୍ଷ', sub:'କଳା ବିଭାଗ', icon:'📘', url:'./p2-arts-1/index.html'},
-    {title:'+2 ଦ୍ୱିତୀୟ ବର୍ଷ', sub:'କଳା ବିଭାଗ', icon:'📗', url:'https://plus-2-arts-ii.pages.dev/'}
-  ]},
-  commerce:{ name:'ବାଣିଜ୍ୟ', items:[
-    {title:'+2 ପ୍ରଥମ ବର୍ଷ', sub:'ବାଣିଜ୍ୟ ବିଭାଗ', icon:'💼', url:'./p2-commerce-1/index.html'},
-    {title:'+2 ଦ୍ୱିତୀୟ ବର୍ଷ', sub:'ବାଣିଜ୍ୟ ବିଭାଗ', icon:'📋', url:'https://plus-2-com-ii.pages.dev/'}
-  ]},
-  science:{ name:'ବିଜ୍ଞାନ', items:[
-    {title:'+2 ପ୍ରଥମ ବର୍ଷ', sub:'ବିଜ୍ଞାନ ବିଭାଗ', icon:'🔬', url:'./p2-science-1/index.html'},
-    {title:'+2 ଦ୍ୱିତୀୟ ବର୍ଷ', sub:'ବିଜ୍ଞାନ ବିଭାଗ', icon:'🧪', url:'./p2-science-2/index.html'}
-  ]}
-};
-
-const ARTS_HON = [
-  {name:'Political Science',      odia:'ରାଜନୀତି ବିଜ୍ଞାନ (ଅନର୍ସ)',       icon:'🏛️', path:'p3-arts-polsci'},
-  {name:'History',                odia:'ଇତିହାସ (ଅନର୍ସ)',                icon:'📜', path:'p3-arts-history'},
-  {name:'Education',              odia:'ଶିକ୍ଷା (ଅନର୍ସ)',                icon:'🎓', path:'p3-arts-education'},
-  {name:'Psychology',             odia:'ମନୋ ବିଜ୍ଞାନ (ଅନର୍ସ)',           icon:'🧠', path:'p3-arts-psychology'},
-  {name:'Economics',              odia:'ଅର୍ଥନୀତି (ଅନର୍ସ)',              icon:'📈', path:'p3-arts-economics'},
-  {name:'Sociology',              odia:'ସମାଜ ବିଜ୍ଞାନ (ଅନର୍ସ)',          icon:'👥', path:'p3-arts-sociology'},
-  {name:'Home Science',           odia:'ଗୃହ ବିଜ୍ଞାନ (ଅନର୍ସ)',           icon:'🏠', path:'p3-arts-homescience'},
-  {name:'Philosophy',             odia:'ଦର୍ଶନ (ଅନର୍ସ)',                 icon:'🦉', path:'p3-arts-philosophy'},
-  {name:'English',                odia:'ଇଂରାଜୀ (ଅନର୍ସ)',                icon:'📖', path:'p3-arts-english'},
-  {name:'Public Administration',  odia:'ଲୋକ ପ୍ରଶାସନ (ଅନର୍ସ)',           icon:'🏢', path:'p3-arts-publicadmin'}
-];
-const SCI_HON = [
-  {name:'Physics',              odia:'ପଦାର୍ଥ ବିଜ୍ଞାନ (ଅନର୍ସ)',     icon:'⚛️', path:'p3-science-physics'},
-  {name:'Chemistry',            odia:'ରସାୟନ ବିଜ୍ଞାନ (ଅନର୍ସ)',      icon:'🧪', path:'p3-science-chemistry'},
-  {name:'Botany',               odia:'ଉଦ୍ଭିଦ ବିଜ୍ଞାନ (ଅନର୍ସ)',     icon:'🌿', path:'p3-science-botany'},
-  {name:'Zoology',               odia:'ପ୍ରାଣୀ ବିଜ୍ଞାନ (ଅନର୍ସ)',     icon:'🐾', path:'p3-science-zoology'},
-  {name:'Computer Science',     odia:'କମ୍ପ୍ୟୁଟର ବିଜ୍ଞାନ (ଅନର୍ସ)',  icon:'💻', path:'p3-science-compsci'},
-  {name:'Environmental Science', odia:'ପରିବେଶ ବିଜ୍ଞାନ (ଅନର୍ସ)',     icon:'🌱', path:'p3-science-envscience'}
-];
-
-const LEGAL = [
-  {title:'Constitutional Law', sub:'ସାମ୍ବିଧାନିକ ଆଇନ', icon:'📜', url:'https://law-constitutional.pages.dev/'},
-  {title:'CPC',  sub:'Civil Procedure Code', icon:'📋', url:'https://law-cpc.pages.dev/'},
-  {title:'BNSS', sub:'Nagarik Suraksha Sanhita', icon:'🛡️', url:'https://law-bnss.pages.dev/'},
-  {title:'BNS',  sub:'Bharatiya Nyaya Sanhita', icon:'⚖️', url:'https://law-bns.pages.dev/'},
-  {title:'BSA',  sub:'Bharatiya Sakshya Adhiniyam', icon:'📚', url:'https://law-bsa.pages.dev/'},
-  {title:'GRCO (Civil)',    sub:'Odisha HC — Civil',    icon:'🏛️', url:'https://law-grco-civil.pages.dev/'},
-  {title:'GRCO (Criminal)', sub:'Odisha HC — Criminal', icon:'📜', url:'https://law-grco-criminal.pages.dev/'},
-  {title:'Family Law', sub:'Hindu Marriage Act & DV Act', icon:'📋', url:'https://law-fl.pages.dev/'}
-];
-
-const SPECIAL_URL = './special-training/index.html';
-
-function semItems(basePath, count){
-  const icons = ['📘','📗','📙','📕','📓','📔','📒','🎓'];
-  const arr = [];
-  for (let s = 1; s <= count; s++){
-    arr.push({ title:'Sem-'+s, sub:'ସେମିଷ୍ଟାର '+s, icon: icons[(s-1)%8], url:'./'+basePath+'-sem'+s+'/index.html' });
-  }
-  return arr;
+function toggleAcc(id){
+  const item = document.getElementById(id);
+  const open = item.classList.contains('open');
+  item.parentElement.querySelectorAll('.acc-item.open').forEach(el => el.classList.remove('open'));
+  if (!open) item.classList.add('open');
 }
 
-/* ============ ODIA DATE GREETING (with today's festival, no dropdown) ============ */
+/* ============ +3 grids/accordions (built once, same content/links as before) ============ */
+const ICONS = ['📘','📗','📙','📕','📓','📔','📒','🎓'];
+const SEM_CLASS = ['lv-sem1','lv-sem2','lv-sem3','lv-sem4'];
+
+function semCards(basePath, label){
+  let html = '';
+  for (let s = 1; s <= 8; s++){
+    html += `<a href="./${basePath}-sem${s}/index.html" class="lv-card ${SEM_CLASS[(s-1)%4]}">
+      <div class="lv-icon">${ICONS[s-1]}</div><div class="lv-name">Sem-${s}</div><div class="lv-sub">${label}</div><div class="lv-bar"></div>
+    </a>`;
+  }
+  return html;
+}
+
+document.getElementById('p3-commerce-grid').innerHTML = semCards('p3-commerce', '+3 Commerce');
+
+const ARTS_HON = [
+  {key:'polsci', name:'Political Science', odia:'ରାଜନୀତି ବିଜ୍ଞାନ (ଅନର୍ସ)', icon:'🏛️', cls:'acc-polsci', path:'p3-arts-polsci'},
+  {key:'history', name:'History', odia:'ଇତିହାସ (ଅନର୍ସ)', icon:'📜', cls:'acc-history', path:'p3-arts-history'},
+  {key:'education', name:'Education', odia:'ଶିକ୍ଷା (ଅନର୍ସ)', icon:'🎓', cls:'acc-educ', path:'p3-arts-education'},
+  {key:'psychology', name:'Psychology', odia:'ମନୋ ବିଜ୍ଞାନ (ଅନର୍ସ)', icon:'🧠', cls:'acc-psych', path:'p3-arts-psychology'},
+  {key:'economics', name:'Economics', odia:'ଅର୍ଥନୀତି (ଅନର୍ସ)', icon:'📈', cls:'acc-econ', path:'p3-arts-economics'},
+  {key:'sociology', name:'Sociology', odia:'ସମାଜ ବିଜ୍ଞାନ (ଅନର୍ସ)', icon:'👥', cls:'acc-socio', path:'p3-arts-sociology'}
+];
+const SCI_HON = [
+  {key:'physics', name:'Physics', odia:'ପଦାର୍ଥ ବିଜ୍ଞାନ (ଅନର୍ସ)', icon:'⚛️', cls:'acc-polsci', path:'p3-science-physics'},
+  {key:'chemistry', name:'Chemistry', odia:'ରସାୟନ ବିଜ୍ଞାନ (ଅନର୍ସ)', icon:'🧪', cls:'acc-history', path:'p3-science-chemistry'},
+  {key:'mathematics', name:'Mathematics', odia:'ଗଣିତ (ଅନର୍ସ)', icon:'📐', cls:'acc-educ', path:'p3-science-mathematics'},
+  {key:'botany', name:'Botany', odia:'ଉଦ୍ଭିଦ ବିଜ୍ଞାନ (ଅନର୍ସ)', icon:'🌿', cls:'acc-psych', path:'p3-science-botany'},
+  {key:'zoology', name:'Zoology', odia:'ପ୍ରାଣୀ ବିଜ୍ଞାନ (ଅନର୍ସ)', icon:'🐾', cls:'acc-econ', path:'p3-science-zoology'},
+  {key:'compsci', name:'Computer Science', odia:'କମ୍ପ୍ୟୁଟର ବିଜ୍ଞାନ (ଅନର୍ସ)', icon:'💻', cls:'acc-socio', path:'p3-science-compsci'}
+];
+
+function buildHonoursAccordion(list, targetId, idPrefix){
+  const target = document.getElementById(targetId);
+  let html = '';
+  list.forEach((s, i) => {
+    const accId = idPrefix + '-' + s.key;
+    html += `<div class="acc-item" id="${accId}">
+      <div class="acc-trigger ${s.cls}" onclick="toggleAcc('${accId}')">
+        <div class="acc-ico">${s.icon}</div>
+        <div class="acc-label">
+          <div class="acc-eyebrow">+3 Honours · 8 Semesters</div>
+          <div class="acc-name">${s.name}</div>
+          <div class="acc-odia">${s.odia}</div>
+        </div>
+        <div class="acc-chevron"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+      </div>
+      <div class="acc-body"><div class="grid2">${semCards(s.path, s.name)}</div></div>
+    </div>`;
+  });
+  target.innerHTML = html;
+}
+buildHonoursAccordion(ARTS_HON, 'p3-arts-accordion', 'arts');
+buildHonoursAccordion(SCI_HON, 'p3-science-accordion', 'sci');
+
+/* ============ TODAY'S ODIA DATE + FESTIVAL GREETING (static text, no typewriter) ============ */
 const MONTH_NAMES_OD = ['ଜାନୁୟାରୀ','ଫେବୃୟାରୀ','ମାର୍ଚ୍ଚ','ଏପ୍ରିଲ','ମଇ','ଜୁନ','ଜୁଲାଇ','ଅଗଷ୍ଟ','ସେପ୍ଟେମ୍ବର','ଅକ୍ଟୋବର','ନଭେମ୍ବର','ଡିସେମ୍ବର'];
 const WEEKDAY_NAMES_OD = ['ରବିବାର','ସୋମବାର','ମଙ୍ଗଳବାର','ବୁଧବାର','ଗୁରୁବାର','ଶୁକ୍ରବାର','ଶନିବାର'];
 const ORDINAL_OD = ['ପ୍ରଥମ','ଦ୍ୱିତୀୟ','ତୃତୀୟ','ଚତୁର୍ଥ','ପଞ୍ଚମ'];
 
 const FESTIVALS_OD = {
-  1: [
-    {day:1, occ:'ନୂତନ ବର୍ଷ (ଇଂରାଜୀ)'},
-    {day:2, occ:'ପୌଷ ପୂର୍ଣ୍ଣିମା, ପୁଷ୍ୟାଭିଷେକ'},
-    {day:6, occ:'ସଙ୍କଟ ଚତୁର୍ଥୀ ବ୍ରତ'},
-    {day:12, occ:'ସ୍ୱାମୀ ବିବେକାନନ୍ଦ ଜୟନ୍ତୀ'},
-    {day:14, occ:'ମକର ସଂକ୍ରାନ୍ତି, ପୋଙ୍ଗଲ'},
-    {day:16, occ:'ରଟନ୍ତି ଚତୁର୍ଦ୍ଦଶୀ'},
-    {day:18, occ:'ତ୍ରିବେଣୀ ଅମାବାସ୍ୟା'},
-    {day:21, occ:'ଶ୍ରୀ ଜଗନ୍ନାଥ ମହାପ୍ରଭୁଙ୍କ ପଦ୍ମ ବେଶ'},
-    {day:23, occ:'ଶ୍ରୀ ପଞ୍ଚମୀ, ସରସ୍ୱତୀ ପୂଜା'},
-    {day:26, occ:'ଗଣତନ୍ତ୍ର ଦିବସ, ଭୌମ ଅଷ୍ଟମୀ'},
-    {day:29, occ:'ଭୈମୀ ଏକାଦଶୀ'},
-    {day:31, occ:'ନିତ୍ୟାନନ୍ଦ ମହାପ୍ରଭୁ ଜନ୍ମୋତ୍ସବ'}
-  ],
-  2: [
-    {day:1, occ:'ମାଘ ପୂର୍ଣ୍ଣିମା, ମାଘ ବ୍ରତ ସମାପ୍ତି'},
-    {day:4, occ:'ଶବ-ଏ-ବରାତ'},
-    {day:12, occ:'ସ୍ୱାମୀ ଦୟାନନ୍ଦ ସରସ୍ୱତୀ ଜୟନ୍ତୀ'},
-    {day:13, occ:'କୁମ୍ଭ ସଂକ୍ରାନ୍ତି, ପଙ୍କୋଦ୍ଧାର ଏକାଦଶୀ'},
-    {day:15, occ:'ମହାଶିବରାତ୍ରି, ଜାଗର ଉପବାସ'},
-    {day:17, occ:'ଅମାବାସ୍ୟା'},
-    {day:19, occ:'ରମଜାନ ମାସ ଆରମ୍ଭ'},
-    {day:26, occ:'ସୁଦଶା ବ୍ରତ, ଫଗୁ ଦଶମୀ'},
-    {day:27, occ:'ପାପ ନାଶିନୀ ଏକାଦଶୀ'},
-    {day:28, occ:'ଗୋବିନ୍ଦ ଦ୍ୱାଦଶୀ ସ୍ନାନ'}
-  ],
-  3: [
-    {day:3, occ:'ଦୋଳ ପୂର୍ଣ୍ଣିମା, ଶ୍ରୀ ଚୈତନ୍ୟ ଜୟନ୍ତୀ, ଶ୍ରୀ ଜଗନ୍ନାଥ ରାଜରାଜେଶ୍ୱର ବେଶ, ଚନ୍ଦ୍ର ଗ୍ରହଣ'},
-    {day:4, occ:'ହୋଳି ଉତ୍ସବ'},
-    {day:8, occ:'ପଞ୍ଚୁ ଦୋଳ'},
-    {day:15, occ:'ମୀନ ସଂକ୍ରାନ୍ତି, ପାପମୋଚନୀ ଏକାଦଶୀ'},
-    {day:17, occ:'ବରୁଣୀ ସ୍ନାନ, ତାରାତାରିଣୀ ମେଳା, ଶବ-ଏ-କଦର'},
-    {day:19, occ:'ବାସନ୍ତୀ ଦୁର୍ଗା ପୂଜା ଆରମ୍ଭ'},
-    {day:21, occ:'ଇଦ-ଉଲ-ଫିତର'},
-    {day:24, occ:'ବାସନ୍ତୀ ଦୁର୍ଗା ପୂଜା ସପ୍ତମୀ'},
-    {day:26, occ:'ଅଶୋକାଷ୍ଟମୀ, ଶ୍ରୀ ଲିଙ୍ଗରାଜ ରୁକୁଣ ରଥଯାତ୍ରା'},
-    {day:27, occ:'ଶ୍ରୀ ରାମ ନବମୀ, ବାସନ୍ତୀ ଦୁର୍ଗା ପୂଜା ଦଶମୀ'},
-    {day:29, occ:'କାମଦା ଏକାଦଶୀ'},
-    {day:31, occ:'ମହାବୀର ଜୟନ୍ତୀ, ଦୟାନ ଚୋରି (ଶ୍ରୀମନ୍ଦିର)'}
-  ],
-  4: [
-    {day:1, occ:'ଉତ୍କଳ ଦିବସ, ବିଷ୍ଣୁ ଦମନକ ଚତୁର୍ଦ୍ଦଶୀ, ହିଙ୍ଗୁଳା ଯାତ୍ରା'},
-    {day:2, occ:'ଚୈତ୍ର ପୂର୍ଣ୍ଣିମା, ବୈଶାଖ ବ୍ରତାରମ୍ଭ, ଚୈତ୍ର ପର୍ବ'},
-    {day:3, occ:'ଗୁଡ଼ ଫ୍ରାଇଡେ, ଲଙ୍କା ପୋଡ଼ି'},
-    {day:6, occ:'ଇଷ୍ଟର ସୋମବାର'},
-    {day:10, occ:'ଶରଣ ଆରମ୍ଭ'},
-    {day:12, occ:'ଶ୍ରୀମନ୍ଦିରରେ ରାମାଭିଷେକ'},
-    {day:13, occ:'ବରୁଥିନୀ ଏକାଦଶୀ, ମାସାନ୍ତ'},
-    {day:14, occ:'ମହାବିଷୁବ ପଣା ସଂକ୍ରାନ୍ତି, ଝାମୁ ଯାତ୍ରା, ହନୁମାନ ଜୟନ୍ତୀ'},
-    {day:15, occ:'ଶରଣୀ ଶେଷ'},
-    {day:16, occ:'ଶିବ ଚତୁର୍ଦ୍ଦଶୀ ଉପବାସ'},
-    {day:17, occ:'ରୁକୁଣି ଅମାବାସ୍ୟା'},
-    {day:19, occ:'ପରଶୁରାମ ଜୟନ୍ତୀ'},
-    {day:20, occ:'ଅକ୍ଷୟ ତୃତୀୟା, ଶ୍ରୀକ୍ଷେତ୍ର ଚନ୍ଦନ ଯାତ୍ରା ଆରମ୍ଭ'},
-    {day:22, occ:'ଶ୍ରୀ ରାମାନୁଜାଚାର୍ଯ୍ୟ ଜୟନ୍ତୀ'},
-    {day:24, occ:'ନୀଳାଦ୍ରି ମହୋଦୟ ଅଷ୍ଟମୀ'},
-    {day:25, occ:'ସୀତା ନବମୀ, ଶନିଶ୍ଚର ଯଜ୍ଞ'},
-    {day:27, occ:'ମୋହିନୀ ଏକାଦଶୀ ଉପବାସ'},
-    {day:28, occ:'ଉତ୍କଳ ଗୌରବ ମଧୁସୂଦନ ଦାସ ଜୟନ୍ତୀ'},
-    {day:30, occ:'ନୃସିଂହ ଜନ୍ମ, ଚତୁର୍ଦ୍ଦଶୀ ଉପବାସ'}
-  ],
-  5: [
-    {day:1, occ:'ଶ୍ରମିକ ଦିବସ, ବୁଦ୍ଧ ଜୟନ୍ତୀ, ବୈଶାଖ ବ୍ରତ ସମାପନ'},
-    {day:2, occ:'ଶରଣ ଆରମ୍ଭ'},
-    {day:9, occ:'ଶ୍ରୀକ୍ଷେତ୍ରରେ ଭାଉଁରୀ'},
-    {day:10, occ:'ଉତ୍କଳରେ ଭାଉଁରୀ, ଶ୍ରୀକ୍ଷେତ୍ରରେ ହଳଦୀପାଣି'},
-    {day:12, occ:'ଶରଣ ଶେଷ'},
-    {day:13, occ:'ଜଳକ୍ରୀଡ଼ା ଏକାଦଶୀ ଉପବାସ'},
-    {day:14, occ:'ମାସାନ୍ତ'},
-    {day:15, occ:'ବୃଷ ସଂକ୍ରାନ୍ତି, ଶିବ ଚତୁର୍ଦ୍ଦଶୀ'},
-    {day:16, occ:'ଅମାବାସ୍ୟା, ସାବିତ୍ରୀ ବ୍ରତ, ଚନ୍ଦ୍ର କ୍ଷୟ'},
-    {day:17, occ:'ଚନ୍ଦ୍ର ଦର୍ଶନ, ମଳମାସ ଆରମ୍ଭ'},
-    {day:27, occ:'ପୁରୁଷୋତ୍ତମ ଏକାଦଶୀ ଉପବାସ, ଇଦ-ଉଲ-ଜୁହା'},
-    {day:29, occ:'ଶିବ ଚତୁର୍ଦ୍ଦଶୀ'},
-    {day:30, occ:'ପୂର୍ଣ୍ଣିମାର ଚନ୍ଦ୍ରପୂଜା'},
-    {day:31, occ:'ମଳ ପୂର୍ଣ୍ଣିମା'}
-  ],
-  6: [
-    {day:4, occ:'ଶରଣ ଆରମ୍ଭ'},
-    {day:8, occ:'ଶରଣ ଶେଷ'},
-    {day:11, occ:'ପୁରୁଷୋତ୍ତମ ଏକାଦଶୀ ଉପବାସ'},
-    {day:14, occ:'ପହିଲି ରଜ, ମାସାନ୍ତ, ଚନ୍ଦ୍ର କ୍ଷୟ'},
-    {day:15, occ:'ମିଥୁନ ସଂକ୍ରାନ୍ତି, ରଜ ସଂକ୍ରାନ୍ତି, ମଳ ଅମାବାସ୍ୟା'},
-    {day:16, occ:'ଶୁଦ୍ଧ ମାସ ଆରମ୍ଭ, ଚନ୍ଦ୍ର ଦର୍ଶନ, ଶେଷ ରଜ, ଭୂଦାହ'},
-    {day:17, occ:'ରମ୍ଭା ତୃତୀୟା, ବସୁମତୀ ସ୍ନାନ'},
-    {day:18, occ:'ଉମା ଚତୁର୍ଥୀ, ଶିବ ବିବାହ ଉତ୍ସବ'},
-    {day:19, occ:'ଶୀତଳ ଷଷ୍ଠୀ, ଅରଣ୍ୟକ ଷଷ୍ଠୀ'},
-    {day:20, occ:'ଶ୍ରୀମନ୍ଦିରରେ ଶୀତଳ ଷଷ୍ଠୀ, ଜଳକ୍ରୀଡ଼ା'},
-    {day:24, occ:'ଗଙ୍ଗା ଦଶହରା'},
-    {day:25, occ:'ରୁକ୍ମିଣୀ ବିବାହ, ନିର୍ଜଳା ଏକାଦଶୀ, ଲକ୍ଷ୍ମୀ ନାରାୟଣ ବ୍ରତ'},
-    {day:26, occ:'ଚମ୍ପକ ଦ୍ୱାଦଶୀ, ମହରମ'},
-    {day:28, occ:'ଶ୍ରୀମନ୍ଦିରରେ ଚତୁର୍ଦ୍ଦଶୀ ହୋମ'},
-    {day:29, occ:'ଦେବସ୍ନାନ ପୂର୍ଣ୍ଣିମା, ଚନ୍ଦ୍ର ପୂଜା, ଶ୍ରୀ ଜୀଉଙ୍କ ଅନାସର ଆରମ୍ଭ'}
-  ],
-  7: [
-    {day:1, occ:'ଶରଣ ଆରମ୍ଭ'},
-    {day:5, occ:'ଅନାସର ପଞ୍ଚମୀ, ଫୁଲୁରୀ ଲାଗି'},
-    {day:6, occ:'ଶରଣ ଶେଷ'},
-    {day:10, occ:'ଅନାସର ଦଶମୀ'},
-    {day:11, occ:'ଖାଲିଲାଗି ଏକାଦଶୀ ଉପବାସ, ଅନାସର ଦ୍ୱାଦଶୀ, ହଳ ନିଷେଧ'},
-    {day:12, occ:'ଅନାସର ତ୍ରୟୋଦଶୀ, ଘନଲାଗି'},
-    {day:13, occ:'ଚନ୍ଦ୍ର କ୍ଷୟ, ନିଶିପାଳନ, ଶିବ ଚତୁର୍ଦ୍ଦଶୀ ଉପବାସ'},
-    {day:14, occ:'ଅମାବାସ୍ୟା, ନେତ୍ରୋତ୍ସବ'},
-    {day:15, occ:'ଶ୍ରୀ ଜୀଉଙ୍କର ଉଭା ଯାତ୍ରା, ଚନ୍ଦ୍ର ଦର୍ଶନ'},
-    {day:16, occ:'ଶ୍ରୀ ଗୁଣ୍ଡିଚା ରଥଯାତ୍ରା, ରଥଯାତ୍ରା, ମାସାନ୍ତ'},
-    {day:17, occ:'ଦକ୍ଷିଣାୟନ କର୍କଟ ସଂକ୍ରାନ୍ତି, ହଳ ନିଷେଧ'},
-    {day:20, occ:'ହେରା ପଞ୍ଚମୀ'},
-    {day:21, occ:'ପରଶୁରାମାଷ୍ଟମୀ'},
-    {day:22, occ:'ନବମୀ ସନ୍ଧ୍ୟା ଦର୍ଶନ'},
-    {day:23, occ:'ନବମୀ ଦର୍ଶନ'},
-    {day:24, occ:'ବାହୁଡ଼ା ଯାତ୍ରା, ବାହୁଡ଼ା'},
-    {day:25, occ:'ହରିଶୟନ (ବଡ) ଏକାଦଶୀ ଉପବାସ, ଶ୍ରୀ ଜୀଉଙ୍କର ସୁନା ବେଶ'},
-    {day:26, occ:'ଗରୁଡ଼ ଶୟନ ଉତ୍ସବ, ଅଧରପାଣା'},
-    {day:27, occ:'ନୀଳାଦ୍ରି ବିଜେ, ଶିବ ଶୟନ, ଶିବ ଚତୁର୍ଦ୍ଦଶୀ ଉପବାସ'},
-    {day:28, occ:'ଶରଣ ଆରମ୍ଭ'},
-    {day:29, occ:'ବ୍ୟାସ ପୂର୍ଣ୍ଣିମା, ଚନ୍ଦ୍ରପୂଜା'}
-  ],
-  8: [
-    {day:2, occ:'ଶରଣ ଶେଷ'},
-    {day:3, occ:'ବୋଲବମ ଆରମ୍ଭ, ମନସା ପଞ୍ଚମୀ'},
-    {day:9, occ:'କାମଦା ଏକାଦଶୀ ଉପବାସ'},
-    {day:11, occ:'ଶିବ ଚତୁର୍ଦ୍ଦଶୀ ଉପବାସ'},
-    {day:12, occ:'ଶ୍ରୀମନ୍ଦିରରେ ଚିତାଲାଗି ଅମାବାସ୍ୟା, ଚିତଉ ଅମାବାସ୍ୟା, ନିଶିପାଳନ'},
-    {day:14, occ:'ଚନ୍ଦ୍ର ଦର୍ଶନ'},
-    {day:15, occ:'୮୦ତମ ସ୍ୱାଧୀନତା ଦିବସ, ଶ୍ରୀ ଅରବିନ୍ଦ ଜୟନ୍ତୀ'},
-    {day:16, occ:'ଜାଗ୍ରତଗୌରୀ ପଞ୍ଚମୀ, ମାସାନ୍ତ'},
-    {day:17, occ:'ସିଂହ ସଂକ୍ରାନ୍ତି'},
-    {day:22, occ:'ଝୁଲଣ ଯାତ୍ରା ଆରମ୍ଭ'},
-    {day:23, occ:'ପୁତ୍ରଦା ଏକାଦଶୀ ଉପବାସ, ଶ୍ରୀ ଜୀଉଙ୍କର ପବିତ୍ରାରୋପଣ, ରବିନାରାୟଣ ବ୍ରତ'},
-    {day:24, occ:'ପବିତ୍ରାରୋପଣ, ଶରଣ ଆରମ୍ଭ'},
-    {day:25, occ:'ଆଖିତେକା ପର୍ବ'},
-    {day:26, occ:'ଶିବ ଚତୁର୍ଦ୍ଦଶୀ ଉପବାସ, ଶିବ ପବିତ୍ରାରୋପଣ, ମହାପୁରୁଷ ମହମ୍ମଦଙ୍କ ଜନ୍ମ ଦିବସ'},
-    {day:27, occ:'ଶ୍ରୀ ବଳଭଦ୍ର ଜନ୍ମ, ରକ୍ଷାବନ୍ଧନ, ରାଖି ପୂର୍ଣ୍ଣିମା'},
-    {day:28, occ:'ଗମ୍ଭା ପୂର୍ଣ୍ଣିମା, ଶ୍ରାବଣ ପୂର୍ଣ୍ଣିମା'},
-    {day:29, occ:'ଶରଣ ଶେଷ'},
-    {day:30, occ:'ଖୁଦୁରୁକୁଣି ଓଷା, କୌଶଲ୍ୟା ପୂଜା'},
-    {day:31, occ:'ଅଙ୍ଗଭେଟା ତୃତୀୟା'}
-  ],
-  9: [
-    {day:1, occ:'ରାଖି ପଞ୍ଚମୀ'},
-    {day:2, occ:'ଶ୍ରୀମନ୍ଦିରରେ ରେଖା ପଞ୍ଚମୀ, ବୁଧବାମନ ଓଷା'},
-    {day:4, occ:'ଶ୍ରୀ କୃଷ୍ଣ ଜନ୍ମାଷ୍ଟମୀ, ଶ୍ରୀ ଶ୍ରୀ ଆଦିତ୍ୟ ନାରାୟଣ ଦାସଙ୍କ ଜନ୍ମୋତ୍ସବ'},
-    {day:5, occ:'ନନ୍ଦୋତ୍ସବ, ଶିକ୍ଷକ ଦିବସ, ସର୍ବପଲ୍ଲୀ ରାଧାକୃଷ୍ଣନ ଜୟନ୍ତୀ'},
-    {day:7, occ:'କାଳିୟଦଳନ ଏକାଦଶୀ ଉପବାସ'},
-    {day:9, occ:'ଶିବ ଚତୁର୍ଦ୍ଦଶୀ ଉପବାସ'},
-    {day:10, occ:'ଗୃହଲକ୍ଷ୍ମୀ ସପ୍ତପୁରୀ ଭୋଗ, ଚନ୍ଦ୍ର କ୍ଷୟ, ନିଶିପାଳନ'},
-    {day:11, occ:'ଶ୍ରୀମନ୍ଦିରରେ ସପ୍ତପୁରୀ ଅମାବାସ୍ୟା'},
-    {day:12, occ:'ଚନ୍ଦ୍ର ଦର୍ଶନ'},
-    {day:14, occ:'ଶ୍ରୀ ଗଣେଶ ଚତୁର୍ଥୀ, ଚଉରା ଚତୁର୍ଥୀ, ବଳିତ୍ରୁତୀୟା'},
-    {day:15, occ:'ଋଷି ପଞ୍ଚମୀ, ନୂଆଁଖାଇ ପର୍ବ'},
-    {day:16, occ:'ମାସାନ୍ତ'},
-    {day:17, occ:'କନ୍ୟା ସଂକ୍ରାନ୍ତି, ବିଶ୍ୱକର୍ମା ପୂଜା, ଷଷ୍ଠୀ ଓଷା, ସୋମନାଥ ବ୍ରତ ଆରମ୍ଭ, ଲଳିତା ସପ୍ତମୀ, କୁକ୍କୁଟୀ ବ୍ରତ'},
-    {day:18, occ:'ଶ୍ରୀ ଦୁର୍ଗା ଷଷ୍ଠୀ ଓଷା'},
-    {day:19, occ:'ଶ୍ରୀ ରାଧାଷ୍ଟମୀ ଓ ଦୁର୍ବଳାଷ୍ଟମୀ'},
-    {day:20, occ:'ତାଳ ନବମୀ, ଠାକୁର ଅନୁକୂଳ ଚନ୍ଦ୍ର ଜୟନ୍ତୀ'},
-    {day:21, occ:'ଶରଣ ଆରମ୍ଭ'},
-    {day:22, occ:'ପାର୍ଶ୍ୱପରିବର୍ତ୍ତନ (ବଡ) ଏକାଦଶୀ'},
-    {day:23, occ:'ସୁନିଆ, ବାମନଜନ୍ମ, ସନ ୧୪୩୪ ସାଲ ଅଙ୍କ ପ୍ରବେଶ, ଗରୁଡ଼ ପାର୍ଶ୍ୱପରିବର୍ତ୍ତନ, ଇନ୍ଦ୍ରଧ୍ୱଜ ପୂଜା'},
-    {day:25, occ:'ଅନନ୍ତ ଚତୁର୍ଦ୍ଦଶୀ, ଅନନ୍ତ ବ୍ରତ, ଶ୍ରୀ ଦୁର୍ଗା ଓ ଶିବଙ୍କ ପାର୍ଶ୍ୱପରିବର୍ତ୍ତନ'},
-    {day:26, occ:'ଇନ୍ଦ୍ରୋତ୍ସବ ପୂର୍ଣ୍ଣିମା, ଚନ୍ଦ୍ରପୂଜା, ଭାଗବତ ଜନ୍ମ'},
-    {day:27, occ:'ଅପରପକ୍ଷ ଆରମ୍ଭ'},
-    {day:30, occ:'ଅଶ୍ୱ ପଞ୍ଚମୀ'}
-  ],
-  10: [
-    {day:1, occ:'ଗଜ ଷଷ୍ଠୀ'},
-    {day:2, occ:'ଗାନ୍ଧୀ ଓ ଶାସ୍ତ୍ରୀ ଜୟନ୍ତୀ'},
-    {day:3, occ:'ଶ୍ରୀ ଦୁର୍ଗା ଦେବୀଙ୍କ ଉତ୍ଥାପନ, ସହସ୍ର କୁମ୍ଭାଭିଷେକ, ଷୋଡଶଦିନାତ୍ମକ ପୂଜା, ମୂଳାଷ୍ଟମୀ, ଦ୍ୱିତୀୟବାହନ ଓଷା'},
-    {day:6, occ:'ଇନ୍ଦିରା ଏକାଦଶୀ ଉପବାସ'},
-    {day:9, occ:'ଶିବ ଚତୁର୍ଦ୍ଦଶୀ'},
-    {day:10, occ:'ମହାଳୟା, ଅମାବାସ୍ୟା, ଚନ୍ଦ୍ର କ୍ଷୟ'},
-    {day:11, occ:'ଶ୍ରୀ ଦୁର୍ଗା ଦେବୀଙ୍କର ନବଦିନାତ୍ମକ ପୂଜାରମ୍ଭ, ମା ବିରଜା ଦେବଙ୍କର ରଥଯାତ୍ରା'},
-    {day:12, occ:'ଚନ୍ଦ୍ର ଦର୍ଶନ'},
-    {day:15, occ:'ନଟ ପଞ୍ଚମୀ, ମା ବିରଜା ଦେବୀଙ୍କର ପଞ୍ଚମୀ ହୋମ ଓ ଗୁପ୍ତ ପଞ୍ଚମୀ ବ୍ରତ'},
-    {day:16, occ:'ତପଃ ଷଷ୍ଠୀ, ମୃନ୍ମୟୀ ଦେବଙ୍କର ବିଲ୍ୱାଧିବାସ'},
-    {day:17, occ:'ଶ୍ରୀ ଦୁର୍ଗା ଦେବୀଙ୍କର ତ୍ରିଦିନାତ୍ମକ ସପ୍ତମୀ ପୂଜା, ମୃନ୍ମୟୀ ଦେବୀଙ୍କ ମହାସପ୍ତମୀ ପୂଜା, ତୁଳା ସଂକ୍ରାନ୍ତି ଉପବାସ'},
-    {day:18, occ:'ମହାଅଷ୍ଟମୀ, ମୃନ୍ମୟୀ ଦେବୀଙ୍କ ମହାଅଷ୍ଟମୀ ପୂଜା'},
-    {day:19, occ:'ମହାନବମୀ, ମୃନ୍ମୟୀ ଦେବୀଙ୍କ ମହାନବମୀ ପୂଜା'},
-    {day:20, occ:'ମୃନ୍ମୟୀ ଦେବଙ୍କର ଦଶହରା, ଦଶହରା'},
-    {day:21, occ:'ଶ୍ରୀମନ୍ଦିରରେ ଦଶହରା, ସୋମନାଥ ବ୍ରତ ଉଦଯାପନ ଓ ଭସାଣି'},
-    {day:22, occ:'ପାପାଙ୍କୁଶା ଏକାଦଶୀ ଉପବାସ, ଶ୍ରୀ ଲକ୍ଷ୍ମୀନାରାୟଣ ବ୍ରତ'},
-    {day:23, occ:'ଶରଣ ଶେଷ'},
-    {day:24, occ:'ଶିବ ଚତୁର୍ଦ୍ଦଶୀ ଉପବାସ'},
-    {day:25, occ:'କୁମାରୋତ୍ସବ, ଗଜଲକ୍ଷ୍ମୀ ପୂଜା ଓ ଚନ୍ଦ୍ରପୂଜା'},
-    {day:26, occ:'କୁମାର ପୂର୍ଣ୍ଣିମା, କାର୍ତ୍ତିକ ବ୍ରତାରମ୍ଭ, ପଣ୍ଡିତ ବିଷ୍ଣୁ ପ୍ରସାଦ ଖଡ଼ିଆରତ୍ନଙ୍କ ଶ୍ରାଦ୍ଧ'}
-  ],
-  11: [
-    {day:5, occ:'ରମା ଏକାଦଶୀ ଉପବାସ, ଗୋବତ୍ସ ଦ୍ୱାଦଶୀ'},
-    {day:7, occ:'ଧନ୍ୱନ୍ତରୀ ଜୟନ୍ତୀ, ଧନତେରସ, ନରକ ଚତୁର୍ଦ୍ଦଶୀ'},
-    {day:8, occ:'ଦୀପାବଳୀ, ପାୟଶ୍ରାଦ୍ଧ, ଶ୍ୟାମା କାଳୀ ପୂଜା'},
-    {day:9, occ:'କାର୍ତ୍ତିକ ଅମାବାସ୍ୟା, ସୋମବତୀ ସ୍ନାନ'},
-    {day:10, occ:'ଗୋବର୍ଦ୍ଧନ ପୂଜା, ଅନ୍ନକୂଟ, ଚନ୍ଦ୍ର ଦର୍ଶନ'},
-    {day:11, occ:'ଯମ ଓ ଭ୍ରାତୃ ଦ୍ୱିତୀୟା'},
-    {day:13, occ:'ନାଗ ଚତୁର୍ଥୀ'},
-    {day:14, occ:'ଶିଶୁ ଦିବସ, ଜବାହରଲାଲ ନେହେରୁ ଜୟନ୍ତୀ'},
-    {day:16, occ:'ବିଛା ସଂକ୍ରାନ୍ତି, ଗୋଷ୍ଠାଷ୍ଟମୀ, ଅମୃତ ମନୋହି ଭୋଗ'},
-    {day:17, occ:'ଗୋଷ୍ଠାଷ୍ଟମୀ'},
-    {day:18, occ:'କାଞ୍ଜି ଅଣ୍ଳା ନବମୀ, ଜଗଦ୍ଧାତ୍ରୀ ପୂଜା, ଶ୍ରୀ ରାଧା ପାଦଦର୍ଶନ, ଭାଗବତ ସପ୍ତାହ ପାଠ'},
-    {day:19, occ:'ଶରଣ ଶେଷ'},
-    {day:20, occ:'ରାଧା ଦାମୋଦର ବେଶ ସମାପ୍ତି'},
-    {day:21, occ:'ଦେବୋତ୍ଥାନ (ବଡ) ଏକାଦଶୀ, ଗରୁଡ଼ ଦ୍ୱାଦଶୀ, ତୁଳସୀ ବିବାହ, ଭୀଷ୍ମ ପଞ୍ଚକ ବ୍ରତ'},
-    {day:23, occ:'ବଡ ଓଷା, ବୈକୁଣ୍ଠ ଚତୁର୍ଦ୍ଦଶୀ, କାର୍ତ୍ତିକ ମାସ ଶେଷ ସୋମବାର'},
-    {day:24, occ:'ରାସ ପୂର୍ଣ୍ଣିମା, କାର୍ତ୍ତିକ ବ୍ରତ ସମାପନ, କାର୍ତ୍ତିକେଶ୍ୱର ପୂଜା, ଚନ୍ଦ୍ରପୂଜା, ବାଲି ଯାତ୍ରା'},
-    {day:25, occ:'ଚଡ଼କଖାଇ'},
-    {day:26, occ:'ପ୍ରଥମ ମାର୍ଗଶିର ଗୁରୁବାର (ମନାବାସ ଗୁରୁବାର)'},
-    {day:28, occ:'ସୀତା ବିବାହ'},
-    {day:29, occ:'ଶ୍ରୀକ୍ଷେତ୍ରରେ ପରିକ୍ରମା'}
-  ],
-  12: [
-    {day:1, occ:'ପ୍ରଥମାଷ୍ଟମୀ'},
-    {day:2, occ:'କାଞ୍ଜିଆଳ ନବମୀ'},
-    {day:3, occ:'ମନାବାସ ଗୁରୁବାର'},
-    {day:4, occ:'ଉତ୍ପନ୍ନା ଏକାଦଶୀ ଉପବାସ'},
-    {day:7, occ:'ଶ୍ରୀମନ୍ଦିରରେ ଦେବଦୀପାବଳୀ ଉତ୍ସବ ଆରମ୍ଭ, ଶିବ ଚତୁର୍ଦ୍ଦଶୀ ଉପବାସ'},
-    {day:8, occ:'ମହୋଦଧି ଅମାବାସ୍ୟା, ଚନ୍ଦ୍ର କ୍ଷୟ, ଶ୍ରୀମନ୍ଦିରରେ ମଧ୍ୟ ଦୀପାବଳୀ, ଗୋସହସ୍ର ସ୍ନାନ'},
-    {day:9, occ:'ଶ୍ରୀମନ୍ଦିରରେ ଶେଷ ଦୀପାବଳୀ'},
-    {day:10, occ:'ଚନ୍ଦ୍ର ଦର୍ଶନ'},
-    {day:11, occ:'ରମ୍ଭା ତୃତୀୟା'},
-    {day:12, occ:'ଶରଣ ଆରମ୍ଭ'},
-    {day:14, occ:'କୁରଳ ପଞ୍ଚମୀ'},
-    {day:15, occ:'ଓଢ଼ଣା ଓ ପ୍ରାବରଣ ଷଷ୍ଠୀ'},
-    {day:16, occ:'ଧନୁ ସଂକ୍ରାନ୍ତି, ପହିଲି ଭୋଗ'},
-    {day:17, occ:'ଶରଣ ଶେଷ'},
-    {day:18, occ:'ମୋକ୍ଷଦା ଏକାଦଶୀ ଉପବାସ, ରବିନାରାୟଣ ବ୍ରତ'},
-    {day:21, occ:'ବ୍ୟଞ୍ଜନ ଦ୍ୱାଦଶୀ'},
-    {day:22, occ:'ଅନଙ୍ଗ ତ୍ରୟୋଦଶୀ, ଗୀତା ଜୟନ୍ତୀ, ପାଷାଣ ଚତୁର୍ଦ୍ଦଶୀ'},
-    {day:23, occ:'ପାଣ୍ଡୁ ଓଷା, ଚନ୍ଦ୍ରପୂଜା'},
-    {day:24, occ:'ପୂର୍ଣ୍ଣିମା, ଗୁରୁ ପୂର୍ଣ୍ଣିମା'},
-    {day:25, occ:'ଯୀଶୁ ଖ୍ରୀଷ୍ଟଙ୍କ ଜନ୍ମ (ବଡ଼ଦିନ)'},
-    {day:26, occ:'ବସ୍ତ୍ର ପହରା, ବଟ ଓଷା'},
-    {day:31, occ:'ପାଠାଣୀ ସାମନ୍ତ ଜୟନ୍ତୀ, ଇଂରାଜୀ ବର୍ଷ ଶେଷ'}
-  ]
+  1: [{day:1,occ:'ନୂତନ ବର୍ଷ (ଇଂରାଜୀ)'},{day:2,occ:'ପୌଷ ପୂର୍ଣ୍ଣିମା, ପୁଷ୍ୟାଭିଷେକ'},{day:6,occ:'ସଙ୍କଟ ଚତୁର୍ଥୀ ବ୍ରତ'},{day:12,occ:'ସ୍ୱାମୀ ବିବେକାନନ୍ଦ ଜୟନ୍ତୀ'},{day:14,occ:'ମକର ସଂକ୍ରାନ୍ତି, ପୋଙ୍ଗଲ'},{day:16,occ:'ରଟନ୍ତି ଚତୁର୍ଦ୍ଦଶୀ'},{day:18,occ:'ତ୍ରିବେଣୀ ଅମାବାସ୍ୟା'},{day:21,occ:'ଶ୍ରୀ ଜଗନ୍ନାଥ ମହାପ୍ରଭୁଙ୍କ ପଦ୍ମ ବେଶ'},{day:23,occ:'ଶ୍ରୀ ପଞ୍ଚମୀ, ସରସ୍ୱତୀ ପୂଜା'},{day:26,occ:'ଗଣତନ୍ତ୍ର ଦିବସ, ଭୌମ ଅଷ୍ଟମୀ'},{day:29,occ:'ଭୈମୀ ଏକାଦଶୀ'},{day:31,occ:'ନିତ୍ୟାନନ୍ଦ ମହାପ୍ରଭୁ ଜନ୍ମୋତ୍ସବ'}],
+  2: [{day:1,occ:'ମାଘ ପୂର୍ଣ୍ଣିମା, ମାଘ ବ୍ରତ ସମାପ୍ତି'},{day:4,occ:'ଶବ-ଏ-ବରାତ'},{day:12,occ:'ସ୍ୱାମୀ ଦୟାନନ୍ଦ ସରସ୍ୱତୀ ଜୟନ୍ତୀ'},{day:13,occ:'କୁମ୍ଭ ସଂକ୍ରାନ୍ତି, ପଙ୍କୋଦ୍ଧାର ଏକାଦଶୀ'},{day:15,occ:'ମହାଶିବରାତ୍ରି, ଜାଗର ଉପବାସ'},{day:17,occ:'ଅମାବାସ୍ୟା'},{day:19,occ:'ରମଜାନ ମାସ ଆରମ୍ଭ'},{day:26,occ:'ସୁଦଶା ବ୍ରତ, ଫଗୁ ଦଶମୀ'},{day:27,occ:'ପାପ ନାଶିନୀ ଏକାଦଶୀ'},{day:28,occ:'ଗୋବିନ୍ଦ ଦ୍ୱାଦଶୀ ସ୍ନାନ'}],
+  3: [{day:3,occ:'ଦୋଳ ପୂର୍ଣ୍ଣିମା, ଶ୍ରୀ ଚୈତନ୍ୟ ଜୟନ୍ତୀ, ଶ୍ରୀ ଜଗନ୍ନାଥ ରାଜରାଜେଶ୍ୱର ବେଶ, ଚନ୍ଦ୍ର ଗ୍ରହଣ'},{day:4,occ:'ହୋଳି ଉତ୍ସବ'},{day:8,occ:'ପଞ୍ଚୁ ଦୋଳ'},{day:15,occ:'ମୀନ ସଂକ୍ରାନ୍ତି, ପାପମୋଚନୀ ଏକାଦଶୀ'},{day:17,occ:'ବରୁଣୀ ସ୍ନାନ, ତାରାତାରିଣୀ ମେଳା, ଶବ-ଏ-କଦର'},{day:19,occ:'ବାସନ୍ତୀ ଦୁର୍ଗା ପୂଜା ଆରମ୍ଭ'},{day:21,occ:'ଇଦ-ଉଲ-ଫିତର'},{day:24,occ:'ବାସନ୍ତୀ ଦୁର୍ଗା ପୂଜା ସପ୍ତମୀ'},{day:26,occ:'ଅଶୋକାଷ୍ଟମୀ, ଶ୍ରୀ ଲିଙ୍ଗରାଜ ରୁକୁଣ ରଥଯାତ୍ରା'},{day:27,occ:'ଶ୍ରୀ ରାମ ନବମୀ, ବାସନ୍ତୀ ଦୁର୍ଗା ପୂଜା ଦଶମୀ'},{day:29,occ:'କାମଦା ଏକାଦଶୀ'},{day:31,occ:'ମହାବୀର ଜୟନ୍ତୀ, ଦୟାନ ଚୋରି (ଶ୍ରୀମନ୍ଦିର)'}],
+  4: [{day:1,occ:'ଉତ୍କଳ ଦିବସ, ବିଷ୍ଣୁ ଦମନକ ଚତୁର୍ଦ୍ଦଶୀ, ହିଙ୍ଗୁଳା ଯାତ୍ରା'},{day:2,occ:'ଚୈତ୍ର ପୂର୍ଣ୍ଣିମା, ବୈଶାଖ ବ୍ରତାରମ୍ଭ, ଚୈତ୍ର ପର୍ବ'},{day:3,occ:'ଗୁଡ଼ ଫ୍ରାଇଡେ, ଲଙ୍କା ପୋଡ଼ି'},{day:6,occ:'ଇଷ୍ଟର ସୋମବାର'},{day:10,occ:'ଶରଣ ଆରମ୍ଭ'},{day:12,occ:'ଶ୍ରୀମନ୍ଦିରରେ ରାମାଭିଷେକ'},{day:13,occ:'ବରୁଥିନୀ ଏକାଦଶୀ, ମାସାନ୍ତ'},{day:14,occ:'ମହାବିଷୁବ ପଣା ସଂକ୍ରାନ୍ତି, ଝାମୁ ଯାତ୍ରା, ହନୁମାନ ଜୟନ୍ତୀ'},{day:15,occ:'ଶରଣୀ ଶେଷ'},{day:16,occ:'ଶିବ ଚତୁର୍ଦ୍ଦଶୀ ଉପବାସ'},{day:17,occ:'ରୁକୁଣି ଅମାବାସ୍ୟା'},{day:19,occ:'ପରଶୁରାମ ଜୟନ୍ତୀ'},{day:20,occ:'ଅକ୍ଷୟ ତୃତୀୟା, ଶ୍ରୀକ୍ଷେତ୍ର ଚନ୍ଦନ ଯାତ୍ରା ଆରମ୍ଭ'},{day:22,occ:'ଶ୍ରୀ ରାମାନୁଜାଚାର୍ଯ୍ୟ ଜୟନ୍ତୀ'},{day:24,occ:'ନୀଳାଦ୍ରି ମହୋଦୟ ଅଷ୍ଟମୀ'},{day:25,occ:'ସୀତା ନବମୀ, ଶନିଶ୍ଚର ଯଜ୍ଞ'},{day:27,occ:'ମୋହିନୀ ଏକାଦଶୀ ଉପବାସ'},{day:28,occ:'ଉତ୍କଳ ଗୌରବ ମଧୁସୂଦନ ଦାସ ଜୟନ୍ତୀ'},{day:30,occ:'ନୃସିଂହ ଜନ୍ମ, ଚତୁର୍ଦ୍ଦଶୀ ଉପବାସ'}],
+  5: [{day:1,occ:'ଶ୍ରମିକ ଦିବସ, ବୁଦ୍ଧ ଜୟନ୍ତୀ, ବୈଶାଖ ବ୍ରତ ସମାପନ'},{day:2,occ:'ଶରଣ ଆରମ୍ଭ'},{day:9,occ:'ଶ୍ରୀକ୍ଷେତ୍ରରେ ଭାଉଁରୀ'},{day:10,occ:'ଉତ୍କଳରେ ଭାଉଁରୀ, ଶ୍ରୀକ୍ଷେତ୍ରରେ ହଳଦୀପାଣି'},{day:12,occ:'ଶରଣ ଶେଷ'},{day:13,occ:'ଜଳକ୍ରୀଡ଼ା ଏକାଦଶୀ ଉପବାସ'},{day:14,occ:'ମାସାନ୍ତ'},{day:15,occ:'ବୃଷ ସଂକ୍ରାନ୍ତି, ଶିବ ଚତୁର୍ଦ୍ଦଶୀ'},{day:16,occ:'ଅମାବାସ୍ୟା, ସାବିତ୍ରୀ ବ୍ରତ, ଚନ୍ଦ୍ର କ୍ଷୟ'},{day:17,occ:'ଚନ୍ଦ୍ର ଦର୍ଶନ, ମଳମାସ ଆରମ୍ଭ'},{day:27,occ:'ପୁରୁଷୋତ୍ତମ ଏକାଦଶୀ ଉପବାସ, ଇଦ-ଉଲ-ଜୁହା'},{day:29,occ:'ଶିବ ଚତୁର୍ଦ୍ଦଶୀ'},{day:30,occ:'ପୂର୍ଣ୍ଣିମାର ଚନ୍ଦ୍ରପୂଜା'},{day:31,occ:'ମଳ ପୂର୍ଣ୍ଣିମା'}],
+  6: [{day:4,occ:'ଶରଣ ଆରମ୍ଭ'},{day:8,occ:'ଶରଣ ଶେଷ'},{day:11,occ:'ପୁରୁଷୋତ୍ତମ ଏକାଦଶୀ ଉପବାସ'},{day:14,occ:'ପହିଲି ରଜ, ମାସାନ୍ତ, ଚନ୍ଦ୍ର କ୍ଷୟ'},{day:15,occ:'ମିଥୁନ ସଂକ୍ରାନ୍ତି, ରଜ ସଂକ୍ରାନ୍ତି, ମଳ ଅମାବାସ୍ୟା'},{day:16,occ:'ଶୁଦ୍ଧ ମାସ ଆରମ୍ଭ, ଚନ୍ଦ୍ର ଦର୍ଶନ, ଶେଷ ରଜ, ଭୂଦାହ'},{day:17,occ:'ରମ୍ଭା ତୃତୀୟା, ବସୁମତୀ ସ୍ନାନ'},{day:18,occ:'ଉମା ଚତୁର୍ଥୀ, ଶିବ ବିବାହ ଉତ୍ସବ'},{day:19,occ:'ଶୀତଳ ଷଷ୍ଠୀ, ଅରଣ୍ୟକ ଷଷ୍ଠୀ'},{day:20,occ:'ଶ୍ରୀମନ୍ଦିରରେ ଶୀତଳ ଷଷ୍ଠୀ, ଜଳକ୍ରୀଡ଼ା'},{day:24,occ:'ଗଙ୍ଗା ଦଶହରା'},{day:25,occ:'ରୁକ୍ମିଣୀ ବିବାହ, ନିର୍ଜଳା ଏକାଦଶୀ, ଲକ୍ଷ୍ମୀ ନାରାୟଣ ବ୍ରତ'},{day:26,occ:'ଚମ୍ପକ ଦ୍ୱାଦଶୀ, ମହରମ'},{day:28,occ:'ଶ୍ରୀମନ୍ଦିରରେ ଚତୁର୍ଦ୍ଦଶୀ ହୋମ'},{day:29,occ:'ଦେବସ୍ନାନ ପୂର୍ଣ୍ଣିମା, ଚନ୍ଦ୍ର ପୂଜା, ଶ୍ରୀ ଜୀଉଙ୍କ ଅନାସର ଆରମ୍ଭ'}],
+  7: [{day:1,occ:'ଶରଣ ଆରମ୍ଭ'},{day:5,occ:'ଅନାସର ପଞ୍ଚମୀ, ଫୁଲୁରୀ ଲାଗି'},{day:6,occ:'ଶରଣ ଶେଷ'},{day:10,occ:'ଅନାସର ଦଶମୀ'},{day:11,occ:'ଖାଲିଲାଗି ଏକାଦଶୀ ଉପବାସ, ଅନାସର ଦ୍ୱାଦଶୀ, ହଳ ନିଷେଧ'},{day:12,occ:'ଅନାସର ତ୍ରୟୋଦଶୀ, ଘନଲାଗି'},{day:13,occ:'ଚନ୍ଦ୍ର କ୍ଷୟ, ନିଶିପାଳନ, ଶିବ ଚତୁର୍ଦ୍ଦଶୀ ଉପବାସ'},{day:14,occ:'ଅମାବାସ୍ୟା, ନେତ୍ରୋତ୍ସବ'},{day:15,occ:'ଶ୍ରୀ ଜୀଉଙ୍କର ଉଭା ଯାତ୍ରା, ଚନ୍ଦ୍ର ଦର୍ଶନ'},{day:16,occ:'ଶ୍ରୀ ଗୁଣ୍ଡିଚା ରଥଯାତ୍ରା, ରଥଯାତ୍ରା, ମାସାନ୍ତ'},{day:17,occ:'ଦକ୍ଷିଣାୟନ କର୍କଟ ସଂକ୍ରାନ୍ତି, ହଳ ନିଷେଧ'},{day:20,occ:'ହେରା ପଞ୍ଚମୀ'},{day:21,occ:'ପରଶୁରାମାଷ୍ଟମୀ'},{day:22,occ:'ନବମୀ ସନ୍ଧ୍ୟା ଦର୍ଶନ'},{day:23,occ:'ନବମୀ ଦର୍ଶନ'},{day:24,occ:'ବାହୁଡ଼ା ଯାତ୍ରା, ବାହୁଡ଼ା'},{day:25,occ:'ହରିଶୟନ (ବଡ) ଏକାଦଶୀ ଉପବାସ, ଶ୍ରୀ ଜୀଉଙ୍କର ସୁନା ବେଶ'},{day:26,occ:'ଗରୁଡ଼ ଶୟନ ଉତ୍ସବ, ଅଧରପାଣା'},{day:27,occ:'ନୀଳାଦ୍ରି ବିଜେ, ଶିବ ଶୟନ, ଶିବ ଚତୁର୍ଦ୍ଦଶୀ ଉପବାସ'},{day:28,occ:'ଶରଣ ଆରମ୍ଭ'},{day:29,occ:'ବ୍ୟାସ ପୂର୍ଣ୍ଣିମା, ଚନ୍ଦ୍ରପୂଜା'}],
+  8: [{day:2,occ:'ଶରଣ ଶେଷ'},{day:3,occ:'ବୋଲବମ ଆରମ୍ଭ, ମନସା ପଞ୍ଚମୀ'},{day:9,occ:'କାମଦା ଏକାଦଶୀ ଉପବାସ'},{day:11,occ:'ଶିବ ଚତୁର୍ଦ୍ଦଶୀ ଉପବାସ'},{day:12,occ:'ଶ୍ରୀମନ୍ଦିରରେ ଚିତାଲାଗି ଅମାବାସ୍ୟା, ଚିତଉ ଅମାବାସ୍ୟା, ନିଶିପାଳନ'},{day:14,occ:'ଚନ୍ଦ୍ର ଦର୍ଶନ'},{day:15,occ:'୮୦ତମ ସ୍ୱାଧୀନତା ଦିବସ, ଶ୍ରୀ ଅରବିନ୍ଦ ଜୟନ୍ତୀ'},{day:16,occ:'ଜାଗ୍ରତଗୌରୀ ପଞ୍ଚମୀ, ମାସାନ୍ତ'},{day:17,occ:'ସିଂହ ସଂକ୍ରାନ୍ତି'},{day:22,occ:'ଝୁଲଣ ଯାତ୍ରା ଆରମ୍ଭ'},{day:23,occ:'ପୁତ୍ରଦା ଏକାଦଶୀ ଉପବାସ, ଶ୍ରୀ ଜୀଉଙ୍କର ପବିତ୍ରାରୋପଣ, ରବିନାରାୟଣ ବ୍ରତ'},{day:24,occ:'ପବିତ୍ରାରୋପଣ, ଶରଣ ଆରମ୍ଭ'},{day:25,occ:'ଆଖିତେକା ପର୍ବ'},{day:26,occ:'ଶିବ ଚତୁର୍ଦ୍ଦଶୀ ଉପବାସ, ଶିବ ପବିତ୍ରାରୋପଣ, ମହାପୁରୁଷ ମହମ୍ମଦଙ୍କ ଜନ୍ମ ଦିବସ'},{day:27,occ:'ଶ୍ରୀ ବଳଭଦ୍ର ଜନ୍ମ, ରକ୍ଷାବନ୍ଧନ, ରାଖି ପୂର୍ଣ୍ଣିମା'},{day:28,occ:'ଗମ୍ଭା ପୂର୍ଣ୍ଣିମା, ଶ୍ରାବଣ ପୂର୍ଣ୍ଣିମା'},{day:29,occ:'ଶରଣ ଶେଷ'},{day:30,occ:'ଖୁଦୁରୁକୁଣି ଓଷା, କୌଶଲ୍ୟା ପୂଜା'},{day:31,occ:'ଅଙ୍ଗଭେଟା ତୃତୀୟା'}],
+  9: [{day:1,occ:'ରାଖି ପଞ୍ଚମୀ'},{day:2,occ:'ଶ୍ରୀମନ୍ଦିରରେ ରେଖା ପଞ୍ଚମୀ, ବୁଧବାମନ ଓଷା'},{day:4,occ:'ଶ୍ରୀ କୃଷ୍ଣ ଜନ୍ମାଷ୍ଟମୀ, ଶ୍ରୀ ଶ୍ରୀ ଆଦିତ୍ୟ ନାରାୟଣ ଦାସଙ୍କ ଜନ୍ମୋତ୍ସବ'},{day:5,occ:'ନନ୍ଦୋତ୍ସବ, ଶିକ୍ଷକ ଦିବସ, ସର୍ବପଲ୍ଲୀ ରାଧାକୃଷ୍ଣନ ଜୟନ୍ତୀ'},{day:7,occ:'କାଳିୟଦଳନ ଏକାଦଶୀ ଉପବାସ'},{day:9,occ:'ଶିବ ଚତୁର୍ଦ୍ଦଶୀ ଉପବାସ'},{day:10,occ:'ଗୃହଲକ୍ଷ୍ମୀ ସପ୍ତପୁରୀ ଭୋଗ, ଚନ୍ଦ୍ର କ୍ଷୟ, ନିଶିପାଳନ'},{day:11,occ:'ଶ୍ରୀମନ୍ଦିରରେ ସପ୍ତପୁରୀ ଅମାବାସ୍ୟା'},{day:12,occ:'ଚନ୍ଦ୍ର ଦର୍ଶନ'},{day:14,occ:'ଶ୍ରୀ ଗଣେଶ ଚତୁର୍ଥୀ, ଚଉରା ଚତୁର୍ଥୀ, ବଳିତ୍ରୁତୀୟା'},{day:15,occ:'ଋଷି ପଞ୍ଚମୀ, ନୂଆଁଖାଇ ପର୍ବ'},{day:16,occ:'ମାସାନ୍ତ'},{day:17,occ:'କନ୍ୟା ସଂକ୍ରାନ୍ତି, ବିଶ୍ୱକର୍ମା ପୂଜା, ଷଷ୍ଠୀ ଓଷା, ସୋମନାଥ ବ୍ରତ ଆରମ୍ଭ, ଲଳିତା ସପ୍ତମୀ, କୁକ୍କୁଟୀ ବ୍ରତ'},{day:18,occ:'ଶ୍ରୀ ଦୁର୍ଗା ଷଷ୍ଠୀ ଓଷା'},{day:19,occ:'ଶ୍ରୀ ରାଧାଷ୍ଟମୀ ଓ ଦୁର୍ବଳାଷ୍ଟମୀ'},{day:20,occ:'ତାଳ ନବମୀ, ଠାକୁର ଅନୁକୂଳ ଚନ୍ଦ୍ର ଜୟନ୍ତୀ'},{day:21,occ:'ଶରଣ ଆରମ୍ଭ'},{day:22,occ:'ପାର୍ଶ୍ୱପରିବର୍ତ୍ତନ (ବଡ) ଏକାଦଶୀ'},{day:23,occ:'ସୁନିଆ, ବାମନଜନ୍ମ, ସନ ୧୪୩୪ ସାଲ ଅଙ୍କ ପ୍ରବେଶ, ଗରୁଡ଼ ପାର୍ଶ୍ୱପରିବର୍ତ୍ତନ, ଇନ୍ଦ୍ରଧ୍ୱଜ ପୂଜା'},{day:25,occ:'ଅନନ୍ତ ଚତୁର୍ଦ୍ଦଶୀ, ଅନନ୍ତ ବ୍ରତ, ଶ୍ରୀ ଦୁର୍ଗା ଓ ଶିବଙ୍କ ପାର୍ଶ୍ୱପରିବର୍ତ୍ତନ'},{day:26,occ:'ଇନ୍ଦ୍ରୋତ୍ସବ ପୂର୍ଣ୍ଣିମା, ଚନ୍ଦ୍ରପୂଜା, ଭାଗବତ ଜନ୍ମ'},{day:27,occ:'ଅପରପକ୍ଷ ଆରମ୍ଭ'},{day:30,occ:'ଅଶ୍ୱ ପଞ୍ଚମୀ'}],
+  10: [{day:1,occ:'ଗଜ ଷଷ୍ଠୀ'},{day:2,occ:'ଗାନ୍ଧୀ ଓ ଶାସ୍ତ୍ରୀ ଜୟନ୍ତୀ'},{day:3,occ:'ଶ୍ରୀ ଦୁର୍ଗା ଦେବୀଙ୍କ ଉତ୍ଥାପନ, ସହସ୍ର କୁମ୍ଭାଭିଷେକ, ଷୋଡଶଦିନାତ୍ମକ ପୂଜା, ମୂଳାଷ୍ଟମୀ, ଦ୍ୱିତୀୟବାହନ ଓଷା'},{day:6,occ:'ଇନ୍ଦିରା ଏକାଦଶୀ ଉପବାସ'},{day:9,occ:'ଶିବ ଚତୁର୍ଦ୍ଦଶୀ'},{day:10,occ:'ମହାଳୟା, ଅମାବାସ୍ୟା, ଚନ୍ଦ୍ର କ୍ଷୟ'},{day:11,occ:'ଶ୍ରୀ ଦୁର୍ଗା ଦେବୀଙ୍କର ନବଦିନାତ୍ମକ ପୂଜାରମ୍ଭ, ମା ବିରଜା ଦେବଙ୍କର ରଥଯାତ୍ରା'},{day:12,occ:'ଚନ୍ଦ୍ର ଦର୍ଶନ'},{day:15,occ:'ନଟ ପଞ୍ଚମୀ, ମା ବିରଜା ଦେବୀଙ୍କର ପଞ୍ଚମୀ ହୋମ ଓ ଗୁପ୍ତ ପଞ୍ଚମୀ ବ୍ରତ'},{day:16,occ:'ତପଃ ଷଷ୍ଠୀ, ମୃନ୍ମୟୀ ଦେବଙ୍କର ବିଲ୍ୱାଧିବାସ'},{day:17,occ:'ଶ୍ରୀ ଦୁର୍ଗା ଦେବୀଙ୍କର ତ୍ରିଦିନାତ୍ମକ ସପ୍ତମୀ ପୂଜା, ମୃନ୍ମୟୀ ଦେବୀଙ୍କ ମହାସପ୍ତମୀ ପୂଜା, ତୁଳା ସଂକ୍ରାନ୍ତି ଉପବାସ'},{day:18,occ:'ମହାଅଷ୍ଟମୀ, ମୃନ୍ମୟୀ ଦେବୀଙ୍କ ମହାଅଷ୍ଟମୀ ପୂଜା'},{day:19,occ:'ମହାନବମୀ, ମୃନ୍ମୟୀ ଦେବୀଙ୍କ ମହାନବମୀ ପୂଜା'},{day:20,occ:'ମୃନ୍ମୟୀ ଦେବଙ୍କର ଦଶହରା, ଦଶହରା'},{day:21,occ:'ଶ୍ରୀମନ୍ଦିରରେ ଦଶହରା, ସୋମନାଥ ବ୍ରତ ଉଦଯାପନ ଓ ଭସାଣି'},{day:22,occ:'ପାପାଙ୍କୁଶା ଏକାଦଶୀ ଉପବାସ, ଶ୍ରୀ ଲକ୍ଷ୍ମୀନାରାୟଣ ବ୍ରତ'},{day:23,occ:'ଶରଣ ଶେଷ'},{day:24,occ:'ଶିବ ଚତୁର୍ଦ୍ଦଶୀ ଉପବାସ'},{day:25,occ:'କୁମାରୋତ୍ସବ, ଗଜଲକ୍ଷ୍ମୀ ପୂଜା ଓ ଚନ୍ଦ୍ରପୂଜା'},{day:26,occ:'କୁମାର ପୂର୍ଣ୍ଣିମା, କାର୍ତ୍ତିକ ବ୍ରତାରମ୍ଭ, ପଣ୍ଡିତ ବିଷ୍ଣୁ ପ୍ରସାଦ ଖଡ଼ିଆରତ୍ନଙ୍କ ଶ୍ରାଦ୍ଧ'}],
+  11: [{day:5,occ:'ରମା ଏକାଦଶୀ ଉପବାସ, ଗୋବତ୍ସ ଦ୍ୱାଦଶୀ'},{day:7,occ:'ଧନ୍ୱନ୍ତରୀ ଜୟନ୍ତୀ, ଧନତେରସ, ନରକ ଚତୁର୍ଦ୍ଦଶୀ'},{day:8,occ:'ଦୀପାବଳୀ, ପାୟଶ୍ରାଦ୍ଧ, ଶ୍ୟାମା କାଳୀ ପୂଜା'},{day:9,occ:'କାର୍ତ୍ତିକ ଅମାବାସ୍ୟା, ସୋମବତୀ ସ୍ନାନ'},{day:10,occ:'ଗୋବର୍ଦ୍ଧନ ପୂଜା, ଅନ୍ନକୂଟ, ଚନ୍ଦ୍ର ଦର୍ଶନ'},{day:11,occ:'ଯମ ଓ ଭ୍ରାତୃ ଦ୍ୱିତୀୟା'},{day:13,occ:'ନାଗ ଚତୁର୍ଥୀ'},{day:14,occ:'ଶିଶୁ ଦିବସ, ଜବାହରଲାଲ ନେହେରୁ ଜୟନ୍ତୀ'},{day:16,occ:'ବିଛା ସଂକ୍ରାନ୍ତି, ଗୋଷ୍ଠାଷ୍ଟମୀ, ଅମୃତ ମନୋହି ଭୋଗ'},{day:17,occ:'ଗୋଷ୍ଠାଷ୍ଟମୀ'},{day:18,occ:'କାଞ୍ଜି ଅଣ୍ଳା ନବମୀ, ଜଗଦ୍ଧାତ୍ରୀ ପୂଜା, ଶ୍ରୀ ରାଧା ପାଦଦର୍ଶନ, ଭାଗବତ ସପ୍ତାହ ପାଠ'},{day:19,occ:'ଶରଣ ଶେଷ'},{day:20,occ:'ରାଧା ଦାମୋଦର ବେଶ ସମାପ୍ତି'},{day:21,occ:'ଦେବୋତ୍ଥାନ (ବଡ) ଏକାଦଶୀ, ଗରୁଡ଼ ଦ୍ୱାଦଶୀ, ତୁଳସୀ ବିବାହ, ଭୀଷ୍ମ ପଞ୍ଚକ ବ୍ରତ'},{day:23,occ:'ବଡ ଓଷା, ବୈକୁଣ୍ଠ ଚତୁର୍ଦ୍ଦଶୀ, କାର୍ତ୍ତିକ ମାସ ଶେଷ ସୋମବାର'},{day:24,occ:'ରାସ ପୂର୍ଣ୍ଣିମା, କାର୍ତ୍ତିକ ବ୍ରତ ସମାପନ, କାର୍ତ୍ତିକେଶ୍ୱର ପୂଜା, ଚନ୍ଦ୍ରପୂଜା, ବାଲି ଯାତ୍ରା'},{day:25,occ:'ଚଡ଼କଖାଇ'},{day:26,occ:'ପ୍ରଥମ ମାର୍ଗଶିର ଗୁରୁବାର (ମନାବାସ ଗୁରୁବାର)'},{day:28,occ:'ସୀତା ବିବାହ'},{day:29,occ:'ଶ୍ରୀକ୍ଷେତ୍ରରେ ପରିକ୍ରମା'}],
+  12: [{day:1,occ:'ପ୍ରଥମାଷ୍ଟମୀ'},{day:2,occ:'କାଞ୍ଜିଆଳ ନବମୀ'},{day:3,occ:'ମନାବାସ ଗୁରୁବାର'},{day:4,occ:'ଉତ୍ପନ୍ନା ଏକାଦଶୀ ଉପବାସ'},{day:7,occ:'ଶ୍ରୀମନ୍ଦିରରେ ଦେବଦୀପାବଳୀ ଉତ୍ସବ ଆରମ୍ଭ, ଶିବ ଚତୁର୍ଦ୍ଦଶୀ ଉପବାସ'},{day:8,occ:'ମହୋଦଧି ଅମାବାସ୍ୟା, ଚନ୍ଦ୍ର କ୍ଷୟ, ଶ୍ରୀମନ୍ଦିରରେ ମଧ୍ୟ ଦୀପାବଳୀ, ଗୋସହସ୍ର ସ୍ନାନ'},{day:9,occ:'ଶ୍ରୀମନ୍ଦିରରେ ଶେଷ ଦୀପାବଳୀ'},{day:10,occ:'ଚନ୍ଦ୍ର ଦର୍ଶନ'},{day:11,occ:'ରମ୍ଭା ତୃତୀୟା'},{day:12,occ:'ଶରଣ ଆରମ୍ଭ'},{day:14,occ:'କୁରଳ ପଞ୍ଚମୀ'},{day:15,occ:'ଓଢ଼ଣା ଓ ପ୍ରାବରଣ ଷଷ୍ଠୀ'},{day:16,occ:'ଧନୁ ସଂକ୍ରାନ୍ତି, ପହିଲି ଭୋଗ'},{day:17,occ:'ଶରଣ ଶେଷ'},{day:18,occ:'ମୋକ୍ଷଦା ଏକାଦଶୀ ଉପବାସ, ରବିନାରାୟଣ ବ୍ରତ'},{day:21,occ:'ବ୍ୟଞ୍ଜନ ଦ୍ୱାଦଶୀ'},{day:22,occ:'ଅନଙ୍ଗ ତ୍ରୟୋଦଶୀ, ଗୀତା ଜୟନ୍ତୀ, ପାଷାଣ ଚତୁର୍ଦ୍ଦଶୀ'},{day:23,occ:'ପାଣ୍ଡୁ ଓଷା, ଚନ୍ଦ୍ରପୂଜା'},{day:24,occ:'ପୂର୍ଣ୍ଣିମା, ଗୁରୁ ପୂର୍ଣ୍ଣିମା'},{day:25,occ:'ଯୀଶୁ ଖ୍ରୀଷ୍ଟଙ୍କ ଜନ୍ମ (ବଡ଼ଦିନ)'},{day:26,occ:'ବସ୍ତ୍ର ପହରା, ବଟ ଓଷା'},{day:31,occ:'ପାଠାଣୀ ସାମନ୍ତ ଜୟନ୍ତୀ, ଇଂରାଜୀ ବର୍ଷ ଶେଷ'}]
 };
 
 function getTodayFestivalText(date){
@@ -444,12 +499,9 @@ function getTodayFestivalText(date){
   const day = date.getDate();
   const list = FESTIVALS_OD[month] || [];
   const match = list.find(f => f.day === day);
-  if (match){
-    return ' ଆମ ଓଡିଶାରେ ଆଜିର ଦିନକୁ ' + match.occ + ' ରୂପେ ପାଳନ କରାଯାଏ ।';
-  }
+  if (match) return ' ଆମ ଓଡିଶାରେ ଆଜିର ଦିନକୁ ' + match.occ + ' ରୂପେ ପାଳନ କରାଯାଏ ।';
   return '';
 }
-
 function buildOdiaDatePhrase(date){
   const y = date.getFullYear();
   const monthName = MONTH_NAMES_OD[date.getMonth()];
@@ -458,7 +510,6 @@ function buildOdiaDatePhrase(date){
   const dd = date.getDate();
   return 'ଆଜି ' + y + ' ମସିହା ' + monthName + ' ମାସର ' + ordinal + ' ' + weekdayName + ' ' + dd + ' ତାରିଖ ଅଟେ ।';
 }
-
 function getTodaySpecialMessage(){
   const date = new Date();
   let msg = buildOdiaDatePhrase(date);
@@ -466,287 +517,7 @@ function getTodaySpecialMessage(){
   msg += getTodayFestivalText(date);
   return msg;
 }
-
-/* ============ CORE CHAT ENGINE ============ */
-const chatLog = document.getElementById('chatLog');
-let userScrolledUp = false;
-chatLog.addEventListener('scroll', function(){
-  const distanceFromBottom = chatLog.scrollHeight - chatLog.scrollTop - chatLog.clientHeight;
-  userScrolledUp = distanceFromBottom > 60;
-});
-function scrollToBottom(opts){
-  opts = opts || {};
-  if (opts.respectUserScroll && userScrolledUp) return;
-  requestAnimationFrame(()=>{ chatLog.scrollTop = chatLog.scrollHeight + 200; });
-}
-
-let screenStack = [];
-let forwardStack = [];
-
-function newScreen(){
-  userScrolledUp = false;
-  if (chatLog.children.length){
-    screenStack.push(Array.from(chatLog.children));
-    chatLog.innerHTML = '';
-  }
-  forwardStack = [];
-  renderNavRow();
-}
-function reactivateButtons(){
-  chatLog.querySelectorAll('.qr-btn').forEach(b => { b.disabled = false; b.style.pointerEvents = ''; b.style.opacity = ''; });
-}
-function goBack(){
-  if (!screenStack.length) return;
-  userScrolledUp = false;
-  forwardStack.push(Array.from(chatLog.children));
-  chatLog.innerHTML = '';
-  screenStack.pop().forEach(n => chatLog.appendChild(n));
-  reactivateButtons(); renderNavRow(); scrollToBottom();
-}
-function goForward(){
-  if (!forwardStack.length) return;
-  userScrolledUp = false;
-  screenStack.push(Array.from(chatLog.children));
-  chatLog.innerHTML = '';
-  forwardStack.pop().forEach(n => chatLog.appendChild(n));
-  reactivateButtons(); renderNavRow(); scrollToBottom();
-}
-const navBackBtn = document.getElementById('navBackBtn');
-const navFwdBtn = document.getElementById('navFwdBtn');
-navBackBtn.onclick = goBack;
-navFwdBtn.onclick = goForward;
-function renderNavRow(){
-  navBackBtn.disabled = !screenStack.length;
-  navFwdBtn.disabled = !forwardStack.length;
-}
-
-function showTypingIndicator(){
-  const row = document.createElement('div');
-  row.className = 'msg-row typing-row';
-  row.id = 'typingRow';
-  row.innerHTML = '<img class="msg-avatar" src="https://raw.githubusercontent.com/happysangitanms/assets/main/bot%20image-2.gif" onerror="this.style.display=\'none\'"><div class="bubble bot"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
-  chatLog.appendChild(row);
-  scrollToBottom();
-}
-function removeTypingIndicator(){ const r = document.getElementById('typingRow'); if (r) r.remove(); }
-
-function botSay(text, opts){
-  opts = opts || {};
-  return new Promise(resolve => {
-    if (!opts.sameScreen) newScreen();
-    showTypingIndicator();
-    setTimeout(()=>{
-      removeTypingIndicator();
-      const row = document.createElement('div');
-      row.className = 'msg-row';
-      row.innerHTML = '<img class="msg-avatar" src="https://raw.githubusercontent.com/happysangitanms/assets/main/bot%20image-2.gif" onerror="this.style.display=\'none\'"><div class="bubble bot"><span class="type-target"></span><span class="type-cursor"></span></div>';
-      chatLog.appendChild(row);
-      scrollToBottom();
-      const target = row.querySelector('.type-target');
-      const cursor = row.querySelector('.type-cursor');
-      let i = 0;
-      const speed = opts.speed || 16;
-      function tick(){
-        if (i <= text.length){
-          target.textContent = text.slice(0, i);
-          i++;
-          scrollToBottom({respectUserScroll:true});
-          setTimeout(tick, speed);
-        } else {
-          cursor.remove();
-          renderNavRow();
-          resolve();
-        }
-      }
-      tick();
-    }, opts.thinkDelay === undefined ? 450 : opts.thinkDelay);
-  });
-}
-
-function addQuickReplies(options){
-  const wrap = document.createElement('div');
-  wrap.className = 'qr-wrap';
-  options.forEach(o => {
-    const btn = document.createElement('button');
-    btn.className = 'qr-btn' + (o.className ? ' ' + o.className : '');
-    btn.textContent = o.label;
-    btn.onclick = () => {
-      wrap.querySelectorAll('.qr-btn').forEach(b => { b.disabled = true; b.style.pointerEvents = 'none'; b.style.opacity = '0.55'; });
-      o.onClick();
-    };
-    wrap.appendChild(btn);
-  });
-  chatLog.appendChild(wrap);
-  renderNavRow(); scrollToBottom();
-  return wrap;
-}
-
-function addCardGrid(cards){
-  const wrap = document.createElement('div');
-  wrap.className = 'menu-card-grid';
-  cards.forEach(c => {
-    const el = document.createElement('div');
-    el.className = 'menu-card';
-    el.style.background = c.bg;
-    el.innerHTML = '<div class="mc-icon">'+c.icon+'</div><div class="mc-title">'+c.title+'</div>' + (c.sub ? '<div class="mc-sub">'+c.sub+'</div>' : '');
-    el.onclick = c.onClick;
-    wrap.appendChild(el);
-  });
-  chatLog.appendChild(wrap);
-  renderNavRow(); scrollToBottom();
-  return wrap;
-}
-
-function addEnterCard(title, href){
-  const isExternal = /^https?:\/\//i.test(href);
-  const a = document.createElement('a');
-  a.className = 'enter-card';
-  a.href = href;
-  a.innerHTML =
-    '<div class="ec-label">👆 Tap to Enter</div>' +
-    '<div class="ec-title">'+title+'</div>' +
-    '<div class="ec-prompt">ଖୋଲିବା ପାଇଁ ଏଠାରେ କ୍ଲିକ୍ କରନ୍ତୁ →</div>' +
-    '<div class="ec-feedback"></div>';
-  a.onclick = function(e){
-    e.preventDefault();
-    a.classList.add('clicked');
-    setTimeout(()=>{
-      a.classList.remove('clicked');
-      if (isExternal) window.open(href, '_blank');
-      else window.location.href = href;
-    }, 500);
-  };
-  chatLog.appendChild(a);
-  renderNavRow(); scrollToBottom();
-  return a;
-}
-
-function confirmEnter(title, url, backFn){
-  const isExternal = /^https?:\/\//i.test(url);
-  if (isExternal) {
-    window.open(url, '_blank');
-  } else {
-    window.location.href = url;
-  }
-}
-
-/* ============ CONVERSATION FLOW ============ */
-async function openMainMenu(sameScreen){
-  await botSay('ଆପଣ କେଉଁ ବିଭାଗ ଦେଖିବାକୁ ଚାହୁଁଛନ୍ତି ?', { sameScreen: !!sameScreen });
-  addQuickReplies([
-    { label: '🏫 ସ୍କୁଲ୍', className:'qj-school', onClick: () => askSchool() },
-    { label: '📘 +2', className:'qj-p2', onClick: () => askPlus2() },
-    { label: '🎓 +3', className:'qj-p3', onClick: () => askPlus3() },
-    { label: '⚖️ ଆଇନ ସଚେତନତା ପାଇଁ ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ', className:'qj-legal', onClick: () => askLegal() },
-    { label: '🌟 ଇଂରାଜୀ ଜ୍ଞାନ, ଯୁକ୍ତି ଦକ୍ଷତା ଏବଂ ମାନସିକ ଶକ୍ତିର ବିକାଶ ପାଇଁ ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ', className:'qj-special', onClick: () => askSpecial() }
-  ]);
-}
-
-async function askSchool(){
-  await botSay('ସ୍କୁଲ୍ ଶିକ୍ଷାର୍ଥୀଙ୍କ ପାଇଁ କେଉଁ ଶ୍ରେଣୀ ଖୋଲିବେ ?');
-  const wrap = document.createElement('div');
-  wrap.className = 'school-btn-grid';
-  SCHOOL.forEach((c,i) => {
-    const btn = document.createElement('button');
-    btn.className = 'school-btn';
-    btn.style.background = gradFor(i);
-    btn.textContent = c.short;
-    btn.onclick = () => confirmEnter(c.label, c.url, () => askSchool());
-    wrap.appendChild(btn);
-  });
-  chatLog.appendChild(wrap);
-  renderNavRow(); scrollToBottom();
-  addQuickReplies([{ label: '← ମୁଖ୍ୟ ମେନୁକୁ ଫେରନ୍ତୁ', onClick: () => openMainMenu() }]);
-}
-  
-async function askPlus2(){
-  await botSay('+2 ଶ୍ରେଣୀରେ କେଉଁ ବିଭାଗ ପଢିବେ ?');
-  addQuickReplies([
-    { label: '📘 କଳା', onClick: () => showPlus2Stream('arts') },
-    { label: '💼 ବାଣିଜ୍ୟ', onClick: () => showPlus2Stream('commerce') },
-    { label: '🔬 ବିଜ୍ଞାନ', onClick: () => showPlus2Stream('science') },
-    { label: '← ମୁଖ୍ୟ ମେନୁ', onClick: () => openMainMenu() }
-  ]);
-}
-async function showPlus2Stream(key){
-  const g = PLUS2[key];
-  await botSay('+2 ' + g.name + ' — କେଉଁ ବର୍ଷ ଖୋଲିବେ ?');
-  const cards = g.items.map((it,i) => ({
-    title: it.title, sub: it.sub, icon: it.icon, bg: gradFor(i),
-    onClick: () => confirmEnter(it.title, it.url, () => showPlus2Stream(key))
-  }));
-  addCardGrid(cards);
-  addQuickReplies([{ label: '← ଅନ୍ୟ ବିଭାଗ', onClick: () => askPlus2() }]);
-}
-
-async function askPlus3(){
-  await botSay('+2 ଶ୍ରେଣୀରେ କେଉଁ ବିଭାଗ ପଢିବେ ?');
-  addQuickReplies([
-    { label: '💼 ବାଣିଜ୍ୟ ଅନର୍ସ', onClick: () => showPlus3Commerce() },
-    { label: '📜 କଳା ଅନର୍ସ', onClick: () => showHonoursSubjects('arts') },
-    { label: '🔬 ବିଜ୍ଞାନ ଅନର୍ସ', onClick: () => showHonoursSubjects('science') },
-    { label: '← ମୁଖ୍ୟ ମେନୁ', onClick: () => openMainMenu() }
-  ]);
-}
-async function showPlus3Commerce(){
-  await botSay('ବାଣିଜ୍ୟ — କେଉଁ ସେମିଷ୍ଟାର ଖୋଲିବେ ?');
-  const cards = semItems('p3-commerce', 8).map((it,i) => ({
-    title: it.title, sub: it.sub, icon: it.icon, bg: gradFor(i),
-    onClick: () => confirmEnter('Commerce ' + it.title, it.url, () => showPlus3Commerce())
-  }));
-  addCardGrid(cards);
-  addQuickReplies([{ label: '← ପଛକୁ', onClick: () => askPlus3() }]);
-}
-async function showHonoursSubjects(stream){
-  const list = stream === 'arts' ? ARTS_HON : SCI_HON;
-  await botSay((stream === 'arts' ? 'କଳା' : 'ବିଜ୍ଞାନ') + ' ଅନର୍ସ — କେଉଁ ବିଷୟ ପଢିବେ ?');
-  const cards = list.map((s,i) => ({
-    title: s.name, sub: s.odia, icon: s.icon, bg: gradFor(i),
-    onClick: () => showHonoursSemesters(stream, s)
-  }));
-  addCardGrid(cards);
-  addQuickReplies([{ label: '← ପଛକୁ', onClick: () => askPlus3() }]);
-}
-async function showHonoursSemesters(stream, subj){
-  await botSay(subj.name + ' (' + subj.odia + ') — କେଉଁ ସେମିଷ୍ଟାର ଖୋଲିବେ ?');
-  const cards = semItems(subj.path, 8).map((it,i) => ({
-    title: it.title, sub: it.sub, icon: it.icon, bg: gradFor(i),
-    onClick: () => confirmEnter(subj.name + ' ' + it.title, it.url, () => showHonoursSemesters(stream, subj))
-  }));
-  addCardGrid(cards);
-  addQuickReplies([{ label: '← ଅନ୍ୟ ବିଷୟ', onClick: () => showHonoursSubjects(stream) }]);
-}
-
-async function askLegal(){
-  await botSay('ଆଇନ ସଚେତନତା ପାଇଁ କେଉଁ ବିଷୟ ଖୋଲିବେ ?');
-  const cards = LEGAL.map((it,i) => ({
-    title: it.title, sub: it.sub, icon: it.icon, bg: gradFor(i),
-    onClick: () => confirmEnter(it.title, it.url, () => askLegal())
-  }));
-  addCardGrid(cards);
-  addQuickReplies([{ label: '← ମୁଖ୍ୟ ମେନୁ', onClick: () => openMainMenu() }]);
-}
-
-async function askSpecial(){
-  await confirmEnter('ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ ବହି', SPECIAL_URL, () => openMainMenu());
-}
-
-/* ============ BOOT ============ */
-async function startConversation(){
-  await botSay(getTodaySpecialMessage(), { sameScreen:true });
-  await botSay('🌹 ଇ-ବିଦ୍ୟା ଏକାଡେମୀରେ ଆପଣଙ୍କୁ ସ୍ଵାଗତ! ମୁଁ ଆପଣଙ୍କ ପାଠ୍ୟ ସହାୟକ । ଚାଲନ୍ତୁ ଆଗକୁ ବଢିବା ।', { sameScreen:true });
-  await openMainMenu(true);
-}
-function setAppHeight(){
-  const vh = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
-  document.documentElement.style.setProperty('--app-height', vh + 'px');
-}
-setAppHeight();
-window.addEventListener('resize', setAppHeight);
-window.addEventListener('orientationchange', setAppHeight);
-if (window.visualViewport) window.visualViewport.addEventListener('resize', setAppHeight);
-
-startConversation();
+document.getElementById('greetingText').textContent = getTodaySpecialMessage();
 </script>
 </body>
 </html>
