@@ -490,12 +490,13 @@ function openSubject(groupKey, subjKey){
 }
 function modalBack(){
   if (modalStack.length > 1){ modalStack.pop(); render(); }
+  else { closeModal(); }
 }
 function render(){
   const top = modalStack[modalStack.length - 1];
   document.getElementById('modalTitle').textContent = top.title;
   document.getElementById('modalBody').innerHTML = top.html;
-  document.getElementById('modalBack').classList.toggle('show', modalStack.length > 1);
+  document.getElementById('modalBack').classList.add('show');
 }
 function closeModal(){
   document.getElementById('panelView').classList.add('hidden');
