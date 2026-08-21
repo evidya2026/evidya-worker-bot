@@ -868,7 +868,7 @@ const liveCallDot = document.getElementById('liveCallDot');
 const keypad = document.getElementById('keypad');
 
 let currentNodeId = null;
-let history = [];
+let navHistory = [];
 let muted = false;
 
 let currentAudio = null;
@@ -893,11 +893,21 @@ function speak(text){
 }
 
 function playAudioFile(path){
+    window.speechSynthesis.cancel();
+    if(currentAudio){
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        currentAudio = null;
+    }
+
     speakingIndicator.classList.add('on');
     currentAudio = new Audio(path);
     if(muted){ currentAudio.muted = true; }
     currentAudio.addEventListener('ended', () => speakingIndicator.classList.remove('on'));
-    currentAudio.addEventListener('error', () => speakingIndicator.classList.remove('on'));
+   currentAudio.addEventListener('error', () => {
+    speakingIndicator.classList.remove('on');
+    speak(node.text); // fallback for regular menu prompts too
+});
     currentAudio.play().catch(()=>{ speakingIndicator.classList.remove('on'); });
 }
 
@@ -909,34 +919,38 @@ function playPrompt(node){
     }
 }
 
+// inside goToNode()
 function goToNode(nodeId, pushHistory){
-    if(pushHistory && currentNodeId) history.push(currentNodeId);
+    if(pushHistory && currentNodeId) navHistory.push(currentNodeId);
     currentNodeId = nodeId;
     const node = IVR_MENU[nodeId];
     playPrompt(node);
 }
-
 function handleKey(key){
     const node = IVR_MENU[currentNodeId];
     if(!node) return;
     const target = node.options ? node.options[key] : undefined;
 
-    if(!target){
-        speak("ଦୟାକରି ସଠିକ୍ ବଟନ୍ ଚୟନ କରନ୍ତୁ ।");
-        return;
+if(!target){
+    if(INVALID_KEY_AUDIO && INVALID_KEY_AUDIO.trim() !== ""){
+        playAudioFile(INVALID_KEY_AUDIO);
+    } else {
+        speak(INVALID_KEY_TEXT);
     }
+    return;
+}
     if(target === "REPEAT"){
         playPrompt(node);
         return;
     }
-    if(target === "BACK"){
-        const prev = history.pop();
-        if(prev){
-            currentNodeId = prev;
-            playPrompt(IVR_MENU[prev]);
-        }
-        return;
+   if(target === "BACK"){
+    const prev = navHistory.pop();
+    if(prev){
+        currentNodeId = prev;
+        playPrompt(IVR_MENU[prev]);
     }
+    return;
+}
     if(target === "EXECUTIVE"){
         placeRealExecutiveCall();
         return;
@@ -950,6 +964,8 @@ function handleKey(key){
 
 const EXECUTIVE_HANDOFF_AUDIO = "";
 const EXECUTIVE_HANDOFF_TEXT = "ଦୟାକରି ଧ୍ୟାନ ଦିଅନ୍ତୁ । ମୋର ଏହି କଥା ସାରିବା ପରେ ଆପଣଙ୍କ ଫୋନର ଡାଏଲର ରେ ଆମ ପ୍ରତିନିଧିଙ୍କ ନମ୍ବର ଆସିଯିବ । ଆପଣ ସେହି ନମ୍ବରକୁ ଡାଏଲ କରି ତାଙ୍କ ସହିତ କଥା ହୁଅନ୍ତୁ ।";
+    const INVALID_KEY_AUDIO = ""; // put your .m4a URL here, e.g. "https://cdn.evidya.de/invalid_key.m4a"
+const INVALID_KEY_TEXT = "ଦୟାକରି ସଠିକ୍ ବଟନ୍ ଚୟନ କରନ୍ତୁ ।";
 
 function dialExecutiveNow(){
     window.location.href = "tel:" + EXECUTIVE_PHONE_NUMBER;
@@ -1005,6 +1021,7 @@ function speakThenDial(){
     window.speechSynthesis.speak(utter);
 }
 
+// inside resetDialerUI()
 function resetDialerUI(){
     liveCallDot.classList.remove('show');
     keypad.style.opacity = "1";
@@ -1013,7 +1030,7 @@ function resetDialerUI(){
     endBtn.style.pointerEvents = "auto";
     muted = false;
     muteBtn.classList.remove('active');
-    history = [];
+    navHistory = [];
     currentNodeId = null;
 }
 
@@ -1042,11 +1059,9 @@ endBtn.addEventListener('click', closeIvr);
 muteBtn.addEventListener('click', () => {
     muted = !muted;
     muteBtn.classList.toggle('active', muted);
-    if(muted){
-        window.speechSynthesis.cancel();
-        if(currentAudio) currentAudio.pause();
-        speakingIndicator.classList.remove('on');
-    }
+    window.speechSynthesis.cancel(); // TTS can't be "muted", only stopped
+    if(currentAudio) currentAudio.muted = muted;
+    if(muted) speakingIndicator.classList.remove('on');
 });
 
 document.querySelectorAll('.key').forEach(btn => {
