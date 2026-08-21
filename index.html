@@ -64,12 +64,17 @@ button{font:inherit;}
   position:relative;
   display:flex; gap:2px; overflow-x:auto; white-space:nowrap;
   padding:8px 10px 6px; scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+.top-nav a{
+  touch-action:manipulation;
 }
 .top-nav::-webkit-scrollbar{display:none;}
 .top-nav a{
   text-decoration:none; color:rgba(255,255,255,.68);
   font-family:'Poppins',sans-serif; font-size:12.5px; font-weight:600;
-  padding:6px 12px; border-radius:999px; flex-shrink:0;
+  padding:10px 14px; border-radius:999px; flex-shrink:0;
+  touch-action:manipulation;
 }
 .top-nav a.active{background:var(--gold-soft); color:var(--gold-lt);}
 
