@@ -390,8 +390,22 @@ const FILE_SCHEMAS = {
       Array.isArray(t.questions) && t.questions.length > 0 && t.questions.every(isNonEmptyStr)
     )
   },
-  'mermaid.js': { check: o =>
+   'mermaid.js': { check: o =>
     Array.isArray(o) && o.length > 0 && o.every(isNonEmptyStr)
+  },
+  'teachdata.js': { check: o =>
+    Array.isArray(o) && o.length > 0 &&
+    o.every(l =>
+      isNonEmptyStr(l.heading) &&
+      Array.isArray(l.steps) && l.steps.length > 0 &&
+      l.steps.every(s => isNonEmptyStr(s.text) && isNonEmptyStr(s.example) && isNonEmptyStr(s.simple) && Object.keys(s).length === 3) &&
+      Array.isArray(l.questions) && l.questions.length > 0 &&
+      l.questions.every(q =>
+        isNonEmptyStr(q.q) && Array.isArray(q.opts) && q.opts.length === 4 &&
+        q.opts.every(isNonEmptyStr) && typeof q.ans === 'number' && q.ans >= 0 && q.ans <= 3 &&
+        Object.keys(q).length === 3
+      )
+    )
   }
 };
 
@@ -595,6 +609,28 @@ ${topics}
 ]`;
 }
 
+function formatTeachData(data) {
+  const lessons = data.map(l => {
+    const steps = l.steps.map(s => `      { text: ${J(s.text)}, example: ${J(s.example)}, simple: ${J(s.simple)} }`).join(',\n');
+    const opts = q => q.opts.map(o => J(o)).join(', ');
+    const questions = l.questions.map(q => `      { q: ${J(q.q)}, opts: [${opts(q)}], ans: ${q.ans} }`).join(',\n');
+    return `  {
+    heading: ${J(l.heading)},
+    steps: [
+${steps}
+    ],
+    questions: [
+${questions}
+    ]
+  }`;
+  }).join(',\n\n');
+  return `[
+
+${lessons}
+
+]`;
+}
+
 function formatMermaid(data) {
   const items = data.map(g => {
     const escaped = g
@@ -703,8 +739,9 @@ function validateBeforeSubmit(rawText, targetPath) {
     'matching.js': formatMatching,
     'fillblanks.js': formatFillBlanks,
     'arrange.js': formatArrange,
-    'topicsdata.js': formatTopicsData,
-    'mermaid.js': formatMermaid
+       'topicsdata.js': formatTopicsData,
+    'mermaid.js': formatMermaid,
+    'teachdata.js': formatTeachData
   };
   const formatFn = formatters[fileName];
   const formatted = formatFn ? formatFn(result.value) : objText.trim();
