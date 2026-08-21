@@ -82,11 +82,16 @@ button{font:inherit;}
   .brand-logo img{width:100%; height:100%; display:block; object-fit:cover;}
 .brand-logo{
   width:100vw;
-  height:88px;
   margin-left:calc(50% - 50vw);
   margin-right:calc(50% - 50vw);
   flex-shrink:0;
-  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 0;
+  background:rgba(255,255,255,0.06);
+  border-top:1px solid rgba(255,255,255,0.10);
+  border-bottom:1px solid rgba(255,255,255,0.10);
 }
 .brand-name{
   font-family:'Noto Serif Oriya',serif; font-weight:800; font-size:19px;
