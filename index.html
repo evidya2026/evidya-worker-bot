@@ -466,7 +466,7 @@ function openSubject(groupKey, subjKey){
   const s = list.find(x => x.key === subjKey);
   modalStack.push({ title: s.name, html: semGrid(s.path, s.name) });
   render();
-  document.getElementById('panelView').scrollIntoView({block:'start'});
+  window.scrollTo(0, 0);
 }
 function modalBack(){
   if (modalStack.length > 1){ modalStack.pop(); render(); }
