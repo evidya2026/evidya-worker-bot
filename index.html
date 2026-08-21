@@ -76,10 +76,16 @@ button{font:inherit;}
 .brand-row{
   position:relative;
   display:flex; flex-direction:column; align-items:center; text-align:center;
-  gap:8px;
+  gap:0;
   padding:14px 16px 12px;
 }
-.brand-logo{width:104px; height:104px; flex-shrink:0;}
+  .brand-logo img{width:100%; height:auto; display:block; object-fit:cover;}
+.brand-logo{
+  width:100vw;
+  margin-left:calc(50% - 50vw);
+  margin-right:calc(50% - 50vw);
+  flex-shrink:0;
+}
 .brand-name{
   font-family:'Noto Serif Oriya',serif; font-weight:800; font-size:19px;
   color:#fff; line-height:1.25;
