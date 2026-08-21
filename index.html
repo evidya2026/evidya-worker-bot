@@ -439,32 +439,32 @@ function honoursRows(list, groupKey){
 }
 function artsHTML(){
   return `
-    <div class="modal-sub-label">+2 କଳା</div>
+    <div class="modal-sub-label">+2 କଳା :</div>
     <div class="modal-grid">
       ${gcard('./p2-arts-1/index.html','📘','ପ୍ରଥମ ବର୍ଷ','+2 Arts',pcls(0))}
       ${gcard('https://plus-2-arts-ii.pages.dev/','📗','ଦ୍ୱିତୀୟ ବର୍ଷ','+2 Arts',pcls(1),true)}
     </div>
-    <div class="modal-sub-label">+3 କଳା ଅନର୍ସ — ବିଷୟ ବାଛନ୍ତୁ</div>
+    <div class="modal-sub-label">+3 କଳା ଅନର୍ସ — ବିଷୟ ବାଛନ୍ତୁ :</div>
     ${honoursRows(ARTS_HON,'arts')}`;
 }
 function commerceHTML(){
   return `
-    <div class="modal-sub-label">+2 ବାଣିଜ୍ୟ</div>
+    <div class="modal-sub-label">+2 ବାଣିଜ୍ୟ :</div>
     <div class="modal-grid">
       ${gcard('./p2-commerce-1/index.html','💼','ପ୍ରଥମ ବର୍ଷ','+2 Com.',pcls(2))}
       ${gcard('https://plus-2-com-ii.pages.dev/','📋','ଦ୍ୱିତୀୟ ବର୍ଷ','+2 Com.',pcls(3),true)}
     </div>
-    <div class="modal-sub-label">+3 ବାଣିଜ୍ୟ ଅନର୍ସ — ସେମିଷ୍ଟାର ବାଛନ୍ତୁ</div>
+    <div class="modal-sub-label">+3 ବାଣିଜ୍ୟ ଅନର୍ସ — ସେମିଷ୍ଟାର ବାଛନ୍ତୁ :</div>
     ${semGrid('p3-commerce','+3 Commerce')}`;
 }
 function scienceHTML(){
   return `
-    <div class="modal-sub-label">+2 ବିଜ୍ଞାନ</div>
+    <div class="modal-sub-label">+2 ବିଜ୍ଞାନ :</div>
     <div class="modal-grid">
       ${gcard('./p2-science-1/index.html','🔬','ପ୍ରଥମ ବର୍ଷ','+2 Sc.',pcls(3))}
       ${gcard('./p2-science-2/index.html','🧪','ଦ୍ୱିତୀୟ ବର୍ଷ','+2 Sc.',pcls(4))}
     </div>
-    <div class="modal-sub-label">+3 ବିଜ୍ଞାନ ଅନର୍ସ — ବିଷୟ ବାଛନ୍ତୁ</div>
+    <div class="modal-sub-label">+3 ବିଜ୍ଞାନ ଅନର୍ସ — ବିଷୟ ବାଛନ୍ତୁ :</div>
     ${honoursRows(SCI_HON,'sci')}`;
 }
 
