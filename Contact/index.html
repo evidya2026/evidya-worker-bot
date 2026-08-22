@@ -972,6 +972,15 @@ function dialExecutiveNow(){
 }
 
 function placeRealExecutiveCall(){
+    // Stop whatever is currently playing before starting the handoff audio
+    window.speechSynthesis.cancel();
+    if(currentAudio){
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        currentAudio = null;
+    }
+    speakingIndicator.classList.remove('on');
+
     liveCallDot.classList.add('show');
     keypad.style.opacity = "0.4";
     keypad.style.pointerEvents = "none";
@@ -979,7 +988,6 @@ function placeRealExecutiveCall(){
     endBtn.style.pointerEvents = "none";
 
     if(EXECUTIVE_HANDOFF_AUDIO && EXECUTIVE_HANDOFF_AUDIO.trim() !== ""){
-        window.speechSynthesis.cancel();
         speakingIndicator.classList.add('on');
         currentAudio = new Audio(EXECUTIVE_HANDOFF_AUDIO);
         if(muted) currentAudio.muted = true;
@@ -996,7 +1004,7 @@ function placeRealExecutiveCall(){
         speakThenDial();
     }
 }
-
+    
 function speakThenDial(){
     window.speechSynthesis.cancel();
     if(muted){
