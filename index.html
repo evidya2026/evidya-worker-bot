@@ -241,6 +241,25 @@ footer{
   line-height:1.5;
   margin-top:8px;
 }
+
+  body.panel-open .brand-logo{ display:none; }
+body.panel-open .brand-tag{ display:none; }
+body.panel-open .brand-row{ padding-bottom:6px; }
+body.panel-open .brand-name{ font-size:15px; margin:0; }
+
+  .g-card{
+  min-height:60px;      /* was 78px */
+  padding:4px;           /* was 6px */
+}
+.g-name{
+  font-size:16px;        /* was 19px */
+}
+.modal-grid{
+  gap:8px;                /* was 10px */
+}
+.modal-body{
+  padding:12px 12px 14px; /* was 18px 14px 20px */
+}
 </style>
 
 
@@ -484,6 +503,7 @@ function openCategory(key){
   render();
   document.getElementById('homeView').classList.add('hidden');
   document.getElementById('panelView').classList.remove('hidden');
+  document.body.classList.add('panel-open');   // ← add this
   window.scrollTo(0, 0);
 }
 function openSubject(groupKey, subjKey){
@@ -507,6 +527,7 @@ function closeModal(){
   document.getElementById('panelView').classList.add('hidden');
   document.getElementById('homeView').classList.remove('hidden');
   modalStack = [];
+  document.body.classList.remove('panel-open');  // ← add this
 }
 </script>
 </body>
