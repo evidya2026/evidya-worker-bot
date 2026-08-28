@@ -3,381 +3,293 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>ଇ-ବିଦ୍ୟା ଏକାଡେମୀ</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Oriya:wght@600;700;800&family=Noto+Sans+Oriya:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
-
+<title>ଓଡ଼ିଆ ସହାୟକ</title>
 <style>
-:root{
-  /* ── palette ── */
-  --ink-900:#0a1220;
-  --ink-800:#101f38;
-  --ink-700:#173067;
-  --gold:#c9973a;
-  --gold-lt:#eccb7c;
-  --gold-soft:rgba(201,151,58,.16);
-  --paper:#f6f1e6;
-  --card:#fffdf8;
-  --text:#241e14;
-  --slate:#726955;
-  --line:#e6dcc6;
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:'Nirmala UI','Mangal',system-ui,sans-serif;
+    background:#eef0fb;
+    min-height:100vh;
+  }
+  .page{display:none;min-height:100vh;flex-direction:column}
+  .page.show{display:flex}
 
-  --maroon:#9c2b1c;   --maroon-lt:#c8503a;
-  --indigo:#254aa8;   --indigo-lt:#3f6bdc;
-  --violet:#5b2a9e;   --violet-lt:#7e4ec9;
-  --emerald:#0d7a54;  --emerald-lt:#149e6d;
-  --wine:#7a2331;     --wine-lt:#a23345;
-  --amber:#a8620c;    --amber-lt:#d3861f;
-}
+  header{
+    background:linear-gradient(160deg,#090d3d 0%,#161f6b 45%,#4453c2 100%);
+    color:#fff;
+    padding:calc(18px + env(safe-area-inset-top,0px)) 18px 20px;
+    border-radius:0 0 20px 20px;
+  }
+  header.with-back{
+    padding-top:calc(14px + env(safe-area-inset-top,0px));
+    padding-bottom:18px;
+    display:flex;align-items:center;gap:10px;
+  }
+  header h1{font-size:26px;font-weight:600;margin-bottom:3px}
+  header p{font-size:12px;opacity:.8}
+  .hdr-text{min-width:0}
+  .hdr-text h1{font-size:17.5px;font-weight:600;margin-bottom:2px;line-height:1.3}
+  .hdr-text p{font-size:11px;opacity:.8}
 
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html{-webkit-text-size-adjust:100%;}
-body{
-  font-family:'Noto Sans Oriya','Poppins',sans-serif;
-  background:var(--paper);
-  color:var(--text);
-  line-height:1.5;
-}
-img{max-width:100%;display:block;}
-a{color:inherit;}
-button{font:inherit;}
-:focus-visible{outline:3px solid var(--gold-lt);outline-offset:2px;border-radius:6px;}
-@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important;}}
+  .back-btn{
+    background:rgba(255,255,255,.14);border:none;color:#fff;
+    width:36px;height:36px;border-radius:50%;font-size:18px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;
+  }
+  .back-btn:active{background:rgba(255,255,255,.26)}
 
-/* ══ HEADER (sticky) ══ */
-.site-header{
-  position:sticky; top:0; z-index:100;
-  background:linear-gradient(160deg,var(--ink-900) 0%,var(--ink-800) 55%,var(--ink-700) 130%);
-  padding-top:env(safe-area-inset-top);
-  overflow:hidden;
-}
-/* Konark-wheel motif, purely decorative */
-.wheel-motif{
-  position:absolute; top:-38px; right:-38px; width:150px; height:150px;
-  opacity:.14; pointer-events:none;
-}
-.wheel-motif circle{fill:none;stroke:var(--gold-lt);stroke-width:2.4;}
-.wheel-motif line{stroke:var(--gold-lt);stroke-width:2;}
+  main{flex:1}
+  .container{max-width:560px;margin:0 auto;padding:18px 14px 0}
 
-.top-nav{
-  position:relative;
-  display:flex; gap:2px; overflow-x:auto; white-space:nowrap;
-  padding:8px 10px 6px; scrollbar-width:none;
-  -webkit-overflow-scrolling:touch;
-}
-.top-nav a{
-  touch-action:manipulation;
-}
-.top-nav::-webkit-scrollbar{display:none;}
-.top-nav a{
-  text-decoration:none; color:rgba(255,255,255,.68);
-  font-family:'Poppins',sans-serif; font-size:12.5px; font-weight:600;
-  padding:10px 14px; border-radius:999px; flex-shrink:0;
-  touch-action:manipulation;
-}
-.top-nav a.active{background:var(--gold-soft); color:var(--gold-lt);}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .card{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;text-decoration:none;color:#fff;border:none;
+    border-radius:16px;padding:26px 10px;font-size:14.5px;font-weight:600;
+    line-height:1.4;box-shadow:0 4px 14px rgba(0,0,0,.15);cursor:pointer;
+    font-family:inherit;width:100%;
+  }
+  .card .ic{font-size:26px;margin-bottom:8px;display:block}
+  .card:active{transform:scale(.96)}
 
-.brand-row{
-  position:relative;
-  display:flex; flex-direction:column; align-items:center; text-align:center;
-  gap:6px;
-  padding:0px 16px 12px;
-}
-.brand-logo img{
-  height:84px;
-  width:auto;
-  max-width:92%;
-  object-fit:contain;
-  display:block;
-  transform:scaleX(1.15);
-}
-.brand-logo{
-  width:100vw;
-  margin-left:calc(50% - 50vw);
-  margin-right:calc(50% - 50vw);
-  flex-shrink:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:12px 14px;
-  background:rgba(255,255,255,0.06);
-  border-top:1px solid rgba(255,255,255,0.10);
-  border-bottom:1px solid rgba(255,255,255,0.10);
-}
-.brand-name{
-  font-family:'Noto Serif Oriya',serif; font-weight:800; font-size:19px;
-  color:#fff; line-height:1.25;
-}
-.brand-tag{
-  font-size:12px; color:rgba(255,255,255,.65); font-weight:500; margin-top:2px;
-}
+  .c-blue{background:linear-gradient(135deg,#232f8f,#4453c2)}
+  .c-green{background:linear-gradient(135deg,#00534a,#00796b)}
+  .c-orange{background:linear-gradient(135deg,#c1610a,#e0912a)}
+  .c-gold{background:linear-gradient(135deg,#8a5a00,#e0a020)}
 
-/* ══ MAIN ══ */
-main{padding:10px 16px 8px; max-width:560px; margin:0 auto;}
+  .section-label{font-size:12.5px;color:#565b82;font-weight:600;margin-bottom:12px}
 
-.section-label{
-  display:flex; align-items:center; gap:8px;
-  font-family:'Poppins',sans-serif; font-size:12px; font-weight:700;
-  letter-spacing:.04em; text-transform:uppercase; color:#000000;
-  margin:22px 0 10px;
-}
-.section-label:first-child{margin-top:0;}
-.section-label svg{width:16px; height:16px; flex-shrink:0; opacity:.7;}
-.section-label::after{content:'';flex:1;height:1px;background:var(--line);}
+  /* category / item grids (education pages) */
+  .edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .edu-link{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;text-decoration:none;color:#fff;border:none;font-family:inherit;
+    border-radius:16px;padding:24px 10px;box-shadow:0 4px 14px rgba(0,0,0,.15);cursor:pointer;
+  }
+  .edu-link:active{transform:scale(.96)}
+  .edu-link .eic{font-size:26px;margin-bottom:8px;display:block}
+  .edu-link .ename{font-size:14.5px;font-weight:700;line-height:1.3}
+  .edu-link .esub{font-size:11px;font-weight:500;opacity:.85;margin-top:3px;display:block}
 
-/* ── category cards (home) — 2-column grid ── */
-.cat-list{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
-.cat-row{
-  position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:0; text-align:center;
-  padding:20px 10px; border-radius:18px; text-decoration:none; color:#fff;
-  border:1px solid rgba(255,255,255,.10);
-  box-shadow:0 6px 16px -8px rgba(10,18,32,.45);
-  min-height:130px;
-  cursor:pointer; -webkit-appearance:none; appearance:none; width:100%; font:inherit;
-}
-.cat-row:active{transform:scale(.97);}
-.cat-kicker{
-  font-family:'Noto Sans Oriya',sans-serif; font-size:14px; font-weight:700; letter-spacing:.02em;
-  color:rgba(255,255,255,.85); margin-bottom:3px;
-}
-.cat-title{font-family:'Noto Serif Oriya',serif; font-weight:800; font-size:18px; line-height:1.3;}
-.cat-sub{font-size:15px; font-weight:700; color:rgba(255,255,255,.92); margin-top:6px; line-height:1.3;}
+  /* compact variant for longer lists (classes / acts / semesters) */
+  .edu-grid.compact{gap:8px}
+  .edu-link.compact{padding:14px 6px;border-radius:13px}
+  .edu-link.compact .eic{font-size:19px;margin-bottom:4px}
+  .edu-link.compact .ename{font-size:12.5px}
+  .edu-link.compact .esub{font-size:9.5px}
 
-.bg-school  {background:linear-gradient(135deg,var(--maroon),var(--maroon-lt));}
-.bg-arts    {background:linear-gradient(135deg,var(--indigo),var(--indigo-lt));}
-.bg-commerce{background:linear-gradient(135deg,var(--violet),var(--violet-lt));}
-.bg-science {background:linear-gradient(135deg,var(--emerald),var(--emerald-lt));}
-.bg-legal   {background:linear-gradient(135deg,var(--wine),var(--wine-lt));}
-.bg-special {background:linear-gradient(135deg,var(--amber),var(--amber-lt));}
+  .e-maroon{background:linear-gradient(135deg,#9c2b1c,#c8503a)}
+  .e-indigo{background:linear-gradient(135deg,#254aa8,#3f6bdc)}
+  .e-violet{background:linear-gradient(135deg,#5b2a9e,#7e4ec9)}
+  .e-emerald{background:linear-gradient(135deg,#0d7a54,#149e6d)}
+  .e-wine{background:linear-gradient(135deg,#7a2331,#a23345)}
+  .e-amber{background:linear-gradient(135deg,#a8620c,#d3861f)}
 
-/* ══ FOOTER ══ */
-footer{
-  margin:28px 16px max(18px, env(safe-area-inset-bottom));
-  background:var(--card); border:1px solid var(--line); border-radius:16px;
-  padding:16px 16px; max-width:560px; margin-left:auto; margin-right:auto;
-}
-.footer-brand{
-  font-family:'Noto Serif Oriya',serif; font-weight:700; font-size:14px; color:var(--maroon);
-  text-align:center;
-}
-.footer-fullbleed{
-  width:100%; margin:0; padding:10px 0;
-  font-size:12px; color:var(--slate); line-height:1.5; text-align:justify;
-}
-.footer-pages{
-  display:flex; flex-wrap:wrap; justify-content:center; gap:6px;
-  margin-top:14px; padding-top:14px; border-top:1px solid var(--line);
-}
-.footer-pages a{
-  font-size:12px; font-weight:600; text-decoration:none; color:var(--indigo);
-  background:#f1ecdd; padding:6px 10px; border-radius:10px;
-}
-.footer-copy{font-size:11px; color:#a49c86; text-align:center; margin-top:14px;}
+  .sub-label{font-family:inherit;font-size:15px;font-weight:800;color:#161f6b;margin:4px 0 10px}
+  .sub-label:not(:first-child){margin-top:22px}
 
-/* ══ DRILL-DOWN PANEL (replaces the category grid in place — no overlay) ══ */
-.hidden{display:none!important;}
-.panel{
-  background:var(--paper);
-  border-radius:20px;
-  overflow:hidden;
-  border:1px solid var(--line);
-  box-shadow:0 10px 28px -14px rgba(10,18,32,.35);
-  animation:panel-in .22s ease;
-}
-@keyframes panel-in{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
-.modal-head{
-  display:flex; align-items:center; gap:6px;
-  padding:14px 8px 16px 12px; background:linear-gradient(150deg,var(--ink-900),var(--ink-700));
-}
-.modal-back,.modal-close{
-  width:34px; height:34px; border-radius:50%; border:none; flex-shrink:0;
-  background:rgba(255,255,255,.14); color:#fff; font-size:16px; font-weight:700;
-  display:none; align-items:center; justify-content:center; cursor:pointer;
-}
-.modal-back.show,.modal-close{display:flex;}
-.modal-title{
-  flex:1; min-width:0; color:#fff; font-weight:700; font-size:15.5px;
-  font-family:'Noto Serif Oriya',serif; line-height:1.35;
-}
-.modal-body{padding:18px 14px 20px;}
+  /* subject rows (honours -> opens semester list) */
+  .subj-list{display:flex;flex-direction:column;gap:9px}
+  .subj-row{
+    display:flex;align-items:center;gap:12px;padding:13px 14px;
+    border-radius:16px;cursor:pointer;border:none;width:100%;text-align:left;color:#fff;
+    box-shadow:0 4px 14px rgba(0,0,0,.15);font-family:inherit;
+  }
+  .subj-row:active{transform:scale(.98)}
+  .subj-ico{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+  .subj-label{flex:1;min-width:0}
+  .subj-name{font-size:15px;font-weight:800;line-height:1.25}
+  .subj-odia{font-size:11.5px;color:rgba(255,255,255,.85);margin-top:2px}
+  .subj-arrow{font-size:19px;opacity:.85;flex-shrink:0}
 
-/* two-up grid used inside the panel — same visual language as the home cards */
-.modal-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
-.g-card{
-  border-radius:16px; padding:6px; text-align:center; text-decoration:none; color:#fff;
-  display:flex; align-items:center; justify-content:center;
-  min-height:78px; border:1px solid rgba(255,255,255,.12);
-  box-shadow:0 5px 14px -8px rgba(10,18,32,.5);
-}
-.g-card:active{transform:scale(.96);}
-.g-name{font-family:'Noto Serif Oriya',serif; font-weight:800; font-size:19px; line-height:1.2;}
-.g-sub{display:none;}
+  /* ── Rojgar Sahayak — bottom-sheet modal (unchanged) ── */
+  .modal-overlay{
+    display:none;position:fixed;inset:0;background:rgba(9,10,30,.6);
+    z-index:998;opacity:0;transition:opacity .2s;
+  }
+  .modal-overlay.show{display:block;opacity:1}
+  .modal{
+    display:none;position:fixed;left:0;right:0;bottom:0;
+    background:#fff;border-radius:22px 22px 0 0;width:100%;
+    z-index:999;box-shadow:0 -6px 20px rgba(9,10,30,.25);
+    transform:translateY(100%);transition:transform .28s ease-out;
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  .modal.show{display:block;transform:translateY(0)}
+  .modal-handle{width:38px;height:4px;background:#e0e0f0;border-radius:3px;margin:10px auto 0}
+  .modal-hdr{
+    padding:14px 20px 12px;display:flex;justify-content:space-between;align-items:center;
+    border-bottom:1px solid #f0f1fa;
+  }
+  .modal-hdr h2{font-size:15.5px;color:#161f6b;font-weight:600}
+  .modal-close{
+    background:#f0f1fa;border:none;color:#565b82;font-size:16px;
+    width:28px;height:28px;border-radius:50%;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .modal-body{padding:18px 20px 26px;display:flex;flex-direction:column;gap:10px}
+  .sub-title{font-size:12.5px;color:#565b82;font-weight:600}
+  .sub-link{
+    display:block;text-decoration:none;background:#161f6b;color:#fff;
+    border-radius:12px;padding:13px 14px;font-size:13.5px;font-weight:600;text-align:center;
+  }
+  .sub-link.alt{background:#e0a020}
+  .sub-link:active{filter:brightness(.92)}
 
-/* subject rows (honours -> opens semesters) — same shape as g-card, laid out horizontally */
-.subj-list{display:flex; flex-direction:column; gap:9px;}
-.subj-row{
-  display:flex; align-items:center; gap:12px; padding:13px 14px;
-  border-radius:16px; cursor:pointer; border:1px solid rgba(255,255,255,.12); width:100%; text-align:left; color:#fff;
-  box-shadow:0 5px 14px -8px rgba(10,18,32,.5);
-}
-.subj-row:active{transform:scale(.98);}
-.subj-ico{width:34px; height:34px; border-radius:10px; background:rgba(255,255,255,.18); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0;}
-.subj-label{flex:1; min-width:0;}
-.subj-name{font-family:'Noto Serif Oriya',serif; font-size:17px; font-weight:800; line-height:1.25;}
-.subj-odia{font-size:12px; color:rgba(255,255,255,.82); margin-top:2px;}
-.subj-arrow{font-size:19px; opacity:.8; flex-shrink:0;}
-
-.modal-sub-label{
-  font-family:'Noto Serif Oriya',serif; font-size:17px; font-weight:800; color:#0d0d0d;
-  margin:4px 0 12px;
-}
-.modal-sub-label:not(:first-child){margin-top:26px;}
-  .footer-note{
-  font-size:12px;
-  text-align:justify;
-  color:var(--slate);
-  line-height:1.5;
-  margin-top:8px;
-}
-
-  body.panel-open .brand-logo{ display:none; }
-body.panel-open .brand-tag{ display:none; }
-body.panel-open .brand-row{ padding-bottom:6px; }
-body.panel-open .brand-name{ font-size:15px; margin:0; }
-
-  .g-card{
-  min-height:60px;      /* was 78px */
-  padding:4px;           /* was 6px */
-}
-.g-name{
-  font-size:16px;        /* was 19px */
-}
-.modal-grid{
-  gap:8px;                /* was 10px */
-}
-.modal-body{
-  padding:12px 12px 14px; /* was 18px 14px 20px */
-}
+  footer{
+    background:#fffdf8;border:1px solid #e6dcc6;border-radius:14px;
+    padding:14px 14px;max-width:560px;margin:22px 14px max(16px,env(safe-area-inset-bottom,0px));
+  }
+  @media (min-width:588px){ footer{margin-left:auto;margin-right:auto} }
+  .footer-brand{font-weight:700;font-size:13.5px;color:#9c2b1c;text-align:center}
+  .footer-note{font-size:11px;text-align:justify;color:#726955;line-height:1.5;margin-top:8px}
+  .footer-pages{
+    display:flex;flex-wrap:wrap;justify-content:center;gap:6px;
+    margin-top:12px;padding-top:12px;border-top:1px solid #e6dcc6;
+  }
+  .footer-pages a{
+    font-size:11.5px;font-weight:600;text-decoration:none;color:#254aa8;
+    background:#f1ecdd;padding:5px 9px;border-radius:9px;
+  }
+  .footer-copy{font-size:10.5px;color:#a49c86;text-align:center;margin-top:12px}
 </style>
-
-
 </head>
 <body>
 
-<header class="site-header">
-  <svg class="wheel-motif" viewBox="0 0 200 200" aria-hidden="true">
-    <circle cx="100" cy="100" r="88"></circle>
-    <circle cx="100" cy="100" r="20"></circle>
-    <line x1="120" y1="100" x2="188" y2="100"></line>
-    <line x1="118.5" y1="107.7" x2="181.3" y2="133.7"></line>
-    <line x1="114.1" y1="114.1" x2="162.2" y2="162.2"></line>
-    <line x1="107.7" y1="118.5" x2="133.7" y2="181.3"></line>
-    <line x1="100" y1="120" x2="100" y2="188"></line>
-    <line x1="92.3" y1="118.5" x2="66.3" y2="181.3"></line>
-    <line x1="85.9" y1="114.1" x2="37.8" y2="162.2"></line>
-    <line x1="81.5" y1="107.7" x2="18.7" y2="133.7"></line>
-    <line x1="80" y1="100" x2="12" y2="100"></line>
-    <line x1="81.5" y1="92.3" x2="18.7" y2="66.3"></line>
-    <line x1="85.9" y1="85.9" x2="37.8" y2="37.8"></line>
-    <line x1="92.3" y1="81.5" x2="66.3" y2="18.7"></line>
-    <line x1="100" y1="80" x2="100" y2="12"></line>
-    <line x1="107.7" y1="81.5" x2="133.7" y2="18.7"></line>
-    <line x1="114.1" y1="85.9" x2="162.2" y2="37.8"></line>
-    <line x1="118.5" y1="92.3" x2="181.3" y2="66.3"></line>
-  </svg>
-
- <nav class="top-nav">
-  <a href="/index.html" class="active">🏠 Home</a>
-  <a href="/About/">About</a>
-  <a href="/Contact/">Contact</a>
-  <a href="/Terms/">Terms</a>
-  <a href="/Agent-Terms/">Agent-Terms</a>
-  <a href="/Disclaimer/">Disclaimer</a>
-  <a href="/Privacy/">Privacy Policy</a>
-  <a href="/Grievance-Redressal/">Grievance-Redressal</a>
-  <a href="https://evidya-admin.pages.dev/Agent%20registration/" target="_blank" rel="noopener noreferrer">Agent Log-in</a>
-</nav>
-
-  <div class="brand-row">
-    <div class="brand-logo"><img src="https://cdn.evidya.de/LOGO.png" alt="E-Vidya Academy Logo"></div>
-    <div>
-      <div class="brand-name">ଇ-ବିଦ୍ୟା ଏକାଡେମୀ</div>
-      <div class="brand-tag">ଘରେ ପାଠପଢ଼ାରେ ସାହାଯ୍ୟ — ଅଭିଭାବକଙ୍କ ପାଇଁ</div>
+<!-- ═══ PAGE 1 — HOME ═══ -->
+<div class="page show" id="homePage">
+  <header>
+    <h1>ଓଡ଼ିଆ ସହାୟକ</h1>
+    <p>(ଆପଣଙ୍କ ମାର୍ଗଦର୍ଶକ)</p>
+  </header>
+  <main>
+    <div class="container">
+      <div class="grid">
+        <button class="card c-blue" onclick="showPage('eduPage')">
+          <span class="ic">🎓</span>ଶିକ୍ଷା ସହାୟକ
+        </button>
+        <a class="card c-green" href="https://village-shops.pages.dev/help-desk" target="_blank" rel="noopener">
+          <span class="ic">🖥️</span>ଡିଜିଟାଲ ସହାୟକ
+        </a>
+        <a class="card c-orange" href="https://village-shops.pages.dev" target="_blank" rel="noopener">
+          <span class="ic">🛒</span>ବଜାର ସହାୟକ
+        </a>
+        <button class="card c-gold" onclick="openModal('rojgarOverlay','rojgarModal')">
+          <span class="ic">💰</span>ରୋଜଗାର ସହାୟକ
+        </button>
+      </div>
     </div>
-  </div>
-</header>
-
-<main>
-  <div id="homeView">
-
-    <div class="section-label">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.4"/><path d="M12 3v3M12 18v3M21 12h-3M6 12H3M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1M18.4 18.4l-2.1-2.1M7.7 7.7 5.6 5.6"/></svg>
-      ଆପଣଙ୍କ ବିଭାଗ ବାଛନ୍ତୁ
+  </main>
+  <footer>
+    <div class="footer-brand">🌹 E-Vidya Academy 🌹</div>
+    <p class="footer-note">Independent educational resource for supplementary home study support. Not affiliated with or endorsed by any government board or educational authority. Please cross-check information with your prescribed textbook and official curriculum materials.</p>
+    <div class="footer-pages">
+      <a href="https://evidya.pages.dev/About/" target="_blank" rel="noopener">About</a>
+      <a href="https://evidya.pages.dev/Contact/" target="_blank" rel="noopener">Contact</a>
+      <a href="https://evidya.pages.dev/Terms/" target="_blank" rel="noopener">Terms</a>
+      <a href="https://evidya.pages.dev/Agent-Terms/" target="_blank" rel="noopener">Agent-Terms</a>
+      <a href="https://evidya.pages.dev/Disclaimer/" target="_blank" rel="noopener">Disclaimer</a>
+      <a href="https://evidya.pages.dev/Privacy/" target="_blank" rel="noopener">Privacy</a>
+      <a href="https://evidya.pages.dev/Grievance-Redressal/" target="_blank" rel="noopener">Grievance</a>
+      <a href="https://evidya-admin.pages.dev/Agent%20registration/" target="_blank" rel="noopener">Agent Log-in</a>
     </div>
-    
-    <div class="cat-list">
-      <button class="cat-row bg-school" onclick="openCategory('school')">
-        <div class="cat-kicker">ଇ-ବିଦ୍ୟା</div>
-        <div class="cat-title">ବିଦ୍ୟାଳୟ ବିଭାଗ</div>
-        <div class="cat-sub">(Class I-X)</div>
-      </button>
+    <div class="footer-copy">© 2026 E-Vidya Academy · All Rights Reserved</div>
+  </footer>
+</div>
 
-      <button class="cat-row bg-arts" onclick="openCategory('arts')">
-        <div class="cat-kicker">ଇ-ବିଦ୍ୟା</div>
-        <div class="cat-title">କଳା ବିଭାଗ</div>
-        <div class="cat-sub">(+2 ଓ +3 Arts)</div>
-      </button>
-
-      <button class="cat-row bg-commerce" onclick="openCategory('commerce')">
-        <div class="cat-kicker">ଇ-ବିଦ୍ୟା</div>
-        <div class="cat-title">ବାଣିଜ୍ୟ ବିଭାଗ</div>
-        <div class="cat-sub">(+2 ଓ +3 Com.)</div>
-      </button>
-
-      <button class="cat-row bg-science" onclick="openCategory('science')">
-        <div class="cat-kicker">ଇ-ବିଦ୍ୟା</div>
-        <div class="cat-title">ବିଜ୍ଞାନ ବିଭାଗ</div>
-       <div class="cat-sub">(+2 ଓ +3 Sc.)</div>
-      </button>
-
-      <button class="cat-row bg-legal" onclick="openCategory('legal')">
-        <div class="cat-kicker">ଇ-ବିଦ୍ୟା</div>
-        <div class="cat-title">ଆଇନ ସଚେତନତା</div>
-      </button>
-
-      <a href="./special-training/index.html" class="cat-row bg-special">
-        <div class="cat-kicker">ଇ-ବିଦ୍ୟା</div>
-        <div class="cat-title">ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ</div>
-      </a>
+<!-- ═══ PAGE 2 — ଶିକ୍ଷା ସହାୟକ : 6 category cards ═══ -->
+<div class="page" id="eduPage">
+  <header class="with-back">
+    <button class="back-btn" onclick="showPage('homePage')" aria-label="ପଛକୁ ଫେରନ୍ତୁ">‹</button>
+    <div class="hdr-text"><h1>🎓 ଶିକ୍ଷା ସହାୟକ</h1><p>ଆପଣଙ୍କ ବିଭାଗ ବାଛନ୍ତୁ</p></div>
+  </header>
+  <main>
+    <div class="container">
+      <div class="edu-grid">
+        <button class="edu-link e-maroon" onclick="openCategory('school')">
+          <span class="eic">🏫</span><span class="ename">ବିଦ୍ୟାଳୟ ବିଭାଗ</span><span class="esub">(Class I-X)</span>
+        </button>
+        <button class="edu-link e-indigo" onclick="openCategory('arts')">
+          <span class="eic">📘</span><span class="ename">କଳା ବିଭାଗ</span><span class="esub">(+2 ଓ +3 Arts)</span>
+        </button>
+        <button class="edu-link e-violet" onclick="openCategory('commerce')">
+          <span class="eic">💼</span><span class="ename">ବାଣିଜ୍ୟ ବିଭାଗ</span><span class="esub">(+2 ଓ +3 Com.)</span>
+        </button>
+        <button class="edu-link e-emerald" onclick="openCategory('science')">
+          <span class="eic">🔬</span><span class="ename">ବିଜ୍ଞାନ ବିଭାଗ</span><span class="esub">(+2 ଓ +3 Sc.)</span>
+        </button>
+        <button class="edu-link e-wine" onclick="openCategory('legal')">
+          <span class="eic">⚖️</span><span class="ename">ଆଇନ ସଚେତନତା</span>
+        </button>
+        <a class="edu-link e-amber" href="https://evidya.pages.dev/special-training/index.html" target="_blank" rel="noopener">
+          <span class="eic">✨</span><span class="ename">ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ</span>
+        </a>
+      </div>
     </div>
-  </div>
-
-  <!-- ══ Drill-down panel — replaces the grid above in place, no overlay/modal ══ -->
-  <div class="panel hidden" id="panelView">
-    <div class="modal-head">
-      <button class="modal-back" id="modalBack" onclick="modalBack()" aria-label="ପଛକୁ ଫେରନ୍ତୁ">‹</button>
-      <div class="modal-title" id="modalTitle"></div>
-      <button class="modal-close" onclick="closeModal()" aria-label="ସବୁ ବିଭାଗକୁ ଫେରନ୍ତୁ">✕</button>
+  </main>
+  <footer>
+    <div class="footer-brand">🌹 E-Vidya Academy 🌹</div>
+    <p class="footer-note">Independent educational resource for supplementary home study support. Not affiliated with or endorsed by any government board or educational authority. Please cross-check information with your prescribed textbook and official curriculum materials.</p>
+    <div class="footer-pages">
+      <a href="https://evidya.pages.dev/About/" target="_blank" rel="noopener">About</a>
+      <a href="https://evidya.pages.dev/Contact/" target="_blank" rel="noopener">Contact</a>
+      <a href="https://evidya.pages.dev/Terms/" target="_blank" rel="noopener">Terms</a>
+      <a href="https://evidya.pages.dev/Agent-Terms/" target="_blank" rel="noopener">Agent-Terms</a>
+      <a href="https://evidya.pages.dev/Disclaimer/" target="_blank" rel="noopener">Disclaimer</a>
+      <a href="https://evidya.pages.dev/Privacy/" target="_blank" rel="noopener">Privacy</a>
+      <a href="https://evidya.pages.dev/Grievance-Redressal/" target="_blank" rel="noopener">Grievance</a>
+      <a href="https://evidya-admin.pages.dev/Agent%20registration/" target="_blank" rel="noopener">Agent Log-in</a>
     </div>
-    <div class="modal-body" id="modalBody"></div>
-  </div>
-</main>
+    <div class="footer-copy">© 2026 E-Vidya Academy · All Rights Reserved</div>
+  </footer>
+</div>
 
-<footer>
-  <div class="footer-brand">🌹 E-Vidya Academy 🌹</div>
- <p class="footer-note">Independent educational resource for supplementary home study support. Not affiliated with or endorsed by any government board or educational authority. Please cross-check information with your prescribed textbook and official curriculum materials.</p>
-  <div class="footer-pages">
-    <a href="About/">About</a><a href="Contact/">Contact</a><a href="Terms/">Terms</a><a href="Agent-Terms/">Agent-Terms</a>
-    <a href="Disclaimer/">Disclaimer</a><a href="Privacy/">Privacy</a><a href="Grievance-Redressal/">Grievance</a>
-    <a href="https://evidya-admin.pages.dev/Agent%20registration/" target="_blank" rel="noopener noreferrer">Agent Log-in</a>
+<!-- ═══ PAGE 3 — DYNAMIC DRILL PAGE (category items / honours subjects / semesters) ═══ -->
+<div class="page" id="drillPage">
+  <header class="with-back">
+    <button class="back-btn" onclick="drillBack()" aria-label="ପଛକୁ ଫେରନ୍ତୁ">‹</button>
+    <div class="hdr-text"><h1 id="drillTitle"></h1><p>(ଆପଣଙ୍କ ମାର୍ଗଦର୍ଶକ)</p></div>
+  </header>
+  <main><div class="container" id="drillBody"></div></main>
+  <footer>
+    <div class="footer-brand">🌹 E-Vidya Academy 🌹</div>
+    <p class="footer-note">Independent educational resource for supplementary home study support. Not affiliated with or endorsed by any government board or educational authority. Please cross-check information with your prescribed textbook and official curriculum materials.</p>
+    <div class="footer-pages">
+      <a href="https://evidya.pages.dev/About/" target="_blank" rel="noopener">About</a>
+      <a href="https://evidya.pages.dev/Contact/" target="_blank" rel="noopener">Contact</a>
+      <a href="https://evidya.pages.dev/Terms/" target="_blank" rel="noopener">Terms</a>
+      <a href="https://evidya.pages.dev/Agent-Terms/" target="_blank" rel="noopener">Agent-Terms</a>
+      <a href="https://evidya.pages.dev/Disclaimer/" target="_blank" rel="noopener">Disclaimer</a>
+      <a href="https://evidya.pages.dev/Privacy/" target="_blank" rel="noopener">Privacy</a>
+      <a href="https://evidya.pages.dev/Grievance-Redressal/" target="_blank" rel="noopener">Grievance</a>
+      <a href="https://evidya-admin.pages.dev/Agent%20registration/" target="_blank" rel="noopener">Agent Log-in</a>
+    </div>
+    <div class="footer-copy">© 2026 E-Vidya Academy · All Rights Reserved</div>
+  </footer>
+</div>
+
+<!-- ROJGAR SAHAYAK MODAL (unchanged, lives outside all pages) -->
+<div class="modal-overlay" id="rojgarOverlay" onclick="closeModal('rojgarOverlay','rojgarModal')"></div>
+<div class="modal" id="rojgarModal">
+  <div class="modal-handle"></div>
+  <div class="modal-hdr">
+    <h2>💰 ରୋଜଗାର ସହାୟକ</h2>
+    <button class="modal-close" onclick="closeModal('rojgarOverlay','rojgarModal')">✕</button>
   </div>
-  <div class="footer-copy">© 2026 E-Vidya Academy · All Rights Reserved</div>
-</footer>
+  <div class="modal-body">
+    <span class="sub-title">ନିଜ ଘରେ ରହି ନିମ୍ନଲିଖିତ ଉପାୟରେ ଆପଣ ରୋଜଗାର କରିପାରିବେ :</span>
+    <a class="sub-link" href="https://village-shops.pages.dev/shop-owner-portal" target="_blank" rel="noopener">
+      🏪 ନିଜର ଏକ ଅନ୍-ଲାଇନ୍ ଦୋକାନ ଖୋଲନ୍ତୁ...
+    </a>
+    <a class="sub-link alt" href="https://evidya-admin.pages.dev/Agent%20registration" target="_blank" rel="noopener">
+      🕒 ଇ-ବିଦ୍ୟା ଏକାଡ଼େମୀ ର ଏଜେଣ୍ଟ ହୋଇ ପାର୍ଟ-ଟାଇମ ରୋଜଗାର କରନ୍ତୁ...
+    </a>
+  </div>
+</div>
 
 <script>
-/* ============ DATA (unchanged links) ============ */
+/* ============ DATA (mirrors the original E-Vidya Academy source) ============ */
 const SCHOOL = [
   ['https://school-class1.pages.dev/','🔢','ପ୍ରଥମ ଶ୍ରେଣୀ','Class 1'],
   ['https://school-class2.pages.dev/','✏️','ଦ୍ୱିତୀୟ ଶ୍ରେଣୀ','Class 2'],
@@ -390,7 +302,6 @@ const SCHOOL = [
   ['https://school-class-9.pages.dev/','📚','ନବମ ଶ୍ରେଣୀ','Class 9'],
   ['https://school-class10.pages.dev/','🎓','ଦଶମ ଶ୍ରେଣୀ','Class 10']
 ];
-
 const LEGAL = [
   ['https://law-constitutional.pages.dev/','📜','Constitutional Law','ସାମ୍ବିଧାନିକ ଆଇନ'],
   ['https://law-cpc.pages.dev/','📋','CPC','Civil Procedure Code'],
@@ -401,7 +312,6 @@ const LEGAL = [
   ['https://law-grco-criminal.pages.dev/','📜','GRCO (Criminal)','Odisha HC — Criminal'],
   ['https://law-fl.pages.dev/','📋','Family Law','Hindu Marriage Act & DV Act']
 ];
-
 const ARTS_HON = [
   {key:'polsci',    name:'Political Science', odia:'ରାଜନୀତି ବିଜ୍ଞାନ (ଅନର୍ସ)', icon:'🏛️', path:'p3-arts-polsci'},
   {key:'history',   name:'History',           odia:'ଇତିହାସ (ଅନର୍ସ)',        icon:'📜', path:'p3-arts-history'},
@@ -419,32 +329,30 @@ const SCI_HON = [
   {key:'compsci',    name:'Computer Science',  odia:'କମ୍ପ୍ୟୁଟର ବିଜ୍ଞାନ (ଅନର୍ସ)',icon:'💻', path:'p3-science-compsci'}
 ];
 
-const SEM_ICONS = ['📘','📗','📙','📕','📓','📔','📒','🎓'];
-
-/* shared 6-color brand palette, same classes the home cards use */
-const PALETTE = ['bg-school','bg-arts','bg-commerce','bg-science','bg-legal','bg-special'];
+const PALETTE = ['e-maroon','e-indigo','e-violet','e-emerald','e-wine','e-amber'];
 const pcls = i => PALETTE[i % PALETTE.length];
 
 /* ============ HTML BUILDERS ============ */
-function gcard(url, icon, name, sub, cls, newTab){
-  return `<a href="${url}" class="g-card ${cls}" ${newTab?'target="_blank" rel="noopener"':''}>
-    <div class="g-name">${name}</div>
+function gcard(url, icon, name, sub, cls, compact){
+  return `<a href="${url}" class="edu-link ${cls}${compact?' compact':''}" target="_blank" rel="noopener">
+    <span class="eic">${icon}</span><span class="ename">${name}</span>${sub?`<span class="esub">${sub}</span>`:''}
   </a>`;
 }
-function semGrid(basePath, label){
-  let html = '<div class="modal-grid">';
+function semGrid(basePath){
+  let html = '<div class="edu-grid compact">';
+  const icons=['📘','📗','📙','📕','📓','📔','📒','🎓'];
   for (let s = 1; s <= 8; s++){
-    html += gcard(`./${basePath}-sem${s}/index.html`, SEM_ICONS[s-1], `Sem-${s}`, label, pcls(s-1));
+    html += gcard(`https://evidya.pages.dev/${basePath}-sem${s}/index.html`, icons[s-1], `Sem-${s}`, '', pcls(s-1), true);
   }
   return html + '</div>';
 }
 function schoolHTML(){
-  let html = '<div class="modal-grid">';
+  let html = '<div class="edu-grid compact">';
   SCHOOL.forEach(([url,icon,name,sub], i) => { html += gcard(url,icon,name,sub,pcls(i),true); });
   return html + '</div>';
 }
 function legalHTML(){
-  let html = '<div class="modal-grid">';
+  let html = '<div class="edu-grid compact">';
   LEGAL.forEach(([url,icon,name,sub], i) => { html += gcard(url,icon,name,sub,pcls(i),true); });
   return html + '</div>';
 }
@@ -458,76 +366,81 @@ function honoursRows(list, groupKey){
 }
 function artsHTML(){
   return `
-    <div class="modal-sub-label">+2 କଳା :</div>
-    <div class="modal-grid">
-      ${gcard('./p2-arts-1/index.html','📘','ପ୍ରଥମ ବର୍ଷ','+2 Arts',pcls(0))}
-      ${gcard('https://plus-2-arts-ii.pages.dev/','📗','ଦ୍ୱିତୀୟ ବର୍ଷ','+2 Arts',pcls(1),true)}
+    <div class="sub-label">+2 କଳା :</div>
+    <div class="edu-grid">
+      ${gcard('https://evidya.pages.dev/p2-arts-1/index.html','📘','ପ୍ରଥମ ବର୍ଷ','+2 Arts',pcls(0))}
+      ${gcard('https://plus-2-arts-ii.pages.dev/','📗','ଦ୍ୱିତୀୟ ବର୍ଷ','+2 Arts',pcls(1))}
     </div>
-    <div class="modal-sub-label">+3 କଳା ଅନର୍ସ — ବିଷୟ ବାଛନ୍ତୁ :</div>
+    <div class="sub-label">+3 କଳା ଅନର୍ସ — ବିଷୟ ବାଛନ୍ତୁ :</div>
     ${honoursRows(ARTS_HON,'arts')}`;
 }
 function commerceHTML(){
   return `
-    <div class="modal-sub-label">+2 ବାଣିଜ୍ୟ :</div>
-    <div class="modal-grid">
-      ${gcard('./p2-commerce-1/index.html','💼','ପ୍ରଥମ ବର୍ଷ','+2 Com.',pcls(2))}
-      ${gcard('https://plus-2-com-ii.pages.dev/','📋','ଦ୍ୱିତୀୟ ବର୍ଷ','+2 Com.',pcls(3),true)}
+    <div class="sub-label">+2 ବାଣିଜ୍ୟ :</div>
+    <div class="edu-grid">
+      ${gcard('https://evidya.pages.dev/p2-commerce-1/index.html','💼','ପ୍ରଥମ ବର୍ଷ','+2 Com.',pcls(2))}
+      ${gcard('https://plus-2-com-ii.pages.dev/','📋','ଦ୍ୱିତୀୟ ବର୍ଷ','+2 Com.',pcls(3))}
     </div>
-    <div class="modal-sub-label">+3 ବାଣିଜ୍ୟ ଅନର୍ସ — ସେମିଷ୍ଟାର ବାଛନ୍ତୁ :</div>
-    ${semGrid('p3-commerce','+3 Commerce')}`;
+    <div class="sub-label">+3 ବାଣିଜ୍ୟ ଅନର୍ସ — ସେମିଷ୍ଟାର ବାଛନ୍ତୁ :</div>
+    ${semGrid('p3-commerce')}`;
 }
 function scienceHTML(){
   return `
-    <div class="modal-sub-label">+2 ବିଜ୍ଞାନ :</div>
-    <div class="modal-grid">
-      ${gcard('./p2-science-1/index.html','🔬','ପ୍ରଥମ ବର୍ଷ','+2 Sc.',pcls(3))}
-      ${gcard('./p2-science-2/index.html','🧪','ଦ୍ୱିତୀୟ ବର୍ଷ','+2 Sc.',pcls(4))}
+    <div class="sub-label">+2 ବିଜ୍ଞାନ :</div>
+    <div class="edu-grid">
+      ${gcard('https://evidya.pages.dev/p2-science-1/index.html','🔬','ପ୍ରଥମ ବର୍ଷ','+2 Sc.',pcls(3))}
+      ${gcard('https://evidya.pages.dev/p2-science-2/index.html','🧪','ଦ୍ୱିତୀୟ ବର୍ଷ','+2 Sc.',pcls(4))}
     </div>
-    <div class="modal-sub-label">+3 ବିଜ୍ଞାନ ଅନର୍ସ — ବିଷୟ ବାଛନ୍ତୁ :</div>
+    <div class="sub-label">+3 ବିଜ୍ଞାନ ଅନର୍ସ — ବିଷୟ ବାଛନ୍ତୁ :</div>
     ${honoursRows(SCI_HON,'sci')}`;
 }
 
-/* ============ MODAL ENGINE ============ */
-let modalStack = [];
+/* ============ NAVIGATION ENGINE ============ */
+let drillStack = [];
 const CATEGORY_TITLES = {
-  school:'🏫 ବିଦ୍ୟାଳୟ ବିଭାଗ — କେଉଁ ଶ୍ରେଣୀ ?',
-  arts:'📘 କଳା ବିଭାଗ — କେଉଁଠି ପଢ଼ୁଛନ୍ତି ?',
-  commerce:'💼 ବାଣିଜ୍ୟ ବିଭାଗ — କେଉଁଠି ପଢ଼ୁଛନ୍ତି ?',
-  science:'🔬 ବିଜ୍ଞାନ ବିଭାଗ — କେଉଁଠି ପଢ଼ୁଛନ୍ତି ?',
-  legal:'⚖️ ଆଇନ ସଚେତନତା — କେଉଁ ବିଷୟ ?'
+  school:'🏫 ବିଦ୍ୟାଳୟ ବିଭାଗ',
+  arts:'📘 କଳା ବିଭାଗ',
+  commerce:'💼 ବାଣିଜ୍ୟ ବିଭାଗ',
+  science:'🔬 ବିଜ୍ଞାନ ବିଭାଗ',
+  legal:'⚖️ ଆଇନ ସଚେତନତା'
 };
 const CATEGORY_BUILDERS = { school:schoolHTML, arts:artsHTML, commerce:commerceHTML, science:scienceHTML, legal:legalHTML };
 
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+  window.scrollTo(0,0);
+}
 function openCategory(key){
-  modalStack = [{ title: CATEGORY_TITLES[key], html: CATEGORY_BUILDERS[key]() }];
-  render();
-  document.getElementById('homeView').classList.add('hidden');
-  document.getElementById('panelView').classList.remove('hidden');
-  document.body.classList.add('panel-open');   // ← add this
-  window.scrollTo(0, 0);
+  drillStack = [{ title: CATEGORY_TITLES[key], html: CATEGORY_BUILDERS[key]() }];
+  renderDrill();
+  showPage('drillPage');
 }
 function openSubject(groupKey, subjKey){
   const list = groupKey === 'arts' ? ARTS_HON : SCI_HON;
   const s = list.find(x => x.key === subjKey);
-  modalStack.push({ title: s.name, html: semGrid(s.path, s.name) });
-  render();
-  window.scrollTo(0, 0);
+  drillStack.push({ title: s.name, html: semGrid(s.path) });
+  renderDrill();
+  window.scrollTo(0,0);
 }
-function modalBack(){
-  if (modalStack.length > 1){ modalStack.pop(); render(); }
-  else { closeModal(); }
+function drillBack(){
+  if (drillStack.length > 1){ drillStack.pop(); renderDrill(); }
+  else { drillStack = []; showPage('eduPage'); }
 }
-function render(){
-  const top = modalStack[modalStack.length - 1];
-  document.getElementById('modalTitle').textContent = top.title;
-  document.getElementById('modalBody').innerHTML = top.html;
-  document.getElementById('modalBack').classList.add('show');
+function renderDrill(){
+  const top = drillStack[drillStack.length - 1];
+  document.getElementById('drillTitle').textContent = top.title;
+  document.getElementById('drillBody').innerHTML = top.html;
 }
-function closeModal(){
-  document.getElementById('panelView').classList.add('hidden');
-  document.getElementById('homeView').classList.remove('hidden');
-  modalStack = [];
-  document.body.classList.remove('panel-open');  // ← add this
+function openModal(overlayId, modalId){
+  document.getElementById(overlayId).classList.add('show');
+  document.getElementById(modalId).classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(overlayId, modalId){
+  document.getElementById(overlayId).classList.remove('show');
+  document.getElementById(modalId).classList.remove('show');
+  document.body.style.overflow = '';
 }
 </script>
 </body>
