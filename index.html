@@ -20,6 +20,7 @@
     color:#fff;
     padding:calc(18px + env(safe-area-inset-top,0px)) 18px 20px;
     border-radius:0 0 20px 20px;
+    text-align:center;
   }
   header.with-back{
     padding-top:calc(14px + env(safe-area-inset-top,0px));
@@ -28,7 +29,7 @@
   }
   header h1{font-size:26px;font-weight:600;margin-bottom:3px}
   header p{font-size:12px;opacity:.8}
-  .hdr-text{min-width:0}
+  .hdr-text{min-width:0;text-align:left}
   .hdr-text h1{font-size:17.5px;font-weight:600;margin-bottom:2px;line-height:1.3}
   .hdr-text p{font-size:11px;opacity:.8}
 
@@ -39,18 +40,18 @@
   }
   .back-btn:active{background:rgba(255,255,255,.26)}
 
-  main{flex:1}
+  main{flex:0 1 auto}
   .container{max-width:560px;margin:0 auto;padding:18px 14px 0}
 
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .card{
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     text-align:center;text-decoration:none;color:#fff;border:none;
-    border-radius:16px;padding:26px 10px;font-size:14.5px;font-weight:600;
-    line-height:1.4;box-shadow:0 4px 14px rgba(0,0,0,.15);cursor:pointer;
+    border-radius:16px;padding:22px 10px;font-size:17px;font-weight:700;
+    line-height:1.35;box-shadow:0 4px 14px rgba(0,0,0,.15);cursor:pointer;
     font-family:inherit;width:100%;
   }
-  .card .ic{font-size:26px;margin-bottom:8px;display:block}
+  .card .ic{font-size:30px;margin-bottom:8px;display:block}
   .card:active{transform:scale(.96)}
 
   .c-blue{background:linear-gradient(135deg,#232f8f,#4453c2)}
@@ -68,16 +69,16 @@
     border-radius:16px;padding:24px 10px;box-shadow:0 4px 14px rgba(0,0,0,.15);cursor:pointer;
   }
   .edu-link:active{transform:scale(.96)}
-  .edu-link .eic{font-size:26px;margin-bottom:8px;display:block}
-  .edu-link .ename{font-size:14.5px;font-weight:700;line-height:1.3}
-  .edu-link .esub{font-size:11px;font-weight:500;opacity:.85;margin-top:3px;display:block}
+  .edu-link .eic{font-size:30px;margin-bottom:8px;display:block}
+  .edu-link .ename{font-size:16.5px;font-weight:800;line-height:1.25}
+  .edu-link .esub{font-size:12.5px;font-weight:600;opacity:.9;margin-top:3px;display:block}
 
   /* compact variant for longer lists (classes / acts / semesters) */
   .edu-grid.compact{gap:8px}
-  .edu-link.compact{padding:14px 6px;border-radius:13px}
-  .edu-link.compact .eic{font-size:19px;margin-bottom:4px}
-  .edu-link.compact .ename{font-size:12.5px}
-  .edu-link.compact .esub{font-size:9.5px}
+  .edu-link.compact{padding:16px 6px;border-radius:13px}
+  .edu-link.compact .eic{font-size:23px;margin-bottom:5px}
+  .edu-link.compact .ename{font-size:14.5px;font-weight:800}
+  .edu-link.compact .esub{font-size:11px}
 
   .e-maroon{background:linear-gradient(135deg,#9c2b1c,#c8503a)}
   .e-indigo{background:linear-gradient(135deg,#254aa8,#3f6bdc)}
@@ -99,8 +100,8 @@
   .subj-row:active{transform:scale(.98)}
   .subj-ico{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
   .subj-label{flex:1;min-width:0}
-  .subj-name{font-size:15px;font-weight:800;line-height:1.25}
-  .subj-odia{font-size:11.5px;color:rgba(255,255,255,.85);margin-top:2px}
+  .subj-name{font-size:16.5px;font-weight:800;line-height:1.25}
+  .subj-odia{font-size:12.5px;color:rgba(255,255,255,.85);margin-top:2px}
   .subj-arrow{font-size:19px;opacity:.85;flex-shrink:0}
 
   /* ── Rojgar Sahayak — bottom-sheet modal (unchanged) ── */
