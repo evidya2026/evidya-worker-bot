@@ -33,11 +33,12 @@
   .hdr-text h1{font-size:17.5px;font-weight:600;margin-bottom:2px;line-height:1.3}
   .hdr-text p{font-size:11px;opacity:.8}
 
-  .back-btn{
-    background:rgba(255,255,255,.14);border:none;color:#fff;
-    width:36px;height:36px;border-radius:50%;font-size:18px;font-weight:700;
-    display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;
+   .back-btn{
+    background:rgba(255,255,255,.16);border:none;color:#fff;
+    padding:9px 16px 9px 12px;border-radius:22px;font-size:16px;font-weight:700;
+    display:flex;align-items:center;gap:6px;cursor:pointer;flex-shrink:0;
   }
+  .back-btn .arrow{font-size:22px;line-height:1;font-weight:800}
   .back-btn:active{background:rgba(255,255,255,.26)}
 
   main{flex:0 1 auto}
@@ -202,7 +203,7 @@
 <!-- ═══ PAGE 2 — ଶିକ୍ଷା ସହାୟକ : 6 category cards ═══ -->
 <div class="page" id="eduPage">
   <header class="with-back">
-    <button class="back-btn" onclick="showPage('homePage')" aria-label="ପଛକୁ ଫେରନ୍ତୁ">‹</button>
+        <button class="back-btn" onclick="showPage('homePage')" aria-label="ପଛକୁ ଫେରନ୍ତୁ"><span class="arrow">‹</span>ପଛକୁ</button>
     <div class="hdr-text"><h1>🎓 ଶିକ୍ଷା ସହାୟକ</h1><p>ଆପଣଙ୍କ ବିଭାଗ ବାଛନ୍ତୁ</p></div>
   </header>
   <main>
@@ -249,7 +250,7 @@
 <!-- ═══ PAGE 3 — DYNAMIC DRILL PAGE (category items / honours subjects / semesters) ═══ -->
 <div class="page" id="drillPage">
   <header class="with-back">
-    <button class="back-btn" onclick="drillBack()" aria-label="ପଛକୁ ଫେରନ୍ତୁ">‹</button>
+       <button class="back-btn" onclick="drillBack()" aria-label="ପଛକୁ ଫେରନ୍ତୁ"><span class="arrow">‹</span>ପଛକୁ</button>
     <div class="hdr-text"><h1 id="drillTitle"></h1><p>(ଆପଣଙ୍କ ମାର୍ଗଦର୍ଶକ)</p></div>
   </header>
   <main><div class="container" id="drillBody"></div></main>
