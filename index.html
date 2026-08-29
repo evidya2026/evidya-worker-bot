@@ -199,21 +199,7 @@
       </div>
     </div>
   </main>
-  <footer>
-    <div class="footer-brand">🌹 E-Vidya Academy 🌹</div>
-    <p class="footer-note">Independent educational resource for supplementary home study support. Not affiliated with or endorsed by any government board or educational authority. Please cross-check information with your prescribed textbook and official curriculum materials.</p>
-    <div class="footer-pages">
-      <a href="https://evidya.pages.dev/About/" target="_blank" rel="noopener">About</a>
-      <a href="https://evidya.pages.dev/Contact/" target="_blank" rel="noopener">Contact</a>
-      <a href="https://evidya.pages.dev/Terms/" target="_blank" rel="noopener">Terms</a>
-      <a href="https://evidya.pages.dev/Agent-Terms/" target="_blank" rel="noopener">Agent-Terms</a>
-      <a href="https://evidya.pages.dev/Disclaimer/" target="_blank" rel="noopener">Disclaimer</a>
-      <a href="https://evidya.pages.dev/Privacy/" target="_blank" rel="noopener">Privacy</a>
-      <a href="https://evidya.pages.dev/Grievance-Redressal/" target="_blank" rel="noopener">Grievance</a>
-      <a class="sub-link alt" href="https://evidya-agents.pages.dev">Agent Log-in</a>
-    </div>
-    <div class="footer-copy">© 2026 E-Vidya Academy · All Rights Reserved</div>
-  </footer>
+  <footer id="footerHome"></footer>
 </div>
 
 <!-- ═══ PAGE 2 — ଶିକ୍ଷା ସହାୟକ : 6 category cards ═══ -->
@@ -246,21 +232,7 @@
       </div>
     </div>
   </main>
-  <footer>
-    <div class="footer-brand">🌹 E-Vidya Academy 🌹</div>
-    <p class="footer-note">Independent educational resource for supplementary home study support. Not affiliated with or endorsed by any government board or educational authority. Please cross-check information with your prescribed textbook and official curriculum materials.</p>
-    <div class="footer-pages">
-      <a href="https://evidya.pages.dev/About/" target="_blank" rel="noopener">About</a>
-      <a href="https://evidya.pages.dev/Contact/" target="_blank" rel="noopener">Contact</a>
-      <a href="https://evidya.pages.dev/Terms/" target="_blank" rel="noopener">Terms</a>
-      <a href="https://evidya.pages.dev/Agent-Terms/" target="_blank" rel="noopener">Agent-Terms</a>
-      <a href="https://evidya.pages.dev/Disclaimer/" target="_blank" rel="noopener">Disclaimer</a>
-      <a href="https://evidya.pages.dev/Privacy/" target="_blank" rel="noopener">Privacy</a>
-      <a href="https://evidya.pages.dev/Grievance-Redressal/" target="_blank" rel="noopener">Grievance</a>
-      <a class="sub-link alt" href="https://evidya-agents.pages.dev/">Agent Log-in</a>
-    </div>
-    <div class="footer-copy">© 2026 E-Vidya Academy · All Rights Reserved</div>
-  </footer>
+  <footer id="footerEdu"></footer>
 </div>
 
 <!-- ═══ PAGE 3 — DYNAMIC DRILL PAGE (category items / honours subjects / semesters) ═══ -->
@@ -270,21 +242,7 @@
        <div class="hdr-text"><h1 id="drillTitle"></h1></div>
   </header>
   <main><div class="container" id="drillBody"></div></main>
-  <footer>
-    <div class="footer-brand">🌹 E-Vidya Academy 🌹</div>
-    <p class="footer-note">Independent educational resource for supplementary home study support. Not affiliated with or endorsed by any government board or educational authority. Please cross-check information with your prescribed textbook and official curriculum materials.</p>
-    <div class="footer-pages">
-      <a href="https://evidya.pages.dev/About/" target="_blank" rel="noopener">About</a>
-      <a href="https://evidya.pages.dev/Contact/" target="_blank" rel="noopener">Contact</a>
-      <a href="https://evidya.pages.dev/Terms/" target="_blank" rel="noopener">Terms</a>
-      <a href="https://evidya.pages.dev/Agent-Terms/" target="_blank" rel="noopener">Agent-Terms</a>
-      <a href="https://evidya.pages.dev/Disclaimer/" target="_blank" rel="noopener">Disclaimer</a>
-      <a href="https://evidya.pages.dev/Privacy/" target="_blank" rel="noopener">Privacy</a>
-      <a href="https://evidya.pages.dev/Grievance-Redressal/" target="_blank" rel="noopener">Grievance</a>
-      <a class="sub-link alt" href="https://evidya-agents.pages.dev">Agent Log-in</a>
-    </div>
-    <div class="footer-copy">© 2026 E-Vidya Academy · All Rights Reserved</div>
-  </footer>
+  <footer id="footerDrill"></footer>
 </div>
 
 <!-- ROJGAR SAHAYAK MODAL (unchanged, lives outside all pages) -->
@@ -300,7 +258,7 @@
     <a class="sub-link" href="https://village-shops.pages.dev/shop-owner-portal" target="_blank" rel="noopener">
       🏪 ନିଜର ଏକ ଅନ୍-ଲାଇନ୍ ଦୋକାନ ଖୋଲନ୍ତୁ...
     </a>
-    <a class="sub-link alt" href="https://evidya-agents.pages.dev">
+    <a class="sub-link alt" href="https://evidya-agents.pages.dev/">
       🕒 ଇ-ବିଦ୍ୟା ଏକାଡ଼େମୀ ର ଏଜେଣ୍ଟ ହୋଇ ପାର୍ଟ-ଟାଇମ ରୋଜଗାର କରନ୍ତୁ...
     </a>
   </div>
@@ -316,9 +274,9 @@ const SCHOOL = [
   ['https://school-class5.pages.dev/','🔬','ପଞ୍ଚମ ଶ୍ରେଣୀ','Class 5'],
   ['https://school-class6.pages.dev/','🌍','ଷଷ୍ଠ ଶ୍ରେଣୀ','Class 6'],
   ['https://school-class7.pages.dev/','📐','ସପ୍ତମ ଶ୍ରେଣୀ','Class 7'],
-  ['https://evidya.de','🧪','ଅଷ୍ଟମ ଶ୍ରେଣୀ','Class 8'],
+  ['https://school-class8.pages.dev/','🧪','ଅଷ୍ଟମ ଶ୍ରେଣୀ','Class 8'],
   ['https://school-class-9.pages.dev/','📚','ନବମ ଶ୍ରେଣୀ','Class 9'],
-  ['https://evidya.de/','🎓','ଦଶମ ଶ୍ରେଣୀ','Class 10']
+  ['https://school-class10.pages.dev/','🎓','ଦଶମ ଶ୍ରେଣୀ','Class 10']
 ];
 const LEGAL = [
   ['https://law-constitutional.pages.dev/','📜','Constitutional Law','ସାମ୍ବିଧାନିକ ଆଇନ'],
@@ -413,6 +371,30 @@ function scienceHTML(){
     ${honoursRows(SCI_HON,'sci')}`;
 }
 
+/* ============ FOOTER (single source of truth — injected into all 3 pages) ============ */
+function footerHTML(){
+  return `
+    <div class="footer-brand">🌹 E-Vidya Academy 🌹</div>
+    <p class="footer-note">Independent educational resource for supplementary home study support. Not affiliated with or endorsed by any government board or educational authority. Please cross-check information with your prescribed textbook and official curriculum materials.</p>
+    <div class="footer-pages">
+      <a href="https://evidya.pages.dev/About/" target="_blank" rel="noopener">About</a>
+      <a href="https://evidya.pages.dev/Contact/" target="_blank" rel="noopener">Contact</a>
+      <a href="https://evidya.pages.dev/Terms/" target="_blank" rel="noopener">Terms</a>
+      <a href="https://evidya.pages.dev/Agent-Terms/" target="_blank" rel="noopener">Agent-Terms</a>
+      <a href="https://evidya.pages.dev/Disclaimer/" target="_blank" rel="noopener">Disclaimer</a>
+      <a href="https://evidya.pages.dev/Privacy/" target="_blank" rel="noopener">Privacy</a>
+      <a href="https://evidya.pages.dev/Grievance-Redressal/" target="_blank" rel="noopener">Grievance</a>
+      <a href="https://evidya-agents.pages.dev/">Agent Log-in</a>
+    </div>
+    <div class="footer-copy">© 2026 E-Vidya Academy · All Rights Reserved</div>`;
+}
+function injectFooters(){
+  ['footerHome','footerEdu','footerDrill'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = footerHTML();
+  });
+}
+
 /* ============ NAVIGATION ENGINE ============ */
 let drillStack = [];
 const CATEGORY_TITLES = {
@@ -460,6 +442,8 @@ function closeModal(overlayId, modalId){
   document.getElementById(modalId).classList.remove('show');
   document.body.style.overflow = '';
 }
+
+injectFooters();
 </script>
 </body>
 </html>
