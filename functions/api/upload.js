@@ -35,6 +35,61 @@ async function getFirestoreDoc(env, token, path) {
   return await res.json();
 }
 
+async function sha256Hex(data) {
+  const buf = typeof data === 'string' ? new TextEncoder().encode(data) : data;
+  const hash = await crypto.subtle.digest('SHA-256', buf);
+  return [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+async function hmacRaw(key, msg) {
+  const cryptoKey = await crypto.subtle.importKey('raw', key, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  return crypto.subtle.sign('HMAC', cryptoKey, new TextEncoder().encode(msg));
+}
+function hex(buf) { return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join(''); }
+
+async function r2Sign({ method, accountId, accessKeyId, secretAccessKey, bucket, key, body }) {
+  const region = 'auto', service = 's3';
+  const host = `${accountId}.r2.cloudflarestorage.com`;
+  const amzDate = new Date().toISOString().replace(/[:-]|\.\d{3}/g, '');
+  const dateStamp = amzDate.slice(0, 8);
+  const encodedKey = key.split('/').map(encodeURIComponent).join('/');
+  const canonicalUri = `/${bucket}/${encodedKey}`;
+  const bodyBytes = body || new Uint8Array(0);
+  const payloadHash = await sha256Hex(bodyBytes);
+  const canonicalHeaders = `host:${host}\nx-amz-content-sha256:${payloadHash}\nx-amz-date:${amzDate}\n`;
+  const signedHeaders = 'host;x-amz-content-sha256;x-amz-date';
+  const canonicalRequest = `${method}\n${canonicalUri}\n\n${canonicalHeaders}\n${signedHeaders}\n${payloadHash}`;
+  const credentialScope = `${dateStamp}/${region}/${service}/aws4_request`;
+  const stringToSign = `AWS4-HMAC-SHA256\n${amzDate}\n${credentialScope}\n${await sha256Hex(canonicalRequest)}`;
+  const kDate = await hmacRaw(new TextEncoder().encode('AWS4' + secretAccessKey), dateStamp);
+  const kRegion = await hmacRaw(kDate, region);
+  const kService = await hmacRaw(kRegion, service);
+  const kSigning = await hmacRaw(kService, 'aws4_request');
+  const signature = hex(await hmacRaw(kSigning, stringToSign));
+  const authorization = `AWS4-HMAC-SHA256 Credential=${accessKeyId}/${credentialScope}, SignedHeaders=${signedHeaders}, Signature=${signature}`;
+  return {
+    url: `https://${host}${canonicalUri}`,
+    headers: { Authorization: authorization, 'x-amz-date': amzDate, 'x-amz-content-sha256': payloadHash }
+  };
+}
+
+async function backupToSecondBucket(env, key, binary) {
+  if (!env.R2_BACKUP_ACCOUNT_ID || !env.R2_BACKUP_ACCESS_KEY_ID || !env.R2_BACKUP_SECRET_ACCESS_KEY || !env.R2_BACKUP_BUCKET) return;
+  try {
+    const signed = await r2Sign({
+      method: 'PUT',
+      accountId: env.R2_BACKUP_ACCOUNT_ID,
+      accessKeyId: env.R2_BACKUP_ACCESS_KEY_ID,
+      secretAccessKey: env.R2_BACKUP_SECRET_ACCESS_KEY,
+      bucket: env.R2_BACKUP_BUCKET,
+      key,
+      body: binary
+    });
+    await fetch(signed.url, { method: 'PUT', headers: signed.headers, body: binary });
+  } catch (e) {
+    console.error('R2 backup upload failed (non-fatal):', e.message);
+  }
+}
+
 export async function onRequestPost({ request, env }) {
   try {
     const formData = await request.formData();
@@ -80,6 +135,11 @@ export async function onRequestPost({ request, env }) {
     await env.EVIDYA_BUCKET.put(key, arrayBuffer, {
       httpMetadata: { contentType: file.type || 'application/octet-stream' }
     });
+
+    // Mirror this worker's upload into the second (backup) Cloudflare account's
+    // bucket too, under the exact same key/folder path — never deleted from there.
+    await backupToSecondBucket(env, key, new Uint8Array(arrayBuffer));
+
     return new Response(JSON.stringify({ success: true, key }), { status: 200 });
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), { status: 500 });
