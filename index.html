@@ -1,446 +1,1075 @@
 <!DOCTYPE html>
-<html lang="or">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>ଓଡ଼ିଆ ସହାୟକ</title>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Vidya Content Task</title> 
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-check-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html{-webkit-text-size-adjust:100%}
-  body{
-    font-family:'Nirmala UI','Mangal',system-ui,sans-serif;
-    background:#eef0fb;
-    min-height:100vh;
-  }
-  .page{display:none;min-height:100vh;flex-direction:column}
-  .page.show{display:flex}
+body{font-family:sans-serif;background:#f0f4f8;padding:16px;max-width:480px;margin:0 auto;}
+.box{background:#fff;border-radius:14px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,.1);margin-bottom:14px;}
+input,textarea{width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;font-size:14px;margin-bottom:10px;}
+textarea{min-height:200px;}
+button{width:100%;padding:13px;background:#667eea;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;}
+.job{border:1.5px solid #e0e0e0;border-radius:10px;padding:14px;margin-bottom:10px;cursor:pointer;}
+.job:hover{border-color:#667eea;}
 
-  header{
-    background:linear-gradient(160deg,#090d3d 0%,#161f6b 45%,#4453c2 100%);
-    color:#fff;
-    padding:calc(18px + env(safe-area-inset-top,0px)) 18px 20px;
-    border-radius:0 0 20px 20px;
-    text-align:center;
-  }
-   header.with-back{
-    padding-top:calc(22px + env(safe-area-inset-top,0px));
-    padding-bottom:26px;
-    position:relative;
-  }
-  header h1{font-size:26px;font-weight:600;margin-bottom:3px}
-  header p{font-size:12px;opacity:.8}
-  .hdr-text{min-width:0;text-align:center;padding:0 90px}
-  .hdr-text h1{font-size:17.5px;font-weight:600;margin-bottom:2px;line-height:1.3}
-  .hdr-text p{font-size:11px;opacity:.8}
+  /* Button press feedback */
+button { transition: transform .12s ease, opacity .12s ease; }
+button:active { transform: scale(0.96); }
+button:disabled { opacity: .65; cursor: not-allowed; transform: none; }
 
-    .back-btn{
-    background:rgba(255,255,255,.16);border:none;color:#fff;
-    padding:9px 16px 9px 12px;border-radius:22px;font-size:16px;font-weight:700;
-    display:flex;align-items:center;gap:6px;cursor:pointer;flex-shrink:0;
-    position:absolute;left:18px;top:calc(14px + env(safe-area-inset-top,0px));
-    z-index:2;
-  }
-  .back-btn .arrow{font-size:22px;line-height:1;font-weight:800}
-  .back-btn:active{background:rgba(255,255,255,.26)}
+.btn-spinner {
+    display: inline-block; width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff;
+    border-radius: 50%; animation: btnspin .6s linear infinite;
+    margin-right: 8px; vertical-align: middle;
+}
+@keyframes btnspin { to { transform: rotate(360deg); } }
+</style></head><body>
 
-  main{flex:0 1 auto}
-  .container{max-width:560px;margin:0 auto;padding:18px 14px 0}
-
-    .welcome-img-wrap{
-    width:46%;height:180px;border-radius:28px;overflow:hidden;
-    box-shadow:0 8px 20px rgba(22,31,107,.22);
-    margin:0 auto 16px;border:5px solid #fff;
-    background:linear-gradient(160deg,#eef0fb,#dfe3f7);
-    padding:6px;
-  }
-  .welcome-img-wrap img{
-    width:100%;height:100%;object-fit:cover;object-position:center top;display:block;
-    border-radius:24px;
-  }
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .card{
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    text-align:center;text-decoration:none;color:#fff;border:none;
-    border-radius:16px;padding:22px 10px;font-size:17px;font-weight:700;
-    line-height:1.35;box-shadow:0 4px 14px rgba(0,0,0,.15);cursor:pointer;
-    font-family:inherit;width:100%;
-  }
-  .card .ic{font-size:30px;margin-bottom:8px;display:block}
-  .card:active{transform:scale(.96)}
-
-  .c-blue{background:linear-gradient(135deg,#232f8f,#4453c2)}
-  .c-green{background:linear-gradient(135deg,#00534a,#00796b)}
-  .c-orange{background:linear-gradient(135deg,#c1610a,#e0912a)}
-  .c-gold{background:linear-gradient(135deg,#8a5a00,#e0a020)}
-
-  .section-label{font-size:12.5px;color:#565b82;font-weight:600;margin-bottom:12px}
-
-  /* category / item grids (education pages) */
-  .edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .edu-link{
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    text-align:center;text-decoration:none;color:#fff;border:none;font-family:inherit;
-    border-radius:16px;padding:24px 10px;box-shadow:0 4px 14px rgba(0,0,0,.15);cursor:pointer;
-  }
-  .edu-link:active{transform:scale(.96)}
-  .edu-link .eic{font-size:30px;margin-bottom:8px;display:block}
-  .edu-link .ename{font-size:16.5px;font-weight:800;line-height:1.25}
-  .edu-link .esub{font-size:12.5px;font-weight:600;opacity:.9;margin-top:3px;display:block}
-
-  /* compact variant for longer lists (classes / acts / semesters) */
-  .edu-grid.compact{gap:8px}
-  .edu-link.compact{padding:16px 6px;border-radius:13px}
-  .edu-link.compact .eic{font-size:23px;margin-bottom:5px}
-  .edu-link.compact .ename{font-size:14.5px;font-weight:800}
-  .edu-link.compact .esub{font-size:11px}
-
-  .e-maroon{background:linear-gradient(135deg,#9c2b1c,#c8503a)}
-  .e-indigo{background:linear-gradient(135deg,#254aa8,#3f6bdc)}
-  .e-violet{background:linear-gradient(135deg,#5b2a9e,#7e4ec9)}
-  .e-emerald{background:linear-gradient(135deg,#0d7a54,#149e6d)}
-  .e-wine{background:linear-gradient(135deg,#7a2331,#a23345)}
-  .e-amber{background:linear-gradient(135deg,#a8620c,#d3861f)}
-
-  .sub-label{font-family:inherit;font-size:15px;font-weight:800;color:#161f6b;margin:4px 0 10px}
-  .sub-label:not(:first-child){margin-top:22px}
-
-  /* subject rows (honours -> opens semester list) */
-  .subj-list{display:flex;flex-direction:column;gap:9px}
-  .subj-row{
-    display:flex;align-items:center;gap:12px;padding:13px 14px;
-    border-radius:16px;cursor:pointer;border:none;width:100%;text-align:left;color:#fff;
-    box-shadow:0 4px 14px rgba(0,0,0,.15);font-family:inherit;
-  }
-  .subj-row:active{transform:scale(.98)}
-  .subj-ico{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-  .subj-label{flex:1;min-width:0}
-  .subj-name{font-size:16.5px;font-weight:800;line-height:1.25}
-  .subj-odia{font-size:12.5px;color:rgba(255,255,255,.85);margin-top:2px}
-  .subj-arrow{font-size:19px;opacity:.85;flex-shrink:0}
-
-  /* ── Rojgar Sahayak — bottom-sheet modal (unchanged) ── */
-  .modal-overlay{
-    display:none;position:fixed;inset:0;background:rgba(9,10,30,.6);
-    z-index:998;opacity:0;transition:opacity .2s;
-  }
-  .modal-overlay.show{display:block;opacity:1}
-  .modal{
-    display:none;position:fixed;left:0;right:0;bottom:0;
-    background:#fff;border-radius:22px 22px 0 0;width:100%;
-    z-index:999;box-shadow:0 -6px 20px rgba(9,10,30,.25);
-    transform:translateY(100%);transition:transform .28s ease-out;
-    padding-bottom:env(safe-area-inset-bottom,0px);
-  }
-  .modal.show{display:block;transform:translateY(0)}
-  .modal-handle{width:38px;height:4px;background:#e0e0f0;border-radius:3px;margin:10px auto 0}
-  .modal-hdr{
-    padding:14px 20px 12px;display:flex;justify-content:space-between;align-items:center;
-    border-bottom:1px solid #f0f1fa;
-  }
-  .modal-hdr h2{font-size:15.5px;color:#161f6b;font-weight:600}
-  .modal-close{
-    background:#f0f1fa;border:none;color:#565b82;font-size:16px;
-    width:28px;height:28px;border-radius:50%;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .modal-body{padding:18px 20px 26px;display:flex;flex-direction:column;gap:10px}
-  .sub-title{font-size:12.5px;color:#565b82;font-weight:600}
-  .sub-link{
-    display:block;text-decoration:none;background:#161f6b;color:#fff;
-    border-radius:12px;padding:13px 14px;font-size:13.5px;font-weight:600;text-align:center;
-  }
-  .sub-link.alt{background:#e0a020}
-  .sub-link:active{filter:brightness(.92)}
-
-  footer{
-    background:#fffdf8;border:1px solid #e6dcc6;border-radius:14px;
-    padding:14px 14px;max-width:560px;margin:22px 14px max(16px,env(safe-area-inset-bottom,0px));
-  }
-  @media (min-width:588px){ footer{margin-left:auto;margin-right:auto} }
-  .footer-brand{font-weight:700;font-size:13.5px;color:#9c2b1c;text-align:center}
-  .footer-note{font-size:11px;text-align:justify;color:#726955;line-height:1.5;margin-top:8px}
-  .footer-pages{
-    display:flex;flex-wrap:wrap;justify-content:center;gap:6px;
-    margin-top:12px;padding-top:12px;border-top:1px solid #e6dcc6;
-  }
-  .footer-pages a{
-    font-size:11.5px;font-weight:600;text-decoration:none;color:#254aa8;
-    background:#f1ecdd;padding:5px 9px;border-radius:9px;
-  }
-  .footer-copy{font-size:10.5px;color:#a49c86;text-align:center;margin-top:12px}
-</style>
-</head>
-<body>
-
-<!-- ═══ PAGE 1 — HOME ═══ -->
-<div class="page show" id="homePage">
-  <header>
-    <h1>ଓଡ଼ିଆ ସହାୟକ</h1>
-    <p>(ଆପଣଙ୍କ ଅନ୍-ଲାଇନ୍ ମାର୍ଗଦର୍ଶକ)</p>
-  </header>
-  <main>
-    <div class="container">
-      <div class="welcome-img-wrap">
-        <img src="https://cdn.evidya.de/welcome%20image.gif" alt="ସ୍ୱାଗତ">
-      </div>
-           <div class="grid">
-        <button class="card c-blue" onclick="showPage('eduPage')">
-          <span class="ic">🎓</span>ଶିକ୍ଷା ସହାୟକ
-        </button>
-        <a class="card c-green" href="https://village-shops.pages.dev/" target="_blank" rel="noopener">
-          <span class="ic">🖥️</span>ମୋ ଗାଁ ସହାୟକ
-        </a>
-        <button class="card c-gold" style="grid-column:1 / -1" onclick="openModal('rojgarOverlay','rojgarModal')">
-          <span class="ic">💰</span>ରୋଜଗାର ସହାୟକ
-        </button>
-      </div>
-    </div>
-  </main>
-  <footer id="footerHome"></footer>
+<div class="box" id="loginBox">
+  <h3>Enter your Worker Code</h3>
+  <input id="workerCode" placeholder="e.g. WRK4X9K2">
+  <button onclick="login()">Continue</button>
+  <div id="loginError" style="color:red;font-size:13px;"></div>
 </div>
 
-<!-- ═══ PAGE 2 — ଶିକ୍ଷା ସହାୟକ : 6 category cards ═══ -->
-<div class="page" id="eduPage">
-  <header class="with-back">
-        <button class="back-btn" onclick="showPage('homePage')" aria-label="ପଛକୁ ଫେରନ୍ତୁ"><span class="arrow">‹</span>ପଛକୁ</button>
-    <div class="hdr-text"><h1>🎓 ଶିକ୍ଷା ସହାୟକ</h1><p>ଦୟାକରି ଆପଣଙ୍କ ବିଭାଗ ବାଛନ୍ତୁ : </p></div>
-  </header>
-  <main>
-    <div class="container">
-      <div class="edu-grid">
-        <button class="edu-link e-maroon" onclick="openCategory('school')">
-          <span class="eic">🏫</span><span class="ename">ବିଦ୍ୟାଳୟ ବିଭାଗ</span><span class="esub">(Class I-X)</span>
-        </button>
-        <button class="edu-link e-indigo" onclick="openCategory('arts')">
-          <span class="eic">📘</span><span class="ename">କଳା ବିଭାଗ</span><span class="esub">(+2 ଓ +3 Arts)</span>
-        </button>
-        <button class="edu-link e-violet" onclick="openCategory('commerce')">
-          <span class="eic">💼</span><span class="ename">ବାଣିଜ୍ୟ ବିଭାଗ</span><span class="esub">(+2 ଓ +3 Com.)</span>
-        </button>
-        <button class="edu-link e-emerald" onclick="openCategory('science')">
-          <span class="eic">🔬</span><span class="ename">ବିଜ୍ଞାନ ବିଭାଗ</span><span class="esub">(+2 ଓ +3 Sc.)</span>
-        </button>
-        <button class="edu-link e-wine" onclick="openCategory('legal')">
-          <span class="eic">⚖️</span><span class="ename">ଆଇନ ସଚେତନତା</span>
-        </button>
-        <a class="edu-link e-amber" href="https://evidya.pages.dev/special-training/index.html" target="_blank" rel="noopener">
-          <span class="eic">✨</span><span class="ename">ସ୍ଵତନ୍ତ୍ର ଟ୍ରେନିଂ</span>
-        </a>
-      </div>
-    </div>
-  </main>
-  <footer id="footerEdu"></footer>
-</div>
-
-<!-- ═══ PAGE 3 — DYNAMIC DRILL PAGE (category items / honours subjects / semesters) ═══ -->
-<div class="page" id="drillPage">
-  <header class="with-back">
-       <button class="back-btn" onclick="drillBack()" aria-label="ପଛକୁ ଫେରନ୍ତୁ"><span class="arrow">‹</span>ପଛକୁ</button>
-       <div class="hdr-text"><h1 id="drillTitle"></h1></div>
-  </header>
-  <main><div class="container" id="drillBody"></div></main>
-  <footer id="footerDrill"></footer>
-</div>
-
-<!-- ROJGAR SAHAYAK MODAL (unchanged, lives outside all pages) -->
-<div class="modal-overlay" id="rojgarOverlay" onclick="closeModal('rojgarOverlay','rojgarModal')"></div>
-<div class="modal" id="rojgarModal">
-  <div class="modal-handle"></div>
-  <div class="modal-hdr">
-    <h2>💰 ରୋଜଗାର ସହାୟକ</h2>
-    <button class="modal-close" onclick="closeModal('rojgarOverlay','rojgarModal')">✕</button>
+<div id="welcomeBox"></div>
+<div class="box" id="mainTabsBox" style="display:none;">
+  <div style="display:flex;gap:8px;">
+    <button id="tabTasksBtn" onclick="switchMainTab('tasks')" style="flex:1;background:#667eea;">📋 My Tasks</button>
+    <button id="tabPerfBtn" onclick="switchMainTab('perf')" style="flex:1;background:#999;">📊 Performance Report</button>
   </div>
-  <div class="modal-body">
-    <span class="sub-title">ନିଜ ଘରେ ରହି ନିମ୍ନଲିଖିତ ଉପାୟରେ ଆପଣ ରୋଜଗାର କରିପାରିବେ :</span>
-    <a class="sub-link" href="https://village-shops.pages.dev/shop-owner-portal" target="_blank" rel="noopener">
-      🏪 ନିଜର ଏକ ଅନ୍-ଲାଇନ୍ ଦୋକାନ ଖୋଲନ୍ତୁ...
-    </a>
-    <a class="sub-link alt" href="https://evidya-agents.pages.dev/">
-      🕒 ଇ-ବିଦ୍ୟା ଏକାଡ଼େମୀ ର ଏଜେଣ୍ଟ ହୋଇ ପାର୍ଟ-ଟାଇମ ରୋଜଗାର କରନ୍ତୁ...
-    </a>
+</div>
+<div id="jobsBox" style="display:none;"></div>
+<div id="perfReportBox" style="display:none;"></div>
+<div class="box" id="taskBox" style="display:none;">
+  <h3 id="taskTitle"></h3>
+  <p id="taskInstructions" style="font-size:14px;color:#333;font-weight:600;white-space:pre-wrap;word-break:break-word;margin-bottom:12px;"></p>
+  <button id="copyPromptBtn" onclick="copyPrompt()" style="background:#059669;margin-bottom:10px;">📋 Copy Prompt for AI</button>
+  <button id="copyNotebookBtn" onclick="copyNotebookPrompt()" style="display:none;background:#0d9488;margin-bottom:10px;">📓 Copy NotebookLM Prompt</button>
+<a id="openNotebookLmBtn" href="https://notebooklm.google.com/" target="_blank" style="display:none;text-align:center;background:#4c1d95;color:white;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;margin-bottom:10px;">🔗 Open NotebookLM</a>
+<a id="openChatGptBtn" href="https://chat.openai.com/" target="_blank" style="display:none;text-align:center;background:#10a37f;color:white;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;margin-bottom:10px;">🤖 Open ChatGPT</a>
+<a id="openClaudeBtn" href="https://claude.ai/new" target="_blank" style="display:none;text-align:center;background:#d97757;color:white;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;margin-bottom:10px;">✨ Open Claude</a>
+  <a id="compressLinkBtn" href="#" target="_blank" style="display:none;text-align:center;background:#d97706;color:white;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;margin-bottom:14px;">🗜️ Open Compression Tool</a>
+
+ <textarea id="taskContent" placeholder="Paste the AI-generated content here..." oninput="saveDraftNow()"></textarea>
+  <button id="submitTextBtn" onclick="submitTask()">Submit</button>
+
+  <div id="mediaFileSection" style="display:none;">
+    <p id="mediaFileNameHint" style="font-size:12px;color:#666;margin-bottom:8px;"></p>
+    <input type="file" id="mediaFileInput" style="margin-bottom:10px;">
+    <button onclick="uploadMediaFile()">⬆️ Upload File</button>
+    <p id="uploadStatus" style="font-size:12px;margin-top:8px;"></p>
+  </div>
+
+  <div id="mediaVideoSection" style="display:none;">
+   <input id="videoIdInput" placeholder="Paste the full YouTube video link here" style="margin-bottom:10px;">
+    <button onclick="submitVideoId()">Submit Video ID</button>
   </div>
 </div>
 
 <script>
-/* ============ DATA (mirrors the original E-Vidya Academy source) ============ */
-const SCHOOL = [
-  ['https://school-class1.pages.dev/','🔢','ପ୍ରଥମ ଶ୍ରେଣୀ','Class 1'],
-  ['https://school-class2.pages.dev/','✏️','ଦ୍ୱିତୀୟ ଶ୍ରେଣୀ','Class 2'],
-  ['https://school-class3.pages.dev/','📖','ତୃତୀୟ ଶ୍ରେଣୀ','Class 3'],
-  ['https://school-class4.pages.dev/','📝','ଚତୁର୍ଥ ଶ୍ରେଣୀ','Class 4'],
-  ['https://school-class5.pages.dev/','🔬','ପଞ୍ଚମ ଶ୍ରେଣୀ','Class 5'],
-  ['https://school-class6.pages.dev/','🌍','ଷଷ୍ଠ ଶ୍ରେଣୀ','Class 6'],
-  ['https://school-class7.pages.dev/','📐','ସପ୍ତମ ଶ୍ରେଣୀ','Class 7'],
-  ['https://school-class8.pages.dev/','🧪','ଅଷ୍ଟମ ଶ୍ରେଣୀ','Class 8'],
-  ['https://school-class-9.pages.dev/','📚','ନବମ ଶ୍ରେଣୀ','Class 9'],
-  ['https://school-class10.pages.dev/','🎓','ଦଶମ ଶ୍ରେଣୀ','Class 10']
-];
-const LEGAL = [
-  ['https://law-constitutional.pages.dev/','📜','Constitutional Law','ସାମ୍ବିଧାନିକ ଆଇନ'],
-  ['https://law-cpc.pages.dev/','📋','CPC','Civil Procedure Code'],
-  ['https://law-bnss.pages.dev/','🛡️','BNSS','Nagarik Suraksha Sanhita'],
-  ['https://law-bns.pages.dev/','⚖️','BNS','Bharatiya Nyaya Sanhita'],
-  ['https://law-bsa.pages.dev/','📚','BSA','Bharatiya Sakshya Adhiniyam'],
-  ['https://law-grco-civil.pages.dev/','🏛️','GRCO (Civil)','Odisha HC — Civil'],
-  ['https://law-grco-criminal.pages.dev/','📜','GRCO (Criminal)','Odisha HC — Criminal'],
-  ['https://law-fl.pages.dev/','📋','Family Law','Hindu Marriage Act & DV Act']
-];
-const ARTS_HON = [
-  {key:'polsci',    name:'Political Science', odia:'ରାଜନୀତି ବିଜ୍ଞାନ (ଅନର୍ସ)', icon:'🏛️', path:'p3-arts-polsci'},
-  {key:'history',   name:'History',           odia:'ଇତିହାସ (ଅନର୍ସ)',        icon:'📜', path:'p3-arts-history'},
-  {key:'education', name:'Education',         odia:'ଶିକ୍ଷା (ଅନର୍ସ)',        icon:'🎓', path:'p3-arts-education'},
-  {key:'psychology',name:'Psychology',        odia:'ମନୋ ବିଜ୍ଞାନ (ଅନର୍ସ)',   icon:'🧠', path:'p3-arts-psychology'},
-  {key:'economics', name:'Economics',         odia:'ଅର୍ଥନୀତି (ଅନର୍ସ)',      icon:'📈', path:'p3-arts-economics'},
-  {key:'sociology', name:'Sociology',         odia:'ସମାଜ ବିଜ୍ଞାନ (ଅନର୍ସ)',  icon:'👥', path:'p3-arts-sociology'}
-];
-const SCI_HON = [
-  {key:'physics',    name:'Physics',           odia:'ପଦାର୍ଥ ବିଜ୍ଞାନ (ଅନର୍ସ)', icon:'⚛️', path:'p3-science-physics'},
-  {key:'chemistry',  name:'Chemistry',         odia:'ରସାୟନ ବିଜ୍ଞାନ (ଅନର୍ସ)', icon:'🧪', path:'p3-science-chemistry'},
-  {key:'mathematics',name:'Mathematics',       odia:'ଗଣିତ (ଅନର୍ସ)',          icon:'📐', path:'p3-science-mathematics'},
-  {key:'botany',     name:'Botany',            odia:'ଉଦ୍ଭିଦ ବିଜ୍ଞାନ (ଅନର୍ସ)', icon:'🌿', path:'p3-science-botany'},
-  {key:'zoology',    name:'Zoology',           odia:'ପ୍ରାଣୀ ବିଜ୍ଞାନ (ଅନର୍ସ)', icon:'🐾', path:'p3-science-zoology'},
-  {key:'compsci',    name:'Computer Science',  odia:'କମ୍ପ୍ୟୁଟର ବିଜ୍ଞାନ (ଅନର୍ସ)',icon:'💻', path:'p3-science-compsci'}
-];
+const firebaseConfig = {
+  apiKey: "AIzaSyA3-rvQJ1g9K-1l8-_PXX8IffG8W4qU7AE",
+  authDomain: "evidya-academy.firebaseapp.com",
+  projectId: "evidya-academy",
+  storageBucket: "evidya-academy.firebasestorage.app",
+  messagingSenderId: "86172698431",
+  appId: "1:86172698431:web:eb3bd5b2887cda88eb358a"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+let currentWorker = null, currentJobId = null;
 
-const PALETTE = ['e-maroon','e-indigo','e-violet','e-emerald','e-wine','e-amber'];
-const pcls = i => PALETTE[i % PALETTE.length];
+  const appCheck = firebase.appCheck();
+appCheck.activate('6LeJgWMtAAAAAOeGJV17W9m1RIoBpixRTMPAKYou', true);
 
-/* ============ HTML BUILDERS ============ */
-function gcard(url, icon, name, sub, cls, compact){
-  return `<a href="${url}" class="edu-link ${cls}${compact?' compact':''}" target="_blank" rel="noopener">
-    <span class="eic">${icon}</span><span class="ename">${name}</span>${sub?`<span class="esub">${sub}</span>`:''}
-  </a>`;
-}
-function semGrid(basePath){
-  let html = '<div class="edu-grid compact">';
-  const icons=['📘','📗','📙','📕','📓','📔','📒','🎓'];
-  for (let s = 1; s <= 8; s++){
-    html += gcard(`https://evidya.pages.dev/${basePath}-sem${s}/index.html`, icons[s-1], `Sem-${s}`, '', pcls(s-1), true);
+async function login() {
+  const code = document.getElementById('workerCode').value.trim().toUpperCase();
+  const doc = await db.collection('workers').doc(code).get();
+  if (!doc.exists || doc.data().status === 'BLOCKED') {
+    document.getElementById('loginError').textContent = 'Invalid or blocked code.';
+    return;
   }
-  return html + '</div>';
-}
-function schoolHTML(){
-  let html = '<div class="edu-grid compact">';
-  SCHOOL.forEach(([url,icon,name,sub], i) => { html += gcard(url,icon,name,sub,pcls(i),true); });
-  return html + '</div>';
-}
-function legalHTML(){
-  let html = '<div class="edu-grid compact">';
-  LEGAL.forEach(([url,icon,name,sub], i) => { html += gcard(url,icon,name,sub,pcls(i),true); });
-  return html + '</div>';
-}
-function honoursRows(list, groupKey){
-  return `<div class="subj-list">` + list.map((s,i) => `
-    <button class="subj-row ${pcls(i)}" onclick="openSubject('${groupKey}','${s.key}')">
-      <div class="subj-ico">${s.icon}</div>
-      <div class="subj-label"><div class="subj-name">${s.name}</div><div class="subj-odia">${s.odia}</div></div>
-      <div class="subj-arrow">›</div>
-    </button>`).join('') + `</div>`;
-}
-function artsHTML(){
-  return `
-    <div class="sub-label">+2 କଳା :</div>
-    <div class="edu-grid">
-      ${gcard('https://evidya.pages.dev/p2-arts-1/index.html','📘','ପ୍ରଥମ ବର୍ଷ','+2 Arts',pcls(0))}
-      ${gcard('https://plus-2-arts-ii.pages.dev/','📗','ଦ୍ୱିତୀୟ ବର୍ଷ','+2 Arts',pcls(1))}
-    </div>
-    <div class="sub-label">+3 କଳା ଅନର୍ସ — ବିଷୟ ବାଛନ୍ତୁ :</div>
-    ${honoursRows(ARTS_HON,'arts')}`;
-}
-function commerceHTML(){
-  return `
-    <div class="sub-label">+2 ବାଣିଜ୍ୟ :</div>
-    <div class="edu-grid">
-      ${gcard('https://evidya.pages.dev/p2-commerce-1/index.html','💼','ପ୍ରଥମ ବର୍ଷ','+2 Com.',pcls(2))}
-      ${gcard('https://plus-2-com-ii.pages.dev/','📋','ଦ୍ୱିତୀୟ ବର୍ଷ','+2 Com.',pcls(3))}
-    </div>
-    <div class="sub-label">+3 ବାଣିଜ୍ୟ ଅନର୍ସ — ସେମିଷ୍ଟାର ବାଛନ୍ତୁ :</div>
-    ${semGrid('p3-commerce')}`;
-}
-function scienceHTML(){
-  return `
-    <div class="sub-label">+2 ବିଜ୍ଞାନ :</div>
-    <div class="edu-grid">
-      ${gcard('https://evidya.pages.dev/p2-science-1/index.html','🔬','ପ୍ରଥମ ବର୍ଷ','+2 Sc.',pcls(3))}
-      ${gcard('https://evidya.pages.dev/p2-science-2/index.html','🧪','ଦ୍ୱିତୀୟ ବର୍ଷ','+2 Sc.',pcls(4))}
-    </div>
-    <div class="sub-label">+3 ବିଜ୍ଞାନ ଅନର୍ସ — ବିଷୟ ବାଛନ୍ତୁ :</div>
-    ${honoursRows(SCI_HON,'sci')}`;
+ currentWorker = code;
+  document.getElementById('loginBox').style.display = 'none';
+  document.getElementById('mainTabsBox').style.display = 'block';
+  document.getElementById('jobsBox').style.display = 'block';
+  showWelcomeAndYesterday();
+  loadJobs();
 }
 
-/* ============ FOOTER (single source of truth — injected into all 3 pages) ============ */
-function footerHTML(){
-  return `
-    <div class="footer-brand">🌹 E-Vidya Academy 🌹</div>
-    <p class="footer-note">Independent educational resource for supplementary home study support. Not affiliated with or endorsed by any government board or educational authority. Please cross-check information with your prescribed textbook and official curriculum materials.</p>
-    <div class="footer-pages">
-      <a href="https://evidya.pages.dev/About/" target="_blank" rel="noopener">About</a>
-      <a href="https://evidya.pages.dev/Contact/" target="_blank" rel="noopener">Contact</a>
-      <a href="https://evidya.pages.dev/Terms/" target="_blank" rel="noopener">Terms</a>
-      <a href="https://evidya.pages.dev/Agent-Terms/" target="_blank" rel="noopener">Agent-Terms</a>
-      <a href="https://evidya.pages.dev/Disclaimer/" target="_blank" rel="noopener">Disclaimer</a>
-      <a href="https://evidya.pages.dev/Privacy/" target="_blank" rel="noopener">Privacy</a>
-      <a href="https://evidya.pages.dev/Grievance-Redressal/" target="_blank" rel="noopener">Grievance</a>
-      <a href="https://evidya-agents.pages.dev/">Agent Log-in</a>
-    </div>
-    <div class="footer-copy">© 2026 E-Vidya Academy · All Rights Reserved</div>`;
+function getDayRange(daysAgo) {
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const start = new Date(startOfToday);
+  start.setDate(start.getDate() - daysAgo);
+  const end = new Date(start);
+  end.setDate(end.getDate() + 1);
+  return { start: start.toISOString(), end: end.toISOString() };
 }
-function injectFooters(){
-  ['footerHome','footerEdu','footerDrill'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = footerHTML();
+
+async function fetchCountsForRange(range) {
+  const counts = { submitted: 0, published: 0, rejected: 0 };
+  try {
+    const snap = await db.collection('jobHistory')
+      .where('worker', '==', currentWorker)
+      .where('timestamp', '>=', range.start)
+      .where('timestamp', '<', range.end)
+      .get();
+    snap.forEach(d => { const h = d.data(); counts[h.eventType] = (counts[h.eventType] || 0) + 1; });
+  } catch (err) {
+    console.error('Report fetch failed (may need a Firestore index — check console for a link):', err);
+  }
+  return counts;
+}
+
+function renderStatRow(label, counts) {
+  return `
+    <div style="margin-top:10px;">
+      <div style="font-size:12px;color:#666;">${label}</div>
+      <div style="display:flex;justify-content:center;gap:18px;margin-top:6px;">
+        <div><div style="font-size:20px;font-weight:900;color:#059669;">${counts.submitted}</div><div style="font-size:10px;color:#666;">Submitted</div></div>
+        <div><div style="font-size:20px;font-weight:900;color:#2563eb;">${counts.published}</div><div style="font-size:10px;color:#666;">Approved</div></div>
+        <div><div style="font-size:20px;font-weight:900;color:#dc2626;">${counts.rejected}</div><div style="font-size:10px;color:#666;">Rejected</div></div>
+      </div>
+    </div>`;
+}
+
+async function showWelcomeAndYesterday() {
+  const todayCounts = await fetchCountsForRange(getDayRange(0));
+  const yesterdayCounts = await fetchCountsForRange(getDayRange(1));
+
+  let name = currentWorker;
+  try {
+    const wdoc = await db.collection('workers').doc(currentWorker).get();
+    if (wdoc.exists && wdoc.data().name) name = wdoc.data().name;
+  } catch (err) {}
+
+  document.getElementById('welcomeBox').innerHTML = `
+    <div class="box" style="text-align:center;">
+      <img src="https://raw.githubusercontent.com/happysangitanms/assets/main/LOGO.png" style="width:56px;margin-bottom:8px;">
+      <div style="font-size:17px;font-weight:800;color:#4c1d95;">Welcome, ${name}! 👋</div>
+      ${renderStatRow("Today's Performance", todayCounts)}
+      ${renderStatRow("Yesterday's Performance", yesterdayCounts)}
+    </div>`;
+}
+function switchMainTab(tab) {
+  document.getElementById('jobsBox').style.display = tab === 'tasks' ? 'block' : 'none';
+  document.getElementById('perfReportBox').style.display = tab === 'perf' ? 'block' : 'none';
+  document.getElementById('tabTasksBtn').style.background = tab === 'tasks' ? '#667eea' : '#999';
+  document.getElementById('tabPerfBtn').style.background = tab === 'perf' ? '#667eea' : '#999';
+  if (tab === 'perf') loadMyPerformance();
+}
+
+async function loadMyPerformance() {
+  const wrap = document.getElementById('perfReportBox');
+  wrap.innerHTML = '<div class="box">Loading...</div>';
+  try {
+    const histSnap = await db.collection('jobHistory').where('worker', '==', currentWorker).orderBy('timestamp', 'asc').get();
+    window.myPerfAllEvents = histSnap.docs.map(d => d.data());
+
+    wrap.innerHTML = `<div class="box">
+      <div style="margin-bottom:10px;">
+        <select id="perfRangeSelect" onchange="onPerfRangeChange()" style="width:100%;padding:10px;border-radius:8px;border:2px solid #e0e0e0;font-size:14px;">
+          <option value="today">Today</option>
+          <option value="yesterday">Yesterday</option>
+          <option value="week">This Week</option>
+          <option value="month">This Month</option>
+          <option value="custom">Custom Range</option>
+          <option value="till" selected>Till Date (All Time)</option>
+        </select>
+      </div>
+      <div id="perfCustomDates" style="display:none;gap:8px;margin-bottom:10px;">
+        <input type="date" id="perfCustomStart" style="width:48%;padding:10px;display:inline-block;margin-right:4%;">
+        <input type="date" id="perfCustomEnd" style="width:48%;padding:10px;display:inline-block;">
+        <button onclick="applyPerfRangeFilter()" style="margin-top:8px;">Apply Custom Range</button>
+      </div>
+      <div id="perfResultsWrap"></div>
+    </div>`;
+    applyPerfRangeFilter();
+  } catch (err) {
+    console.error(err);
+    wrap.innerHTML = '<div class="box" style="color:red;font-size:12px;">Failed to load. (May need a Firestore index — check browser console for a setup link.)</div>';
+  }
+}
+
+function onPerfRangeChange() {
+  const val = document.getElementById('perfRangeSelect').value;
+  document.getElementById('perfCustomDates').style.display = val === 'custom' ? 'block' : 'none';
+  if (val !== 'custom') applyPerfRangeFilter();
+}
+
+function getPresetRange(preset) {
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if (preset === 'today') {
+    const end = new Date(startOfToday); end.setDate(end.getDate() + 1);
+    return { start: startOfToday, end: end };
+  }
+  if (preset === 'yesterday') {
+    const start = new Date(startOfToday); start.setDate(start.getDate() - 1);
+    return { start: start, end: startOfToday };
+  }
+  if (preset === 'week') {
+    const start = new Date(startOfToday); start.setDate(start.getDate() - 6);
+    const end = new Date(startOfToday); end.setDate(end.getDate() + 1);
+    return { start: start, end: end };
+  }
+  if (preset === 'month') {
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    const end = new Date(startOfToday); end.setDate(end.getDate() + 1);
+    return { start: start, end: end };
+  }
+  return null; // 'till' = no filter
+}
+
+function applyPerfRangeFilter() {
+  const preset = document.getElementById('perfRangeSelect').value;
+  let range = null;
+  if (preset === 'custom') {
+    const s = document.getElementById('perfCustomStart').value;
+    const e = document.getElementById('perfCustomEnd').value;
+    if (!s || !e) { document.getElementById('perfResultsWrap').innerHTML = '<p style="font-size:12px;color:#666;">Pick both start and end dates.</p>'; return; }
+    const start = new Date(s);
+    const end = new Date(e); end.setDate(end.getDate() + 1); // include the whole end day
+    range = { start, end };
+  } else {
+    range = getPresetRange(preset);
+  }
+
+  const allEvents = window.myPerfAllEvents || [];
+  const filtered = range ? allEvents.filter(ev => {
+    const t = new Date(ev.timestamp);
+    return t >= range.start && t < range.end;
+  }) : allEvents;
+
+  const counts = { submitted: 0, published: 0, rejected: 0 };
+  const historyByJob = {};
+  filtered.forEach(h => {
+    counts[h.eventType] = (counts[h.eventType] || 0) + 1;
+    if (!historyByJob[h.jobId]) historyByJob[h.jobId] = { label: h.jobLabel, events: [] };
+    historyByJob[h.jobId].events.push(h);
+  });
+  const decided = counts.published + counts.rejected;
+  const approvalRate = decided ? Math.round((counts.published / decided) * 100) : 0;
+  window.myPerfData = { counts, approvalRate, historyByJob };
+
+  let historyHtml = '<h4 style="margin-top:14px;">📅 Date-wise History</h4>';
+  const ids = Object.keys(historyByJob);
+  if (ids.length === 0) {
+    historyHtml += '<p style="font-size:12px;color:#666;">No history in this period.</p>';
+  } else {
+    ids.forEach(jid => {
+      const jh = historyByJob[jid];
+      historyHtml += `<div style="background:#f7f7f7;border-radius:8px;padding:8px;margin-bottom:8px;"><b style="font-size:12.5px;">${jh.label}</b>`;
+      jh.events.forEach(ev => {
+        const label = ev.eventType === 'rejected' ? 'Rejected' : ev.eventType === 'submitted' ? 'Resubmitted' : 'Final Approved';
+        historyHtml += `<div style="font-size:11px;color:#333;">- ${label} — ${new Date(ev.timestamp).toLocaleString('en-IN')}${ev.note ? ' — Reason: ' + ev.note : ''}</div>`;
+      });
+      historyHtml += '</div>';
+    });
+  }
+
+  document.getElementById('perfResultsWrap').innerHTML = `
+    <div style="display:flex;justify-content:space-around;text-align:center;margin:10px 0;">
+      <div><div style="font-size:20px;font-weight:900;color:#059669;">${counts.submitted}</div><div style="font-size:10px;">Submitted</div></div>
+      <div><div style="font-size:20px;font-weight:900;color:#2563eb;">${counts.published}</div><div style="font-size:10px;">Published</div></div>
+      <div><div style="font-size:20px;font-weight:900;color:#dc2626;">${counts.rejected}</div><div style="font-size:10px;">Rejected</div></div>
+      <div><div style="font-size:20px;font-weight:900;color:#7c3aed;">${approvalRate}%</div><div style="font-size:10px;">Approval</div></div>
+    </div>
+    ${historyHtml}
+    <button onclick="downloadMyPerformancePDF()" style="background:#4c1d95;">⬇️ Download My Performance PDF</button>`;
+}
+async function downloadMyPerformancePDF() {
+  const a = window.myPerfData;
+  if (!a) return;
+  const container = document.createElement('div');
+  container.style.cssText = 'position:fixed;left:-9999px;top:0;width:600px;background:#fff;padding:30px;font-family:sans-serif;color:#000;';
+  let historyHtml = '';
+  Object.keys(a.historyByJob).forEach(jid => {
+    const jh = a.historyByJob[jid];
+    historyHtml += `<div style="margin-top:8px;font-size:12px;font-weight:700;">${jh.label}</div>`;
+    jh.events.forEach(ev => {
+      const label = ev.eventType === 'rejected' ? 'Rejected' : ev.eventType === 'submitted' ? 'Resubmitted' : 'Final Approved & Published';
+      historyHtml += `<div style="font-size:10.5px;padding-left:10px;">- ${label} — ${new Date(ev.timestamp).toLocaleString('en-IN')}${ev.note ? ' — Reason: ' + ev.note : ''}</div>`;
+    });
+  });
+  container.innerHTML = `
+    <div style="display:flex;align-items:center;gap:14px;border-bottom:3px solid #4c1d95;padding-bottom:12px;margin-bottom:16px;">
+      <img src="https://raw.githubusercontent.com/happysangitanms/assets/main/LOGO.png" style="width:56px;">
+      <div><div style="font-size:19px;font-weight:900;">E-Vidya Academy</div><div style="font-size:11px;">My Performance Report — ${currentWorker}</div></div>
+    </div>
+   <div style="font-size:13px;">Submitted: <b>${a.counts.submitted}</b> | Published: <b>${a.counts.published}</b> | Rejected: <b>${a.counts.rejected}</b> | Approval Rate: <b>${a.approvalRate}%</b></div>
+    ${historyHtml}`;
+  document.body.appendChild(container);
+  try {
+    const canvas = await html2canvas(container, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+    const imgData = canvas.toDataURL('image/png');
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const w = pdf.internal.pageSize.getWidth();
+    pdf.addImage(imgData, 'PNG', 0, 0, w, (canvas.height * w) / canvas.width);
+    pdf.save('My_Performance_' + currentWorker + '.pdf');
+  } catch (err) {
+    alert('Failed to generate PDF.');
+  } finally {
+    document.body.removeChild(container);
+  }
+}
+
+function isNonEmptyStr(v) { return typeof v === 'string' && v.length > 0; }
+
+const FILE_SCHEMAS = {
+ 'worddata.js': { check: o =>
+    typeof o.currentWord === 'number' &&
+    Array.isArray(o.words) && o.words.length > 0 &&
+    o.words.every(w =>
+      isNonEmptyStr(w.word) && isNonEmptyStr(w.odia) && isNonEmptyStr(w.emoji) &&
+      isNonEmptyStr(w.what) && isNonEmptyStr(w.why) && isNonEmptyStr(w.when) &&
+      isNonEmptyStr(w.where) && isNonEmptyStr(w.how) &&
+      w.audio && isNonEmptyStr(w.audio.intro) && isNonEmptyStr(w.audio.encourage) && isNonEmptyStr(w.audio.praise) &&
+      Object.keys(w).length === 9 && Object.keys(w.audio).length === 3
+    )
+  },
+  'truefalse.js': { check: o =>
+    Array.isArray(o.questions) && o.questions.length > 0 &&
+    o.questions.every(q => isNonEmptyStr(q.question) && typeof q.correct === 'boolean' && Object.keys(q).length === 2)
+  },
+  'summary.js': { check: o =>
+    isNonEmptyStr(o.introduction) && isNonEmptyStr(o.conclusion) &&
+    Array.isArray(o.sentences) && o.sentences.length > 0 &&
+    o.sentences.every(s => isNonEmptyStr(s.heading) && isNonEmptyStr(s.text) && Object.keys(s).length === 2) &&
+    Object.keys(o).length === 3
+  },
+  'stq.js': { check: o =>
+    Array.isArray(o.questions) && o.questions.length > 0 &&
+    o.questions.every(q => isNonEmptyStr(q.question) && isNonEmptyStr(q.answer) && Object.keys(q).length === 2)
+  },
+  'questions.js': { check: o =>
+    Array.isArray(o) && o.length > 0 &&
+    o.every(q =>
+      typeof q.audio === 'string' && isNonEmptyStr(q.question) && isNonEmptyStr(q.introduction) &&
+      Array.isArray(q.points) && q.points.length > 0 && q.points.every(isNonEmptyStr) &&
+      isNonEmptyStr(q.conclusion) && Object.keys(q).length === 5
+    )
+  },
+  'mcq.js': { check: o =>
+    Array.isArray(o.questions) && o.questions.length > 0 &&
+    o.questions.every(q =>
+      isNonEmptyStr(q.question) && Array.isArray(q.options) && q.options.length === 4 &&
+      q.options.every(isNonEmptyStr) && typeof q.correct === 'number' &&
+      q.correct >= 0 && q.correct <= 3 && Object.keys(q).length === 3
+    )
+  },
+  'matching.js': { check: o =>
+    Array.isArray(o.pairs) && o.pairs.length > 0 &&
+    o.pairs.every(p => isNonEmptyStr(p.left) && isNonEmptyStr(p.right) && Object.keys(p).length === 2) &&
+    Object.keys(o).length === 1
+  },
+  'fillblanks.js': { check: o =>
+    Array.isArray(o.questions) && o.questions.length > 0 &&
+    o.questions.every(q => isNonEmptyStr(q.question) && isNonEmptyStr(q.answer) && Object.keys(q).length === 2)
+  },
+  'arrange.js': { check: o =>
+    Array.isArray(o.questions) && o.questions.length > 0 &&
+    o.questions.every(q =>
+      Array.isArray(q.words) && q.words.length > 0 && q.words.every(isNonEmptyStr) &&
+      isNonEmptyStr(q.correct) && Object.keys(q).length === 2
+    )
+  },
+  'topicsdata.js': { check: o =>
+    Array.isArray(o) && o.length > 0 &&
+    o.every(t =>
+      isNonEmptyStr(t.heading) &&
+      Array.isArray(t.audioPoints) && t.audioPoints.length > 0 &&
+      t.audioPoints.every(ap => isNonEmptyStr(ap.text) && isNonEmptyStr(ap.audio)) &&
+      Array.isArray(t.questions) && t.questions.length > 0 && t.questions.every(isNonEmptyStr)
+    )
+  },
+   'mermaid.js': { check: o =>
+    Array.isArray(o) && o.length > 0 && o.every(isNonEmptyStr)
+  },
+  'teachdata.js': { check: o =>
+    Array.isArray(o) && o.length > 0 &&
+    o.every(l =>
+      isNonEmptyStr(l.heading) &&
+      Array.isArray(l.steps) && l.steps.length > 0 &&
+      l.steps.every(s => isNonEmptyStr(s.text) && isNonEmptyStr(s.example) && isNonEmptyStr(s.simple) && Object.keys(s).length === 3) &&
+      Array.isArray(l.questions) && l.questions.length > 0 &&
+      l.questions.every(q =>
+        isNonEmptyStr(q.q) && Array.isArray(q.opts) && q.opts.length === 4 &&
+        q.opts.every(isNonEmptyStr) && typeof q.ans === 'number' && q.ans >= 0 && q.ans <= 3 &&
+        Object.keys(q).length === 3
+      )
+    )
+  }
+};
+
+function cleanPastedContent(raw) {
+  let text = raw.replace(/^\uFEFF/, '').replace(/[\u200B-\u200D]/g, '');       // invisible junk
+  text = text.replace(/```[a-zA-Z]*\n?/g, '').replace(/```/g, '');            // strip code-fence markers
+  const firstMarker = text.search(/const\s+\w+\s*=|^\s*[\{\[]/m);
+  if (firstMarker > 0) text = text.slice(firstMarker);                        // strip AI chit-chat before the code
+
+  // Only normalize curly quotes when they're being used as the STRING DELIMITER
+  // itself (right after : , [ ( and right before , } ] )) — never when they're
+  // literal punctuation sitting inside an already straight-quoted string.
+  text = text.replace(/([:\[,(]\s*)[\u2018\u2019]([^\u2018\u2019]*)[\u2018\u2019](\s*[,}\]\)])/g, "$1'$2'$3");
+  text = text.replace(/([:\[,(]\s*)[\u201C\u201D]([^\u201C\u201D]*)[\u201C\u201D](\s*[,}\]\)])/g, '$1"$2"$3');
+
+  return text.trim();
+}
+
+function extractObjectLiteral(text) {
+  const m = text.match(/const\s+\w+\s*=\s*([\s\S]*?);?\s*$/);
+  return (m ? m[1] : text).replace(/;\s*$/, '').trim();
+}
+
+  
+function tryParse(objText) {
+  try { return { ok: true, value: new Function('return (' + objText + ')')() }; }
+  catch (err) { return { ok: false, error: err.message }; }
+}
+
+function attemptStructuralRepair(objText) {
+  let text = objText.replace(/,(\s*[\}\]])/g, '$1'); // stray trailing commas
+  const closers = { '{': '}', '[': ']' };
+  const stack = [];
+  let inString = false, quoteChar = '';
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inString) { if (c === '\\') { i++; continue; } if (c === quoteChar) inString = false; continue; }
+    if (c === '"' || c === "'" || c === '`') { inString = true; quoteChar = c; continue; }
+    if (closers[c]) stack.push(closers[c]);
+    else if ((c === '}' || c === ']') && stack[stack.length - 1] === c) stack.pop();
+  }
+  while (stack.length) text += stack.pop();   // re-attach any missing closing brackets
+  return text;
+}
+
+
+function J(v) { return JSON.stringify(v); }
+
+function formatWordData(data) {
+  const words = data.words.map(w => `        {
+            word: ${J(w.word)},
+            odia: ${J(w.odia)},
+            emoji: ${J(w.emoji)},
+            what: ${J(w.what)},
+            why: ${J(w.why)},
+            when: ${J(w.when)},
+            where: ${J(w.where)},
+            how: ${J(w.how)},
+            audio: { intro: ${J(w.audio.intro)}, encourage: ${J(w.audio.encourage)}, praise: ${J(w.audio.praise)} }
+        }`).join(',\n');
+  return `{
+    currentWord: ${data.currentWord},
+    words: [
+${words}
+    ]
+}`;
+}
+
+function formatTrueFalse(data) {
+  const qs = data.questions.map((q, i) => `        {
+            question: ${J(q.question)},
+            correct: ${q.correct}
+        }`).join(',\n');
+  return `{
+    questions: [
+${qs}
+    ]
+}`;
+}
+
+function formatSummary(data) {
+  const sentences = data.sentences.map(s => `        {
+            heading: ${J(s.heading)},
+            text: ${J(s.text)}
+        }`).join(',\n');
+  return `{
+    introduction: ${J(data.introduction)},
+    sentences: [
+${sentences}
+    ],
+    conclusion: ${J(data.conclusion)}
+}`;
+}
+
+function formatStq(data) {
+  const qs = data.questions.map((q, i) => `        {
+            question: ${J(q.question)},
+            answer: ${J(q.answer)}
+        }`).join(',\n');
+  return `{
+    questions: [
+${qs}
+    ]
+}`;
+}
+
+function formatQuestions(data) {
+  const items = data.map(q => {
+    const points = q.points.map(p => `${J(p)}`).join(',\n');
+    return `{
+audio: ${J(q.audio)},
+question: ${J(q.question)},
+introduction: ${J(q.introduction)},
+points: [
+${points}
+],
+conclusion: ${J(q.conclusion)}
+}`;
+  }).join(',\n');
+  return `[
+${items}
+]`;
+}
+
+function formatMcq(data) {
+  const qs = data.questions.map((q, i) => {
+    const opts = q.options.map(o => `                ${J(o)}`).join(',\n');
+    return `        {
+            question: ${J(q.question)},
+            options: [
+${opts}
+            ],
+            correct: ${q.correct}
+        }`;
+  }).join(',\n');
+  return `{
+    questions: [
+${qs}
+    ]
+}`;
+}
+
+function formatMatching(data) {
+  const pairs = data.pairs.map(p => `        { left: ${J(p.left)}, right: ${J(p.right)} }`).join(',\n');
+  return `{
+    pairs: [
+${pairs}
+    ]
+}`;
+}
+
+function formatFillBlanks(data) {
+  const qs = data.questions.map((q, i) => `        {
+            question: ${J(q.question)},
+            answer: ${J(q.answer)}
+        }`).join(',\n');
+  return `{
+    questions: [
+${qs}
+    ]
+}`;
+}
+
+function formatArrange(data) {
+  const qs = data.questions.map(q => {
+    const words = q.words.map(w => J(w)).join(', ');
+    return `        {
+            words: [${words}],
+            correct: ${J(q.correct)}
+        }`;
+  }).join(',\n');
+  return `{
+    questions: [
+${qs}
+    ]
+}`;
+}
+
+function formatTopicsData(data) {
+  const topics = data.map(t => {
+    const audioPoints = t.audioPoints.map(ap => `{
+text:${J(ap.text)},
+audio:${J(ap.audio)}}`).join(',\n');
+    const questions = t.questions.map(q => J(q)).join(',\n\n');
+    return `{
+heading: ${J(t.heading)},
+
+audioPoints: [${audioPoints}],
+
+questions:[
+
+${questions}
+
+]
+}`;
+  }).join(',\n\n');
+  return `[
+
+${topics}
+
+]`;
+}
+
+function formatTeachData(data) {
+  const lessons = data.map(l => {
+    const steps = l.steps.map(s => `      { text: ${J(s.text)}, example: ${J(s.example)}, simple: ${J(s.simple)} }`).join(',\n');
+    const opts = q => q.opts.map(o => J(o)).join(', ');
+    const questions = l.questions.map(q => `      { q: ${J(q.q)}, opts: [${opts(q)}], ans: ${q.ans} }`).join(',\n');
+    return `  {
+    heading: ${J(l.heading)},
+    steps: [
+${steps}
+    ],
+    questions: [
+${questions}
+    ]
+  }`;
+  }).join(',\n\n');
+  return `[
+
+${lessons}
+
+]`;
+}
+
+function formatMermaid(data) {
+  const items = data.map(g => {
+    const escaped = g
+      .replace(/\\/g, '\\\\')   // escape existing backslashes first
+      .replace(/`/g, '\\`')     // escape literal backticks
+      .replace(/\$\{/g, '\\${'); // escape template-literal interpolation syntax
+    return '    `' + escaped + '`';
+  }).join(',\n\n');
+  return `[
+
+${items}
+
+]`;
+}
+
+  
+// Escapes literal double-quote characters that appear INSIDE a string's
+// content (i.e. not acting as the real opening/closing delimiter).
+// Handles cases like: "ଏହାକୁ "ଆର୍ଥିକ ପୁନର୍ଗଠନ" ଯୋଜନା କୁହାଯାଏ"
+// Works for any file — topicsdata.js, fillblanks.js, truefalse.js, mcq.js, etc.
+function escapeStrayInnerQuotes(text) {
+  let result = '';
+  let i = 0;
+  while (i < text.length) {
+    const ch = text[i];
+    if (ch === '"') {
+      let j = i + 1;
+      let buf = '';
+      let closed = false;
+      while (j < text.length) {
+        const c = text[j];
+        if (c === '\\') { buf += c + (text[j + 1] || ''); j += 2; continue; }
+        if (c === '"') {
+          const rest = text.slice(j + 1);
+          if (/^\s*[,}\]\)]/.test(rest) || /^\s*$/.test(rest)) {
+            closed = true;
+            j++;
+            break;
+          } else {
+            buf += '\\"';      // stray quote inside the content — escape it
+            j++;
+            continue;
+          }
+        }
+        buf += c;
+        j++;
+      }
+      result += '"' + buf + (closed ? '"' : '');
+      i = j;
+    } else {
+      result += ch;
+      i++;
+    }
+  }
+  return result;
+}
+
+function validateBeforeSubmit(rawText, targetPath) {
+  const fileName = (targetPath || '').split('/').pop();
+  const schema = FILE_SCHEMAS[fileName];
+  const cleanedOriginal = cleanPastedContent(rawText);   // ✅ always clean first
+  if (!schema) return { ok: true, finalText: cleanedOriginal };
+
+  let objText = extractObjectLiteral(cleanedOriginal);
+
+  let result = tryParse(objText);
+  let repaired = false;
+
+  // Pass 1: structural repair (unbalanced brackets, trailing commas)
+  if (!result.ok) {
+    const fixed = attemptStructuralRepair(objText);
+    const retry = tryParse(fixed);
+    if (retry.ok) { result = retry; repaired = true; }
+  }
+
+  // Pass 2: stray unescaped inner quotes (e.g. “...”, "...", embedded mid-string)
+  if (!result.ok) {
+    const quoteFixed = escapeStrayInnerQuotes(objText);
+    const retry2 = tryParse(quoteFixed);
+    if (retry2.ok) {
+      result = retry2;
+      repaired = true;
+    } else {
+      // Pass 3: stray quotes AND structural issues together
+      const both = attemptStructuralRepair(quoteFixed);
+      const retry3 = tryParse(both);
+      if (retry3.ok) { result = retry3; repaired = true; }
+    }
+  }
+
+  if (!result.ok) {
+    return { ok: false, message: '❌ This isn\u2019t valid code:\n\n' + result.error +
+      '\n\nPlease go back to the AI, copy its ENTIRE reply again, and make sure nothing is typed before or after it (no "Here is the code:", no ``` marks).' };
+  }
+  if (!schema.check(result.value)) {
+    return { ok: false, message: '⚠️ This is valid code, but it\u2019s missing something this task needs (e.g. question/options/answer fields). Double-check the AI\u2019s answer actually matches this task\u2019s format, then re-submit.' };
+  }
+
+  const formatters = {
+    'worddata.js': formatWordData,
+    'truefalse.js': formatTrueFalse,
+    'summary.js': formatSummary,
+    'stq.js': formatStq,
+    'questions.js': formatQuestions,
+    'mcq.js': formatMcq,
+    'matching.js': formatMatching,
+    'fillblanks.js': formatFillBlanks,
+    'arrange.js': formatArrange,
+       'topicsdata.js': formatTopicsData,
+    'mermaid.js': formatMermaid,
+    'teachdata.js': formatTeachData
+  };
+  const formatFn = formatters[fileName];
+  const formatted = formatFn ? formatFn(result.value) : objText.trim();
+  return { ok: true, finalText: formatted, repaired };
+}
+
+let jobsCache = {};
+
+function getJobTypeLabel(j) {
+  if (!j) return '';
+  if (j.jobKind === 'rewrite') return 'REWRITE';
+  if (j.jobKind === 'media') return (j.mediaType || 'MEDIA').toUpperCase();
+  if (j.targetPath) {
+    const parts = j.targetPath.split('/');
+    const fileName = parts[parts.length - 1] || '';
+    return fileName.replace(/\.[a-zA-Z0-9]+$/, '').toUpperCase();
+  }
+  return '';
+}
+
+function saveDraftNow() {
+  if (!currentJobId) return;
+  try {
+    const text = document.getElementById('taskContent').value;
+    if (text) localStorage.setItem('draft_' + currentJobId, text);
+    else localStorage.removeItem('draft_' + currentJobId);
+  } catch(e) {}
+}
+
+function markJobInProgress(jobId) {
+  try { localStorage.setItem('inprogress_' + jobId, '1'); } catch(e) {}
+  renderJobTabs();
+}
+
+function clearJobInProgress(jobId) {
+  try {
+    localStorage.removeItem('inprogress_' + jobId);
+    localStorage.removeItem('draft_' + jobId);
+  } catch(e) {}
+}
+
+let currentWorkerJobFilter = 'all';
+let expandedWorkerBatch = null;
+
+function workerJobCategory(j) {
+  if (j.jobCategory) return j.jobCategory;
+  return j.jobKind === 'media' ? 'upload' : 'publish';
+}
+
+async function loadJobs() {
+  const snap = await db.collection('jobs')
+    .where('assignedWorker', '==', currentWorker)
+    .where('status', 'in', ['open', 'rejected']).get();
+  jobsCache = {};
+  snap.docs.forEach(d => { jobsCache[d.id] = d.data(); });
+  renderJobTabs();
+}
+
+function toggleWorkerBatchExpand(batchKey) {
+  expandedWorkerBatch = (expandedWorkerBatch === batchKey) ? null : batchKey;
+  document.getElementById('taskBox').style.display = 'none';
+  renderJobTabs();
+}
+
+function renderJobTabs() {
+  const wrap = document.getElementById('jobsBox');
+  const allIds = Object.keys(jobsCache);
+  if (allIds.length === 0) { wrap.innerHTML = '<div class="box">No tasks assigned right now.</div>'; return; }
+
+  const filteredIds = allIds.filter(id => currentWorkerJobFilter === 'all' || workerJobCategory(jobsCache[id]) === currentWorkerJobFilter);
+
+  let html = '<h3>Your Tasks</h3>';
+  html += `<div style="display:flex;gap:8px;margin-bottom:12px;">
+    <button style="flex:1;background:${currentWorkerJobFilter==='all'?'#667eea':'#999'};" onclick="setWorkerJobFilter('all')">All</button>
+    <button style="flex:1;background:${currentWorkerJobFilter==='upload'?'#667eea':'#999'};" onclick="setWorkerJobFilter('upload')">📤 Upload Jobs</button>
+    <button style="flex:1;background:${currentWorkerJobFilter==='publish'?'#667eea':'#999'};" onclick="setWorkerJobFilter('publish')">📝 Publish Jobs</button>
+  </div>`;
+
+  if (filteredIds.length === 0) {
+    html += '<div class="box">No tasks in this category right now.</div>';
+  } else {
+    const groups = {};
+    const order = [];
+    filteredIds.forEach(id => {
+      const j = jobsCache[id];
+      const key = j.batchId || id;
+      if (!groups[key]) { groups[key] = { label: j.batchLabel || (j.workerLabel || 'Task'), ids: [] }; order.push(key); }
+      groups[key].ids.push(id);
+    });
+
+    order.forEach(key => {
+      const g = groups[key];
+      const isOpen = expandedWorkerBatch === key;
+      html += `<div class="job" onclick="toggleWorkerBatchExpand('${key}')">📦 ${g.label} (${g.ids.length} task${g.ids.length > 1 ? 's' : ''}) ${isOpen ? '▲' : '▼'}</div>`;
+      if (isOpen) {
+       g.ids.forEach(id => {
+          const jj = jobsCache[id];
+          const label = (jj.workerLabel || 'Task') + (getJobTypeLabel(jj) ? '(' + getJobTypeLabel(jj) + ')' : '');
+          let inProg = false;
+          try { inProg = localStorage.getItem('inprogress_' + id) === '1'; } catch(e) {}
+          html += `<div class="job" style="margin-left:16px;background:#f2f2f2;" data-job-id="${id}">${inProg ? '⏳ ' : ''}${label}</div>`;
+        });
+      }
+    });
+  }
+
+  wrap.innerHTML = html;
+  document.querySelectorAll('.job[data-job-id]').forEach(el => {
+    el.addEventListener('click', (e) => { e.stopPropagation(); openTask(el.getAttribute('data-job-id')); });
   });
 }
 
-/* ============ NAVIGATION ENGINE ============ */
-let drillStack = [];
-const CATEGORY_TITLES = {
-  school:'🏫 ବିଦ୍ୟାଳୟ ବିଭାଗ',
-  arts:'📘 କଳା ବିଭାଗ',
-  commerce:'💼 ବାଣିଜ୍ୟ ବିଭାଗ',
-  science:'🔬 ବିଜ୍ଞାନ ବିଭାଗ',
-  legal:'⚖️ ଆଇନ ସଚେତନତା'
-};
-const CATEGORY_BUILDERS = { school:schoolHTML, arts:artsHTML, commerce:commerceHTML, science:scienceHTML, legal:legalHTML };
-
-function showPage(id){
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('show'));
-  document.getElementById(id).classList.add('show');
-  window.scrollTo(0,0);
-}
-function openCategory(key){
-  drillStack = [{ title: CATEGORY_TITLES[key], html: CATEGORY_BUILDERS[key]() }];
-  renderDrill();
-  showPage('drillPage');
-}
-function openSubject(groupKey, subjKey){
-  const list = groupKey === 'arts' ? ARTS_HON : SCI_HON;
-  const s = list.find(x => x.key === subjKey);
-  drillStack.push({ title: s.name, html: semGrid(s.path) });
-  renderDrill();
-  window.scrollTo(0,0);
-}
-function drillBack(){
-  if (drillStack.length > 1){ drillStack.pop(); renderDrill(); }
-  else { drillStack = []; showPage('eduPage'); }
-}
-function renderDrill(){
-  const top = drillStack[drillStack.length - 1];
-  document.getElementById('drillTitle').textContent = top.title;
-  document.getElementById('drillBody').innerHTML = top.html;
-}
-function openModal(overlayId, modalId){
-  document.getElementById(overlayId).classList.add('show');
-  document.getElementById(modalId).classList.add('show');
-  document.body.style.overflow = 'hidden';
-}
-function closeModal(overlayId, modalId){
-  document.getElementById(overlayId).classList.remove('show');
-  document.getElementById(modalId).classList.remove('show');
-  document.body.style.overflow = '';
+function setWorkerJobFilter(f) {
+  currentWorkerJobFilter = f;
+  renderJobTabs();
 }
 
-injectFooters();
+function openTask(id) {
+  currentJobId = id;
+  let savedDraft = '';
+  try { savedDraft = localStorage.getItem('draft_' + id) || ''; } catch(e) {}
+  document.getElementById('taskContent').value = savedDraft;
+  markJobInProgress(id);
+  const j = jobsCache[id];
+  document.getElementById('taskTitle').textContent = (j.workerLabel || 'Task') + (getJobTypeLabel(j) ? '(' + getJobTypeLabel(j) + ')' : '');
+  document.getElementById('taskInstructions').textContent = j.workerInstructions || 'Copy the prompt, paste it into ChatGPT or Claude, then paste the AI\'s response below.';
+  document.getElementById('taskBox').style.display = 'block';
+  document.getElementById('taskBox').scrollIntoView({behavior:'smooth'});
+
+  const isMedia = j.jobKind === 'media';
+  const isFileUpload = isMedia && (j.mediaType === 'audio' || j.mediaType === 'pdf' || j.mediaType === 'infographic');
+  const isVideo = isMedia && j.mediaType === 'video';
+const isNotebookMedia = isMedia && (j.mediaType === 'audio' || j.mediaType === 'video' || j.mediaType === 'pdf' || j.mediaType === 'infographic');
+
+  const copyBtnEl = document.getElementById('copyPromptBtn');
+  if (isMedia) {
+    copyBtnEl.textContent = '📄 Source Text';
+  } else {
+    copyBtnEl.textContent = '📋 Copy Prompt for AI';
+  }
+  document.getElementById('copyNotebookBtn').textContent = '🤖 Prompt Text';
+
+  document.getElementById('taskContent').style.display = isMedia ? 'none' : 'block';
+  document.getElementById('mediaFileSection').style.display = isFileUpload ? 'block' : 'none';
+  document.getElementById('mediaVideoSection').style.display = isVideo ? 'block' : 'none';
+  document.getElementById('submitTextBtn').style.display = isMedia ? 'none' : 'block';
+  document.getElementById('copyNotebookBtn').style.display = isNotebookMedia ? 'block' : 'none';
+ document.getElementById('openNotebookLmBtn').style.display = isNotebookMedia ? 'block' : 'none';
+const taskPathParts = (j.targetPath || '').split('/');
+  const taskFileName = taskPathParts[taskPathParts.length - 1] || '';
+  const taskClassFolder = taskPathParts[1] || '';
+  const taskLessonMatch = taskClassFolder.match(/CLASS-(\d+)/);
+  const taskLessonNum = taskLessonMatch ? parseInt(taskLessonMatch[1], 10) : null;
+  const taskIsOddLesson = taskLessonNum !== null && taskLessonNum % 2 !== 0;
+  const useClaudeForThis = !isMedia && (taskFileName === 'mermaid.js' || (taskFileName === 'topicsdata.js' && taskIsOddLesson));
+  document.getElementById('openChatGptBtn').style.display = (!isMedia && !useClaudeForThis) ? 'block' : 'none';
+  document.getElementById('openClaudeBtn').style.display = useClaudeForThis ? 'block' : 'none';
+
+  if (isFileUpload) {
+    document.getElementById('mediaFileNameHint').textContent = 'This file will be saved as: ' + j.r2Key;
+  }
+
+  // Show correct compression site link
+  const compressLinks = {
+    audio: 'https://audio.pi7.org/compress-audio',
+    video: 'https://clideo.com/compress-video',
+    pdf: 'https://smallpdf.com/compress-pdf',
+    infographic: 'https://smallpdf.com/compress-pdf'
+  };
+  const linkBtn = document.getElementById('compressLinkBtn');
+  if (isMedia && compressLinks[j.mediaType]) {
+    linkBtn.href = compressLinks[j.mediaType];
+    linkBtn.style.display = 'inline-block';
+  } else {
+    linkBtn.style.display = 'none';
+  }
+}
+
+async function copyTextToClipboard(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    await navigator.clipboard.writeText(text);
+  } else {
+    // Fallback for older/some mobile browsers
+    const temp = document.createElement('textarea');
+    temp.value = text;
+    temp.style.position = 'fixed';
+    temp.style.left = '-9999px';
+    document.body.appendChild(temp);
+    temp.focus();
+    temp.select();
+    document.execCommand('copy');
+    document.body.removeChild(temp);
+  }
+}
+
+async function copyPrompt() {
+  const j = jobsCache[currentJobId];
+  const isMedia = j && j.jobKind === 'media';
+  const text = j ? (isMedia ? (j.sourceText || j.promptText || '') : (j.promptText || '')) : '';
+  const restoreLabel = isMedia ? '📄 Source Text' : '📋 Copy Prompt for AI';
+  const btn = document.getElementById('copyPromptBtn');
+  try {
+    await copyTextToClipboard(text);
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => { btn.textContent = restoreLabel; }, 2000);
+  } catch (err) {
+    alert('Could not copy automatically. Please select and copy the text manually.');
+  }
+}
+
+async function copyNotebookPrompt() {
+  const j = jobsCache[currentJobId];
+  const text = j ? (j.promptOnly || '') : '';
+  const btn = document.getElementById('copyNotebookBtn');
+  try {
+    await copyTextToClipboard(text);
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => { btn.textContent = '🤖 Prompt Text'; }, 2000);
+  } catch (err) {
+    alert('Could not copy automatically. Please select and copy the text manually.');
+  }
+}
+  
+async function logJobEvent(jobId, eventType, note) {
+  try {
+    const j = jobsCache[jobId] || {};
+    await db.collection('jobHistory').add({
+      jobId: jobId,
+      jobLabel: j.workerLabel || j.title || jobId,
+      jobTitle: j.title || '',
+      worker: currentWorker,
+      eventType: eventType,
+      note: note || '',
+      timestamp: new Date().toISOString()
+    });
+  } catch (err) {
+    console.error('logJobEvent failed (non-fatal):', err);
+  }
+}
+
+async function submitTask() {
+     console.log('RUNNING FIXED VERSION', new Date().toISOString());
+  const text = document.getElementById('taskContent').value.trim();
+  if (!text) { alert('Please paste the content first.'); return; }
+
+  const j = jobsCache[currentJobId];
+  const check = validateBeforeSubmit(text, j.targetPath);
+  if (!check.ok) { alert(check.message); return; }
+  if (check.repaired && !confirm('We auto-fixed a small formatting issue in what you pasted. Submit the corrected version?')) return;
+
+  await db.collection('jobs').doc(currentJobId).update({
+    status: 'submitted', submittedText: check.finalText, submittedAt: new Date().toISOString()
+  });
+ await logJobEvent(currentJobId, 'submitted', '');
+  fetch('/api/verify-content', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      fileType: (j.targetPath || '').split('/').pop(),
+      sourceText: j.promptText ? j.promptText.split('THE TEXT:').pop() : '',
+      submittedText: check.finalText
+    })
+  }).then(r => r.json()).then(v => {
+    db.collection('jobs').doc(currentJobId).update({
+      aiCheck: { verdict: v.verdict, issues: v.issues || [], confidence: v.confidence, checkedAt: new Date().toISOString() }
+    });
+  }).catch(() => {});
+  clearJobInProgress(currentJobId);
+  alert('Submitted! Thank you.');
+  document.getElementById('taskBox').style.display = 'none';
+  loadJobs();
+}
+
+async function uploadMediaFile() {
+  const fileInput = document.getElementById('mediaFileInput');
+  const statusEl = document.getElementById('uploadStatus');
+  const j = jobsCache[currentJobId];
+  if (!fileInput.files.length) { statusEl.textContent = 'Please choose a file first.'; return; }
+
+  const file = fileInput.files[0];
+  statusEl.textContent = 'Uploading...';
+  try {
+   const formData = new FormData();
+    formData.append('file', file);
+    formData.append('key', j.r2Key);
+    formData.append('workerCode', currentWorker);
+    formData.append('jobId', currentJobId);
+    const res = await fetch('/api/upload', { method: 'POST', body: formData });
+    const rawText = await res.text();
+    let result;
+    try {
+      result = JSON.parse(rawText);
+    } catch (parseErr) {
+      throw new Error(`Server returned status ${res.status} with no valid response (endpoint may be missing on this domain). Raw: "${rawText.slice(0,150)}"`);
+    }
+    if (!result.success) throw new Error(result.error || 'Upload failed');
+
+await db.collection('jobs').doc(currentJobId).update({
+      status: 'submitted', submittedAt: new Date().toISOString()
+    });
+    await logJobEvent(currentJobId, 'submitted', '');
+    clearJobInProgress(currentJobId);
+    statusEl.textContent = '✅ Uploaded successfully!';
+    setTimeout(() => { document.getElementById('taskBox').style.display = 'none'; loadJobs(); }, 1200);
+  } catch (err) {
+    statusEl.textContent = '❌ Upload failed: ' + err.message;
+  }
+}
+
+function extractYouTubeId(input) {
+  input = input.trim();
+  if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input; // already a bare ID
+  const match = input.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : input;
+}
+
+async function submitVideoId() {
+  const raw = document.getElementById('videoIdInput').value.trim();
+  if (!raw) { alert('Please paste the YouTube video link.'); return; }
+  const videoId = extractYouTubeId(raw);
+  await db.collection('jobs').doc(currentJobId).update({
+    status: 'submitted', submittedText: videoId, submittedAt: new Date().toISOString()
+  });
+  await logJobEvent(currentJobId, 'submitted', '');
+  clearJobInProgress(currentJobId);
+  alert('Submitted!');
+  document.getElementById('taskBox').style.display = 'none';
+  loadJobs();
+}
 </script>
-</body>
-</html>
+</body></html>
