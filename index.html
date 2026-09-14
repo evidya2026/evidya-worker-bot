@@ -73,13 +73,15 @@ button:disabled { opacity: .65; cursor: not-allowed; transform: none; }
 
 <script>
 const firebaseConfig = {
-  apiKey: "AIzaSyA3-rvQJ1g9K-1l8-_PXX8IffG8W4qU7AE",
-  authDomain: "evidya-academy.firebaseapp.com",
-  projectId: "evidya-academy",
-  storageBucket: "evidya-academy.firebasestorage.app",
-  messagingSenderId: "86172698431",
-  appId: "1:86172698431:web:eb3bd5b2887cda88eb358a"
+  apiKey: "AIzaSyC7oQDTV44WkaHBSbdVfRVrGP93HfDDVzQ",
+  authDomain: "evidya-bot.firebaseapp.com",
+  projectId: "evidya-bot",
+  storageBucket: "evidya-bot.firebasestorage.app",
+  messagingSenderId: "57129174935",
+  appId: "1:57129174935:web:7edd1a369604ee4049a6d2",
+  measurementId: "G-BC068XQBGS"
 };
+
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 let currentWorker = null, currentJobId = null;
