@@ -86,8 +86,11 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 let currentWorker = null, currentJobId = null;
 
-  const appCheck = firebase.appCheck();
-appCheck.activate('6LeJgWMtAAAAAOeGJV17W9m1RIoBpixRTMPAKYou', true);
+const appCheck = firebase.appCheck();
+appCheck.activate(
+  new firebase.appCheck.ReCaptchaEnterpriseProvider('6LdP_LotAAAAAFQGvm1Sk-QM8tH887uoXKPLvkO5'),
+  true
+);
 
 async function login() {
   const code = document.getElementById('workerCode').value.trim().toUpperCase();
