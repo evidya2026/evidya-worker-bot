@@ -28,7 +28,7 @@ async function getAccessToken(env) {
 }
 
 async function getFirestoreDoc(env, token, path) {
-  const res = await fetch(`https://firestore.googleapis.com/v1/projects/evidya-academy/databases/(default)/documents/${path}`, {
+  const res = await fetch(`https://firestore.googleapis.com/v1/projects/evidya-bot/databases/(default)/documents/${path}`, {
     headers: { Authorization: `Bearer ${token}` }
   });
   if (!res.ok) return null;
@@ -127,9 +127,13 @@ export async function onRequestPost({ request, env }) {
       return new Response(JSON.stringify({ error: 'This job is not open for upload' }), { status: 403 });
     }
 
-    const MAX_SIZE = 150 * 1024 * 1024;
-    if (file.size > MAX_SIZE) {
-      return new Response(JSON.stringify({ error: 'File too large (max 150MB)' }), { status: 400 });
+       const MAX_SIZE = 95 * 1024 * 1024;
+    if (file.size > MAX_SIZE || file.size === 0) {
+      return new Response(JSON.stringify({ error: 'File too large or empty (max 95MB)' }), { status: 400 });
+    }
+    const normExt = (n) => String(n || '').split('.').pop().toLowerCase().replace('jpeg', 'jpg');
+    if (!normExt(key) || normExt(key) !== normExt(file.name)) {
+      return new Response(JSON.stringify({ error: 'Wrong file type for this task' }), { status: 400 });
     }
     const arrayBuffer = await file.arrayBuffer();
     await env.EVIDYA_BUCKET.put(key, arrayBuffer, {
