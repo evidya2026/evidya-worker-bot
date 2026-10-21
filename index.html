@@ -1077,4 +1077,203 @@ async function submitVideoId() {
   loadJobs();
 }
 </script>
+
+  <script>
+/* ===== ଫର୍ମାଟ୍ ଯାଞ୍ଚ + AI ହଟାଇବା (worker) ===== */
+(function(){
+  /* true କଲେ ସବୁ JSON ରେ examples, quiz, explain, wh, practice ବାଧ୍ୟତାମୂଳକ ହେବ */
+  var STRICT_FULL = false;
+  var JUNK = /\[object |undefined|\{\{|\}\}|lorem ipsum|TODO/i;
+  var MAX_BYTES = 900000;
+
+  function isStr(v){ return typeof v === 'string' && v.trim().length > 0; }
+  function isObj(v){ return !!v && typeof v === 'object' && !Array.isArray(v); }
+
+  /* ---------- JSON ଟପିକ୍ (notes) ର ଗଠନ ଯାଞ୍ଚ ---------- */
+  function checkTopic(o, relaxed){
+    var E = [];
+    function bad(p, m){ if (E.length < 12) E.push(p + ' — ' + m); }
+    function S(v, p){
+      if (!isStr(v)){ bad(p, 'ଖାଲି ଅଛି କିମ୍ବା ଲେଖା ନୁହେଁ'); return false; }
+      if (JUNK.test(v)){ bad(p, 'ଭୁଲ ବା ଅସମ୍ପୂର୍ଣ୍ଣ ଲେଖା ଅଛି'); return false; }
+      return true;
+    }
+    function L(v, p, min){
+      if (!Array.isArray(v) || v.length < min){ bad(p, 'ତାଲିକା (list) ହେବା ଦରକାର, ଅତିକମରେ ' + min + ' ଟି'); return false; }
+      return true;
+    }
+    if (!isObj(o)) return ['ସମ୍ପୂର୍ଣ୍ଣ ଲେଖା { ରୁ ଆରମ୍ଭ ହୋଇ } ରେ ଶେଷ ହେବା ଦରକାର'];
+
+    S(o.heading, 'heading');
+    if (!relaxed){
+      S(o.id, 'id');
+      if (L(o.keywords, 'keywords', 1)) o.keywords.forEach(function(k, i){ S(k, 'keywords[' + i + ']'); });
+      S(o.intro, 'intro');
+      S(o.conclusion, 'conclusion');
+    } else {
+      if (o.intro !== undefined) S(o.intro, 'intro');
+      if (o.conclusion !== undefined) S(o.conclusion, 'conclusion');
+    }
+
+    if (L(o.sections, 'sections', 1)) o.sections.forEach(function(s, i){
+      var p = 'sections[' + i + ']';
+      if (!isObj(s)){ bad(p, 'ବସ୍ତୁ ହେବା ଦରକାର'); return; }
+      S(s.title, p + '.title');
+      S(s.text, p + '.text');
+      if (s.examples !== undefined || STRICT_FULL){
+        if (L(s.examples, p + '.examples', STRICT_FULL ? 1 : 0)) s.examples.forEach(function(x, k){ S(x, p + '.examples[' + k + ']'); });
+      }
+      if (s.quiz !== undefined || STRICT_FULL){
+        if (L(s.quiz, p + '.quiz', STRICT_FULL ? 1 : 0)) s.quiz.forEach(function(q, k){
+          var qp = p + '.quiz[' + k + ']';
+          if (!isObj(q)){ bad(qp, 'ବସ୍ତୁ ହେବା ଦରକାର'); return; }
+          S(q.question, qp + '.question');
+          if (L(q.options, qp + '.options', 2)){
+            var seen = {};
+            q.options.forEach(function(op, m){
+              if (S(op, qp + '.options[' + m + ']')){
+                if (seen[op.trim()]) bad(qp + '.options[' + m + ']', 'ଏହି ଉତ୍ତର ଦୁଇଥର ଅଛି');
+                seen[op.trim()] = 1;
+              }
+            });
+            if (!(Number.isInteger(q.correct) && q.correct >= 0 && q.correct < q.options.length))
+              bad(qp + '.correct', '0 ରୁ ' + (q.options.length - 1) + ' ମଧ୍ୟରେ ଗୋଟିଏ ସଂଖ୍ୟା ହେବା ଦରକାର (ଲେଖା ନୁହେଁ)');
+          }
+        });
+      }
+    });
+
+    if (o.explain !== undefined || STRICT_FULL){
+      if (!isObj(o.explain)) bad('explain', 'ବସ୍ତୁ ହେବା ଦରକାର');
+      else Object.keys(o.explain).forEach(function(k){ S(o.explain[k], 'explain.' + k); });
+    }
+
+    if (o.wh !== undefined || STRICT_FULL){
+      if (!isObj(o.wh)) bad('wh', 'ବସ୍ତୁ ହେବା ଦରକାର');
+      else {
+        if (STRICT_FULL) ['what', 'why', 'how', 'when', 'where'].forEach(function(k){ if (!o.wh[k]) bad('wh.' + k, 'ନାହିଁ'); });
+        Object.keys(o.wh).forEach(function(k){
+          var w = o.wh[k], p = 'wh.' + k;
+          if (!isObj(w)){ bad(p, 'ବସ୍ତୁ ହେବା ଦରକାର'); return; }
+          S(w.answer, p + '.answer');
+          if (w.examples !== undefined && L(w.examples, p + '.examples', 0)) w.examples.forEach(function(x, i){ S(x, p + '.examples[' + i + ']'); });
+          if (L(w.triggers, p + '.triggers', 1)) w.triggers.forEach(function(x, i){ S(x, p + '.triggers[' + i + ']'); });
+        });
+      }
+    }
+
+    if (o.practice !== undefined || STRICT_FULL){
+      if (L(o.practice, 'practice', 1)) o.practice.forEach(function(x, i){
+        var p = 'practice[' + i + ']';
+        if (!isObj(x)){ bad(p, 'ବସ୍ତୁ ହେବା ଦରକାର'); return; }
+        S(x.group, p + '.group'); S(x.ask, p + '.ask'); S(x.target, p + '.target'); S(x.meaning, p + '.meaning');
+        if (isObj(o.explain) && isStr(x.group) && !(x.group in o.explain)) bad(p + '.group', '"' + x.group + '" ନାମ explain ଭିତରେ ନାହିଁ');
+      });
+    }
+    return E;
+  }
+
+  /* ---------- ଲେଖା ପଢ଼ିବା: ପ୍ରଥମେ ସିଧା JSON, ନହେଲେ ଛୋଟ ମରାମତି ---------- */
+  function stage1(raw){
+    var t = String(raw).replace(/^\uFEFF/, '').replace(/[\u200B-\u200D]/g, '');
+    t = t.replace(/```[a-zA-Z]*\n?/g, '').replace(/```/g, '');
+    var i = t.search(/[\{\[]/); if (i > 0) t = t.slice(i);
+    var j = Math.max(t.lastIndexOf('}'), t.lastIndexOf(']')); if (j >= 0) t = t.slice(0, j + 1);
+    return t.trim();
+  }
+  function parseAny(raw){
+    var a = stage1(raw);
+    try { return { ok: true, value: JSON.parse(a), repaired: false }; } catch (e1) {}
+    var c = cleanPastedContent(raw);
+    if (/^\s*const\s/.test(c)) c = extractObjectLiteral(c);
+    var q = escapeStrayInnerQuotes(c);
+    var cands = [c, attemptStructuralRepair(c), q, attemptStructuralRepair(q)];
+    var firstErr = '';
+    for (var k = 0; k < cands.length; k++){
+      var r = tryParse(cands[k]);
+      if (r.ok){
+        try { return { ok: true, value: JSON.parse(JSON.stringify(r.value)), repaired: true }; } catch (e2) {}
+      } else if (!firstErr) firstErr = r.error;
+    }
+    var msg = ''; try { JSON.parse(a); } catch (e3) { msg = e3.message; }
+    return { ok: false, error: msg || firstErr };
+  }
+
+  function validateJson(raw, path){
+    var p = parseAny(raw);
+    if (!p.ok) return { ok: false, message: '❌ ଏହା ଠିକ୍ JSON ନୁହେଁ:\n\n' + p.error + '\n\nAI ର ସମ୍ପୂର୍ଣ୍ଣ ଉତ୍ତର ପୁଣି କପି କରନ୍ତୁ । ଆଗରେ ବା ପଛରେ କିଛି ଲେଖନ୍ତୁ ନାହିଁ ।' };
+    if (String(path || '').indexOf('notes/') === 0){
+      var relaxed = String(path).indexOf('/shikhyarthi/') !== -1;
+      var errs = checkTopic(p.value, relaxed);
+      if (errs.length) return { ok: false, message: '❌ ଫାଇଲ୍ ର ଗଠନ ଠିକ୍ ନୁହେଁ । ଏହି ଭୁଲ ଠିକ୍ କରି ପୁଣି ଦିଅନ୍ତୁ:\n\n' + errs.map(function(e, i){ return (i + 1) + '. ' + e; }).join('\n') + '\n\n(ଏହି ଭୁଲ AI କୁ କହି ଠିକ୍ ଉତ୍ତର ମାଗନ୍ତୁ ।)' };
+    }
+    var out = JSON.stringify(p.value, null, 2);
+    if (new Blob([out]).size > MAX_BYTES) return { ok: false, message: '❌ ଲେଖା ବହୁତ ବଡ଼ ହୋଇଛି । ଏହାକୁ ଦୁଇ ଭାଗ କରନ୍ତୁ ।' };
+    return { ok: true, finalText: out, repaired: p.repaired };
+  }
+
+  function syntaxOk(t){
+    try { new Function(t); return true; }
+    catch (e) { try { new Function('return (' + t + ')'); return true; } catch (e2) { return false; } }
+  }
+
+  var prevValidate = validateBeforeSubmit;
+  validateBeforeSubmit = function(raw, path){
+    var name = String(path || '').split('/').pop();
+    if (/\.json$/i.test(name)) return validateJson(raw, path);
+    var r = prevValidate(raw, path);
+    if (r.ok){
+      if (!FILE_SCHEMAS[name] && /\.js$/i.test(name) && !syntaxOk(r.finalText))
+        return { ok: false, message: '❌ ଏହି ଲେଖାରେ କୋଡ୍ ର ଭୁଲ ଅଛି । AI ର ସମ୍ପୂର୍ଣ୍ଣ ଉତ୍ତର ପୁଣି କପି କରନ୍ତୁ ।' };
+      if (new Blob([r.finalText]).size > MAX_BYTES)
+        return { ok: false, message: '❌ ଲେଖା ବହୁତ ବଡ଼ ହୋଇଛି । ଏହାକୁ ଦୁଇ ଭାଗ କରନ୍ତୁ ।' };
+    }
+    return r;
+  };
+
+  /* ---------- ଜମା କରିବା: AI ବିନା ---------- */
+  submitTask = async function(){
+    var btn = document.getElementById('submitTextBtn');
+    if (btn.disabled) return;
+    var text = document.getElementById('taskContent').value.trim();
+    if (!text){ alert('ଦୟାକରି ପ୍ରଥମେ ଲେଖା paste କରନ୍ତୁ ।'); return; }
+    var jobId = currentJobId, j = jobsCache[jobId];
+    if (!j){ alert('ଏହି କାମ ମିଳିଲା ନାହିଁ । ପେଜ୍ ରିଫ୍ରେସ୍ କରନ୍ତୁ ।'); return; }
+    var check = validateBeforeSubmit(text, j.targetPath);
+    if (!check.ok){ alert(check.message); return; }
+    if (check.repaired && !confirm('ଆପଣଙ୍କ ଲେଖାର ଛୋଟ ଭୁଲ ଆପେ ଆପେ ଠିକ୍ ହୋଇଛି । ଠିକ୍ ହୋଇଥିବା ଲେଖା ଜମା କରିବେ କି ?')) return;
+    btn.disabled = true;
+    try {
+      await db.collection('jobs').doc(jobId).update({
+        status: 'submitted', submittedText: check.finalText, submittedAt: new Date().toISOString()
+      });
+      await logJobEvent(jobId, 'submitted', '');
+      clearJobInProgress(jobId);
+      alert('ଜମା ହୋଇଗଲା ! ଧନ୍ୟବାଦ ।');
+      document.getElementById('taskBox').style.display = 'none';
+      loadJobs();
+    } catch (err) {
+      console.error(err);
+      alert('ଜମା ହେଲା ନାହିଁ । ଇଣ୍ଟରନେଟ୍ ଦେଖି ଆଉଥରେ ଚେଷ୍ଟା କରନ୍ତୁ ।');
+    } finally { btn.disabled = false; }
+  };
+
+  /* ---------- ଫାଇଲ୍ upload: ପ୍ରକାର ଓ ସାଇଜ୍ ଯାଞ୍ଚ ---------- */
+  var upBusy = false;
+  var prevUpload = uploadMediaFile;
+  uploadMediaFile = async function(){
+    if (upBusy) return;
+    var fi = document.getElementById('mediaFileInput'), st = document.getElementById('uploadStatus'), j = jobsCache[currentJobId];
+    if (fi.files.length && j && j.r2Key){
+      var f = fi.files[0];
+      function ext(n){ return String(n || '').split('.').pop().toLowerCase().replace('jpeg', 'jpg'); }
+      if (ext(f.name) !== ext(j.r2Key)){ st.textContent = '❌ ଭୁଲ ପ୍ରକାର ଫାଇଲ୍ । ଏଠାରେ .' + ext(j.r2Key) + ' ଫାଇଲ୍ ଦରକାର ।'; return; }
+      if (f.size === 0){ st.textContent = '❌ ଫାଇଲ୍ ଖାଲି ଅଛି ।'; return; }
+      if (f.size > 95 * 1024 * 1024){ st.textContent = '❌ ଫାଇଲ୍ ବହୁତ ବଡ଼ (95MB ରୁ କମ୍ ହେବା ଦରକାର) । Compression Tool ବ୍ୟବହାର କରନ୍ତୁ ।'; return; }
+    }
+    upBusy = true;
+    try { return await prevUpload.apply(this, arguments); } finally { upBusy = false; }
+  };
+})();
+</script>
 </body></html>
