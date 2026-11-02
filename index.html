@@ -1303,13 +1303,14 @@ async function submitVideoId() {
     }
     function mode(key) {
       if (key === 'emoji' || key === 't') return 'free';
-      if (key === 'opts' || key === 'big') return (k === 'ganita' || (ing && key === 'opts')) ? 'free' : 'title';
+          if (key === 'opts' || key === 'big') return k === 'ganita' ? 'math' : ((ing && key === 'opts') ? 'free' : 'title');
       if (ing && (key === 'en' || key === 'say' || key === 'alts' || key === 'hear')) return 'free';
       if (key === 'title' || key === 'sub') return 'title';
       return 'strict';
     }
     function txt(p, v, md) {
-      if (md === 'free') return;
+         if (md === 'free') return;
+      if (md === 'math') { var mw = v.match(/[A-Za-z]{2,}/); if (mw) bad(p, 'English word found: "' + mw[0] + '" — write it in Odia letters'); else if (DEV.test(v)) bad(p, 'Hindi letters found — use Odia only'); return; }
       if (LAT.test(v)) bad(p, 'English letters found: "' + v.match(/[A-Za-z][A-Za-z ]*/)[0].slice(0, 24) + '" — write it in Odia letters');
       else if (DEV.test(v)) bad(p, 'Hindi letters found — use Odia only');
       else if (md === 'strict' && DIG.test(v)) bad(p, 'digits found — write numbers in Odia words');
