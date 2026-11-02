@@ -1449,5 +1449,54 @@ async function submitVideoId() {
     return origAlert.apply(window, arguments);
   };
 })();
+
+/* ===== ChatGPT "Copy response" ସଫା କରିବା (worker) — self-contained ===== */
+(function () {
+  if (window.__sxPasteClean) return; window.__sxPasteClean = true;
+
+  function cleanCopy(t) {
+    var s = String(t == null ? '' : t);
+    s = s.replace(/&#x([0-9a-fA-F]+);/g, function (m, h) { try { return String.fromCodePoint(parseInt(h, 16)); } catch (e) { return ' '; } });
+    s = s.replace(/&#(\d+);/g, function (m, d) { try { return String.fromCodePoint(parseInt(d, 10)); } catch (e) { return ' '; } });
+    s = s.replace(/&nbsp;/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+    s = s.replace(/\u00A0/g, ' ');
+    s = s.replace(/\\[ \t]*(\r?\n)/g, '$1');
+    s = s.replace(/\\[ \t]*$/, '');
+    s = s.replace(/\\([_*\[\]()#~`<>+\-.!|])/g, '$1');
+    return s;
+  }
+
+  function isJsonJob() {
+    try { var j = jobsCache[currentJobId]; return !!(j && /\.json$/i.test(String(j.targetPath || ''))); } catch (e) { return false; }
+  }
+
+  var prevClean = validateBeforeSubmit;
+  validateBeforeSubmit = function (raw, path) {
+    var p = String(path || '');
+    if (/\.json$/i.test(p)) raw = cleanCopy(raw);
+    return prevClean.call(this, raw, path);
+  };
+
+  function hook() {
+    var ta = document.getElementById('taskContent');
+    if (!ta || ta.__sxPaste) return;
+    ta.__sxPaste = true;
+    ta.addEventListener('paste', function (e) {
+      try {
+        if (!isJsonJob()) return;
+        var cd = e.clipboardData || window.clipboardData;
+        var txt = cd ? cd.getData('text') : '';
+        if (!txt) return;
+        var fixed = cleanCopy(txt);
+        if (fixed === txt) return;
+        e.preventDefault();
+        var a = ta.selectionStart, b = ta.selectionEnd;
+        if (typeof a === 'number') ta.setRangeText(fixed, a, b, 'end'); else ta.value += fixed;
+        ta.dispatchEvent(new Event('input', { bubbles: true }));
+      } catch (err) { console.error(err); }
+    });
+  }
+  hook(); setTimeout(hook, 800); setTimeout(hook, 2500);
+})();
 </script>
 </body></html>
