@@ -1393,5 +1393,60 @@ async function submitVideoId() {
     return { ok: true, finalText: JSON.stringify(o, null, 1), repaired: r.repaired };
   };
 })();
+    /* ===== ଭୁଲ ବାର୍ତ୍ତା କପି ବଟନ୍ (worker) — self-contained ===== */
+(function () {
+  if (window.__sxCopyBox) return; window.__sxCopyBox = true;
+  var origAlert = window.alert;
+
+  function doCopy(text) {
+    try {
+      if (typeof copyTextToClipboard === 'function') return copyTextToClipboard(text);
+    } catch (e) { /* ignore */ }
+    return new Promise(function (res, rej) {
+      try {
+        var t = document.createElement('textarea');
+        t.value = text; t.style.position = 'fixed'; t.style.left = '-9999px';
+        document.body.appendChild(t); t.focus(); t.select();
+        document.execCommand('copy'); document.body.removeChild(t); res();
+      } catch (e) { rej(e); }
+    });
+  }
+
+  function showBox(msg) {
+    var old = document.getElementById('sxErrBox'); if (old) old.remove();
+    var copyText = msg;
+    if (msg.indexOf('Fix these errors') !== -1) {
+      var i = msg.indexOf('\n\n');
+      copyText = 'Fix these errors and give the complete JSON again, nothing else.\n\n' + (i >= 0 ? msg.slice(i + 2) : msg);
+    }
+    var ov = document.createElement('div'); ov.id = 'sxErrBox';
+    ov.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:12px';
+    var box = document.createElement('div');
+    box.style.cssText = 'background:#fff;color:#111;border-radius:14px;padding:14px;max-width:480px;width:100%;max-height:85vh;display:flex;flex-direction:column;font-family:sans-serif';
+    var pre = document.createElement('pre');
+    pre.style.cssText = 'flex:1;overflow:auto;white-space:pre-wrap;word-break:break-word;font-size:14px;line-height:1.6;margin:0 0 12px;user-select:text;-webkit-user-select:text';
+    pre.textContent = msg;
+    var row = document.createElement('div'); row.style.cssText = 'display:flex;gap:8px';
+    var cp = document.createElement('button'); cp.type = 'button'; cp.textContent = '📋 ଭୁଲ କପି କରନ୍ତୁ';
+    cp.style.cssText = 'flex:2;padding:14px;border:0;border-radius:10px;background:#16a34a;color:#fff;font-weight:800;font-size:16px';
+    var cl = document.createElement('button'); cl.type = 'button'; cl.textContent = 'ବନ୍ଦ';
+    cl.style.cssText = 'flex:1;padding:14px;border:0;border-radius:10px;background:#64748b;color:#fff;font-weight:800;font-size:16px';
+    cp.onclick = function () {
+      doCopy(copyText).then(function () {
+        cp.textContent = '✅ କପି ହେଲା !';
+        setTimeout(function () { cp.textContent = '📋 ଭୁଲ କପି କରନ୍ତୁ'; }, 2500);
+      }).catch(function () { cp.textContent = '❌ କପି ହେଲାନି, ଲେଖା ଛୁଇଁ select କରନ୍ତୁ'; });
+    };
+    cl.onclick = function () { ov.remove(); };
+    row.appendChild(cp); row.appendChild(cl);
+    box.appendChild(pre); box.appendChild(row); ov.appendChild(box);
+    document.body.appendChild(ov);
+  }
+
+  window.alert = function (m) {
+    if (typeof m === 'string' && m.charAt(0) === '\u274C' && m.length > 40) { showBox(m); return; }
+    return origAlert.apply(window, arguments);
+  };
+})();
 </script>
 </body></html>
