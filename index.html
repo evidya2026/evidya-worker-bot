@@ -1498,5 +1498,137 @@ async function submitVideoId() {
   }
   hook(); setTimeout(hook, 800); setTimeout(hook, 2500);
 })();
+
+    /* ===== ସହାୟକ ଫାଇଲ୍ ଯାଞ୍ଚ ୨ : ହିନ୍ଦୀ ଓ ସ୍ମାର୍ଟଫୋନ୍ (worker) — self-contained ===== */
+(function () {
+  if (window.__sx2Worker) return; window.__sx2Worker = true;
+  var LAT = /[A-Za-z]/, DIG = /[0-9\u0B66-\u0B6F]/, DEV = /[\u0900-\u0963\u0966-\u097F]/, ODI = /[\u0B00-\u0B7F]/, ANY = /[\u0B00-\u0B7F\u0900-\u097F]/;
+
+  function parsePath(p) {
+    var m = /^(hindi|smartphone)\/(plan-)?l(\d)-(\d{3})(?:-(\d{3}))?\.json$/.exec(String(p || ''));
+    if (!m) return null;
+    if ((m[2] && !m[5]) || (!m[2] && m[5])) return null;
+    var r = { tr: m[1], id: +m[3], n: +m[4], kind: m[2] ? 'plan' : 'class' };
+    if (m[2]) { r.a = +m[4]; r.b = +m[5]; }
+    return r;
+  }
+
+  function check(k, kind, o, ex) {
+    var E = [], hin = (k === 'hindi');
+    function bad(p, m) { if (E.length < 14) E.push(p + ' — ' + m); }
+    function isO(v) { return !!v && typeof v === 'object' && !Array.isArray(v); }
+    function isS(v) { return typeof v === 'string' && v.trim().length > 0; }
+    function S(v, p, odi) {
+      if (!isS(v)) { bad(p, 'empty or missing'); return false; }
+      if (odi === true && !ODI.test(v)) { bad(p, 'must be written in Odia letters'); return false; }
+      if (odi === 'any' && !ANY.test(v)) { bad(p, 'must be written in Odia or Devanagari letters'); return false; }
+      return true;
+    }
+    function mode(key) {
+      if (key === 'emoji' || key === 't' || key === 'icons') return 'free';
+      if (hin) return (key === 'title' || key === 'sub') ? 'hint' : 'hin';
+      if (key === 'opts' || key === 'big' || key === 'title' || key === 'sub') return 'title';
+      return 'strict';
+    }
+    function txt(p, v, md) {
+      if (md === 'free') return;
+      if (LAT.test(v)) { bad(p, 'English letters found: "' + v.match(/[A-Za-z][A-Za-z ]*/)[0].slice(0, 24) + '" — write it in Odia letters'); return; }
+      if (md === 'hin') { if (DIG.test(v)) bad(p, 'digits found — write numbers in words'); return; }
+      if (md === 'hint') return;
+      if (DEV.test(v)) bad(p, 'Hindi letters found — use Odia only');
+      else if (md === 'strict' && DIG.test(v)) bad(p, 'digits found — write numbers in Odia words');
+    }
+    if (!isO(o)) return ['the whole answer must be one JSON object { ... }'];
+    (function walk(v, key, path) {
+      if (typeof v === 'string') { txt(path, v, mode(key)); return; }
+      if (Array.isArray(v)) { v.forEach(function (x, i) { walk(x, key, path + '[' + i + ']'); }); return; }
+      if (isO(v)) Object.keys(v).forEach(function (kk) { walk(v[kk], kk, path ? path + '.' + kk : kk); });
+    })(o, '', '');
+    if (kind === 'plan') {
+      var want = ex.b - ex.a + 1;
+      if (!Array.isArray(o.classes) || o.classes.length !== want) bad('classes', 'need exactly ' + want + ' items (n = ' + ex.a + ' to ' + ex.b + ')');
+      else o.classes.forEach(function (c, i) {
+        var p = 'classes[' + i + ']';
+        if (!isO(c) || +c.n !== ex.a + i) { bad(p + '.n', 'must be ' + (ex.a + i)); return; }
+        if (!S(c.t, p + '.t', hin ? 'any' : true)) return;
+        txt(p + '.t', c.t, hin ? 'hint' : 'title');
+      });
+      return E;
+    }
+    S(o.title, 'title', hin ? 'any' : true); S(o.intro, 'intro', true); S(o.end, 'end', true);
+    if (!isS(o.emoji)) bad('emoji', 'missing');
+    var okT = hin ? { learn: 1, speak: 1 } : { learn: 1, tap: 1, story: 1, tip: 1, 'do': 1 };
+    var nd = 0, nt = 0, ns = 0;
+    if (!Array.isArray(o.steps) || o.steps.length < (hin ? 5 : 6) || o.steps.length > (hin ? 10 : 14)) bad('steps', 'need ' + (hin ? '5 to 10' : '6 to 14') + ' steps');
+    else {
+      o.steps.forEach(function (s, i) {
+        var p = 'steps[' + i + ']';
+        if (!isO(s) || !okT[s.t]) { bad(p + '.t', 'must be one of: ' + Object.keys(okT).join(', ')); return; }
+        S(s.or, p + '.or', true);
+        if (s.t === 'do') nd++; if (s.t === 'tap') nt++; if (s.t === 'speak') ns++;
+        if (hin) {
+          S(s.big, p + '.big'); S(s.say, p + '.say');
+          if (s.t === 'learn') S(s.sub, p + '.sub', true);
+          if (s.tip !== undefined) S(s.tip, p + '.tip', 'any');
+          if (s.alts !== undefined && !(Array.isArray(s.alts) && s.alts.every(isS))) bad(p + '.alts', 'must be a list of texts');
+        } else {
+          if (s.say !== undefined) S(s.say, p + '.say', true);
+          if (s.t === 'learn' || s.t === 'story' || s.t === 'do') S(s.big, p + '.big');
+          if (s.t === 'do' && isS(s.or) && s.or.indexOf('ତଳେ ଦବାନ୍ତୁ') < 0) bad(p + '.or', 'a "do" step must end with: ଏହା କରିଦେଲେ ତଳେ ଦବାନ୍ତୁ');
+          if (s.t === 'tap') {
+            S(s.q, p + '.q', true);
+            var okIc = Array.isArray(s.icons) && s.icons.length >= 3 && s.icons.length <= 6 && s.icons.every(function (ic) {
+              return Array.isArray(ic) && ic.length === 2 && isS(ic[0]) && isS(ic[1]) && ODI.test(ic[1]) && !LAT.test(ic[1]) && !DEV.test(ic[1]);
+            });
+            if (!okIc) bad(p + '.icons', 'need 3 to 6 items like ["🔘","<Odia label>"], label in Odia letters only');
+            else {
+              var ls = {}; s.icons.forEach(function (ic) { ls[ic[1].trim()] = 1; });
+              if (Object.keys(ls).length !== s.icons.length) bad(p + '.icons', 'two labels are the same');
+            }
+            if (!(Number.isInteger(s.ans) && s.ans >= 0 && Array.isArray(s.icons) && s.ans < s.icons.length)) bad(p + '.ans', 'must be an icon number starting from 0');
+          }
+        }
+      });
+      if (hin && ns < 1) bad('steps', 'need at least one "speak" step');
+      if (!hin && nd !== 1) bad('steps', 'need exactly one "do" step');
+      if (!hin && nt < 1) bad('steps', 'need at least one "tap" step');
+    }
+    function quiz(arr, p, min, max) {
+      if (!Array.isArray(arr) || arr.length < min || arr.length > max) { bad(p, 'need ' + min + ' to ' + max + ' questions'); return; }
+      arr.forEach(function (it, i) {
+        var q = p + '[' + i + ']';
+        if (!isO(it)) { bad(q, 'must be an object'); return; }
+        S(it.q, q + '.q', true);
+        if (it.hear !== undefined) S(it.hear, q + '.hear', hin ? 'any' : true);
+        if (it.or !== undefined) S(it.or, q + '.or', hin ? 'any' : true);
+        if (!Array.isArray(it.opts) || it.opts.length < 2 || it.opts.length > 4 || !it.opts.every(isS)) { bad(q + '.opts', 'need 2 to 4 non-empty options'); return; }
+        var seen = {}; it.opts.forEach(function (x) { seen[x.trim()] = 1; });
+        if (Object.keys(seen).length !== it.opts.length) bad(q + '.opts', 'two options are the same');
+        if (!(Number.isInteger(it.ans) && it.ans >= 0 && it.ans < it.opts.length)) bad(q + '.ans', 'must be an option number from 0 to ' + (it.opts.length - 1));
+        if (!hin) {
+          var need = it.opts.some(function (x) { return DIG.test(x); });
+          if (need && !(Array.isArray(it.osay) && it.osay.length === it.opts.length && it.osay.every(isS))) bad(q + '.osay', 'needed: spoken Odia words for every option');
+        }
+      });
+    }
+    if (!isO(o.game)) bad('game', 'missing'); else { S(o.game.title, 'game.title', true); quiz(o.game.items, 'game.items', 3, 8); }
+    quiz(o.test, 'test', 4, 10);
+    return E;
+  }
+
+  var prevSx2 = validateBeforeSubmit;
+  validateBeforeSubmit = function (raw, path) {
+    var r = prevSx2(raw, path);
+    var pp = parsePath(path);
+    if (!pp || !r.ok) return r;
+    var o; try { o = JSON.parse(r.finalText); } catch (e) { return { ok: false, message: '❌ ଏହା ଠିକ୍ JSON ନୁହେଁ । AI ର ସମ୍ପୂର୍ଣ୍ଣ ଉତ୍ତର ପୁଣି କପି କରନ୍ତୁ ।' }; }
+    var errs = check(pp.tr, pp.kind, o, pp);
+    if (errs.length) {
+      return { ok: false, message: '❌ ଫାଇଲ୍ ରେ ଭୁଲ ଅଛି । ତଳର ଲେଖା କପି କରି AI କୁ ଦିଅନ୍ତୁ ଓ କୁହନ୍ତୁ: "Fix these errors and give the complete JSON again, nothing else."\n\n' + errs.map(function (e, i) { return (i + 1) + '. ' + e; }).join('\n') };
+    }
+    if (pp.kind === 'class') { o.n = pp.n; o.level = pp.id; delete o.cat; }
+    return { ok: true, finalText: JSON.stringify(o, null, 1), repaired: r.repaired };
+  };
+})();
 </script>
 </body></html>
