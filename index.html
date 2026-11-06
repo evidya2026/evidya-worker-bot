@@ -2047,5 +2047,137 @@ async function submitVideoId() {
     return { ok: true, finalText: JSON.stringify(o, null, 1), repaired: r.repaired };
   };
 })();
+
+/* ===== ସଂଳାପ ଓ ହୃଦୟର ଈଶ୍ୱର ସହାୟକ ଫାଇଲ୍ ଯାଞ୍ଚ (worker) — self-contained ===== */
+(function () {
+  if (window.__sx6Worker) return; window.__sx6Worker = true;
+  var LAT = /[A-Za-z]/, DIG = /[0-9\u0B66-\u0B6F]/, DEV = /[\u0900-\u0963\u0966-\u097F]/, ODI = /[\u0B00-\u0B7F]/;
+  var BAN = ['କ୍ୱାଣ୍ଟମ', 'ଫ୍ରିକ୍ୱେନ୍ସି', 'ଭାଇବ୍ରେସନ', 'କମ୍ପନ'];
+  var PRE = /^(sanlap|ishwar)\/(?:c-(\d{3,4})|plan-(\d{3,4})-(\d{3,4}))\.json$/;
+  function parsePath(p) {
+    var m = PRE.exec(String(p || '')); if (!m) return null;
+    if (m[2]) { var n = +m[2]; return (n >= 1 && n <= 1000) ? { tr: m[1], kind: 'class', n: n } : null; }
+    var a = +m[3], b = +m[4];
+    if (a < 1 || b > 1000 || b < a) return null;
+    return { tr: m[1], kind: 'plan', n: a, a: a, b: b };
+  }
+
+  function check(k, kind, o, ex) {
+    var E = [];
+    function bad(p, m) { if (E.length < 14) E.push(p + ' — ' + m); }
+    function isO(v) { return !!v && typeof v === 'object' && !Array.isArray(v); }
+    function isS(v) { return typeof v === 'string' && v.trim().length > 0; }
+    function S(v, p, odi) {
+      if (!isS(v)) { bad(p, 'empty or missing'); return false; }
+      if (odi && !ODI.test(v)) { bad(p, 'must be written in Odia letters'); return false; }
+      return true;
+    }
+    function mode(key) {
+      if (key === 'emoji' || key === 't' || key === 'e') return 'free';
+      if (key === 'title' || key === 'big' || key === 'sub') return 'title';
+      return 'strict';
+    }
+    function txt(p, v, md) {
+      if (md === 'free') return;
+      if (LAT.test(v)) { bad(p, 'English letters found: "' + v.match(/[A-Za-z][A-Za-z ]*/)[0].slice(0, 24) + '" — write it in Odia letters'); return; }
+      if (DEV.test(v)) { bad(p, 'Hindi letters found — use Odia only'); return; }
+      if (md === 'strict' && DIG.test(v)) { bad(p, 'digits found — write numbers in Odia words'); return; }
+      if (k === 'ishwar') for (var i = 0; i < BAN.length; i++) if (v.indexOf(BAN[i]) >= 0) { bad(p, 'pseudo-science word "' + BAN[i] + '" is not allowed'); return; }
+    }
+    if (!isO(o)) return ['the whole answer must be one JSON object { ... }'];
+    (function walk(v, key, path) {
+      if (typeof v === 'string') { txt(path, v, mode(key)); return; }
+      if (Array.isArray(v)) { v.forEach(function (x, i) { walk(x, key, path + '[' + i + ']'); }); return; }
+      if (isO(v)) Object.keys(v).forEach(function (kk) { walk(v[kk], kk, path ? path + '.' + kk : kk); });
+    })(o, '', '');
+    if (kind === 'plan') {
+      var want = ex.b - ex.a + 1;
+      if (!Array.isArray(o.classes) || o.classes.length !== want) bad('classes', 'need exactly ' + want + ' items (n = ' + ex.a + ' to ' + ex.b + ')');
+      else o.classes.forEach(function (c, i) {
+        var p = 'classes[' + i + ']';
+        if (!isO(c) || +c.n !== ex.a + i) { bad(p + '.n', 'must be ' + (ex.a + i)); return; }
+        if (!S(c.t, p + '.t', true)) return;
+        txt(p + '.t', c.t, 'title');
+      });
+      return E;
+    }
+    S(o.title, 'title', true); S(o.intro, 'intro', true); S(o.end, 'end', true);
+    if (o.introSay !== undefined) S(o.introSay, 'introSay', true);
+    if (!isS(o.emoji)) bad('emoji', 'missing');
+    var cnt = { story: 0, learn: 0, power: 0, scene: 0, 'do': 0 }, st = o.steps;
+    if (!Array.isArray(st) || st.length < 6 || st.length > 12) bad('steps', 'need 6 to 12 steps');
+    else {
+      st.forEach(function (s, i) {
+        var p = 'steps[' + i + ']';
+        if (!isO(s) || !Object.prototype.hasOwnProperty.call(cnt, s.t)) { bad(p + '.t', 'must be one of: story, learn, power, scene, do'); return; }
+        cnt[s.t]++;
+        if (s.t === 'story') { S(s.big, p + '.big', true); S(s.or, p + '.or', true); }
+        else if (s.t === 'learn') {
+          S(s.big, p + '.big', true); S(s.sub, p + '.sub', true); S(s.or, p + '.or', true);
+          if (s.say !== undefined) S(s.say, p + '.say', true);
+        } else if (s.t === 'power') {
+          S(s.big, p + '.big', true); S(s.sub, p + '.sub', true); S(s.or, p + '.or', true);
+        } else if (s.t === 'do') {
+          S(s.big, p + '.big', true); S(s.sub, p + '.sub', true); S(s.or, p + '.or', true);
+          if (isS(s.or) && s.or.indexOf('ତଳେ ଦବାନ୍ତୁ') < 0) bad(p + '.or', 'a "do" step must end with: ଏହା କରିଦେଲେ ତଳେ ଦବାନ୍ତୁ');
+        } else if (s.t === 'scene') {
+          S(s.big, p + '.big', true); S(s.or, p + '.or', true);
+          if (!Array.isArray(s.turns) || s.turns.length < 2 || s.turns.length > 3) bad(p + '.turns', 'need 2 or 3 turns');
+          else s.turns.forEach(function (t, j) {
+            var q = p + '.turns[' + j + ']';
+            if (!isO(t)) { bad(q, 'must be an object'); return; }
+            S(t.who, q + '.who', true); S(t.say, q + '.say', true);
+            if (!isS(t.e)) bad(q + '.e', 'missing emoji');
+            if (t.sayVoice !== undefined) S(t.sayVoice, q + '.sayVoice', true);
+            if (!Array.isArray(t.opts) || t.opts.length !== 3 || !t.opts.every(isS)) { bad(q + '.opts', 'need exactly 3 non-empty replies'); return; }
+            var sn = {}; t.opts.forEach(function (x) { sn[x.trim()] = 1; });
+            if (Object.keys(sn).length !== 3) bad(q + '.opts', 'two replies are the same');
+            t.opts.forEach(function (x, m) { S(x, q + '.opts[' + m + ']', true); });
+            if (!(Number.isInteger(t.ans) && t.ans >= 0 && t.ans < 3)) bad(q + '.ans', 'must be a reply number from 0 to 2');
+            if (!Array.isArray(t.why) || t.why.length !== 3 || !t.why.every(isS)) bad(q + '.why', 'need exactly 3 reasons, one for each reply');
+            else t.why.forEach(function (x, m) { S(x, q + '.why[' + m + ']', true); });
+          });
+        }
+      });
+      if (isO(st[0]) && st[0].t !== 'story') bad('steps[0]', 'the first step must be the "story" step');
+      if (isO(st[st.length - 1]) && st[st.length - 1].t !== 'do') bad('steps', 'the last step must be the "do" step');
+      if (cnt.story !== 1 || cnt.power !== 1 || cnt.scene !== 1 || cnt['do'] !== 1) bad('steps', 'need exactly one each of story, power, scene, do');
+      if (cnt.learn < 3 || cnt.learn > 5) bad('steps', 'need 3 to 5 learn steps');
+    }
+    function quiz(arr, p, min, max, needOr) {
+      if (!Array.isArray(arr) || arr.length < min || arr.length > max) { bad(p, 'need ' + min + ' to ' + max + ' questions'); return; }
+      arr.forEach(function (it, i) {
+        var q = p + '[' + i + ']';
+        if (!isO(it)) { bad(q, 'must be an object'); return; }
+        S(it.q, q + '.q', true);
+        if (needOr) S(it.or, q + '.or', true); else if (it.or !== undefined) S(it.or, q + '.or', true);
+        if (it.orSay !== undefined) S(it.orSay, q + '.orSay', true);
+        if (it.qSay !== undefined) S(it.qSay, q + '.qSay', true);
+        if (!Array.isArray(it.opts) || it.opts.length < 2 || it.opts.length > 4 || !it.opts.every(isS)) { bad(q + '.opts', 'need 2 to 4 non-empty options'); return; }
+        var seen = {}; it.opts.forEach(function (x) { seen[x.trim()] = 1; });
+        if (Object.keys(seen).length !== it.opts.length) bad(q + '.opts', 'two options are the same');
+        it.opts.forEach(function (x, m) { S(x, q + '.opts[' + m + ']', true); });
+        if (!(Number.isInteger(it.ans) && it.ans >= 0 && it.ans < it.opts.length)) bad(q + '.ans', 'must be an option number from 0 to ' + (it.opts.length - 1));
+      });
+    }
+    if (!isO(o.game)) bad('game', 'missing'); else { S(o.game.title, 'game.title', true); quiz(o.game.items, 'game.items', 3, 6, false); }
+    quiz(o.test, 'test', 4, 6, true);
+    return E;
+  }
+
+  var prevSx6 = validateBeforeSubmit;
+  validateBeforeSubmit = function (raw, path) {
+    var r = prevSx6(raw, path);
+    var pp = parsePath(path);
+    if (!pp || !r.ok) return r;
+    var o; try { o = JSON.parse(r.finalText); } catch (e) { return { ok: false, message: '❌ ଏହା ଠିକ୍ JSON ନୁହେଁ । AI ର ସମ୍ପୂର୍ଣ୍ଣ ଉତ୍ତର ପୁଣି କପି କରନ୍ତୁ ।' }; }
+    var errs = check(pp.tr, pp.kind, o, pp);
+    if (errs.length) {
+      return { ok: false, message: '❌ ଫାଇଲ୍ ରେ ଭୁଲ ଅଛି । ତଳର ଲେଖା କପି କରି AI କୁ ଦିଅନ୍ତୁ ଓ କୁହନ୍ତୁ: "Fix these errors and give the complete JSON again, nothing else."\n\n' + errs.map(function (e, i) { return (i + 1) + '. ' + e; }).join('\n') };
+    }
+    if (pp.kind === 'class') { o.n = pp.n; delete o.level; delete o.cat; }
+    return { ok: true, finalText: JSON.stringify(o, null, 1), repaired: r.repaired };
+  };
+})();
 </script>
 </body></html>
