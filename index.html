@@ -2179,5 +2179,146 @@ async function submitVideoId() {
     return { ok: true, finalText: JSON.stringify(o, null, 1), repaired: r.repaired };
   };
 })();
+
+/* ===== ଯୋଜନା ସହାୟକ ଫାଇଲ୍ ଯାଞ୍ଚ (worker) — self-contained ===== */
+(function () {
+  if (window.__sx7Worker) return; window.__sx7Worker = true;
+  var SCOPE = ['village', 'gp', 'block', 'tahasil', 'thana', 'district'];
+  var LAT = /[A-Za-z]/, DIG = /[0-9\u0B66-\u0B6F]/, DEV = /[\u0900-\u0963\u0966-\u097F]/, ODI = /[\u0B00-\u0B7F]/;
+  var AMT = /(ହଜାର|କୋଟି|ଲକ୍ଷ(?![୍ଣ])|ଶତକଡ଼ା|ପ୍ରତିଶତ)/;
+  var PRE = /^yojana\/(?:list-(kendra|rajya)-([a-z_]{2,15})|s-(\d{3,4}))\.json$/;
+  function parsePath(p) {
+    var m = PRE.exec(String(p || '')); if (!m) return null;
+    if (m[3]) return { kind: 'lesson', id: +m[3] };
+    return { kind: 'list', g: m[1], c: m[2] };
+  }
+
+  function check(kind, o, ex) {
+    var E = [];
+    function bad(p, m) { if (E.length < 14) E.push(p + ' — ' + m); }
+    function isO(v) { return !!v && typeof v === 'object' && !Array.isArray(v); }
+    function isS(v) { return typeof v === 'string' && v.trim().length > 0; }
+    function S(v, p, odi) {
+      if (!isS(v)) { bad(p, 'empty or missing'); return false; }
+      if (odi && !ODI.test(v)) { bad(p, 'must be written in Odia letters'); return false; }
+      return true;
+    }
+    function mode(key, path) {
+      if (key === 'emoji' || key === 'icons' || key === 'scope' || key === 'govt' || key === 'cat' || key === 'c') return 'free';
+      if (key === 't') return /rungs\[\d+\]\.t$/.test(path) ? 'title' : 'free';
+      if (key === 'title' || key === 'big' || key === 'sub' || key === 'office' || key === 'btns' || key === 'n') return 'title';
+      return 'strict';
+    }
+    function txt(p, v, md) {
+      if (md === 'free') return;
+      if (LAT.test(v)) { bad(p, 'English letters found: "' + v.match(/[A-Za-z][A-Za-z ]*/)[0].slice(0, 24) + '" — write it in Odia letters'); return; }
+      if (DEV.test(v)) { bad(p, 'Hindi letters found — use Odia only'); return; }
+      if (md === 'strict') {
+        if (DIG.test(v)) { bad(p, 'digits found — write numbers in Odia words'); return; }
+        if (AMT.test(v)) bad(p, 'exact amount or percentage words are not allowed — use general words');
+      }
+    }
+    if (!isO(o)) return ['the whole answer must be one JSON object { ... }'];
+    (function walk(v, key, path) {
+      if (typeof v === 'string') { txt(path, v, mode(key, path)); return; }
+      if (Array.isArray(v)) { v.forEach(function (x, i) { walk(x, key, path + '[' + i + ']'); }); return; }
+      if (isO(v)) Object.keys(v).forEach(function (kk) { walk(v[kk], kk, path ? path + '.' + kk : kk); });
+    })(o, '', '');
+    if (kind === 'list') {
+      if (o.govt !== ex.g) bad('govt', 'must be "' + ex.g + '"');
+      if (o.cat !== ex.c) bad('cat', 'must be "' + ex.c + '"');
+      if (!Array.isArray(o.schemes) || o.schemes.length < 3 || o.schemes.length > 40) bad('schemes', 'need 3 to 40 schemes');
+      else {
+        var seen = {};
+        o.schemes.forEach(function (s, i) {
+          var p = 'schemes[' + i + ']';
+          if (!isO(s)) { bad(p, 'must be an object'); return; }
+          S(s.n, p + '.n', true); S(s.d, p + '.d', true);
+          if (isS(s.n)) {
+            var k = s.n.replace(/[\s\u200B-\u200D]/g, '');
+            if (seen[k]) bad(p + '.n', 'same scheme twice'); seen[k] = 1;
+            if (s.n.length > 90) bad(p + '.n', 'name is too long');
+          }
+          if (!Array.isArray(s.c) || s.c.length < 1 || s.c.length > 6 || !s.c.every(function (x) { return typeof x === 'string' && /^[a-z_]{2,15}$/.test(x); })) bad(p + '.c', 'need 1 to 6 category ids');
+          else if (s.c.indexOf(ex.c) < 0) bad(p + '.c', 'must include "' + ex.c + '"');
+        });
+      }
+      return E;
+    }
+    S(o.title, 'title', true); S(o.intro, 'intro', true); S(o.end, 'end', true);
+    if (o.introSay !== undefined) S(o.introSay, 'introSay', true);
+    if (!isS(o.emoji)) bad('emoji', 'missing');
+    var okT = { learn: 1, tap: 1, story: 1, ladder: 1, find: 1, 'do': 1, tip: 1 }, cnt = { learn: 0, tap: 0, story: 0, ladder: 0, find: 0, 'do': 0 }, st = o.steps;
+    if (!Array.isArray(st) || st.length < 9 || st.length > 18) bad('steps', 'need 9 to 18 steps');
+    else {
+      st.forEach(function (s, i) {
+        var p = 'steps[' + i + ']';
+        if (!isO(s) || !okT[s.t]) { bad(p + '.t', 'must be one of: learn, tap, story, ladder, find, do, tip'); return; }
+        if (cnt[s.t] !== undefined) cnt[s.t]++;
+        S(s.or, p + '.or', true);
+        if (s.t !== 'find' && s.t !== 'tip' && s.t !== 'tap') S(s.big, p + '.big', true);
+        if (s.sub !== undefined && s.sub !== '') S(s.sub, p + '.sub', true);
+        if (s.say !== undefined) S(s.say, p + '.say', true);
+        if (s.t === 'do' && isS(s.or) && s.or.indexOf('ତଳେ ଦବାନ୍ତୁ') < 0) bad(p + '.or', 'a "do" step must end with: ଏହା କରିଦେଲେ ତଳେ ଦବାନ୍ତୁ');
+        if (s.t === 'tap') {
+          S(s.q, p + '.q', true);
+          var okIc = Array.isArray(s.icons) && s.icons.length >= 3 && s.icons.length <= 6 && s.icons.every(function (ic) {
+            return Array.isArray(ic) && ic.length === 2 && isS(ic[0]) && isS(ic[1]) && ODI.test(ic[1]) && !LAT.test(ic[1]) && !DEV.test(ic[1]);
+          });
+          if (!okIc) bad(p + '.icons', 'need 3 to 6 items like ["🏢","<Odia label>"], label in Odia letters only');
+          else {
+            var ls = {}; s.icons.forEach(function (ic) { ls[ic[1].trim()] = 1; });
+            if (Object.keys(ls).length !== s.icons.length) bad(p + '.icons', 'two labels are the same');
+          }
+          if (!(Number.isInteger(s.ans) && s.ans >= 0 && Array.isArray(s.icons) && s.ans < s.icons.length)) bad(p + '.ans', 'must be an icon number starting from 0');
+        }
+        if (s.t === 'ladder') {
+          if (!Array.isArray(s.rungs) || s.rungs.length < 3 || s.rungs.length > 6) bad(p + '.rungs', 'need 3 to 6 rungs');
+          else s.rungs.forEach(function (r, j) {
+            if (!isO(r)) { bad(p + '.rungs[' + j + ']', 'must be an object with t and d'); return; }
+            S(r.t, p + '.rungs[' + j + '].t', true); S(r.d, p + '.rungs[' + j + '].d', true);
+          });
+        }
+        if (s.t === 'find') {
+          S(s.office, p + '.office', true);
+          if (!Array.isArray(s.scope) || !s.scope.every(function (x) { return SCOPE.indexOf(x) >= 0; })) bad(p + '.scope', 'must be a list using only: ' + SCOPE.join(', ') + ' (it may be empty)');
+          if (!Array.isArray(s.btns) || s.btns.length < 1 || s.btns.length > 6 || !s.btns.every(function (b) { return Array.isArray(b) && b.length === 2 && isS(b[0]) && isS(b[1]) && ODI.test(b[1]); })) bad(p + '.btns', 'need 1 to 6 items like ["📮 ଠିକଣା","ଠିକଣା"] with the search word in Odia letters');
+        }
+      });
+      if (isO(st[st.length - 1]) && st[st.length - 1].t !== 'do') bad('steps', 'the last step must be the "do" step');
+      if (cnt['do'] !== 1 || cnt.find !== 1 || cnt.story !== 1) bad('steps', 'need exactly one "do", one "find" and one "story" step');
+      if (cnt.ladder < 1) bad('steps', 'need a "ladder" step for the grievance');
+      if (cnt.tap < 1) bad('steps', 'need at least one "tap" step');
+      if (cnt.learn < 5) bad('steps', 'need at least 5 "learn" steps');
+    }
+    if (!Array.isArray(o.test) || o.test.length < 4 || o.test.length > 6) bad('test', 'need 4 to 6 questions');
+    else o.test.forEach(function (it, i) {
+      var q = 'test[' + i + ']';
+      if (!isO(it)) { bad(q, 'must be an object'); return; }
+      S(it.q, q + '.q', true); S(it.or, q + '.or', true);
+      if (it.qSay !== undefined) S(it.qSay, q + '.qSay', true);
+      if (!Array.isArray(it.opts) || it.opts.length < 2 || it.opts.length > 4 || !it.opts.every(isS)) { bad(q + '.opts', 'need 2 to 4 non-empty options'); return; }
+      var sn = {}; it.opts.forEach(function (x) { sn[x.trim()] = 1; });
+      if (Object.keys(sn).length !== it.opts.length) bad(q + '.opts', 'two options are the same');
+      it.opts.forEach(function (x, m) { S(x, q + '.opts[' + m + ']', true); });
+      if (!(Number.isInteger(it.ans) && it.ans >= 0 && it.ans < it.opts.length)) bad(q + '.ans', 'must be an option number from 0 to ' + (it.opts.length - 1));
+    });
+    return E;
+  }
+
+  var prevSx7 = validateBeforeSubmit;
+  validateBeforeSubmit = function (raw, path) {
+    var r = prevSx7(raw, path);
+    var pp = parsePath(path);
+    if (!pp || !r.ok) return r;
+    var o; try { o = JSON.parse(r.finalText); } catch (e) { return { ok: false, message: '❌ ଏହା ଠିକ୍ JSON ନୁହେଁ । AI ର ସମ୍ପୂର୍ଣ୍ଣ ଉତ୍ତର ପୁଣି କପି କରନ୍ତୁ ।' }; }
+    var errs = check(pp.kind, o, pp);
+    if (errs.length) {
+      return { ok: false, message: '❌ ଫାଇଲ୍ ରେ ଭୁଲ ଅଛି । ତଳର ଲେଖା କପି କରି AI କୁ ଦିଅନ୍ତୁ ଓ କୁହନ୍ତୁ: "Fix these errors and give the complete JSON again, nothing else."\n\n' + errs.map(function (e, i) { return (i + 1) + '. ' + e; }).join('\n') };
+    }
+    if (pp.kind === 'lesson') { o.n = pp.id; delete o.level; delete o.cat; delete o.game; }
+    return { ok: true, finalText: JSON.stringify(o, null, 1), repaired: r.repaired };
+  };
+})();
 </script>
 </body></html>
