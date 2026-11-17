@@ -2053,7 +2053,7 @@ async function submitVideoId() {
   if (window.__sx6Worker) return; window.__sx6Worker = true;
   var LAT = /[A-Za-z]/, DIG = /[0-9\u0B66-\u0B6F]/, DEV = /[\u0900-\u0963\u0966-\u097F]/, ODI = /[\u0B00-\u0B7F]/;
   var BAN = ['କ୍ୱାଣ୍ଟମ', 'ଫ୍ରିକ୍ୱେନ୍ସି', 'ଭାଇବ୍ରେସନ', 'କମ୍ପନ'];
-  var PRE = /^(sanlap|ishwar)\/(?:c-(\d{3,4})|plan-(\d{3,4})-(\d{3,4}))\.json$/;
+   var PRE = /^(sanlap|ishwar|yukti)\/(?:c-(\d{3,4})|plan-(\d{3,4})-(\d{3,4}))\.json$/;
   function parsePath(p) {
     var m = PRE.exec(String(p || '')); if (!m) return null;
     if (m[2]) { var n = +m[2]; return (n >= 1 && n <= 1000) ? { tr: m[1], kind: 'class', n: n } : null; }
